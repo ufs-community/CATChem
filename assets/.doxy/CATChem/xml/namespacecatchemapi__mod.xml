@@ -1,0 +1,1421 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchemapi__mod" kind="namespace" language="Fortran">
+    <compoundname>catchemapi_mod</compoundname>
+    <innerclass refid="structcatchemapi__mod_1_1catchemconfigtype" prot="public">catchemapi_mod::catchemconfigtype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1catchemdatatype" prot="public">catchemapi_mod::catchemdatatype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1catchemdiagnostictype" prot="public">catchemapi_mod::catchemdiagnostictype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1catcheminstancetype" prot="public">catchemapi_mod::catcheminstancetype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1fieldmappingregistrytype" prot="private">catchemapi_mod::fieldmappingregistrytype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1fieldmappingtype" prot="private">catchemapi_mod::fieldmappingtype</innerclass>
+    <innerclass refid="structcatchemapi__mod_1_1flexibledataexchangetype" prot="private">catchemapi_mod::flexibledataexchangetype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecatchemapi__mod_1a88a9ec1775445fbf71f7fbdba7c24d5a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchemapi_mod::catchem_success</definition>
+        <argsstring></argsstring>
+        <name>catchem_success</name>
+        <qualifiedname>catchemapi_mod::catchem_success</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="49" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchemapi__mod_1a529703b7bcd670f2feeef46197fbb4e0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchemapi_mod::catchem_failure</definition>
+        <argsstring></argsstring>
+        <name>catchem_failure</name>
+        <qualifiedname>catchemapi_mod::catchem_failure</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="50" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="50" bodyend="50"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a863275517703aaf4290fc1c8358481bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_init</definition>
+        <argsstring>(this, config, rc)</argsstring>
+        <name>instance_init</name>
+        <qualifiedname>catchemapi_mod::instance_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemconfigtype" kindref="compound">catchemconfigtype</ref>), intent(in)</type>
+          <defname>config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize CATChem with basic configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="268" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="269" bodyend="319"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ab13d1b476816517cf533453e98880f71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_init_from_config_files</definition>
+        <argsstring>(this, config, rc)</argsstring>
+        <name>instance_init_from_config_files</name>
+        <qualifiedname>catchemapi_mod::instance_init_from_config_files</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemconfigtype" kindref="compound">catchemconfigtype</ref>), intent(in)</type>
+          <defname>config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Modern initialization from configuration files (recommended) Follows proper initialization order: main config → species YAML → emission YAML. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="324" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="325" bodyend="401"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1acca9a8a52a2fd46aaa3e29c5e7d314fa" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_setup_grid</definition>
+        <argsstring>(this, lats, lons, levels, rc)</argsstring>
+        <name>instance_setup_grid</name>
+        <qualifiedname>catchemapi_mod::instance_setup_grid</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>lats</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>lons</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>levels</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Setup grid geometry and coordinate system. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lats</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Latitude coordinates [degrees] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lons</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Longitude coordinates [degrees] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">levels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Vertical levels [Pa or m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="405" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="406" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1aba7abceb880fa484ecb4253d6b10af08" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_add_process</definition>
+        <argsstring>(this, process_name, process_config, rc)</argsstring>
+        <name>instance_add_process</name>
+        <qualifiedname>catchemapi_mod::instance_add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>process_config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to the simulation. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="441" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="442" bodyend="464"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a2f233221517ed96394132735502311cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_setup_run_phases</definition>
+        <argsstring>(this, phase_names, rc)</argsstring>
+        <name>instance_setup_run_phases</name>
+        <qualifiedname>catchemapi_mod::instance_setup_run_phases</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(in)</type>
+          <defname>phase_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Setup run phases for multi-phase execution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="468" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="469" bodyend="499"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ae2c910a912f9e151988a868ccc2ae3f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_run_phase</definition>
+        <argsstring>(this, phase_name, rc)</argsstring>
+        <name>instance_run_phase</name>
+        <qualifiedname>catchemapi_mod::instance_run_phase</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>phase_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a specific phase. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="503" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="504" bodyend="541"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1af2f3e17ce432608343132e500d0261c6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_run_all_phases</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>instance_run_all_phases</name>
+        <qualifiedname>catchemapi_mod::instance_run_all_phases</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all configured phases in sequence. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="545" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="546" bodyend="564"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a1b8a96497e85eebddf597a73fa1c83a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_phase_names</definition>
+        <argsstring>(this, phase_names, rc)</argsstring>
+        <name>instance_get_phase_names</name>
+        <qualifiedname>catchemapi_mod::instance_get_phase_names</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>phase_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get names of configured run phases. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="568" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="569" bodyend="586"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ae45f93b6424e7cae9be9c8b182a7cf0e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function catchemapi_mod::instance_get_current_phase</definition>
+        <argsstring>(this)</argsstring>
+        <name>instance_get_current_phase</name>
+        <qualifiedname>catchemapi_mod::instance_get_current_phase</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current phase index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="590" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="591" bodyend="595"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1aade49ce2bf68793f2e39cd3d0f2d9f7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_configure_process_manager</definition>
+        <argsstring>(this, max_processes, enable_column_batching, rc)</argsstring>
+        <name>instance_configure_process_manager</name>
+        <qualifiedname>catchemapi_mod::instance_configure_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>max_processes</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>enable_column_batching</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Configure process manager with custom settings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="599" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="600" bodyend="621"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a41adc526eaf81fde7fcddaa4b0852574" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_set_process_manager</definition>
+        <argsstring>(this, process_manager, rc)</argsstring>
+        <name>instance_set_process_manager</name>
+        <qualifiedname>catchemapi_mod::instance_set_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(in)</type>
+          <defname>process_manager</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set a custom process manager (advanced usage) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="625" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="626" bodyend="638"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a5a441a1db8b95961ad38202f2673b5b4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_run_timestep</definition>
+        <argsstring>(this, input_data, output_data, rc)</argsstring>
+        <name>instance_run_timestep</name>
+        <qualifiedname>catchemapi_mod::instance_run_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>input_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(out)</type>
+          <defname>output_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single time step. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="642" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="643" bodyend="681"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a59d3f2adeb77606ca09ce4d1ca4001b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_run_multiple_steps</definition>
+        <argsstring>(this, nsteps, input_data, output_data, rc)</argsstring>
+        <name>instance_run_multiple_steps</name>
+        <qualifiedname>catchemapi_mod::instance_run_multiple_steps</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nsteps</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), dimension(:), intent(in)</type>
+          <defname>input_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), dimension(:), intent(out)</type>
+          <defname>output_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run multiple time steps. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="685" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="686" bodyend="705"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a35c076627ad1b70ea5047822406248b9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchemapi_mod::instance_is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>instance_is_ready</name>
+        <qualifiedname>catchemapi_mod::instance_is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if ready to run. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="709" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="710" bodyend="714"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a9c3f12a34c5b86a5fccc75d71f9dd328" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_set_meteorology</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_set_meteorology</name>
+        <qualifiedname>catchemapi_mod::instance_set_meteorology</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set meteorological data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="718" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="719" bodyend="750"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1af5a272e6c3d45f3293bbb42eff34f2e1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_set_concentrations</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_set_concentrations</name>
+        <qualifiedname>catchemapi_mod::instance_set_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set chemical concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="754" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="755" bodyend="772"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ab43785342d049d5a406fdc6599d69664" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_set_emissions</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_set_emissions</name>
+        <qualifiedname>catchemapi_mod::instance_set_emissions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set emission data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="776" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="777" bodyend="794"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a67ce2d3dbf27b43e8a87c37e55ba3eb5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_concentrations</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_get_concentrations</name>
+        <qualifiedname>catchemapi_mod::instance_get_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(out)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get concentrations from CATChem. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="798" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="799" bodyend="822"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1aa2ce14f591bb6a22a0c6aa859788f09e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_diagnostics</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_get_diagnostics</name>
+        <qualifiedname>catchemapi_mod::instance_get_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(out)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="826" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="827" bodyend="843"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a1fea8478be81d0a537e9f4f762f047bc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_error_message</definition>
+        <argsstring>(this, error_msg)</argsstring>
+        <name>instance_get_error_message</name>
+        <qualifiedname>catchemapi_mod::instance_get_error_message</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>error_msg</defname>
+        </param>
+        <briefdescription>
+<para>Get error message. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="847" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="848" bodyend="856"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ae1ce7dce5d55eff7df90f7db10abc697" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_validate_data</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>instance_validate_data</name>
+        <qualifiedname>catchemapi_mod::instance_validate_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate input data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="860" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="861" bodyend="886"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a62f95198d4d91216d8832ae4555b2f46" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_species_names</definition>
+        <argsstring>(this, species_names, rc)</argsstring>
+        <name>instance_get_species_names</name>
+        <qualifiedname>catchemapi_mod::instance_get_species_names</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get species names. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="890" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="891" bodyend="901"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ab78245589863ccf411fd7482c3d27ff3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>instance_finalize</name>
+        <qualifiedname>catchemapi_mod::instance_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize CATChem instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="905" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="906" bodyend="916"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a8c68ad53ff215a1a19dc04040add9f09" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_available_diagnostics</definition>
+        <argsstring>(this, diagnostics, rc)</argsstring>
+        <name>instance_get_available_diagnostics</name>
+        <qualifiedname>catchemapi_mod::instance_get_available_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdiagnostictype" kindref="compound">catchemdiagnostictype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="922" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="923" bodyend="927"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a35e0c94948282d413c668e529c41d637" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_process_diagnostic</definition>
+        <argsstring>(this, process_name, diag_name, diagnostic, rc)</argsstring>
+        <name>instance_get_process_diagnostic</name>
+        <qualifiedname>catchemapi_mod::instance_get_process_diagnostic</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>diag_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdiagnostictype" kindref="compound">catchemdiagnostictype</ref>), intent(out)</type>
+          <defname>diagnostic</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="930" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="931" bodyend="936"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ac4150b4d5c3993d6480b0a521628d172" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_all_process_diagnostics</definition>
+        <argsstring>(this, diagnostics, rc)</argsstring>
+        <name>instance_get_all_process_diagnostics</name>
+        <qualifiedname>catchemapi_mod::instance_get_all_process_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchemapi__mod_1_1catchemdiagnostictype" kindref="compound">catchemdiagnostictype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="939" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="940" bodyend="944"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a776954512f333b9d41d7930983264917" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_list_process_diagnostics</definition>
+        <argsstring>(this, process_names, diagnostic_info, rc)</argsstring>
+        <name>instance_list_process_diagnostics</name>
+        <qualifiedname>catchemapi_mod::instance_list_process_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>process_names</defname>
+        </param>
+        <param>
+          <type>character(len=256), dimension(:), intent(out), allocatable</type>
+          <defname>diagnostic_info</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="947" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="948" bodyend="953"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a0519135b4755cd297aa56b3a0dffdec8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_fill_met_state_from_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_fill_met_state_from_host</name>
+        <qualifiedname>catchemapi_mod::instance_fill_met_state_from_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(in)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="957" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="958" bodyend="962"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a5fb60752c7afe18b727081bb37eb4d3f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_extract_met_state_to_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_extract_met_state_to_host</name>
+        <qualifiedname>catchemapi_mod::instance_extract_met_state_to_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(out)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="965" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="966" bodyend="970"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a113ba20efd92f1c46af3595bd1033754" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_fill_chem_state_from_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_fill_chem_state_from_host</name>
+        <qualifiedname>catchemapi_mod::instance_fill_chem_state_from_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(in)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="973" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="974" bodyend="978"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a4eb4b68b438c497706975ac8b2000847" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_extract_chem_state_to_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_extract_chem_state_to_host</name>
+        <qualifiedname>catchemapi_mod::instance_extract_chem_state_to_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(out)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="981" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="982" bodyend="986"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a9149dd95abb99591056335cb5629d5d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_fill_emis_state_from_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_fill_emis_state_from_host</name>
+        <qualifiedname>catchemapi_mod::instance_fill_emis_state_from_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(in)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="989" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="990" bodyend="994"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a3724dc0b71e320417af9b856a58657cc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_extract_emis_state_to_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_extract_emis_state_to_host</name>
+        <qualifiedname>catchemapi_mod::instance_extract_emis_state_to_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(out)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="997" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="998" bodyend="1002"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1adaffcb6caee6988df2f6ae1d49ba5bc7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_extract_diagnostics_to_host</definition>
+        <argsstring>(this, data_exchange, rc)</argsstring>
+        <name>instance_extract_diagnostics_to_host</name>
+        <qualifiedname>catchemapi_mod::instance_extract_diagnostics_to_host</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(flexibledataexchangetype), intent(out)</type>
+          <defname>data_exchange</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1005" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1006" bodyend="1010"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a46ccbc2c2f65c829d256da72cd7dab91" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_setup_field_mapping</definition>
+        <argsstring>(this, mappings, rc)</argsstring>
+        <name>instance_setup_field_mapping</name>
+        <qualifiedname>catchemapi_mod::instance_setup_field_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), dimension(:), intent(in)</type>
+          <defname>mappings</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1013" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1014" bodyend="1018"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1aeef276b10291df7841e02911648c6224" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_add_field_mapping</definition>
+        <argsstring>(this, field_type, catchem_name, host_name, data_type, rc)</argsstring>
+        <name>instance_add_field_mapping</name>
+        <qualifiedname>catchemapi_mod::instance_add_field_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_type</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>catchem_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>data_type</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1021" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1022" bodyend="1026"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a8b2ac1745c6eb364cc6b65f3dabcfc95" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_validate_field_mappings</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>instance_validate_field_mappings</name>
+        <qualifiedname>catchemapi_mod::instance_validate_field_mappings</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1029" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1030" bodyend="1033"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1aa4170715dab1811b8a3632e4d4d297ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_container</definition>
+        <argsstring>(this, container)</argsstring>
+        <name>instance_get_container</name>
+        <qualifiedname>catchemapi_mod::instance_get_container</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(statecontainertype), intent(out)</type>
+          <defname>container</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1036" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1037" bodyend="1039"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1ad0b993a749a8860f3345127271e55db9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_process_manager</definition>
+        <argsstring>(this, process_manager)</argsstring>
+        <name>instance_get_process_manager</name>
+        <qualifiedname>catchemapi_mod::instance_get_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(out)</type>
+          <defname>process_manager</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1042" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1043" bodyend="1045"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a06455751c3e31331a44a72bf572ecaf0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::instance_get_diagnostic_manager</definition>
+        <argsstring>(this, diag_manager)</argsstring>
+        <name>instance_get_diagnostic_manager</name>
+        <qualifiedname>catchemapi_mod::instance_get_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemapi__mod_1_1catcheminstancetype" kindref="compound">catcheminstancetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(diagnosticmanagertype), intent(out)</type>
+          <defname>diag_manager</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1048" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1049" bodyend="1051"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1acefc3b4d25df80ae96fedfe2349fed5e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::registry_initialize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>registry_initialize</name>
+        <qualifiedname>catchemapi_mod::registry_initialize</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1056" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1057" bodyend="1060"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a3df2db66d8289041f3ea1e6af15d05d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::registry_add_met_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>registry_add_met_mapping</name>
+        <qualifiedname>catchemapi_mod::registry_add_met_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1063" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1064" bodyend="1068"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a864584da891c3de9830e675ad390d2c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::registry_add_chem_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>registry_add_chem_mapping</name>
+        <qualifiedname>catchemapi_mod::registry_add_chem_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1071" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1072" bodyend="1076"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a09be84b4f8487822cc6697adbf9f8bcb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::registry_add_emis_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>registry_add_emis_mapping</name>
+        <qualifiedname>catchemapi_mod::registry_add_emis_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1079" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1080" bodyend="1084"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a4172c24f7223ac190c41440b6d5448f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::registry_add_diag_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>registry_add_diag_mapping</name>
+        <qualifiedname>catchemapi_mod::registry_add_diag_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1087" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1088" bodyend="1092"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a76e6563e8d5a9b020839f3e9748a7928" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::flex_setup_exchange</definition>
+        <argsstring>(this, nx, ny, nz, rc)</argsstring>
+        <name>flex_setup_exchange</name>
+        <qualifiedname>catchemapi_mod::flex_setup_exchange</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1097" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1098" bodyend="1102"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1adb24b70fe5e0d0f56fee06778b2c4ebc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::flex_map_host_field</definition>
+        <argsstring>(this, field_name, host_data, rc)</argsstring>
+        <name>flex_map_host_field</name>
+        <qualifiedname>catchemapi_mod::flex_map_host_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>host_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1105" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1106" bodyend="1111"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1acfdbebe8e3088eb0af3a0d54af1ec9e9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::flex_get_mapped_field</definition>
+        <argsstring>(this, field_name, data, rc)</argsstring>
+        <name>flex_get_mapped_field</name>
+        <qualifiedname>catchemapi_mod::flex_get_mapped_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1114" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1115" bodyend="1120"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1abee5fa954d22ac8c48d795f3f7d7a8a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::flex_set_mapped_field</definition>
+        <argsstring>(this, field_name, data, rc)</argsstring>
+        <name>flex_set_mapped_field</name>
+        <qualifiedname>catchemapi_mod::flex_set_mapped_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1123" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1124" bodyend="1129"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchemapi__mod_1a97219eddb23c3815b3a82a6f9eab87bb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchemapi_mod::flex_validate_mappings</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>flex_validate_mappings</name>
+        <qualifiedname>catchemapi_mod::flex_validate_mappings</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="1132" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="1133" bodyend="1136"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChemAPI_Mod.F90" line="24" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,610 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchem__highlevel__api" kind="namespace" language="Fortran">
+    <compoundname>catchem_highlevel_api</compoundname>
+    <innerclass refid="structcatchem__highlevel__api_1_1catchemconfigtype" prot="public">catchem_highlevel_api::catchemconfigtype</innerclass>
+    <innerclass refid="structcatchem__highlevel__api_1_1catchemdatatype" prot="public">catchem_highlevel_api::catchemdatatype</innerclass>
+    <innerclass refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype" prot="public">catchem_highlevel_api::catchemdiagnosticstype</innerclass>
+    <innerclass refid="structcatchem__highlevel__api_1_1catchemmodeltype" prot="public">catchem_highlevel_api::catchemmodeltype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1abac968e14464583be97f243839aa214b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_init</definition>
+        <argsstring>(model, config, rc)</argsstring>
+        <name>catchem_init</name>
+        <qualifiedname>catchem_highlevel_api::catchem_init</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(out)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemconfigtype" kindref="compound">catchemconfigtype</ref>), intent(in)</type>
+          <defname>config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize CATChem with simple configuration. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="187" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="188" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a0bde410bf8f979db59b54b4a91f15e01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_run_timestep</definition>
+        <argsstring>(model, met_data, emis_data, rc)</argsstring>
+        <name>catchem_run_timestep</name>
+        <qualifiedname>catchem_highlevel_api::catchem_run_timestep</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>met_data</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>emis_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single CATChem timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="196" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="197" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a487b7f93584c803e3e31a2b1992e43fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_finalize</definition>
+        <argsstring>(model, rc)</argsstring>
+        <name>catchem_finalize</name>
+        <qualifiedname>catchem_highlevel_api::catchem_finalize</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize CATChem. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="214" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="215" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1ab0c1c1a809570796a863949563e1ee58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_add_process</definition>
+        <argsstring>(model, process_name, process_config, rc)</argsstring>
+        <name>catchem_add_process</name>
+        <qualifiedname>catchem_highlevel_api::catchem_add_process</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>process_config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to CATChem. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="222" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="223" bodyend="228"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1ad26f25e571e5f9c52bc6cf074b66a828" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_set_emissions</definition>
+        <argsstring>(model, emis_data, rc)</argsstring>
+        <name>catchem_set_emissions</name>
+        <qualifiedname>catchem_highlevel_api::catchem_set_emissions</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>emis_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set emission data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="232" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="233" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a16691266cda0437b54e0c5d4a5a06af2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_set_meteorology</definition>
+        <argsstring>(model, met_data, rc)</argsstring>
+        <name>catchem_set_meteorology</name>
+        <qualifiedname>catchem_highlevel_api::catchem_set_meteorology</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>met_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set meteorological data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="241" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="242" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a1001fbcf0c300111bd2968067349d750" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_get_concentrations</definition>
+        <argsstring>(model, concentrations, species_names, rc)</argsstring>
+        <name>catchem_get_concentrations</name>
+        <qualifiedname>catchem_highlevel_api::catchem_get_concentrations</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get chemical concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="250" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="251" bodyend="256"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a2a23b49c9b18963e66cb15b082330bea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_highlevel_api::catchem_get_diagnostics</definition>
+        <argsstring>(model, diagnostics, rc)</argsstring>
+        <name>catchem_get_diagnostics</name>
+        <qualifiedname>catchem_highlevel_api::catchem_get_diagnostics</qualifiedname>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>model</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype" kindref="compound">catchemdiagnosticstype</ref>), intent(out)</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="260" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="261" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a61c5b63150954e189f5709d85d7cfc63" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_init</definition>
+        <argsstring>(this, config, rc)</argsstring>
+        <name>model_init</name>
+        <qualifiedname>catchem_highlevel_api::model_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(out)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemconfigtype" kindref="compound">catchemconfigtype</ref>), intent(in)</type>
+          <defname>config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the CATChem model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="273" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="274" bodyend="345"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a0d0add06df900dd3343e149e654db201" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_add_process</definition>
+        <argsstring>(this, process_name, process_config, rc)</argsstring>
+        <name>model_add_process</name>
+        <qualifiedname>catchem_highlevel_api::model_add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>process_config</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to the model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="349" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="350" bodyend="388"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1ab3b593dbb4ed40830e3e9a7afa939597" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_run_timestep</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>model_run_timestep</name>
+        <qualifiedname>catchem_highlevel_api::model_run_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single model timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="392" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="393" bodyend="427"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a18b447cb943954f893ee3c303d0064e7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_set_meteorology</definition>
+        <argsstring>(this, met_data, rc)</argsstring>
+        <name>model_set_meteorology</name>
+        <qualifiedname>catchem_highlevel_api::model_set_meteorology</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>met_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set meteorological data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="431" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="432" bodyend="472"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a1b5255823402163c02fc6bd3d008257e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_set_emissions</definition>
+        <argsstring>(this, emis_data, rc)</argsstring>
+        <name>model_set_emissions</name>
+        <qualifiedname>catchem_highlevel_api::model_set_emissions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>emis_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set emission data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="476" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="477" bodyend="501"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1aa7db7c555d0d9e9c8c9c55371b882a2d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_get_concentrations</definition>
+        <argsstring>(this, concentrations, species_names, rc)</argsstring>
+        <name>model_get_concentrations</name>
+        <qualifiedname>catchem_highlevel_api::model_get_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get chemical concentrations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="505" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="506" bodyend="536"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a3f6f8e0395d16d6049952c16bed3f78c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_get_diagnostics</definition>
+        <argsstring>(this, diagnostics, rc)</argsstring>
+        <name>model_get_diagnostics</name>
+        <qualifiedname>catchem_highlevel_api::model_get_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdiagnosticstype" kindref="compound">catchemdiagnosticstype</ref>), intent(out)</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="540" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="541" bodyend="560"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a2a9e7bedcad66d9e354d1fd447c26fa1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchem_highlevel_api::model_is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>model_is_ready</name>
+        <qualifiedname>catchem_highlevel_api::model_is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if model is ready for execution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="564" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="565" bodyend="568"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a1dabd9844502674fd307ba8d66607690" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=256) function</type>
+        <definition>character(len=256) function catchem_highlevel_api::model_get_status</definition>
+        <argsstring>(this)</argsstring>
+        <name>model_get_status</name>
+        <qualifiedname>catchem_highlevel_api::model_get_status</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get model status information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="572" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="573" bodyend="582"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1aa28f696478c7e0d1ed8da626f933e000" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_get_performance_stats</definition>
+        <argsstring>(this, total_time, avg_time_per_step, n_steps)</argsstring>
+        <name>model_get_performance_stats</name>
+        <qualifiedname>catchem_highlevel_api::model_get_performance_stats</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>total_time</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>avg_time_per_step</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>n_steps</defname>
+        </param>
+        <briefdescription>
+<para>Get performance statistics. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="586" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="587" bodyend="599"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a6bb5d416f1334586529d9315262208a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_validate_inputs</definition>
+        <argsstring>(this, data, rc)</argsstring>
+        <name>model_validate_inputs</name>
+        <qualifiedname>catchem_highlevel_api::model_validate_inputs</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structcatchem__highlevel__api_1_1catchemdatatype" kindref="compound">catchemdatatype</ref>), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate input data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="603" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="604" bodyend="631"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1adab4667495ddcaf5fcf65dc7fc4a50d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_highlevel_api::model_finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>model_finalize</name>
+        <qualifiedname>catchem_highlevel_api::model_finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize the model. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="635" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="636" bodyend="649"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a11ab19565b7408c713d89194626ddc46" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(statecontainertype) function, pointer</type>
+        <definition>type(statecontainertype) function, pointer catchem_highlevel_api::model_get_state_container</definition>
+        <argsstring>(this)</argsstring>
+        <name>model_get_state_container</name>
+        <qualifiedname>catchem_highlevel_api::model_get_state_container</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get access to the state container (for advanced users) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="657" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="658" bodyend="665"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a429bc06ea31da70673b012b30e7d61c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>) function, pointer</type>
+        <definition>type(processmanagertype) function, pointer catchem_highlevel_api::model_get_process_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>model_get_process_manager</name>
+        <qualifiedname>catchem_highlevel_api::model_get_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get access to the process manager (for advanced users) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="669" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="670" bodyend="677"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__highlevel__api_1a29907a0977de4c2df1537ab80aee4286" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>) function, pointer</type>
+        <definition>type(configmanagertype) function, pointer catchem_highlevel_api::model_get_config_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>model_get_config_manager</name>
+        <qualifiedname>catchem_highlevel_api::model_get_config_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__highlevel__api_1_1catchemmodeltype" kindref="compound">catchemmodeltype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get access to the config manager (for advanced users) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="681" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="682" bodyend="689"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_HighLevel_API.F90" line="22" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,451 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcolumninterface__mod_1_1columnviewtype" kind="type" language="Fortran" prot="public">
+    <compoundname>columninterface_mod::columnviewtype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a866ea1ebb7fa4ec715203d514877410b" prot="private" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::grid_type</definition>
+        <argsstring></argsstring>
+        <name>grid_type</name>
+        <qualifiedname>columninterface_mod::columnviewtype::grid_type</qualifiedname>
+        <briefdescription>
+<para>Grid type: 1=column, 2=2D, 3=3D. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="81" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a3f6d7ea4d10ef21610a7ac4f5a09fb30" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>columninterface_mod::columnviewtype::nx</qualifiedname>
+        <briefdescription>
+<para>Number of grid points in x-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="82" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a23ee634e74730a86a17b944ba967ab00" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>columninterface_mod::columnviewtype::ny</qualifiedname>
+        <briefdescription>
+<para>Number of grid points in y-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="83" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a4346563460531f03cb81b3b2cf84c0c0" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::nlev</definition>
+        <argsstring></argsstring>
+        <name>nlev</name>
+        <qualifiedname>columninterface_mod::columnviewtype::nlev</qualifiedname>
+        <briefdescription>
+<para>Number of vertical levels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="84" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a7df90be2d1a745ffd4bfe69e1744c3f3" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::current_i</definition>
+        <argsstring></argsstring>
+        <name>current_i</name>
+        <qualifiedname>columninterface_mod::columnviewtype::current_i</qualifiedname>
+        <briefdescription>
+<para>Current column i-index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="85" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1aa59a00e1292c6f98c3ebd16e02a51d61" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnviewtype::current_j</definition>
+        <argsstring></argsstring>
+        <name>current_j</name>
+        <qualifiedname>columninterface_mod::columnviewtype::current_j</qualifiedname>
+        <briefdescription>
+<para>Current column j-index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="86" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1aa8eadcc6918a11440a5c8e501d7468f7" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), pointer</type>
+        <definition>type(metstatetype), pointer columninterface_mod::columnviewtype::met_state</definition>
+        <argsstring></argsstring>
+        <name>met_state</name>
+        <qualifiedname>columninterface_mod::columnviewtype::met_state</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Pointer to meteorological state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="89" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a49a337ea6fe0307123063f605b3499c7" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), pointer</type>
+        <definition>type(chemstatetype), pointer columninterface_mod::columnviewtype::chem_state</definition>
+        <argsstring></argsstring>
+        <name>chem_state</name>
+        <qualifiedname>columninterface_mod::columnviewtype::chem_state</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Pointer to chemistry state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="90" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1abe7f01ef45dc18cd080bd1f590b38673" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), pointer</type>
+        <definition>real(fp), dimension(:), pointer columninterface_mod::columnviewtype::met_column</definition>
+        <argsstring></argsstring>
+        <name>met_column</name>
+        <qualifiedname>columninterface_mod::columnviewtype::met_column</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Pointer to meteorology column (nlev) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="93" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1a75ec006bfe57bed0226cb457b5d41073" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), pointer</type>
+        <definition>real(fp), dimension(:,:), pointer columninterface_mod::columnviewtype::chem_column</definition>
+        <argsstring></argsstring>
+        <name>chem_column</name>
+        <qualifiedname>columninterface_mod::columnviewtype::chem_column</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Pointer to chemistry column (nlev, nspecies) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="94" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnviewtype_1aa8b16760193b580c876946f03edbf87c" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), pointer</type>
+        <definition>real(fp), dimension(:,:), pointer columninterface_mod::columnviewtype::emis_column</definition>
+        <argsstring></argsstring>
+        <name>emis_column</name>
+        <qualifiedname>columninterface_mod::columnviewtype::emis_column</qualifiedname>
+        <initializer>=&gt; null()</initializer>
+        <briefdescription>
+<para>Pointer to emissions column (nlev, nspecies) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="95" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1a741bef362235ffb39486f6e85556eb7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::init</definition>
+        <argsstring>(this, met_state, chem_state, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>columninterface_mod::columnviewtype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in), optional, target</type>
+          <defname>met_state</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in), optional, target</type>
+          <defname>chem_state</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="98" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1a3ec78fc4dd401df979b1641d09211f30" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::set_column_position</definition>
+        <argsstring>(this, i, j, rc)</argsstring>
+        <name>set_column_position</name>
+        <qualifiedname>columninterface_mod::columnviewtype::set_column_position</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="99" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1aea39ab81b45f0bac61ef31b6624004f9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::get_met_column_ptr</definition>
+        <argsstring>(this, field_name)</argsstring>
+        <name>get_met_column_ptr</name>
+        <qualifiedname>columninterface_mod::columnviewtype::get_met_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="100" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1a8e1f99109241ec8345062422e35a9c92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::get_chem_column_ptr</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>get_chem_column_ptr</name>
+        <qualifiedname>columninterface_mod::columnviewtype::get_chem_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="101" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1ae29d277d534797450afc2d926dd228e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::get_emis_column_ptr</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>get_emis_column_ptr</name>
+        <qualifiedname>columninterface_mod::columnviewtype::get_emis_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="102" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1a500a4d70a595cbbaec7751d8d5e7ec4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::apply_column_tendency</definition>
+        <argsstring>(this, species_name, tendency_column, dt, layer_height, rc)</argsstring>
+        <name>apply_column_tendency</name>
+        <qualifiedname>columninterface_mod::columnviewtype::apply_column_tendency</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>tendency_column</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>layer_height</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="103" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnviewtype_1a7239672a621433a1f5425ebf119d60a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnviewtype::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>columninterface_mod::columnviewtype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnviewtype" kindref="compound">columnviewtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="104" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Column view abstraction for multi-dimensional state data. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>The ColumnViewType provides a unified interface for accessing and manipulating a single atmospheric column within a multi-dimensional (1D/2D/3D) model grid. It enables column-based processes to operate transparently on both column models and virtual columns extracted from 2D/3D data, supporting zero-copy pointer access for performance and compatibility with OpenMP/OpenACC parallelism.</para>
+<para><bold>Members:</bold><itemizedlist>
+<listitem><para>grid_type: Grid type (1=column, 2=2D, 3=3D)</para>
+</listitem><listitem><para>nx, ny, nlev: Grid dimensions</para>
+</listitem><listitem><para>current_i, current_j: Current column indices</para>
+</listitem><listitem><para>met_state: Pointer to the meteorological state</para>
+</listitem><listitem><para>chem_state: Pointer to the chemistry state</para>
+</listitem><listitem><para>met_column: Pointer to meteorology column (nlev)</para>
+</listitem><listitem><para>chem_column: Pointer to chemistry column (nlev, nspecies)</para>
+</listitem><listitem><para>emis_column: Pointer to emissions column (nlev, nspecies)</para>
+</listitem></itemizedlist>
+</para>
+<para><bold>Usage:</bold><orderedlist>
+<listitem><para>Initialize with <computeroutput><ref refid="structcolumninterface__mod_1_1columnviewtype_1a741bef362235ffb39486f6e85556eb7c" kindref="member">init()</ref></computeroutput> using state pointers</para>
+</listitem><listitem><para>Set column position with <computeroutput><ref refid="structcolumninterface__mod_1_1columnviewtype_1a3ec78fc4dd401df979b1641d09211f30" kindref="member">set_column_position()</ref></computeroutput></para>
+</listitem><listitem><para>Access or modify column data via pointers </para>
+</listitem></orderedlist>
+</para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>chemstate_mod::chemstatetype</label>
+        <link refid="structchemstate__mod_1_1chemstatetype"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>miedata</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>grid</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>columninterface_mod::columnviewtype</label>
+        <link refid="structcolumninterface__mod_1_1columnviewtype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>met_state</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>chem_state</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="3">
+        <label>gridgeometry_mod::gridgeometrytype</label>
+        <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
+      </node>
+      <node id="2">
+        <label>metstate_mod::metstatetype</label>
+        <link refid="structmetstate__mod_1_1metstatetype"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>geometry</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>species_mod::speciestype</label>
+        <link refid="structspecies__mod_1_1speciestype"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/ColumnInterface_Mod.F90" line="77" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="77" bodyend="106"/>
+    <listofallmembers>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a500a4d70a595cbbaec7751d8d5e7ec4b" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>apply_column_tendency</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a75ec006bfe57bed0226cb457b5d41073" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>chem_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a49a337ea6fe0307123063f605b3499c7" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>chem_state</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a7239672a621433a1f5425ebf119d60a5" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>cleanup</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a7df90be2d1a745ffd4bfe69e1744c3f3" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>current_i</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1aa59a00e1292c6f98c3ebd16e02a51d61" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>current_j</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1aa8b16760193b580c876946f03edbf87c" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>emis_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a8e1f99109241ec8345062422e35a9c92" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>get_chem_column_ptr</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1ae29d277d534797450afc2d926dd228e4" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>get_emis_column_ptr</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1aea39ab81b45f0bac61ef31b6624004f9" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>get_met_column_ptr</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a866ea1ebb7fa4ec715203d514877410b" prot="private" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>grid_type</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a741bef362235ffb39486f6e85556eb7c" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>init</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1abe7f01ef45dc18cd080bd1f590b38673" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>met_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1aa8eadcc6918a11440a5c8e501d7468f7" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>met_state</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a4346563460531f03cb81b3b2cf84c0c0" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>nlev</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a3f6d7ea4d10ef21610a7ac4f5a09fb30" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>nx</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a23ee634e74730a86a17b944ba967ab00" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>ny</name></member>
+      <member refid="structcolumninterface__mod_1_1columnviewtype_1a3ec78fc4dd401df979b1641d09211f30" prot="public" virt="non-virtual"><scope>columninterface_mod::columnviewtype</scope><name>set_column_position</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

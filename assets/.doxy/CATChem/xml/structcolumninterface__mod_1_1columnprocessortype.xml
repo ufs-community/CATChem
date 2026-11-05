@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcolumninterface__mod_1_1columnprocessortype" kind="type" language="Fortran" prot="public">
+    <compoundname>columninterface_mod::columnprocessortype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnprocessortype_1ae6030644c91d80feaa122952b442f834" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), dimension(:), allocatable</type>
+        <definition>type(virtualcolumntype), dimension(:), allocatable columninterface_mod::columnprocessortype::columns</definition>
+        <argsstring></argsstring>
+        <name>columns</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::columns</qualifiedname>
+        <briefdescription>
+<para>Array of virtual columns. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="115" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnprocessortype_1a08aa00846fa0b6c9121db3b85e7e17e1" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnprocessortype::n_columns</definition>
+        <argsstring></argsstring>
+        <name>n_columns</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::n_columns</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of columns. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="116" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcolumninterface__mod_1_1columnprocessortype_1a6970a188b6f8857977f5e2c6a2c2455b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer columninterface_mod::columnprocessortype::current_column</definition>
+        <argsstring></argsstring>
+        <name>current_column</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::current_column</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Current column index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="117" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1aee7b8fe65320246d464c0013d7b78000" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::init</definition>
+        <argsstring>(this, max_columns, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>max_columns</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize column processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="120" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a58af7d78b8986527e0175d67fa1472db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::add_column</definition>
+        <argsstring>(this, virtual_col, rc)</argsstring>
+        <name>add_column</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::add_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structvirtualcolumn__mod_1_1virtualcolumntype" kindref="compound">virtualcolumntype</ref>), intent(in)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a column to the processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="121" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a0079a34b1ab51c8c2d2051ee959f726d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::process_all</definition>
+        <argsstring>(this, process_proc, rc)</argsstring>
+        <name>process_all</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::process_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>procedure(<ref refid="interfacecolumninterface__mod_1_1column__process__interface" kindref="compound">column_process_interface</ref>)</type>
+          <defname>process_proc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Process all columns with a given procedure. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="122" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a13106a9be84a7f00a5b49a4ce6bc2670" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::get_column</definition>
+        <argsstring>(this, index)</argsstring>
+        <name>get_column</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::get_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>index</defname>
+        </param>
+        <briefdescription>
+<para>Get specific column by index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="123" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a02d1104cf6059236600ebde171c1a08c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::get_current_column</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_current_column</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::get_current_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get current column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="124" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a09ad0e0d911759a29ace7c87789347b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::next_column</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>next_column</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::next_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Move to next column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="125" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1ad636b2eae1aa289675c877a172b9874f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::reset</definition>
+        <argsstring>(this)</argsstring>
+        <name>reset</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Reset to first column. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="126" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcolumninterface__mod_1_1columnprocessortype_1a07a95e54cf6f5851a1d6ef5a44042f64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure columninterface_mod::columnprocessortype::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>columninterface_mod::columnprocessortype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcolumninterface__mod_1_1columnprocessortype" kindref="compound">columnprocessortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up column processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ColumnInterface_Mod.F90" line="127" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="127" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Column processor for managing multiple virtual columns. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type manages a collection of virtual columns and provides batch processing capabilities while maintaining the column virtualization. </para>
+    </detaileddescription>
+    <location file="src/core/ColumnInterface_Mod.F90" line="112" column="1" bodyfile="src/core/ColumnInterface_Mod.F90" bodystart="112" bodyend="128"/>
+    <listofallmembers>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a58af7d78b8986527e0175d67fa1472db" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>add_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a07a95e54cf6f5851a1d6ef5a44042f64" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>cleanup</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1ae6030644c91d80feaa122952b442f834" prot="private" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>columns</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a6970a188b6f8857977f5e2c6a2c2455b" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>current_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a13106a9be84a7f00a5b49a4ce6bc2670" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>get_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a02d1104cf6059236600ebde171c1a08c" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>get_current_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1aee7b8fe65320246d464c0013d7b78000" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>init</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a08aa00846fa0b6c9121db3b85e7e17e1" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>n_columns</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a09ad0e0d911759a29ace7c87789347b1" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>next_column</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1a0079a34b1ab51c8c2d2051ee959f726d" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>process_all</name></member>
+      <member refid="structcolumninterface__mod_1_1columnprocessortype_1ad636b2eae1aa289675c877a172b9874f" prot="public" virt="non-virtual"><scope>columninterface_mod::columnprocessortype</scope><name>reset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

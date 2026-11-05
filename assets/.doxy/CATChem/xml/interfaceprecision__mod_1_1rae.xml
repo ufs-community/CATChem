@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfaceprecision__mod_1_1rae" kind="interface" language="Fortran" prot="public">
+    <compoundname>precision_mod::rae</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfaceprecision__mod_1_1rae_1a26052abd88e32c79dcca3c615ab1427b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function precision_mod::rae::rae_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f4</name>
+        <qualifiedname>precision_mod::rae::rae_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a75fdfe95b9c5392ecc43993a46f71295" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="68" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="69" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="interfaceprecision__mod_1_1rae_1a7166130d4a856830eed0c3cbc5eebe67" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function precision_mod::rae::rae_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f8</name>
+        <qualifiedname>precision_mod::rae::rae_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a6a9ef3c782043eab3ba764d380bbe55d" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/Precision_Mod.F90" line="77" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="78" bodyend="82"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/Precision_Mod.F90" line="61" column="1" bodyfile="src/core/Precision_Mod.F90" bodystart="61" bodyend="62"/>
+    <listofallmembers>
+      <member refid="interfaceprecision__mod_1_1rae_1a26052abd88e32c79dcca3c615ab1427b" prot="public" virt="non-virtual"><scope>precision_mod::rae</scope><name>rae_f4</name></member>
+      <member refid="interfaceprecision__mod_1_1rae_1a7166130d4a856830eed0c3cbc5eebe67" prot="public" virt="non-virtual"><scope>precision_mod::rae</scope><name>rae_f8</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

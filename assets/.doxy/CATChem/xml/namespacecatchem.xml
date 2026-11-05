@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchem" kind="namespace" language="Fortran">
+    <compoundname>catchem</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchem_1ac1e35198731c157c4555eabbfe4c7886" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem::cc_init_grid_manager</definition>
+        <argsstring>(container, nx, ny, nz, rc)</argsstring>
+        <name>cc_init_grid_manager</name>
+        <qualifiedname>catchem::cc_init_grid_manager</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid manager with column virtualization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>State container </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in x direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ny</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in y direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nz</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of grid points in z direction </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/catchem.F90" line="178" column="1" bodyfile="src/api/catchem.F90" bodystart="179" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem_1a292f71112b164a838787c0f2858752d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem::cc_create_virtual_column</definition>
+        <argsstring>(container, col_idx, virtual_col, rc)</argsstring>
+        <name>cc_create_virtual_column</name>
+        <qualifiedname>catchem::cc_create_virtual_column</qualifiedname>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>col_idx</defname>
+        </param>
+        <param>
+          <type>type(virtualcolumntype), intent(out)</type>
+          <defname>virtual_col</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a virtual column for processing. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>State container </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">col_idx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Column index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">virtual_col</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Virtual column object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/catchem.F90" line="209" column="1" bodyfile="src/api/catchem.F90" bodystart="210" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem_1a73c43298f0263429844c05a60ad74e3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem::cc_run_column_processes</definition>
+        <argsstring>(proc_mgr, container, rc)</argsstring>
+        <name>cc_run_column_processes</name>
+        <qualifiedname>catchem::cc_run_column_processes</qualifiedname>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>proc_mgr</defname>
+        </param>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all column-based processes using process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">proc_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>State container </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/catchem.F90" line="236" column="1" bodyfile="src/api/catchem.F90" bodystart="237" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem_1a5b5e1c2a7e33230a23b6bdcc3ff803b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem::cc_process_all_columns</definition>
+        <argsstring>(proc_mgr, process_name, container, rc)</argsstring>
+        <name>cc_process_all_columns</name>
+        <qualifiedname>catchem::cc_process_all_columns</qualifiedname>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>proc_mgr</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>type(statecontainertype), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Process all columns with a specific process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">proc_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process manager </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of process to run </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>State container </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/catchem.F90" line="249" column="1" bodyfile="src/api/catchem.F90" bodystart="250" bodyend="255"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/catchem.F90" line="55" column="1"/>
+  </compounddef>
+</doxygen>

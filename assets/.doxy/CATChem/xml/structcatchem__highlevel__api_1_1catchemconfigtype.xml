@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__highlevel__api_1_1catchemconfigtype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_highlevel_api::catchemconfigtype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a071df31bd9bfe62c74018703537d5491" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_highlevel_api::catchemconfigtype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::nx</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in x direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="57" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a324b3c1cf6c7c9baa1ff83465744c428" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_highlevel_api::catchemconfigtype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::ny</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in y direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="58" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1ad077e48d882909569f0fd6cbf5850492" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_highlevel_api::catchemconfigtype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::nz</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of grid points in z direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="59" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a7457ada2f427339a84060e1e88d6ee74" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_highlevel_api::catchemconfigtype::n_species</definition>
+        <argsstring></argsstring>
+        <name>n_species</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::n_species</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="60" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a072bbe46986f838a6f65124dcf6c5305" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchem_highlevel_api::catchemconfigtype::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Main configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="63" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1addc62e07f8eb82dbae45f8024e2ff3d3" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchem_highlevel_api::catchemconfigtype::species_file</definition>
+        <argsstring></argsstring>
+        <name>species_file</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::species_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Species definition file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="64" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a71bfc8f234078758e61cca656b482b86" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchem_highlevel_api::catchemconfigtype::mechanism_file</definition>
+        <argsstring></argsstring>
+        <name>mechanism_file</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::mechanism_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Chemical mechanism file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="65" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1ad466826718bc1a7fc239ad400101bea9" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemconfigtype::use_column_processing</definition>
+        <argsstring></argsstring>
+        <name>use_column_processing</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::use_column_processing</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable column virtualization. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="68" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1ae05e4172954d0d862b2e61898324e8cc" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemconfigtype::enable_diagnostics</definition>
+        <argsstring></argsstring>
+        <name>enable_diagnostics</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::enable_diagnostics</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Enable diagnostic output. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="69" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a5b3f459fe09affd98a691f4108ab44e1" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemconfigtype::validate_inputs</definition>
+        <argsstring></argsstring>
+        <name>validate_inputs</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::validate_inputs</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Validate input data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="70" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a97dd37791edd5757c35584f821c6265b" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchem_highlevel_api::catchemconfigtype::verbose_output</definition>
+        <argsstring></argsstring>
+        <name>verbose_output</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::verbose_output</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Enable verbose logging. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="71" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1ae5c9c2c57c7653266f0792a5d2af0daf" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemconfigtype::timestep</definition>
+        <argsstring></argsstring>
+        <name>timestep</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::timestep</qualifiedname>
+        <initializer>= 3600.0_fp</initializer>
+        <briefdescription>
+<para>Model timestep [seconds]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="74" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1a2658db42b47e1af3f348ee691702afa3" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) catchem_highlevel_api::catchemconfigtype::chemistry_solver</definition>
+        <argsstring></argsstring>
+        <name>chemistry_solver</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::chemistry_solver</qualifiedname>
+        <initializer>= &apos;default&apos;</initializer>
+        <briefdescription>
+<para>Chemistry solver type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="77" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1af4e42256cad44b8cacbe35d9dd3720d5" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) catchem_highlevel_api::catchemconfigtype::transport_scheme</definition>
+        <argsstring></argsstring>
+        <name>transport_scheme</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::transport_scheme</qualifiedname>
+        <initializer>= &apos;default&apos;</initializer>
+        <briefdescription>
+<para>Transport scheme. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="78" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__highlevel__api_1_1catchemconfigtype_1af6016eccbf70ad88a39e37b35beeda37" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_highlevel_api::catchemconfigtype::solver_tolerance</definition>
+        <argsstring></argsstring>
+        <name>solver_tolerance</name>
+        <qualifiedname>catchem_highlevel_api::catchemconfigtype::solver_tolerance</qualifiedname>
+        <initializer>= 1.0e-6_fp</initializer>
+        <briefdescription>
+<para>Solver tolerance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_HighLevel_API.F90" line="79" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Simple configuration for CATChem initialization. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_HighLevel_API.F90" line="55" column="1" bodyfile="src/api/CATChem_HighLevel_API.F90" bodystart="55" bodyend="80"/>
+    <listofallmembers>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a2658db42b47e1af3f348ee691702afa3" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>chemistry_solver</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a072bbe46986f838a6f65124dcf6c5305" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>config_file</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1ae05e4172954d0d862b2e61898324e8cc" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>enable_diagnostics</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a71bfc8f234078758e61cca656b482b86" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>mechanism_file</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a7457ada2f427339a84060e1e88d6ee74" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>n_species</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a071df31bd9bfe62c74018703537d5491" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>nx</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a324b3c1cf6c7c9baa1ff83465744c428" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>ny</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1ad077e48d882909569f0fd6cbf5850492" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>nz</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1af6016eccbf70ad88a39e37b35beeda37" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>solver_tolerance</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1addc62e07f8eb82dbae45f8024e2ff3d3" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>species_file</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1ae5c9c2c57c7653266f0792a5d2af0daf" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>timestep</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1af4e42256cad44b8cacbe35d9dd3720d5" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>transport_scheme</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1ad466826718bc1a7fc239ad400101bea9" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>use_column_processing</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a5b3f459fe09affd98a691f4108ab44e1" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>validate_inputs</name></member>
+      <member refid="structcatchem__highlevel__api_1_1catchemconfigtype_1a97dd37791edd5757c35584f821c6265b" prot="public" virt="non-virtual"><scope>catchem_highlevel_api::catchemconfigtype</scope><name>verbose_output</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

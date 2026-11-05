@@ -1,0 +1,1808 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemnetcdf__mod_1_1netcdffiletype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchemnetcdf_mod::netcdffiletype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a9a13a7da8858192ed8ec303b26b9653f" prot="private" static="no" mutable="no">
+        <type>character(len=max_string_len)</type>
+        <definition>character(len=max_string_len) catchemnetcdf_mod::netcdffiletype::filename</definition>
+        <argsstring></argsstring>
+        <name>filename</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::filename</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="110" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a9d20ff544078f4e2982243010cae1e0b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::ncid</definition>
+        <argsstring></argsstring>
+        <name>ncid</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::ncid</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="111" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a7020f0593e310ad332302f73b3664e83" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::mode</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="112" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a314453ebbb55a4c383fe9c9d5f60ae9e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemnetcdf_mod::netcdffiletype::is_open</definition>
+        <argsstring></argsstring>
+        <name>is_open</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::is_open</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="113" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a5bc08fe31cce76c48aefe894262ebcd5" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemnetcdf_mod::netcdffiletype::use_mpi</definition>
+        <argsstring></argsstring>
+        <name>use_mpi</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::use_mpi</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="116" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a3de33039cd09cbbd56b286a8be0ec7fd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::mpi_comm</definition>
+        <argsstring></argsstring>
+        <name>mpi_comm</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::mpi_comm</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="117" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a05c97ed8fdfa495576ea1821dc3ca493" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::mpi_rank</definition>
+        <argsstring></argsstring>
+        <name>mpi_rank</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::mpi_rank</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="118" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a5009b4bbc54bcbd16518b6a9314caa27" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::mpi_size</definition>
+        <argsstring></argsstring>
+        <name>mpi_size</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::mpi_size</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="119" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1abc8e128fb7fdf9f776fd7f9326d45699" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::ndims</definition>
+        <argsstring></argsstring>
+        <name>ndims</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::ndims</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="122" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a04d4d757bdd2622a2857ad582e7db549" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::nvars</definition>
+        <argsstring></argsstring>
+        <name>nvars</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::nvars</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="123" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a11d0ac9cc2e0f383c85a4433a9831376" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::ngatts</definition>
+        <argsstring></argsstring>
+        <name>ngatts</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::ngatts</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="124" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a6643a9e73c21814089af8611ca1a79a8" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemnetcdf_mod::netcdffiletype::unlimdimid</definition>
+        <argsstring></argsstring>
+        <name>unlimdimid</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::unlimdimid</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="125" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a28d11ce6af7b2eefb50d6dd4c0e4c39a" prot="public" static="no" mutable="no">
+        <type>character(len=max_name_len), dimension(max_dims)</type>
+        <definition>character(len=max_name_len), dimension(max_dims) catchemnetcdf_mod::netcdffiletype::dim_names</definition>
+        <argsstring></argsstring>
+        <name>dim_names</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::dim_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="128" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a414624558d8374e08a87aee2687d5576" prot="public" static="no" mutable="no">
+        <type>integer, dimension(max_dims)</type>
+        <definition>integer, dimension(max_dims) catchemnetcdf_mod::netcdffiletype::dim_sizes</definition>
+        <argsstring></argsstring>
+        <name>dim_sizes</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::dim_sizes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="129" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemnetcdf__mod_1_1netcdffiletype_1af16fcd026d1d8ed3d147a70a07e1687d" prot="public" static="no" mutable="no">
+        <type>integer, dimension(max_dims)</type>
+        <definition>integer, dimension(max_dims) catchemnetcdf_mod::netcdffiletype::dim_ids</definition>
+        <argsstring></argsstring>
+        <name>dim_ids</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::dim_ids</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="130" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1aef93c2686a076b8b47bacecb9e3167c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::open</definition>
+        <argsstring>netcdf_open</argsstring>
+        <name>open</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::open</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="134" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a5402cf2ff048811091cb161aed2a34db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::open_mpi</definition>
+        <argsstring>(this, filename, mode_str, mpi_comm, rc)</argsstring>
+        <name>open_mpi</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::open_mpi</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>mode_str</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>mpi_comm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Open NetCDF file with MPI support. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="135" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1af50033a8dee863b37e8f7ce7a74dc419" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::close</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>close</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::close</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Close NetCDF file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="136" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1aee15bade9299734c6dfb304370288a4a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::is_file_open</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_file_open</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::is_file_open</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if file is open. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="137" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a26de267f750497011176cae4a8a96f99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::set_mpi_comm</definition>
+        <argsstring>(this, mpi_comm, rc)</argsstring>
+        <name>set_mpi_comm</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::set_mpi_comm</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>mpi_comm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set MPI communicator for parallel I/O. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="140" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a28b801a61404d88e4d8a4605adf258f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::get_mpi_info</definition>
+        <argsstring>(this, mpi_comm, mpi_rank, mpi_size, rc)</argsstring>
+        <name>get_mpi_info</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::get_mpi_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>mpi_comm</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>mpi_rank</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>mpi_size</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get MPI information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="141" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1aaec6e757bc7916150be9269162b9eaa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::is_mpi_enabled</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_mpi_enabled</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::is_mpi_enabled</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if MPI is enabled for this file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="142" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1af2c633d6feec0973acf6ef064166de7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::get_filename</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_filename</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::get_filename</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get filename. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="145" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ad0e2eec6c60c6856aaf4ef40563b5932" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::get_dimensions</definition>
+        <argsstring>(this, dim_names, dim_sizes, ndims, rc)</argsstring>
+        <name>get_dimensions</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), optional</type>
+          <defname>dim_names</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out), optional</type>
+          <defname>dim_sizes</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>ndims</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get dimension information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="146" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a94bfeb434aec2f23a36e1cfc5db0ff9b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::get_variables</definition>
+        <argsstring>(this, var_names, nvars, rc)</argsstring>
+        <name>get_variables</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::get_variables</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(out), optional</type>
+          <defname>var_names</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>nvars</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get variable names. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="147" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a98a10dcbf4510f410fa8218527ffd9ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::has_variable</definition>
+        <argsstring>(this, var_name)</argsstring>
+        <name>has_variable</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::has_variable</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <briefdescription>
+<para>Check if variable exists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="148" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ad607b9d9cd95ab42b084c30139373672" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::has_dimension</definition>
+        <argsstring>(this, dim_name)</argsstring>
+        <name>has_dimension</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::has_dimension</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>dim_name</defname>
+        </param>
+        <briefdescription>
+<para>Check if dimension exists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="149" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ad1cbaeedb6e393503f74b131b22bdb3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_real_1d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_real_1d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_real_1d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 1D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="152" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a77f7febbe173aed8ceb004b8f74cf7aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_real_2d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_real_2d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_real_2d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 2D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="153" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a35f71e7d01d5e9dd3e30e54cfdad4d02" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_real_3d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_real_3d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_real_3d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 3D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="154" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a417b719495a93980e1406f856d7d0517" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_real_4d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_real_4d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_real_4d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 4D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="155" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1acb266398386373b1d567623153fc9e04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_int_1d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_int_1d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_int_1d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read integer 1D variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="156" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1add64351ff2f27983eb6890adfad6c058" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_string</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_string</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read string variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="157" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 1D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 2D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 3D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read 4D real variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read integer 1D variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>read_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read string variable. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="158" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="158" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1aaae2692cdba12b60a11154e334a0b387" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_real_1d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_real_1d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_real_1d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="162" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a5a26e5c698e0adfe0568024044b6c5cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_real_2d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_real_2d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_real_2d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="163" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a50f819f559e61dc43f4b05fac4ab3799" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_real_3d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_real_3d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_real_3d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="164" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a76007f2204dffed8710d5e7a4265297b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_real_4d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_real_4d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_real_4d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="165" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a0ae5e2cf0a9ac75cbcaeb9a3700a9e39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_int_1d</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_int_1d</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_int_1d</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="166" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a80b858c0ea653884313e24fdee2bd44e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_string</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_string</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="167" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_var</definition>
+        <argsstring>(this, var_name, data, rc)</argsstring>
+        <name>write_var</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_var</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="168" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ac7803064976de811faf69c65aa1e6186" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_attribute_real</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>read_attribute_real</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_attribute_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="172" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a6f587cd85c9aa44fde2f18b8c7db0e99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_attribute_string</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>read_attribute_string</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_attribute_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="173" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a2ab9a02ade9de786fb1c9b95e4576042" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_attribute_real</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>write_attribute_real</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_attribute_real</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="174" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a448969483b054cbc85597790c5dd0274" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_attribute_string</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>write_attribute_string</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_attribute_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="175" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a340ad258864b90f27b31ec81d923f526" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_attr</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>read_attr</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_attr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="176" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a340ad258864b90f27b31ec81d923f526" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::read_attr</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>read_attr</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_attr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="176" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a36bfe64e162d399cf4c0970f44a0f3d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_attr</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>write_attr</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_attr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="177" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a36bfe64e162d399cf4c0970f44a0f3d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>generic</type>
+        <definition>generic catchemnetcdf_mod::netcdffiletype::write_attr</definition>
+        <argsstring>(this, var_name, attr_name, value, rc)</argsstring>
+        <name>write_attr</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_attr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>attr_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="177" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ad5dcee644b582b666268d3afc2917cd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_fv3_coordinates</definition>
+        <argsstring>(this, ak, bk, rc)</argsstring>
+        <name>read_fv3_coordinates</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_fv3_coordinates</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>ak</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(out), allocatable</type>
+          <defname>bk</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read FV3 coordinate information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="180" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ae73ea10af5c3625f8861f50c53856330" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_time_series</definition>
+        <argsstring>(this, var_name, data, time_index, rc)</argsstring>
+        <name>read_time_series</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_time_series</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>time_index</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read time series data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="181" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1ad445ae4297a63e09532b19ca3234cf74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::read_meteorology</definition>
+        <argsstring>(this, temperature, pressure, humidity, wind_u, wind_v, surface_pressure, rc)</argsstring>
+        <name>read_meteorology</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::read_meteorology</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, allocatable</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, allocatable</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, allocatable</type>
+          <defname>humidity</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, allocatable</type>
+          <defname>wind_u</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), optional, allocatable</type>
+          <defname>wind_v</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(out), optional, allocatable</type>
+          <defname>surface_pressure</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Read meteorological data bundle. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="182" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a1c8803bacce197fc89802ce86795822d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::write_column_data</definition>
+        <argsstring>(this, var_name, data, time_index, rc)</argsstring>
+        <name>write_column_data</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::write_column_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>var_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>time_index</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Write column data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="183" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a630108a426d6e2bf0fa7b9fef9df1fab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::sync</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>sync</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::sync</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Sync data to disk. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="186" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemnetcdf__mod_1_1netcdffiletype_1a153260a6bc4e9fa818d3a2d5a93a15e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemnetcdf_mod::netcdffiletype::get_error_message</definition>
+        <argsstring>(this, error_code)</argsstring>
+        <name>get_error_message</name>
+        <qualifiedname>catchemnetcdf_mod::netcdffiletype::get_error_message</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemnetcdf__mod_1_1netcdffiletype" kindref="compound">netcdffiletype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <briefdescription>
+<para>Get error message. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemNetCDF_Mod.F90" line="187" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="187" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>NetCDF file interface type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChemNetCDF_Mod.F90" line="108" column="1" bodyfile="src/api/CATChemNetCDF_Mod.F90" bodystart="108" bodyend="189"/>
+    <listofallmembers>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1af50033a8dee863b37e8f7ce7a74dc419" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>close</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1af16fcd026d1d8ed3d147a70a07e1687d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>dim_ids</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a28d11ce6af7b2eefb50d6dd4c0e4c39a" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>dim_names</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a414624558d8374e08a87aee2687d5576" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>dim_sizes</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a9a13a7da8858192ed8ec303b26b9653f" prot="private" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>filename</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ad0e2eec6c60c6856aaf4ef40563b5932" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>get_dimensions</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a153260a6bc4e9fa818d3a2d5a93a15e5" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>get_error_message</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1af2c633d6feec0973acf6ef064166de7e" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>get_filename</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a28b801a61404d88e4d8a4605adf258f7" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>get_mpi_info</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a94bfeb434aec2f23a36e1cfc5db0ff9b" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>get_variables</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ad607b9d9cd95ab42b084c30139373672" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>has_dimension</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a98a10dcbf4510f410fa8218527ffd9ac" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>has_variable</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1aee15bade9299734c6dfb304370288a4a" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>is_file_open</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1aaec6e757bc7916150be9269162b9eaa0" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>is_mpi_enabled</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a314453ebbb55a4c383fe9c9d5f60ae9e" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>is_open</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a7020f0593e310ad332302f73b3664e83" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>mode</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a3de33039cd09cbbd56b286a8be0ec7fd" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>mpi_comm</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a05c97ed8fdfa495576ea1821dc3ca493" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>mpi_rank</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a5009b4bbc54bcbd16518b6a9314caa27" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>mpi_size</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a9d20ff544078f4e2982243010cae1e0b" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>ncid</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1abc8e128fb7fdf9f776fd7f9326d45699" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>ndims</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a11d0ac9cc2e0f383c85a4433a9831376" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>ngatts</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a04d4d757bdd2622a2857ad582e7db549" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>nvars</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1aef93c2686a076b8b47bacecb9e3167c9" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>open</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a5402cf2ff048811091cb161aed2a34db" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>open_mpi</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a340ad258864b90f27b31ec81d923f526" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_attr</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a340ad258864b90f27b31ec81d923f526" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_attr</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac7803064976de811faf69c65aa1e6186" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_attribute_real</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a6f587cd85c9aa44fde2f18b8c7db0e99" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_attribute_string</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ad5dcee644b582b666268d3afc2917cd6" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_fv3_coordinates</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1acb266398386373b1d567623153fc9e04" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_int_1d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ad445ae4297a63e09532b19ca3234cf74" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_meteorology</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ad1cbaeedb6e393503f74b131b22bdb3a" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_real_1d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a77f7febbe173aed8ceb004b8f74cf7aa" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_real_2d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a35f71e7d01d5e9dd3e30e54cfdad4d02" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_real_3d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a417b719495a93980e1406f856d7d0517" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_real_4d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1add64351ff2f27983eb6890adfad6c058" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_string</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ae73ea10af5c3625f8861f50c53856330" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_time_series</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a902aecb1aae941cd2f577d12e3548a7d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>read_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a26de267f750497011176cae4a8a96f99" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>set_mpi_comm</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a630108a426d6e2bf0fa7b9fef9df1fab" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>sync</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a6643a9e73c21814089af8611ca1a79a8" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>unlimdimid</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a5bc08fe31cce76c48aefe894262ebcd5" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>use_mpi</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a36bfe64e162d399cf4c0970f44a0f3d0" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_attr</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a36bfe64e162d399cf4c0970f44a0f3d0" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_attr</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a2ab9a02ade9de786fb1c9b95e4576042" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_attribute_real</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a448969483b054cbc85597790c5dd0274" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_attribute_string</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a1c8803bacce197fc89802ce86795822d" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_column_data</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a0ae5e2cf0a9ac75cbcaeb9a3700a9e39" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_int_1d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1aaae2692cdba12b60a11154e334a0b387" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_real_1d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a5a26e5c698e0adfe0568024044b6c5cb" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_real_2d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a50f819f559e61dc43f4b05fac4ab3799" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_real_3d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a76007f2204dffed8710d5e7a4265297b" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_real_4d</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1a80b858c0ea653884313e24fdee2bd44e" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_string</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+      <member refid="structcatchemnetcdf__mod_1_1netcdffiletype_1ac9fb15d02ef50c9cd736a0f0218ccbe2" prot="public" virt="non-virtual"><scope>catchemnetcdf_mod::netcdffiletype</scope><name>write_var</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,769 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceerror__mod" kind="namespace" language="Fortran">
+    <compoundname>error_mod</compoundname>
+    <innerclass refid="structerror__mod_1_1errorcontexttype" prot="public">error_mod::errorcontexttype</innerclass>
+    <innerclass refid="structerror__mod_1_1errorinfotype" prot="public">error_mod::errorinfotype</innerclass>
+    <innerclass refid="structerror__mod_1_1errormanagertype" prot="public">error_mod::errormanagertype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceerror__mod_1a91e681f03938e8a30a0feb5524c8538d" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::cc_success</definition>
+        <argsstring></argsstring>
+        <name>cc_success</name>
+        <qualifiedname>error_mod::cc_success</qualifiedname>
+        <initializer>=  0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="73" column="1" bodyfile="src/core/error_mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1aed94460bd2b16e1ce0c046a0a57ede7a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::cc_failure</definition>
+        <argsstring></argsstring>
+        <name>cc_failure</name>
+        <qualifiedname>error_mod::cc_failure</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="74" column="1" bodyfile="src/core/error_mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a544ddc9c4ad8be7cbc1516a0779c280a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_none</definition>
+        <argsstring></argsstring>
+        <name>error_none</name>
+        <qualifiedname>error_mod::error_none</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="80" column="1" bodyfile="src/core/error_mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ab5f08d80e754872bd50f467719d8731b" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_invalid_input</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_input</name>
+        <qualifiedname>error_mod::error_invalid_input</qualifiedname>
+        <initializer>= 1001</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="81" column="1" bodyfile="src/core/error_mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1afb51f7b9b4abe07dc9ae9a6c881d8a3c" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_invalid_config</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_config</name>
+        <qualifiedname>error_mod::error_invalid_config</qualifiedname>
+        <initializer>= 1002</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="82" column="1" bodyfile="src/core/error_mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a17f2a5049655343789477424ad086fe0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_invalid_state</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_state</name>
+        <qualifiedname>error_mod::error_invalid_state</qualifiedname>
+        <initializer>= 1003</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="83" column="1" bodyfile="src/core/error_mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a0e4f8bcf7862163bae91203fa9a5d363" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_file_not_found</definition>
+        <argsstring></argsstring>
+        <name>error_file_not_found</name>
+        <qualifiedname>error_mod::error_file_not_found</qualifiedname>
+        <initializer>= 1004</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="84" column="1" bodyfile="src/core/error_mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1acb3813c8540efd6e37b4a491c6efa794" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_file_read</definition>
+        <argsstring></argsstring>
+        <name>error_file_read</name>
+        <qualifiedname>error_mod::error_file_read</qualifiedname>
+        <initializer>= 1005</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="85" column="1" bodyfile="src/core/error_mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ad5be9d14ba7e93d1714f64ac0cc33240" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_file_write</definition>
+        <argsstring></argsstring>
+        <name>error_file_write</name>
+        <qualifiedname>error_mod::error_file_write</qualifiedname>
+        <initializer>= 1006</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="86" column="1" bodyfile="src/core/error_mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a6fbe0f6211d5396300a50d0a42128bcd" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_memory_allocation</definition>
+        <argsstring></argsstring>
+        <name>error_memory_allocation</name>
+        <qualifiedname>error_mod::error_memory_allocation</qualifiedname>
+        <initializer>= 1007</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="87" column="1" bodyfile="src/core/error_mod.F90" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a1c2c6ded19f6126b81c87da0ae24de99" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_memory_deallocation</definition>
+        <argsstring></argsstring>
+        <name>error_memory_deallocation</name>
+        <qualifiedname>error_mod::error_memory_deallocation</qualifiedname>
+        <initializer>= 1008</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="88" column="1" bodyfile="src/core/error_mod.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a720d6b0320ab3de2a4d70e79087c02a5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_dimension_mismatch</definition>
+        <argsstring></argsstring>
+        <name>error_dimension_mismatch</name>
+        <qualifiedname>error_mod::error_dimension_mismatch</qualifiedname>
+        <initializer>= 1009</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="89" column="1" bodyfile="src/core/error_mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1aad6aa5c6af14500308408b6f6a4c075c" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_bounds_check</definition>
+        <argsstring></argsstring>
+        <name>error_bounds_check</name>
+        <qualifiedname>error_mod::error_bounds_check</qualifiedname>
+        <initializer>= 1010</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="90" column="1" bodyfile="src/core/error_mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a860e360c50ef3f7813ff6bd7e74fcda0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_convergence</definition>
+        <argsstring></argsstring>
+        <name>error_convergence</name>
+        <qualifiedname>error_mod::error_convergence</qualifiedname>
+        <initializer>= 1011</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="91" column="1" bodyfile="src/core/error_mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1aef3875741e831c9c291887569a24cad8" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_numerical_instability</definition>
+        <argsstring></argsstring>
+        <name>error_numerical_instability</name>
+        <qualifiedname>error_mod::error_numerical_instability</qualifiedname>
+        <initializer>= 1012</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="92" column="1" bodyfile="src/core/error_mod.F90" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1acedb77e0c26375cdcacf6b36e79c39d0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_mpi_communication</definition>
+        <argsstring></argsstring>
+        <name>error_mpi_communication</name>
+        <qualifiedname>error_mod::error_mpi_communication</qualifiedname>
+        <initializer>= 1013</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="93" column="1" bodyfile="src/core/error_mod.F90" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a31f9bc8eb253f8d8e6447664c1fda926" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_process_initialization</definition>
+        <argsstring></argsstring>
+        <name>error_process_initialization</name>
+        <qualifiedname>error_mod::error_process_initialization</qualifiedname>
+        <initializer>= 1014</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="94" column="1" bodyfile="src/core/error_mod.F90" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a2e8af8783d9e0757cb0b1e50b6f56cbc" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_state_inconsistency</definition>
+        <argsstring></argsstring>
+        <name>error_state_inconsistency</name>
+        <qualifiedname>error_mod::error_state_inconsistency</qualifiedname>
+        <initializer>= 1015</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="95" column="1" bodyfile="src/core/error_mod.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a2661f9bb7a97d4c1e23356bfdcec928b" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_unsupported_operation</definition>
+        <argsstring></argsstring>
+        <name>error_unsupported_operation</name>
+        <qualifiedname>error_mod::error_unsupported_operation</qualifiedname>
+        <initializer>= 1016</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="96" column="1" bodyfile="src/core/error_mod.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a135a395cf7e6c3a575dd6320b92ca679" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_duplicate_entry</definition>
+        <argsstring></argsstring>
+        <name>error_duplicate_entry</name>
+        <qualifiedname>error_mod::error_duplicate_entry</qualifiedname>
+        <initializer>= 1017</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="97" column="1" bodyfile="src/core/error_mod.F90" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a4a59db1f363534c9930eb45ad222ec4a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::error_not_found</definition>
+        <argsstring></argsstring>
+        <name>error_not_found</name>
+        <qualifiedname>error_mod::error_not_found</qualifiedname>
+        <initializer>= 1018</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="98" column="1" bodyfile="src/core/error_mod.F90" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ac7e468cbb7b0f8d13643412c82e5b7b5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::severity_info</definition>
+        <argsstring></argsstring>
+        <name>severity_info</name>
+        <qualifiedname>error_mod::severity_info</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="104" column="1" bodyfile="src/core/error_mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1aa0462081d62020a4945f6288b032faf8" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::severity_warning</definition>
+        <argsstring></argsstring>
+        <name>severity_warning</name>
+        <qualifiedname>error_mod::severity_warning</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="105" column="1" bodyfile="src/core/error_mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a8547995b529178b006acfb72dcbbb7b6" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::severity_error</definition>
+        <argsstring></argsstring>
+        <name>severity_error</name>
+        <qualifiedname>error_mod::severity_error</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="106" column="1" bodyfile="src/core/error_mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1acb029d96c24f6e1e5928e3ef33fe7857" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::severity_critical</definition>
+        <argsstring></argsstring>
+        <name>severity_critical</name>
+        <qualifiedname>error_mod::severity_critical</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="107" column="1" bodyfile="src/core/error_mod.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ab7150f9b3524d360c1bdcbc8b63601f3" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::severity_fatal</definition>
+        <argsstring></argsstring>
+        <name>severity_fatal</name>
+        <qualifiedname>error_mod::severity_fatal</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="108" column="1" bodyfile="src/core/error_mod.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ad7b92c8f2df74a8337910cc890eec106" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_general</definition>
+        <argsstring></argsstring>
+        <name>category_general</name>
+        <qualifiedname>error_mod::category_general</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="114" column="1" bodyfile="src/core/error_mod.F90" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a7e45a23ce19c7ba867805cf65a18b7b9" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_input</definition>
+        <argsstring></argsstring>
+        <name>category_input</name>
+        <qualifiedname>error_mod::category_input</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="115" column="1" bodyfile="src/core/error_mod.F90" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a6d33e6c417b2dbfe7c280617df167523" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_computation</definition>
+        <argsstring></argsstring>
+        <name>category_computation</name>
+        <qualifiedname>error_mod::category_computation</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="116" column="1" bodyfile="src/core/error_mod.F90" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1ada10080a42acc0d98ad9d05660c326d5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_memory</definition>
+        <argsstring></argsstring>
+        <name>category_memory</name>
+        <qualifiedname>error_mod::category_memory</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="117" column="1" bodyfile="src/core/error_mod.F90" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a17e8d451efe4e7103f2c6396b220e8fd" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_io</definition>
+        <argsstring></argsstring>
+        <name>category_io</name>
+        <qualifiedname>error_mod::category_io</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="118" column="1" bodyfile="src/core/error_mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a05edbc670d24cada378ade74e0dea530" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_mpi</definition>
+        <argsstring></argsstring>
+        <name>category_mpi</name>
+        <qualifiedname>error_mod::category_mpi</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="119" column="1" bodyfile="src/core/error_mod.F90" bodystart="119" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceerror__mod_1a3fdb65cf6afa804e439141570575e877" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public error_mod::category_process</definition>
+        <argsstring></argsstring>
+        <name>category_process</name>
+        <qualifiedname>error_mod::category_process</qualifiedname>
+        <initializer>= 6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="120" column="1" bodyfile="src/core/error_mod.F90" bodystart="120" bodyend="120"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceerror__mod_1adf8890c67762a792dcff25da9d3e10f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public error_mod::cc_error</definition>
+        <argsstring>(errmsg, rc, thisloc, instr)</argsstring>
+        <name>cc_error</name>
+        <qualifiedname>error_mod::cc_error</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>errmsg</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>thisloc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>instr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="197" column="1" bodyfile="src/core/error_mod.F90" bodystart="198" bodyend="247"/>
+      </memberdef>
+      <member refid="group__core__modules_1ga87ab277c6a17ccfee5e2831aba7895cd" kind="function"><name>cc_warning</name></member>
+      <member refid="group__core__modules_1ga07c7634132d8b5cc9561f69d070df2ae" kind="function"><name>cc_checkvar</name></member>
+      <memberdef kind="function" id="namespaceerror__mod_1a01195b48324eef5255e3c29c518a775e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_context_init</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>error_context_init</name>
+        <qualifiedname>error_mod::error_context_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="370" column="1" bodyfile="src/core/error_mod.F90" bodystart="371" bodyend="382"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1a1703f64e5fefa1e2c0ef1c57658fdc43" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_context_clear</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_context_clear</name>
+        <qualifiedname>error_mod::error_context_clear</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clear error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="386" column="1" bodyfile="src/core/error_mod.F90" bodystart="387" bodyend="394"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1afc4475fe4061d95f43dbdaa14099ce6c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=1024) function</type>
+        <definition>character(len=1024) function error_mod::error_context_to_string</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_context_to_string</name>
+        <qualifiedname>error_mod::error_context_to_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Convert error context to string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="398" column="1" bodyfile="src/core/error_mod.F90" bodystart="399" bodyend="407"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1a34ed729cdd8ee8e8e58720b4bd0d7985" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_manager_init</definition>
+        <argsstring>(this, verbose, track_performance, rc)</argsstring>
+        <name>error_manager_init</name>
+        <qualifiedname>error_mod::error_manager_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>verbose</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>track_performance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="411" column="1" bodyfile="src/core/error_mod.F90" bodystart="412" bodyend="431"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1ae0e5b66677e895485b675d50fc71d4a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_manager_push_context</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>error_manager_push_context</name>
+        <qualifiedname>error_mod::error_manager_push_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Push context onto error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="435" column="1" bodyfile="src/core/error_mod.F90" bodystart="436" bodyend="449"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1ac06b14cf0399259861c7b91ba94f1816" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_manager_pop_context</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_manager_pop_context</name>
+        <qualifiedname>error_mod::error_manager_pop_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Pop context from error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="453" column="1" bodyfile="src/core/error_mod.F90" bodystart="454" bodyend="460"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1a9ac4848a77d974eab4db34f876b9db9e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::error_manager_report_error</definition>
+        <argsstring>(this, error_code, message, rc, location, suggestion)</argsstring>
+        <name>error_manager_report_error</name>
+        <qualifiedname>error_mod::error_manager_report_error</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>message</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>location</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>suggestion</defname>
+        </param>
+        <briefdescription>
+<para>Report error with enhanced information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="464" column="1" bodyfile="src/core/error_mod.F90" bodystart="465" bodyend="509"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceerror__mod_1ac7d0127d2041fa191fb2497d2ddecb12" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine error_mod::get_error_properties</definition>
+        <argsstring>(error_code, severity, category)</argsstring>
+        <name>get_error_properties</name>
+        <qualifiedname>error_mod::get_error_properties</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>severity</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>category</defname>
+        </param>
+        <briefdescription>
+<para>Get error properties from error code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="513" column="1" bodyfile="src/core/error_mod.F90" bodystart="514" bodyend="546"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/error_mod.F90" line="47" column="1"/>
+  </compounddef>
+</doxygen>

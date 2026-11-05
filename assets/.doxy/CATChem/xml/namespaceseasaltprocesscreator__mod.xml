@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceseasaltprocesscreator__mod" kind="namespace" language="Fortran">
+    <compoundname>seasaltprocesscreator_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceseasaltprocesscreator__mod_1aea81df453a94c7839896bc96a6c9505f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public seasaltprocesscreator_mod::create_seasalt_process</definition>
+        <argsstring>(process, rc)</argsstring>
+        <name>create_seasalt_process</name>
+        <qualifiedname>seasaltprocesscreator_mod::create_seasalt_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a new seasalt process instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This factory function creates and returns a new instance of the seasalt process. The process is not initialized - the caller must call the init() method with appropriate configuration.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">process</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Allocated process instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" line="35" column="1" bodyfile="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" bodystart="36" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltprocesscreator__mod_1a02a28baa87ef7b1c7878876bb2832d98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public seasaltprocesscreator_mod::register_seasalt_process</definition>
+        <argsstring>(process_mgr, rc)</argsstring>
+        <name>register_seasalt_process</name>
+        <qualifiedname>seasaltprocesscreator_mod::register_seasalt_process</qualifiedname>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>process_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register the seasalt process with a ProcessManager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine registers the seasalt process with a ProcessManager&apos;s factory. This is the correct way to register processes for use in applications and integration tests.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">process_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessManager to register with </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" line="64" column="1" bodyfile="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" bodystart="65" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceseasaltprocesscreator__mod_1aebf662116882f98a338a4c2617fba21d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public seasaltprocesscreator_mod::get_seasalt_default_config</definition>
+        <argsstring>(config_data)</argsstring>
+        <name>get_seasalt_default_config</name>
+        <qualifiedname>seasaltprocesscreator_mod::get_seasalt_default_config</qualifiedname>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>config_data</defname>
+        </param>
+        <briefdescription>
+<para>Get default configuration for seasalt process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function returns a default configuration string that can be used to initialize the seasalt process with reasonable defaults.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">config_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Default configuration string </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" line="88" column="1" bodyfile="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" bodystart="89" bodyend="126"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/seasalt/SeaSaltProcessCreator_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

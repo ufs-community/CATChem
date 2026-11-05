@@ -1,0 +1,1037 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemcore__mod_1_1catchemcoretype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchemcore_mod::catchemcoretype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1affc62db600752d50b78a65cc3b72cf13" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>)</type>
+        <definition>type(errormanagertype) catchemcore_mod::catchemcoretype::error_mgr</definition>
+        <argsstring></argsstring>
+        <name>error_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::error_mgr</qualifiedname>
+        <briefdescription>
+<para>Central error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="66" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1ae0ae22538667a03eb0fa088d03549fef" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configmanagertype" kindref="compound">configmanagertype</ref>)</type>
+        <definition>type(configmanagertype) catchemcore_mod::catchemcoretype::config_mgr</definition>
+        <argsstring></argsstring>
+        <name>config_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::config_mgr</qualifiedname>
+        <briefdescription>
+<para>Configuration manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="67" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1ae9c3b0839d7514e0595ea1f4ab871587" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structconfigmanager__mod_1_1configdatatype" kindref="compound">configdatatype</ref>)</type>
+        <definition>type(configdatatype) catchemcore_mod::catchemcoretype::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::config</qualifiedname>
+        <briefdescription>
+<para>Configuration data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="68" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1aa990cfab2935babddb1486b4c2b48832" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>)</type>
+        <definition>type(statemanagertype) catchemcore_mod::catchemcoretype::state_mgr</definition>
+        <argsstring></argsstring>
+        <name>state_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::state_mgr</qualifiedname>
+        <briefdescription>
+<para>State manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="69" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a569070a9ef85608db0db331c4eab4625" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structgridmanager__mod_1_1gridmanagertype" kindref="compound">gridmanagertype</ref>)</type>
+        <definition>type(gridmanagertype) catchemcore_mod::catchemcoretype::grid_mgr</definition>
+        <argsstring></argsstring>
+        <name>grid_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::grid_mgr</qualifiedname>
+        <briefdescription>
+<para>Grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="70" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a454ae1af3f260559facdf83a794d010e" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype" kindref="compound">diagnosticmanagertype</ref>)</type>
+        <definition>type(diagnosticmanagertype) catchemcore_mod::catchemcoretype::diag_mgr</definition>
+        <argsstring></argsstring>
+        <name>diag_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::diag_mgr</qualifiedname>
+        <briefdescription>
+<para>Diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="71" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a7cef98786bb9fce5a2f367f59644cc7e" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>)</type>
+        <definition>type(processmanagertype) catchemcore_mod::catchemcoretype::process_mgr</definition>
+        <argsstring></argsstring>
+        <name>process_mgr</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::process_mgr</qualifiedname>
+        <briefdescription>
+<para>Process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="72" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a6ac272df40d74282b09dff8bf8962b35" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchemcoretype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="75" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a5b211a1b306745df3ce4454b70c645d0" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchemcoretype::is_configured</definition>
+        <argsstring></argsstring>
+        <name>is_configured</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::is_configured</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Configuration status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="76" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a77c03af1f432c92599db4c9ce4b7de53" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) catchemcore_mod::catchemcoretype::config_file</definition>
+        <argsstring></argsstring>
+        <name>config_file</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::config_file</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Configuration file path. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="77" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1ab87080a32dedf430771802342cd3e78e" prot="public" static="no" mutable="no">
+        <type>character(len=256)</type>
+        <definition>character(len=256) catchemcore_mod::catchemcoretype::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::name</qualifiedname>
+        <initializer>= &apos;CATChem_Core&apos;</initializer>
+        <briefdescription>
+<para>Core instance name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="78" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a2555c7f7522fecaa30ff1da80ae26d88" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nx</qualifiedname>
+        <initializer>= 64</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="81" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a8b221b369668a5a0963391bbf26ec7df" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::ny</qualifiedname>
+        <initializer>= 64</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="81" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1abf2039b9e7ef3bdb3df9fd3fa52c6322" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nz</qualifiedname>
+        <initializer>= 72</initializer>
+        <briefdescription>
+<para>Default grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="81" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a7c6ca52a7b46b05068d8981383160a48" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::nsoil</definition>
+        <argsstring></argsstring>
+        <name>nsoil</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nsoil</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+<para>Number of soil layers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="82" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a49914acbf30063b0542be55ce2090a95" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::nsoiltype</definition>
+        <argsstring></argsstring>
+        <name>nsoiltype</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nsoiltype</qualifiedname>
+        <initializer>= 19</initializer>
+        <briefdescription>
+<para>Number of soil types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="83" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1a19a8cca6593235db7156c48f99854f86" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemcore_mod::catchemcoretype::nsurftype</definition>
+        <argsstring></argsstring>
+        <name>nsurftype</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nsurftype</qualifiedname>
+        <initializer>= 13</initializer>
+        <briefdescription>
+<para>Number of surface types. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="84" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemcore__mod_1_1catchemcoretype_1abb4899a0c42d48ac9df6b3aafef1301d" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemcore_mod::catchemcoretype::nsoil_surftype_provided</definition>
+        <argsstring></argsstring>
+        <name>nsoil_surftype_provided</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::nsoil_surftype_provided</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>true when nsoil, nsurftype and nsoiltype are provided at initialization </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="85" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a170b341db75fa7550b7a477714fd370c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::init</definition>
+        <argsstring>(this, name, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the CATChem core. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets up the core framework and initializes the error manager. Components are initialized later during configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="89" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1ac2cca73ed3d35e729955e7753c3b71c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::configure</definition>
+        <argsstring>(this, config_file, nx, ny, nz, nsoil, nsoiltype, nsurftype, rc)</argsstring>
+        <name>configure</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::configure</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoil</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsoiltype</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>nsurftype</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Configure the CATChem core with a configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Loads configuration and initializes all components in the correct order. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="90" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a8e7516de11d7f70599f038776653c543" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::finalize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>finalize</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::finalize</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize and clean up the core. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="91" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a85bfadcbdbdb38aba9c50043a9e3d0ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::validate</definition>
+        <argsstring>(this)</argsstring>
+        <name>validate</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Validate core state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="92" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1afccb55d4bc4a854fe96963dd34876cff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_state_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_state_manager</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_state_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get state manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="95" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a95fb95fef19b06d002570e541628b737" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_grid_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_grid_manager</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_grid_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="96" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a64ca44dd436a1a8800bd540f11bd0f92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_diagnostic_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_diagnostic_manager</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_diagnostic_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get diagnostic manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="97" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a0446b63850ecbd3b6ac42ca91f045663" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_process_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_process_manager</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_process_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get process manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="98" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1aa9f7c27e7f44999cdbdc6e9ffb50a218" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_config</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_config</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get configuration (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="99" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1aae8820072d8198af2cef03ba22400f3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_error_manager</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_error_manager</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_error_manager</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get error manager (controlled access) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="100" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a5fa696418d75da3e1b06c1d6d24e1135" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::run_timestep</definition>
+        <argsstring>(this, timestep, dt, rc)</argsstring>
+        <name>run_timestep</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::run_timestep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>timestep</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run a single timestep. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="103" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a8cc9598a6bced5e692dee48c68a999ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::setup_grid</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>setup_grid</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::setup_grid</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up grid manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="104" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a71812eacb3ee1d37d869f38d86c82566" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::setup_state</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>setup_state</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::setup_state</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout), target</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up state manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="105" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a540f356e7abba3ffb597443ef745c842" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::setup_diagnostics</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>setup_diagnostics</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::setup_diagnostics</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set up diagnostic manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="106" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a2db6aabf68363abb69a3aaed2be61c8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::setup_processes</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>setup_processes</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::setup_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Setup process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="107" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a13daf4a183cfafc25c21fa41948c5f93" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::add_process</definition>
+        <argsstring>(this, process_name, rc)</argsstring>
+        <name>add_process</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::add_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>process_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Add a process to the process manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="110" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a32dc3309fd85fc6f18feb7fdff137be1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::run_processes</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>run_processes</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::run_processes</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all processes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="111" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1aea2a4d2a7769a127715aaae14362c249" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::print_info</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_info</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::print_info</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print core information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="114" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1ad5eb672a087bdba06488970f8b4fa4b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::is_ready</definition>
+        <argsstring>(this)</argsstring>
+        <name>is_ready</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::is_ready</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if core is ready for operations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="115" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a5d37071e1c921102a66d7b42b302fb2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::set_name</definition>
+        <argsstring>(this, name)</argsstring>
+        <name>set_name</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::set_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <briefdescription>
+<para>Set core name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="116" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemcore__mod_1_1catchemcoretype_1a2197f4a630d149096281efa7561530d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemcore_mod::catchemcoretype::get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_memory_usage</name>
+        <qualifiedname>catchemcore_mod::catchemcoretype::get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchemcore__mod_1_1catchemcoretype" kindref="compound">catchemcoretype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get approximate memory usage. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/CATChemCore_Mod.F90" line="117" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="117" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Central CATChem core that owns all major components. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This type serves as the single entry point and owner of all major CATChem components. It manages their lifecycles and provides controlled access between components to avoid circular dependencies. </para>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>catchemcore_mod::catchemcoretype</label>
+        <link refid="structcatchemcore__mod_1_1catchemcoretype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config_mgr</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>state_mgr</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>grid_mgr</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>diag_mgr</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>process_mgr</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>chemstate_mod::chemstatetype</label>
+        <link refid="structchemstate__mod_1_1chemstatetype"/>
+        <childnode refid="16" relation="usage">
+          <edgelabel>miedata</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>chemspecies</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>grid</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>columninterface_mod::columnprocessortype</label>
+        <link refid="structcolumninterface__mod_1_1columnprocessortype"/>
+      </node>
+      <node id="3">
+        <label>configmanager_mod::configdatatype</label>
+        <link refid="structconfigmanager__mod_1_1configdatatype"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>runtime</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>file_paths</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>external_emissions</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>emission_mapping</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>run_phase_processes</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>run_phases</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>configmanager_mod::configmanagertype</label>
+        <link refid="structconfigmanager__mod_1_1configmanagertype"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>config_data</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>schema</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>configmanager_mod::configschematype</label>
+        <link refid="structconfigmanager__mod_1_1configschematype"/>
+      </node>
+      <node id="8">
+        <label>configmanager_mod::emissioncategorymapping</label>
+        <link refid="structconfigmanager__mod_1_1emissioncategorymapping"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>species_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>configmanager_mod::emissionmappingconfig</label>
+        <link refid="structconfigmanager__mod_1_1emissionmappingconfig"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>categories</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>configmanager_mod::emisspeciesmappingentry</label>
+        <link refid="structconfigmanager__mod_1_1emisspeciesmappingentry"/>
+      </node>
+      <node id="6">
+        <label>configmanager_mod::externalemisconfig</label>
+      </node>
+      <node id="5">
+        <label>configmanager_mod::filepathconfig</label>
+      </node>
+      <node id="10">
+        <label>configmanager_mod::processconfigtype</label>
+        <link refid="structconfigmanager__mod_1_1processconfigtype"/>
+      </node>
+      <node id="11">
+        <label>configmanager_mod::runphasetype</label>
+        <link refid="structconfigmanager__mod_1_1runphasetype"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>processes</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>configmanager_mod::runtimeconfig</label>
+      </node>
+      <node id="25">
+        <label>diagnosticinterface_mod::diagnosticdatatype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticdatatype"/>
+      </node>
+      <node id="24">
+        <label>diagnosticinterface_mod::diagnosticfieldtype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticfieldtype"/>
+        <childnode refid="25" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>diagnosticinterface_mod::diagnosticregistrytype</label>
+        <link refid="structdiagnosticinterface__mod_1_1diagnosticregistrytype"/>
+        <childnode refid="24" relation="usage">
+          <edgelabel>fields</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>diagnosticmanager_mod::diagnosticmanagertype</label>
+        <link refid="structdiagnosticmanager__mod_1_1diagnosticmanagertype"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>process_registries</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>error_mod::errormanagertype</label>
+        <link refid="structerror__mod_1_1errormanagertype"/>
+      </node>
+      <node id="16">
+        <label>gocart2g_mie</label>
+      </node>
+      <node id="18">
+        <label>gridgeometry_mod::gridgeometrytype</label>
+        <link refid="structgridgeometry__mod_1_1gridgeometrytype"/>
+      </node>
+      <node id="21">
+        <label>gridmanager_mod::griddecompositiontype</label>
+        <link refid="structgridmanager__mod_1_1griddecompositiontype"/>
+      </node>
+      <node id="20">
+        <label>gridmanager_mod::gridmanagertype</label>
+        <link refid="structgridmanager__mod_1_1gridmanagertype"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>decomp</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>error_mgr</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>processfactory_mod::processfactorytype</label>
+        <link refid="structprocessfactory__mod_1_1processfactorytype"/>
+      </node>
+      <node id="26">
+        <label>processmanager_mod::processmanagertype</label>
+        <link refid="structprocessmanager__mod_1_1processmanagertype"/>
+        <childnode refid="27" relation="usage">
+          <edgelabel>factory</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>column_processor</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>species_mod::speciestype</label>
+        <link refid="structspecies__mod_1_1speciestype"/>
+      </node>
+      <node id="13">
+        <label>statemanager_mod::statemanagertype</label>
+        <link refid="structstatemanager__mod_1_1statemanagertype"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>time_state</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>chem_state</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>error_mgr</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>grid_mgr</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>diag_mgr</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>timestate_mod::timestatetype</label>
+        <link refid="structtimestate__mod_1_1timestatetype"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/CATChemCore_Mod.F90" line="62" column="1" bodyfile="src/core/CATChemCore_Mod.F90" bodystart="62" bodyend="119"/>
+    <listofallmembers>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a13daf4a183cfafc25c21fa41948c5f93" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>add_process</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1ae9c3b0839d7514e0595ea1f4ab871587" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>config</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a77c03af1f432c92599db4c9ce4b7de53" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>config_file</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1ae0ae22538667a03eb0fa088d03549fef" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>config_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1ac2cca73ed3d35e729955e7753c3b71c5" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>configure</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a454ae1af3f260559facdf83a794d010e" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>diag_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1affc62db600752d50b78a65cc3b72cf13" prot="private" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>error_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a8e7516de11d7f70599f038776653c543" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>finalize</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1aa9f7c27e7f44999cdbdc6e9ffb50a218" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_config</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a64ca44dd436a1a8800bd540f11bd0f92" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_diagnostic_manager</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1aae8820072d8198af2cef03ba22400f3d" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_error_manager</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a95fb95fef19b06d002570e541628b737" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_grid_manager</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a2197f4a630d149096281efa7561530d7" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_memory_usage</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a0446b63850ecbd3b6ac42ca91f045663" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_process_manager</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1afccb55d4bc4a854fe96963dd34876cff" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>get_state_manager</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a569070a9ef85608db0db331c4eab4625" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>grid_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a170b341db75fa7550b7a477714fd370c" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>init</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a5b211a1b306745df3ce4454b70c645d0" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>is_configured</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a6ac272df40d74282b09dff8bf8962b35" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>is_initialized</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1ad5eb672a087bdba06488970f8b4fa4b1" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>is_ready</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1ab87080a32dedf430771802342cd3e78e" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>name</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a7c6ca52a7b46b05068d8981383160a48" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nsoil</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1abb4899a0c42d48ac9df6b3aafef1301d" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nsoil_surftype_provided</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a49914acbf30063b0542be55ce2090a95" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nsoiltype</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a19a8cca6593235db7156c48f99854f86" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nsurftype</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a2555c7f7522fecaa30ff1da80ae26d88" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nx</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a8b221b369668a5a0963391bbf26ec7df" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>ny</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1abf2039b9e7ef3bdb3df9fd3fa52c6322" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>nz</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1aea2a4d2a7769a127715aaae14362c249" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>print_info</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a7cef98786bb9fce5a2f367f59644cc7e" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>process_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a32dc3309fd85fc6f18feb7fdff137be1" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>run_processes</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a5fa696418d75da3e1b06c1d6d24e1135" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>run_timestep</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a5d37071e1c921102a66d7b42b302fb2d" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>set_name</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a540f356e7abba3ffb597443ef745c842" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>setup_diagnostics</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a8cc9598a6bced5e692dee48c68a999ac" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>setup_grid</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a2db6aabf68363abb69a3aaed2be61c8a" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>setup_processes</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a71812eacb3ee1d37d869f38d86c82566" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>setup_state</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1aa990cfab2935babddb1486b4c2b48832" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>state_mgr</name></member>
+      <member refid="structcatchemcore__mod_1_1catchemcoretype_1a85bfadcbdbdb38aba9c50043a9e3d0ed" prot="public" virt="non-virtual"><scope>catchemcore_mod::catchemcoretype</scope><name>validate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -11,10 +11,10 @@
 
 module drydepscheme_gocart_mod
 
-   use catchem_bridge_precision, only: fp
+   use precision_mod, only: fp
    use drydepcommon_mod, only: drydepschemegocartconfig
-   use catchem_bridge_error, only: cc_success, cc_error
-   use catchem_bridge_constants, only: cp, g0, von_karman  !load the constants needed for this scheme
+   use error_mod, only: cc_success, cc_error
+   use constants, only: cp, g0, von_karman  !load the constants needed for this scheme
 
    implicit none
    private
@@ -157,10 +157,7 @@ contains
          do species_idx = 1, num_species
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (is_gas(species_idx)) cycle
-            ! Optionally skip SO4/MSA so their dry deposition is handled by
-            ! so4chem (GOCART SulfateChemDriver) instead.  The core marshals
-            ! species labels upper-cased; the lowercase branches keep the gate
-            ! correct for direct Fortran callers that pass catalog names.
+            ! Optionally skip SO4/MSA so their dry deposition is handled by so4chem (GOCART SulfateChemDriver) instead.
             if (params%skip_sulfate_aero .and. (trim(species_short_name(species_idx)) == 'SO4' .or. &
                trim(species_short_name(species_idx)) == 'so4' .or. trim(species_short_name(species_idx)) == 'MSA' .or. &
                trim(species_short_name(species_idx)) == 'msa')) cycle

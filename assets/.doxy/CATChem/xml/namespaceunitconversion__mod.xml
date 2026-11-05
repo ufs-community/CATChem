@@ -1,0 +1,1718 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceunitconversion__mod" kind="namespace" language="Fortran">
+    <compoundname>unitconversion_mod</compoundname>
+    <innerclass refid="structunitconversion__mod_1_1unitconvertertype" prot="public">unitconversion_mod::unitconvertertype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a58f37cbb9d9c3d33c4ae05cf6c04dab7" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::standard_temp</definition>
+        <argsstring></argsstring>
+        <name>standard_temp</name>
+        <qualifiedname>unitconversion_mod::standard_temp</qualifiedname>
+        <initializer>= 273.15_fp</initializer>
+        <briefdescription>
+<para>Standard temperature [K]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="41" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a9cf326da91e6b2e444a0fbe3cc2edee4" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::standard_press</definition>
+        <argsstring></argsstring>
+        <name>standard_press</name>
+        <qualifiedname>unitconversion_mod::standard_press</qualifiedname>
+        <initializer>= ATM</initializer>
+        <briefdescription>
+<para>Standard pressure [Pa] from Constants. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="42" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a03d2a5fa5654c873457fd8236122b4ca" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::pa_to_hpa</definition>
+        <argsstring></argsstring>
+        <name>pa_to_hpa</name>
+        <qualifiedname>unitconversion_mod::pa_to_hpa</qualifiedname>
+        <initializer>= 0.01_fp</initializer>
+        <briefdescription>
+<para>Pa to hPa. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="45" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a84da0c2cfdc7120200851b44f1c55aa8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::pa_to_atm</definition>
+        <argsstring></argsstring>
+        <name>pa_to_atm</name>
+        <qualifiedname>unitconversion_mod::pa_to_atm</qualifiedname>
+        <initializer>= 1.0_fp/ATM</initializer>
+        <briefdescription>
+<para>Pa to atm (using Constants ATM) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="46" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a0dac38804928bd676ec29f06a4f5f403" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::pa_to_torr</definition>
+        <argsstring></argsstring>
+        <name>pa_to_torr</name>
+        <qualifiedname>unitconversion_mod::pa_to_torr</qualifiedname>
+        <initializer>= 0.007501_fp</initializer>
+        <briefdescription>
+<para>Pa to Torr. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="47" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a624b97196ee640499f165008bd032041" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ppb_to_ppmv</definition>
+        <argsstring></argsstring>
+        <name>ppb_to_ppmv</name>
+        <qualifiedname>unitconversion_mod::ppb_to_ppmv</qualifiedname>
+        <initializer>= 1.0e-3_fp</initializer>
+        <briefdescription>
+<para>ppb to ppmv </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="48" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1af15607e73d5fe711d19287fd49df255d" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ppt_to_ppbv</definition>
+        <argsstring></argsstring>
+        <name>ppt_to_ppbv</name>
+        <qualifiedname>unitconversion_mod::ppt_to_ppbv</qualifiedname>
+        <initializer>= 1.0e-3_fp</initializer>
+        <briefdescription>
+<para>ppt to ppbv </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="49" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ac809d56f83897c8c81207331a3815819" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::inch_to_m</definition>
+        <argsstring></argsstring>
+        <name>inch_to_m</name>
+        <qualifiedname>unitconversion_mod::inch_to_m</qualifiedname>
+        <initializer>= 0.0254_fp</initializer>
+        <briefdescription>
+<para>inch to meter </para>
+        </briefdescription>
+        <detaileddescription>
+<para>inches to meters </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="52" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ab6cfbe08d32aa66c665d53b810214b3e" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::foot_to_m</definition>
+        <argsstring></argsstring>
+        <name>foot_to_m</name>
+        <qualifiedname>unitconversion_mod::foot_to_m</qualifiedname>
+        <initializer>= 0.3048_fp</initializer>
+        <briefdescription>
+<para>foot to meter </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="53" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a3e24265ca116cca57126b1b27c1d7d8d" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::yard_to_m</definition>
+        <argsstring></argsstring>
+        <name>yard_to_m</name>
+        <qualifiedname>unitconversion_mod::yard_to_m</qualifiedname>
+        <initializer>= 0.9144_fp</initializer>
+        <briefdescription>
+<para>yard to meter </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="54" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ab5c5b65a271bb6cbf84dd6c72be9ce4e" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::mile_to_m</definition>
+        <argsstring></argsstring>
+        <name>mile_to_m</name>
+        <qualifiedname>unitconversion_mod::mile_to_m</qualifiedname>
+        <initializer>= 1609.344_fp</initializer>
+        <briefdescription>
+<para>mile to meter </para>
+        </briefdescription>
+        <detaileddescription>
+<para>miles to meters </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="55" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a46c8bc61b5f44783f42d280cd458ec08" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::sqft_to_m2</definition>
+        <argsstring></argsstring>
+        <name>sqft_to_m2</name>
+        <qualifiedname>unitconversion_mod::sqft_to_m2</qualifiedname>
+        <initializer>= 0.09290304_fp</initializer>
+        <briefdescription>
+<para>square foot to m² </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="56" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1adbf7ec604cbacb4ebf8ca53edddda837" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::acre_to_m2</definition>
+        <argsstring></argsstring>
+        <name>acre_to_m2</name>
+        <qualifiedname>unitconversion_mod::acre_to_m2</qualifiedname>
+        <initializer>= 4046.856_fp</initializer>
+        <briefdescription>
+<para>acre to m² </para>
+        </briefdescription>
+        <detaileddescription>
+<para>acres to square meters </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="57" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a41c27209b330f0caba93c5e164d866fe" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::cuft_to_m3</definition>
+        <argsstring></argsstring>
+        <name>cuft_to_m3</name>
+        <qualifiedname>unitconversion_mod::cuft_to_m3</qualifiedname>
+        <initializer>= 0.02831685_fp</initializer>
+        <briefdescription>
+<para>cubic foot to m³ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="58" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a509ff07eac5a5be92a03a21a2b11c9c9" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::gallon_to_m3</definition>
+        <argsstring></argsstring>
+        <name>gallon_to_m3</name>
+        <qualifiedname>unitconversion_mod::gallon_to_m3</qualifiedname>
+        <initializer>= 0.003785412_fp</initializer>
+        <briefdescription>
+<para>US gallon to m³ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="59" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a0d48017113217a1ae4287c8c2ec466b8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::mph_to_ms</definition>
+        <argsstring></argsstring>
+        <name>mph_to_ms</name>
+        <qualifiedname>unitconversion_mod::mph_to_ms</qualifiedname>
+        <initializer>= 0.44704_fp</initializer>
+        <briefdescription>
+<para>mph to m/s </para>
+        </briefdescription>
+        <detaileddescription>
+<para>miles per hour to m/s </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="60" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a8aabac00b968a1d7dcc7a8c7bd30e869" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::fts_to_ms</definition>
+        <argsstring></argsstring>
+        <name>fts_to_ms</name>
+        <qualifiedname>unitconversion_mod::fts_to_ms</qualifiedname>
+        <initializer>= 0.3048_fp</initializer>
+        <briefdescription>
+<para>ft/s to m/s </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="61" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a229ee2ae98e95fcae8125559f18e292a" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::knot_to_ms</definition>
+        <argsstring></argsstring>
+        <name>knot_to_ms</name>
+        <qualifiedname>unitconversion_mod::knot_to_ms</qualifiedname>
+        <initializer>= 0.514444_fp</initializer>
+        <briefdescription>
+<para>knot to m/s </para>
+        </briefdescription>
+        <detaileddescription>
+<para>knots to m/s </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="62" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a297669de33220d305bd3d4dcf2ebaa74" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::lbf_to_n</definition>
+        <argsstring></argsstring>
+        <name>lbf_to_n</name>
+        <qualifiedname>unitconversion_mod::lbf_to_n</qualifiedname>
+        <initializer>= 4.448222_fp</initializer>
+        <briefdescription>
+<para>pound-force to Newton </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="63" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ae71af0130d50266ba6081474fa2ddca3" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::psi_to_pa</definition>
+        <argsstring></argsstring>
+        <name>psi_to_pa</name>
+        <qualifiedname>unitconversion_mod::psi_to_pa</qualifiedname>
+        <initializer>= 6894.757_fp</initializer>
+        <briefdescription>
+<para>psi to Pascal </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="64" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a6c172387b99cf24fc1640ef56d0987b0" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::inhg_to_pa</definition>
+        <argsstring></argsstring>
+        <name>inhg_to_pa</name>
+        <qualifiedname>unitconversion_mod::inhg_to_pa</qualifiedname>
+        <initializer>= 3386.389_fp</initializer>
+        <briefdescription>
+<para>inHg to Pascal </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="65" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1aba58568745cf594c07633870995e4314" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::lb_to_kg</definition>
+        <argsstring></argsstring>
+        <name>lb_to_kg</name>
+        <qualifiedname>unitconversion_mod::lb_to_kg</qualifiedname>
+        <initializer>= 0.4535924_fp</initializer>
+        <briefdescription>
+<para>pound to kg </para>
+        </briefdescription>
+        <detaileddescription>
+<para>pounds to kg </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="66" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ae9da75bd77bd02e09b5b994061e4a034" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::oz_to_kg</definition>
+        <argsstring></argsstring>
+        <name>oz_to_kg</name>
+        <qualifiedname>unitconversion_mod::oz_to_kg</qualifiedname>
+        <initializer>= 0.02834952_fp</initializer>
+        <briefdescription>
+<para>ounce to kg </para>
+        </briefdescription>
+        <detaileddescription>
+<para>ounces to kg </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="67" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1aecdc12b2ad67dc9ecf480aa1ce5a2c7c" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ton_to_kg</definition>
+        <argsstring></argsstring>
+        <name>ton_to_kg</name>
+        <qualifiedname>unitconversion_mod::ton_to_kg</qualifiedname>
+        <initializer>= 907.1847_fp</initializer>
+        <briefdescription>
+<para>US ton to kg. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="68" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1abfadeaee7f602504203b95316662c89b" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::btu_to_j</definition>
+        <argsstring></argsstring>
+        <name>btu_to_j</name>
+        <qualifiedname>unitconversion_mod::btu_to_j</qualifiedname>
+        <initializer>= 1055.056_fp</initializer>
+        <briefdescription>
+<para>BTU to Joule. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="69" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a1391a2655a54058361b8e4b922bf3c0a" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::calorie_to_j</definition>
+        <argsstring></argsstring>
+        <name>calorie_to_j</name>
+        <qualifiedname>unitconversion_mod::calorie_to_j</qualifiedname>
+        <initializer>= 4.184_fp</initializer>
+        <briefdescription>
+<para>calorie to Joule </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="70" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ad43106657ece41c767f15f1aa68a5b75" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ft_to_m</definition>
+        <argsstring></argsstring>
+        <name>ft_to_m</name>
+        <qualifiedname>unitconversion_mod::ft_to_m</qualifiedname>
+        <initializer>= 0.3048_fp</initializer>
+        <briefdescription>
+<para>feet to meters </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="73" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1ace6f5801e311f9b9bb4c86aef51d5e43" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::yd_to_m</definition>
+        <argsstring></argsstring>
+        <name>yd_to_m</name>
+        <qualifiedname>unitconversion_mod::yd_to_m</qualifiedname>
+        <initializer>= 0.9144_fp</initializer>
+        <briefdescription>
+<para>yards to meters </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="76" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a4e9ab23d6000329aa216f7b29458b1c1" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ft2_to_m2</definition>
+        <argsstring></argsstring>
+        <name>ft2_to_m2</name>
+        <qualifiedname>unitconversion_mod::ft2_to_m2</qualifiedname>
+        <initializer>= 0.092903_fp</initializer>
+        <briefdescription>
+<para>square feet to square meters </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="77" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a80141f8496ad944608e809291b8509f6" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::ft3_to_m3</definition>
+        <argsstring></argsstring>
+        <name>ft3_to_m3</name>
+        <qualifiedname>unitconversion_mod::ft3_to_m3</qualifiedname>
+        <initializer>= 0.028317_fp</initializer>
+        <briefdescription>
+<para>cubic feet to cubic meters </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="79" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespaceunitconversion__mod_1a43b0e5f6a4b1b9ca0b73df6bba47b4f8" prot="private" static="no" mutable="no">
+        <type>real(fp), parameter</type>
+        <definition>real(fp), parameter unitconversion_mod::gal_to_m3</definition>
+        <argsstring></argsstring>
+        <name>gal_to_m3</name>
+        <qualifiedname>unitconversion_mod::gal_to_m3</qualifiedname>
+        <initializer>= 0.003785_fp</initializer>
+        <briefdescription>
+<para>US gallons to cubic meters. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="80" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ace5accca9dfadc280cf3ce228e7b227e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public unitconversion_mod::convert_concentration</definition>
+        <argsstring>(input_value, input_units, output_units, molecular_weight, temperature, pressure, output_value, rc)</argsstring>
+        <name>convert_concentration</name>
+        <qualifiedname>unitconversion_mod::convert_concentration</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>input_value</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>output_value</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert concentration units between different systems. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="127" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="130" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1afba0e5cde3791f73362a134a3c6aae20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_pressure</definition>
+        <argsstring>(pressure_in, input_units, output_units, rc)</argsstring>
+        <name>convert_pressure</name>
+        <qualifiedname>unitconversion_mod::convert_pressure</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert pressure units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="165" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="166" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a6b6c843cb8ba2e24b0016317c70719c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_temperature</definition>
+        <argsstring>(temp_in, input_units, output_units, rc)</argsstring>
+        <name>convert_temperature</name>
+        <qualifiedname>unitconversion_mod::convert_temperature</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert temperature units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="213" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="214" bodyend="249"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a7d53d59399f5f6ac3300d219c5acd90d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_flux</definition>
+        <argsstring>(flux_in, input_units, output_units, molecular_weight, rc)</argsstring>
+        <name>convert_flux</name>
+        <qualifiedname>unitconversion_mod::convert_flux</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>flux_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert flux units. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="253" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="254" bodyend="302"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a826963f5f269af135125d7800e9a4c48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_rate_constant</definition>
+        <argsstring>(rate_in, input_units, output_units, rc)</argsstring>
+        <name>convert_rate_constant</name>
+        <qualifiedname>unitconversion_mod::convert_rate_constant</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rate_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert rate constant units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="306" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="307" bodyend="346"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1aa5a979ba1df37fd8b9a2b33cbb023765" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_mass_units</definition>
+        <argsstring>(mass_in, input_units, output_units, rc)</argsstring>
+        <name>convert_mass_units</name>
+        <qualifiedname>unitconversion_mod::convert_mass_units</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>mass_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert mass units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="350" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="351" bodyend="402"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ab830d28228c6b6469b064cf1e3e79c64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::calculate_air_density</definition>
+        <argsstring>(temperature, pressure, humidity)</argsstring>
+        <name>calculate_air_density</name>
+        <qualifiedname>unitconversion_mod::calculate_air_density</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>humidity</defname>
+        </param>
+        <briefdescription>
+<para>Calculate air density. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">humidity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>relative humidity [0-1] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>[kg/m³] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="406" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="407" bodyend="426"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1abba838b0affd53310f0f03a0e97f191d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::calculate_molecular_weight</definition>
+        <argsstring>(formula)</argsstring>
+        <name>calculate_molecular_weight</name>
+        <qualifiedname>unitconversion_mod::calculate_molecular_weight</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>formula</defname>
+        </param>
+        <briefdescription>
+<para>Calculate molecular weight from formula. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="430" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="431" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a77213b99f984aee96a30fb00c2d21039" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine unitconversion_mod::converter_init</definition>
+        <argsstring>(this, temperature, pressure)</argsstring>
+        <name>converter_init</name>
+        <qualifiedname>unitconversion_mod::converter_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Initialize unit converter. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="466" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="467" bodyend="487"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a79df91183f0374a346a120fa4b978b83" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine unitconversion_mod::converter_set_conditions</definition>
+        <argsstring>(this, temperature, pressure, humidity)</argsstring>
+        <name>converter_set_conditions</name>
+        <qualifiedname>unitconversion_mod::converter_set_conditions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>humidity</defname>
+        </param>
+        <briefdescription>
+<para>Set atmospheric conditions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">humidity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>relative humidity [0-1] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="491" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="492" bodyend="506"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a7ab6eaba01d7a4f62dc182bbda2e1290" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_get_air_density</definition>
+        <argsstring>(this)</argsstring>
+        <name>converter_get_air_density</name>
+        <qualifiedname>unitconversion_mod::converter_get_air_density</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get air density. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="510" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="511" bodyend="515"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ac497d8ea81c799e04e1afed5ed19f14d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_calculate_number_density</definition>
+        <argsstring>(this)</argsstring>
+        <name>converter_calculate_number_density</name>
+        <qualifiedname>unitconversion_mod::converter_calculate_number_density</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Calculate number density. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>[molecules/cm³] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="519" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="520" bodyend="524"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ae144f6984f1d3cd08ce82ec2b7d5f49c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_ppbv_to_ugm3</definition>
+        <argsstring>(this, ppbv, molecular_weight)</argsstring>
+        <name>converter_ppbv_to_ugm3</name>
+        <qualifiedname>unitconversion_mod::converter_ppbv_to_ugm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppbv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppbv to μg/m³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="528" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="529" bodyend="535"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a571e94a27f55927856e71abb1b682220" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_ugm3_to_ppbv</definition>
+        <argsstring>(this, ugm3, molecular_weight)</argsstring>
+        <name>converter_ugm3_to_ppbv</name>
+        <qualifiedname>unitconversion_mod::converter_ugm3_to_ppbv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ugm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert μg/m³ to ppbv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="539" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="540" bodyend="546"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a2eb0e013b1debefe3cffd609cf703093" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_molcm3_to_ppbv</definition>
+        <argsstring>(this, molcm3, temperature, pressure)</argsstring>
+        <name>converter_molcm3_to_ppbv</name>
+        <qualifiedname>unitconversion_mod::converter_molcm3_to_ppbv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molcm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Convert molecules/cm³ to ppbv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="550" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="551" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1acdadf97eb99370f5dd81fda99b36b217" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_ppbv_to_molcm3</definition>
+        <argsstring>(this, ppbv, temperature, pressure)</argsstring>
+        <name>converter_ppbv_to_molcm3</name>
+        <qualifiedname>unitconversion_mod::converter_ppbv_to_molcm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppbv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppbv to molecules/cm³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="565" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="566" bodyend="576"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ac2a8d5a1fcb484233ecd5d511293a2f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_ppmv_to_mgm3</definition>
+        <argsstring>(this, ppmv, molecular_weight)</argsstring>
+        <name>converter_ppmv_to_mgm3</name>
+        <qualifiedname>unitconversion_mod::converter_ppmv_to_mgm3</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>ppmv</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert ppmv to mg/m³ </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="580" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="581" bodyend="587"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a22a72849a6a3b19f65e24cce9363ebc3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_mgm3_to_ppmv</definition>
+        <argsstring>(this, mgm3, molecular_weight)</argsstring>
+        <name>converter_mgm3_to_ppmv</name>
+        <qualifiedname>unitconversion_mod::converter_mgm3_to_ppmv</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>mgm3</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert mg/m³ to ppmv. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="591" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="592" bodyend="598"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a262578aa5087a2fda909f1831fafb63d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_calculate_column_mass</definition>
+        <argsstring>(this, concentrations, layer_heights, molecular_weight)</argsstring>
+        <name>converter_calculate_column_mass</name>
+        <qualifiedname>unitconversion_mod::converter_calculate_column_mass</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>layer_heights</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Calculate column mass [kg/m²]. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[ppbv] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layer_heights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[m] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>[kg/m²] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="602" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="604" bodyend="620"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a4d1ca9d25c19e8a4e9d80c606b0e3ea5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_calculate_dobson_units</definition>
+        <argsstring>(this, concentrations, layer_heights)</argsstring>
+        <name>converter_calculate_dobson_units</name>
+        <qualifiedname>unitconversion_mod::converter_calculate_dobson_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>layer_heights</defname>
+        </param>
+        <briefdescription>
+<para>Calculate Dobson Units for gas columns. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[ppbv] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">layer_heights</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>[DU] </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="624" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="625" bodyend="642"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a71da78e924018f81a688bc9c33b7553f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_molcm2s_to_kgm2s</definition>
+        <argsstring>(this, molcm2s, molecular_weight)</argsstring>
+        <name>converter_molcm2s_to_kgm2s</name>
+        <qualifiedname>unitconversion_mod::converter_molcm2s_to_kgm2s</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molcm2s</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert mol/cm²/s to kg/m²/s. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="646" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="647" bodyend="653"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ad7bbd4b7f0d04d90e9066f8030f3dd04" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_kgm2s_to_molcm2s</definition>
+        <argsstring>(this, kgm2s, molecular_weight)</argsstring>
+        <name>converter_kgm2s_to_molcm2s</name>
+        <qualifiedname>unitconversion_mod::converter_kgm2s_to_molcm2s</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>kgm2s</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <briefdescription>
+<para>Convert kg/m²/s to mol/cm²/s. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>[g/mol] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="657" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="658" bodyend="664"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a37a4fe3d6847eabb6852afcbabc0595b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function</type>
+        <definition>real(fp) function unitconversion_mod::converter_convert_rate_units</definition>
+        <argsstring>(this, rate_in, input_units, output_units, rc)</argsstring>
+        <name>converter_convert_rate_units</name>
+        <qualifiedname>unitconversion_mod::converter_convert_rate_units</qualifiedname>
+        <param>
+          <type>class(<ref refid="structunitconversion__mod_1_1unitconvertertype" kindref="compound">unitconvertertype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>rate_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert rate constant units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="668" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="669" bodyend="676"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1aecb407c74036555d436089a5bdc4d128" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_length</definition>
+        <argsstring>(length_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_length</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_length</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>length_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial length units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="684" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="685" bodyend="744"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a9afa365776e3ac9a175c558c422102cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_area</definition>
+        <argsstring>(area_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_area</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_area</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>area_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial area units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="748" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="749" bodyend="804"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a9514480df5b15a6ee5ebc99d7dd85305" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_volume</definition>
+        <argsstring>(volume_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_volume</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_volume</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>volume_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial volume units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="808" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="809" bodyend="876"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a7d59b844f9b4708a7db33f6f239f3a54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_speed</definition>
+        <argsstring>(speed_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_speed</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_speed</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>speed_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial speed units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="880" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="881" bodyend="932"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a2e09be20304cdacd04ad4d77f6848ac8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_force</definition>
+        <argsstring>(force_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_force</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_force</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>force_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial force units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="936" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="937" bodyend="984"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a3feac1559605dae9a85369334e17b5bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_pressure</definition>
+        <argsstring>(pressure_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_pressure</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_pressure</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>pressure_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial pressure units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="988" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="989" bodyend="1056"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1af6231d01778b364115a80e3e476de6ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_temperature</definition>
+        <argsstring>(temp_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_temperature</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_temperature</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>temp_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial temperature units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="1060" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="1061" bodyend="1100"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1a528f486ae0363ba7572251f8616d8c21" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_mass</definition>
+        <argsstring>(mass_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_mass</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_mass</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>mass_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial mass units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="1104" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="1105" bodyend="1168"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceunitconversion__mod_1ac28c8318e88c16bc20f27e78184981fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, public</type>
+        <definition>real(fp) function, public unitconversion_mod::convert_imperial_energy</definition>
+        <argsstring>(energy_in, input_units, output_units, rc)</argsstring>
+        <name>convert_imperial_energy</name>
+        <qualifiedname>unitconversion_mod::convert_imperial_energy</qualifiedname>
+        <param>
+          <type>real(fp), intent(in)</type>
+          <defname>energy_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>input_units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>output_units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert imperial energy units to metric. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/UnitConversion_Mod.F90" line="1172" column="1" bodyfile="src/core/UnitConversion_Mod.F90" bodystart="1173" bodyend="1236"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/UnitConversion_Mod.F90" line="13" column="1"/>
+  </compounddef>
+</doxygen>

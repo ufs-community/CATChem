@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir">
+    <compoundname>src/core</compoundname>
+    <innerfile refid="_c_a_t_chem_core___mod_8_f90">CATChemCore_Mod.F90</innerfile>
+    <innerfile refid="_chem_species_utils___mod_8_f90">ChemSpeciesUtils_Mod.F90</innerfile>
+    <innerfile refid="chemstate__mod_8_f90">chemstate_mod.F90</innerfile>
+    <innerfile refid="_column_interface___mod_8_f90">ColumnInterface_Mod.F90</innerfile>
+    <innerfile refid="_config_manager___mod_8_f90">ConfigManager_Mod.F90</innerfile>
+    <innerfile refid="constants_8_f90">constants.F90</innerfile>
+    <innerfile refid="_diagnostic_interface___mod_8_f90">DiagnosticInterface_Mod.F90</innerfile>
+    <innerfile refid="_diagnostic_manager___mod_8_f90">DiagnosticManager_Mod.F90</innerfile>
+    <innerfile refid="_emission_config_validator___mod_8_f90">EmissionConfigValidator_Mod.F90</innerfile>
+    <innerfile refid="error__mod_8_f90">error_mod.F90</innerfile>
+    <innerfile refid="_ext_emis_data___mod_8_f90">ExtEmisData_Mod.F90</innerfile>
+    <innerfile refid="_grid_geometry___mod_8_f90">GridGeometry_Mod.F90</innerfile>
+    <innerfile refid="_grid_manager___mod_8_f90">GridManager_Mod.F90</innerfile>
+    <innerfile refid="init__mod_8_f90">init_mod.F90</innerfile>
+    <innerfile refid="met__utilities__mod_8_f90">met_utilities_mod.F90</innerfile>
+    <innerfile refid="metstate__mod_8_f90">metstate_mod.F90</innerfile>
+    <innerfile refid="_precision___mod_8_f90">Precision_Mod.F90</innerfile>
+    <innerfile refid="_process_factory___mod_8_f90">ProcessFactory_Mod.F90</innerfile>
+    <innerfile refid="_process_interface___mod_8_f90">ProcessInterface_Mod.F90</innerfile>
+    <innerfile refid="_process_manager___mod_8_f90">ProcessManager_Mod.F90</innerfile>
+    <innerfile refid="_process_registry___mod_8_f90">ProcessRegistry_Mod.F90</innerfile>
+    <innerfile refid="species__mod_8_f90">species_mod.F90</innerfile>
+    <innerfile refid="state__interface__mod_8_f90">state_interface_mod.F90</innerfile>
+    <innerfile refid="_state_manager___mod_8_f90">StateManager_Mod.F90</innerfile>
+    <innerfile refid="_time_state___mod_8_f90">TimeState_Mod.F90</innerfile>
+    <innerfile refid="_unit_conversion___mod_8_f90">UnitConversion_Mod.F90</innerfile>
+    <innerfile refid="utilities__mod_8_f90">utilities_mod.F90</innerfile>
+    <innerfile refid="_virtual_column___mod_8_f90">VirtualColumn_Mod.F90</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/"/>
+  </compounddef>
+</doxygen>

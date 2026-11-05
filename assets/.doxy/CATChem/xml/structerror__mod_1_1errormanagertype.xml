@@ -1,0 +1,335 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structerror__mod_1_1errormanagertype" kind="type" language="Fortran" prot="public">
+    <compoundname>error_mod::errormanagertype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1a627d847c8916afdc51f5ff1ad4e8175a" prot="private" static="no" mutable="no">
+        <type>type(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), dimension(:), allocatable</type>
+        <definition>type(errorcontexttype), dimension(:), allocatable error_mod::errormanagertype::context_stack</definition>
+        <argsstring></argsstring>
+        <name>context_stack</name>
+        <qualifiedname>error_mod::errormanagertype::context_stack</qualifiedname>
+        <briefdescription>
+<para>Context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="159" column="1" bodyfile="src/core/error_mod.F90" bodystart="159" bodyend="159"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1ad7eaf956fd379120023a2cee378dc986" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errormanagertype::stack_depth</definition>
+        <argsstring></argsstring>
+        <name>stack_depth</name>
+        <qualifiedname>error_mod::errormanagertype::stack_depth</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Current stack depth. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="160" column="1" bodyfile="src/core/error_mod.F90" bodystart="160" bodyend="160"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1af46e270c2d5242d3465906e5961f1111" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errormanagertype::total_errors</definition>
+        <argsstring></argsstring>
+        <name>total_errors</name>
+        <qualifiedname>error_mod::errormanagertype::total_errors</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Total error count. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="161" column="1" bodyfile="src/core/error_mod.F90" bodystart="161" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1a8532881f7f3ac893bd0e3063ca6dd69d" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errormanagertype::total_warnings</definition>
+        <argsstring></argsstring>
+        <name>total_warnings</name>
+        <qualifiedname>error_mod::errormanagertype::total_warnings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Total warning count. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="162" column="1" bodyfile="src/core/error_mod.F90" bodystart="162" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1a9d107ea71a23c8988a1d882f2557c7e8" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errormanagertype::max_stack_depth</definition>
+        <argsstring></argsstring>
+        <name>max_stack_depth</name>
+        <qualifiedname>error_mod::errormanagertype::max_stack_depth</qualifiedname>
+        <initializer>= 20</initializer>
+        <briefdescription>
+<para>Maximum stack depth. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="163" column="1" bodyfile="src/core/error_mod.F90" bodystart="163" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1a4c886bf0d3d5bac1efc2d6c567f96e39" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errormanagertype::max_errors_before_abort</definition>
+        <argsstring></argsstring>
+        <name>max_errors_before_abort</name>
+        <qualifiedname>error_mod::errormanagertype::max_errors_before_abort</qualifiedname>
+        <initializer>= 100</initializer>
+        <briefdescription>
+<para>Error limit before abort. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="164" column="1" bodyfile="src/core/error_mod.F90" bodystart="164" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1ae8d2ae49b4b91cdfbbbb89702bfa2e9e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical error_mod::errormanagertype::verbose_errors</definition>
+        <argsstring></argsstring>
+        <name>verbose_errors</name>
+        <qualifiedname>error_mod::errormanagertype::verbose_errors</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Verbose error reporting. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="165" column="1" bodyfile="src/core/error_mod.F90" bodystart="165" bodyend="165"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1ac40a68898993343b6094fba83b6b0540" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical error_mod::errormanagertype::track_performance</definition>
+        <argsstring></argsstring>
+        <name>track_performance</name>
+        <qualifiedname>error_mod::errormanagertype::track_performance</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Performance tracking. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="166" column="1" bodyfile="src/core/error_mod.F90" bodystart="166" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1a7bc5b4f0f584af6ebcf14dd35c44f18a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical error_mod::errormanagertype::abort_on_critical</definition>
+        <argsstring></argsstring>
+        <name>abort_on_critical</name>
+        <qualifiedname>error_mod::errormanagertype::abort_on_critical</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+<para>Abort on critical errors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="167" column="1" bodyfile="src/core/error_mod.F90" bodystart="167" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1aea78abd3c4fe8ed12ecaa2d202163990" prot="public" static="no" mutable="no">
+        <type>integer, dimension(0:4)</type>
+        <definition>integer, dimension(0:4) error_mod::errormanagertype::errors_by_severity</definition>
+        <argsstring></argsstring>
+        <name>errors_by_severity</name>
+        <qualifiedname>error_mod::errormanagertype::errors_by_severity</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Errors by severity. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="170" column="1" bodyfile="src/core/error_mod.F90" bodystart="170" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errormanagertype_1ac1ab638ca38603426a5b8430e636df6e" prot="public" static="no" mutable="no">
+        <type>integer, dimension(0:6)</type>
+        <definition>integer, dimension(0:6) error_mod::errormanagertype::errors_by_category</definition>
+        <argsstring></argsstring>
+        <name>errors_by_category</name>
+        <qualifiedname>error_mod::errormanagertype::errors_by_category</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Errors by category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="171" column="1" bodyfile="src/core/error_mod.F90" bodystart="171" bodyend="171"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structerror__mod_1_1errormanagertype_1a0731cafd654ae0579f6073ff9db1a7c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errormanagertype::init</definition>
+        <argsstring>(this, verbose, track_performance, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>error_mod::errormanagertype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>verbose</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>track_performance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="173" column="1" bodyfile="src/core/error_mod.F90" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structerror__mod_1_1errormanagertype_1a655d97eb954f813b2b6dc173095a6ff9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errormanagertype::push_context</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>push_context</name>
+        <qualifiedname>error_mod::errormanagertype::push_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Push context onto error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="174" column="1" bodyfile="src/core/error_mod.F90" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structerror__mod_1_1errormanagertype_1ae1f161814d21cf9c5615f7a766cf52eb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errormanagertype::pop_context</definition>
+        <argsstring>(this)</argsstring>
+        <name>pop_context</name>
+        <qualifiedname>error_mod::errormanagertype::pop_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Pop context from error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="175" column="1" bodyfile="src/core/error_mod.F90" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structerror__mod_1_1errormanagertype_1a5fb6190c55acab05d12b1970e11a4b89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errormanagertype::report_error</definition>
+        <argsstring>(this, error_code, message, rc, location, suggestion)</argsstring>
+        <name>report_error</name>
+        <qualifiedname>error_mod::errormanagertype::report_error</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>message</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>location</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>suggestion</defname>
+        </param>
+        <briefdescription>
+<para>Report error with enhanced information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="176" column="1" bodyfile="src/core/error_mod.F90" bodystart="176" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Enhanced error manager. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Provides comprehensive error handling with context tracking, severity levels, categories, and performance monitoring. </para>
+    </detaileddescription>
+    <location file="src/core/error_mod.F90" line="157" column="1" bodyfile="src/core/error_mod.F90" bodystart="157" bodyend="177"/>
+    <listofallmembers>
+      <member refid="structerror__mod_1_1errormanagertype_1a7bc5b4f0f584af6ebcf14dd35c44f18a" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>abort_on_critical</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a627d847c8916afdc51f5ff1ad4e8175a" prot="private" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>context_stack</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1ac1ab638ca38603426a5b8430e636df6e" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>errors_by_category</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1aea78abd3c4fe8ed12ecaa2d202163990" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>errors_by_severity</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a0731cafd654ae0579f6073ff9db1a7c0" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>init</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a4c886bf0d3d5bac1efc2d6c567f96e39" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>max_errors_before_abort</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a9d107ea71a23c8988a1d882f2557c7e8" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>max_stack_depth</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1ae1f161814d21cf9c5615f7a766cf52eb" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>pop_context</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a655d97eb954f813b2b6dc173095a6ff9" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>push_context</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a5fb6190c55acab05d12b1970e11a4b89" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>report_error</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1ad7eaf956fd379120023a2cee378dc986" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>stack_depth</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1af46e270c2d5242d3465906e5961f1111" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>total_errors</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1a8532881f7f3ac893bd0e3063ca6dd69d" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>total_warnings</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1ac40a68898993343b6094fba83b6b0540" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>track_performance</name></member>
+      <member refid="structerror__mod_1_1errormanagertype_1ae8d2ae49b4b91cdfbbbb89702bfa2e9e" prot="public" virt="non-virtual"><scope>error_mod::errormanagertype</scope><name>verbose_errors</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

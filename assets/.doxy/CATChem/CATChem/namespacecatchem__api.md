@@ -25,12 +25,6 @@
 
 
 
-## Classes
-
-| Type | Name |
-| ---: | :--- |
-| interface | [**catchem\_diag\_get\_contract**](interfacecatchem__api_1_1catchem__diag__get__contract.md) <br> |
-| interface | [**catchem\_diag\_register\_contract\_checked**](interfacecatchem__api_1_1catchem__diag__register__contract__checked.md) <br> |
 
 
 
@@ -57,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine | [**capture\_boundary\_error**](#function-capture_boundary_error) (class([**catchem\_model**](namespacecatchem__api.md#none-catchem_model)), intent(inout) this) <br> |
+|  subroutine | [**model\_initialize**](#function-model_initialize) (class([**catchem\_model**](namespacecatchem__api.md#none-catchem_model)), intent(inout) this, character(len=\*), intent(in) config\_file, integer, intent(in) nx, integer, intent(in) ny, integer, intent(in) nz, integer, intent(in), optional nsoil, integer, intent(in), optional nsoiltype, integer, intent(in), optional nsurftype, integer, intent(out) rc) <br>_Initialize the CATChem model with configuration file and grid dimensions This method sets up the core CATChem infrastructure using the builder pattern, loads configuration from the specified file, and sets up the grid geometry._  |
 
 
 
@@ -91,11 +85,20 @@
 
 
 
-### function capture\_boundary\_error 
+### function model\_initialize 
 
+_Initialize the CATChem model with configuration file and grid dimensions This method sets up the core CATChem infrastructure using the builder pattern, loads configuration from the specified file, and sets up the grid geometry._ 
 ```Fortran
-subroutine catchem_api::capture_boundary_error (
-    class( catchem_model ), intent(inout) this
+subroutine catchem_api::model_initialize (
+    class( catchem_model ), intent(inout) this,
+    character(len=*), intent(in) config_file,
+    integer, intent(in) nx,
+    integer, intent(in) ny,
+    integer, intent(in) nz,
+    integer, intent(in), optional nsoil,
+    integer, intent(in), optional nsoiltype,
+    integer, intent(in), optional nsurftype,
+    integer, intent(out) rc
 ) 
 ```
 

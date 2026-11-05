@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="group__catchem__plumerise__process" kind="group">
+    <compoundname>catchem_plumerise_process</compoundname>
+    <title>CATChem Plume Rise Process</title>
+    <briefdescription>
+<para>Point source emission vertical distribution. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This group contains modules and functions for calculating the vertical distribution of point source emissions through plume rise calculations. </para>
+    </detaileddescription>
+  </compounddef>
+</doxygen>

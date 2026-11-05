@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacerun__mod" kind="namespace" language="Fortran">
+    <compoundname>run_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacerun__mod_1a17eeb168e33e9275f55b6288bf67b92b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public run_mod::run_process</definition>
+        <argsstring>(metstate, diagstate, chemstate, emisstate, duststate, seasaltstate, drydepstate, rc)</argsstring>
+        <name>run_process</name>
+        <qualifiedname>run_mod::run_process</qualifiedname>
+        <param>
+          <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>metstate</defname>
+        </param>
+        <param>
+          <type>type(diagstatetype), intent(inout)</type>
+          <defname>diagstate</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>chemstate</defname>
+        </param>
+        <param>
+          <type>type(emisstatetype), intent(inout)</type>
+          <defname>emisstate</defname>
+        </param>
+        <param>
+          <type>type(duststatetype), intent(inout)</type>
+          <defname>duststate</defname>
+        </param>
+        <param>
+          <type>type(seasaltstatetype), intent(inout)</type>
+          <defname>seasaltstate</defname>
+        </param>
+        <param>
+          <type>type(drydepstatetype), intent(inout)</type>
+          <defname>drydepstate</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run all CATChem atmospheric chemistry processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine executes all enabled atmospheric chemistry processes including emissions, dry deposition, and other chemical processes for a single time step.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>MetState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The meteorological state containing atmospheric conditions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DiagState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The diagnostic state for storing process outputs </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chemical state containing species concentrations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>EmisState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The emission state containing emission data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DustState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dust process state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SeaSaltState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sea salt process state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DryDepState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dry deposition process state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code indicating success (CC_SUCCESS) or failure</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The processes are executed in the following order:<orderedlist>
+<listitem><para>Emission processes (dust, sea salt, etc.)</para>
+</listitem><listitem><para>Dry deposition calculations</para>
+</listitem><listitem><para>Wet deposition calculations (planned)</para>
+</listitem></orderedlist>
+</para>
+<para><simplesect kind="note"><para>All processes update the ChemState and DiagState objects </para>
+</simplesect>
+<simplesect kind="warning"><para>RC should be checked after calling this routine </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/run_mod.F90" line="54" column="1" bodyfile="src/api/run_mod.F90" bodystart="55" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacerun__mod_1a28655a220784ee5367a70d2b98aa7cfc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine run_mod::run_emis</definition>
+        <argsstring>(metstate, diagstate, chemstate, emisstate, duststate, seasaltstate, rc)</argsstring>
+        <name>run_emis</name>
+        <qualifiedname>run_mod::run_emis</qualifiedname>
+        <param>
+          <type>type(<ref refid="structmetstate__mod_1_1metstatetype" kindref="compound">metstatetype</ref>), intent(in)</type>
+          <defname>metstate</defname>
+        </param>
+        <param>
+          <type>type(diagstatetype), intent(inout)</type>
+          <defname>diagstate</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>chemstate</defname>
+        </param>
+        <param>
+          <type>type(emisstatetype), intent(inout)</type>
+          <defname>emisstate</defname>
+        </param>
+        <param>
+          <type>type(duststatetype), intent(inout)</type>
+          <defname>duststate</defname>
+        </param>
+        <param>
+          <type>type(seasaltstatetype), intent(inout)</type>
+          <defname>seasaltstate</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Run atmospheric emission processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine executes emission processes including dust, sea salt, and other aerosol emissions, then applies them to the chemical state.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>MetState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The meteorological state containing atmospheric conditions </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DiagState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The diagnostic state for storing process outputs </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chemical state containing species concentrations </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>EmisState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The emission state containing emission data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DustState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dust process state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SeaSaltState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sea salt process state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code indicating success (CC_SUCCESS) or failure</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The emission processes include:<itemizedlist>
+<listitem><para>Dust emission calculations using Ginux scheme with 5 size bins</para>
+</listitem><listitem><para>Sea salt emission calculations based on wind speed</para>
+</listitem><listitem><para>Application of all emissions to the chemistry state</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="note"><para>Dust emissions currently work with default 5 bins regardless of namelist </para>
+</simplesect>
+<simplesect kind="warning"><para>RC should be checked after calling this routine </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/run_mod.F90" line="117" column="1" bodyfile="src/api/run_mod.F90" bodystart="118" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacerun__mod_1a08136370c2c761966da8e485db3e688b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public run_mod::finalize_process</definition>
+        <argsstring>(duststate, seasaltstate, drydepstate, rc)</argsstring>
+        <name>finalize_process</name>
+        <qualifiedname>run_mod::finalize_process</qualifiedname>
+        <param>
+          <type>type(duststatetype), intent(inout)</type>
+          <defname>duststate</defname>
+        </param>
+        <param>
+          <type>type(seasaltstatetype), intent(inout)</type>
+          <defname>seasaltstate</defname>
+        </param>
+        <param>
+          <type>type(drydepstatetype), intent(inout)</type>
+          <defname>drydepstate</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Finalize all CATChem atmospheric chemistry processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine performs cleanup and finalization for all atmospheric chemistry processes, deallocating memory and closing any open resources.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>DustState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dust process state to finalize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SeaSaltState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sea salt process state to finalize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DryDepState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dry deposition process state to finalize </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code indicating success (CC_SUCCESS) or failure</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The finalization includes:<itemizedlist>
+<listitem><para>Cleanup of dust emission process state</para>
+</listitem><listitem><para>Cleanup of sea salt emission process state</para>
+</listitem><listitem><para>Cleanup of dry deposition process state</para>
+</listitem><listitem><para>Cleanup of wet deposition process state (planned)</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="note"><para>This routine should be called at the end of simulation </para>
+</simplesect>
+<simplesect kind="warning"><para>RC should be checked after calling this routine </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/run_mod.F90" line="189" column="1" bodyfile="src/api/run_mod.F90" bodystart="190" bodyend="231"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacerun__mod_1a48d135d9fcb2c090592febf93140d980" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public run_mod::init_process</definition>
+        <argsstring>(config, chemstate, emisstate, duststate, seasaltstate, drydepstate, rc)</argsstring>
+        <name>init_process</name>
+        <qualifiedname>run_mod::init_process</qualifiedname>
+        <param>
+          <type>type(configtype), intent(in)</type>
+          <defname>config</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>chemstate</defname>
+        </param>
+        <param>
+          <type>type(emisstatetype), intent(inout)</type>
+          <defname>emisstate</defname>
+        </param>
+        <param>
+          <type>type(duststatetype), intent(inout)</type>
+          <defname>duststate</defname>
+        </param>
+        <param>
+          <type>type(seasaltstatetype), intent(inout)</type>
+          <defname>seasaltstate</defname>
+        </param>
+        <param>
+          <type>type(drydepstatetype), intent(inout)</type>
+          <defname>drydepstate</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize all CATChem atmospheric chemistry processes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine performs initialization of all atmospheric chemistry processes including dust emission, sea salt emission, and dry deposition. It must be called before any process execution routines.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The CATChem configuration object containing setup parameters </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ChemState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The chemical state to be initialized with species data </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>EmisState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The emission state to be initialized for emission processes </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DustState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dust process state to be initialized </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>SeaSaltState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sea salt process state to be initialized </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>DryDepState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The dry deposition process state to be initialized </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code indicating success (CC_SUCCESS) or failure</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The initialization includes:<itemizedlist>
+<listitem><para>Setting up dust emission process parameters and lookup tables</para>
+</listitem><listitem><para>Configuring sea salt emission parameterizations</para>
+</listitem><listitem><para>Preparing dry deposition velocity calculations</para>
+</listitem><listitem><para>Validating process configuration consistency</para>
+</listitem></itemizedlist>
+</para>
+<para><simplesect kind="note"><para>This routine must be called after state allocation but before process execution </para>
+</simplesect>
+<simplesect kind="warning"><para>RC should be checked after calling this routine </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/run_mod.F90" line="256" column="1" bodyfile="src/api/run_mod.F90" bodystart="257" bodyend="299"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/run_mod.F90" line="10" column="1"/>
+  </compounddef>
+</doxygen>

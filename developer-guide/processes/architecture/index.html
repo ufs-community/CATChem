@@ -41,9 +41,9 @@
 </span><span id=__span-1-8><a id=__codelineno-1-8 name=__codelineno-1-8 href=#__codelineno-1-8></a>touch<span class=w> </span>src/process/myprocess/CMakeLists.txt
 </span><span id=__span-1-9><a id=__codelineno-1-9 name=__codelineno-1-9 href=#__codelineno-1-9></a>touch<span class=w> </span>src/process/myprocess/schemes/CMakeLists.txt
 </span></code></pre></div> <h3 id=2-implement-process-module>2. Implement Process Module<a class=headerlink href=#2-implement-process-module title="Permanent link">&para;</a></h3> <div class="language-fortran highlight"><pre><span></span><code><span id=__span-2-1><a id=__codelineno-2-1 name=__codelineno-2-1 href=#__codelineno-2-1></a><span class=k>module </span><span class=n>myprocessProcess_Mod</span>
-</span><span id=__span-2-2><a id=__codelineno-2-2 name=__codelineno-2-2 href=#__codelineno-2-2></a><span class=w>   </span><span class=k>use </span><span class=n>catchem_bridge_precision</span>
+</span><span id=__span-2-2><a id=__codelineno-2-2 name=__codelineno-2-2 href=#__codelineno-2-2></a><span class=w>   </span><span class=k>use </span><span class=n>precision_mod</span>
 </span><span id=__span-2-3><a id=__codelineno-2-3 name=__codelineno-2-3 href=#__codelineno-2-3></a><span class=w>   </span><span class=k>use </span><span class=n>state_mod</span><span class=p>,</span><span class=w> </span><span class=k>only</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=n>StateContainerType</span>
-</span><span id=__span-2-4><a id=__codelineno-2-4 name=__codelineno-2-4 href=#__codelineno-2-4></a><span class=w>   </span><span class=k>use </span><span class=n>catchem_bridge_error</span>
+</span><span id=__span-2-4><a id=__codelineno-2-4 name=__codelineno-2-4 href=#__codelineno-2-4></a><span class=w>   </span><span class=k>use </span><span class=n>error_mod</span>
 </span><span id=__span-2-5><a id=__codelineno-2-5 name=__codelineno-2-5 href=#__codelineno-2-5></a><span class=w>   </span><span class=k>use </span><span class=n>ProcessInterface_Mod</span>
 </span><span id=__span-2-6><a id=__codelineno-2-6 name=__codelineno-2-6 href=#__codelineno-2-6></a><span class=w>   </span><span class=k>use </span><span class=n>myprocessCommon_Mod</span>
 </span><span id=__span-2-7><a id=__codelineno-2-7 name=__codelineno-2-7 href=#__codelineno-2-7></a>
@@ -115,9 +115,9 @@
 </span><span id=__span-2-73><a id=__codelineno-2-73 name=__codelineno-2-73 href=#__codelineno-2-73></a>
 </span><span id=__span-2-74><a id=__codelineno-2-74 name=__codelineno-2-74 href=#__codelineno-2-74></a><span class=k>end module </span><span class=n>myprocessProcess_Mod</span>
 </span></code></pre></div> <h3 id=3-implement-schemes>3. Implement Schemes<a class=headerlink href=#3-implement-schemes title="Permanent link">&para;</a></h3> <p>Schemes provide interchangeable algorithms within a process:</p> <div class="language-fortran highlight"><pre><span></span><code><span id=__span-3-1><a id=__codelineno-3-1 name=__codelineno-3-1 href=#__codelineno-3-1></a><span class=k>module </span><span class=n>MyScheme_Mod</span>
-</span><span id=__span-3-2><a id=__codelineno-3-2 name=__codelineno-3-2 href=#__codelineno-3-2></a><span class=w>   </span><span class=k>use </span><span class=n>catchem_bridge_precision</span>
+</span><span id=__span-3-2><a id=__codelineno-3-2 name=__codelineno-3-2 href=#__codelineno-3-2></a><span class=w>   </span><span class=k>use </span><span class=n>precision_mod</span>
 </span><span id=__span-3-3><a id=__codelineno-3-3 name=__codelineno-3-3 href=#__codelineno-3-3></a><span class=w>   </span><span class=k>use </span><span class=n>state_mod</span><span class=p>,</span><span class=w> </span><span class=k>only</span><span class=w> </span><span class=p>:</span><span class=w> </span><span class=n>StateContainerType</span>
-</span><span id=__span-3-4><a id=__codelineno-3-4 name=__codelineno-3-4 href=#__codelineno-3-4></a><span class=w>   </span><span class=k>use </span><span class=n>catchem_bridge_error</span>
+</span><span id=__span-3-4><a id=__codelineno-3-4 name=__codelineno-3-4 href=#__codelineno-3-4></a><span class=w>   </span><span class=k>use </span><span class=n>error_mod</span>
 </span><span id=__span-3-5><a id=__codelineno-3-5 name=__codelineno-3-5 href=#__codelineno-3-5></a>
 </span><span id=__span-3-6><a id=__codelineno-3-6 name=__codelineno-3-6 href=#__codelineno-3-6></a><span class=w>   </span><span class=k>implicit none</span>
 </span><span id=__span-3-7><a id=__codelineno-3-7 name=__codelineno-3-7 href=#__codelineno-3-7></a><span class=k>   private</span>

@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemapi__mod_1_1fieldmappingregistrytype" kind="type" language="Fortran" prot="private">
+    <compoundname>catchemapi_mod::fieldmappingregistrytype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1af3104582286029f0a10ca3b4b9996f60" prot="public" static="no" mutable="no">
+        <type>type(fieldmappingtype), dimension(:), allocatable</type>
+        <definition>type(fieldmappingtype), dimension(:), allocatable catchemapi_mod::fieldmappingregistrytype::met_mappings</definition>
+        <argsstring></argsstring>
+        <name>met_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::met_mappings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="99" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1ae0accddce0ec13150cefde810838a80b" prot="public" static="no" mutable="no">
+        <type>type(fieldmappingtype), dimension(:), allocatable</type>
+        <definition>type(fieldmappingtype), dimension(:), allocatable catchemapi_mod::fieldmappingregistrytype::chem_mappings</definition>
+        <argsstring></argsstring>
+        <name>chem_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::chem_mappings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="100" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1ad32dfb711a5f65b38b11821ecaee4133" prot="public" static="no" mutable="no">
+        <type>type(fieldmappingtype), dimension(:), allocatable</type>
+        <definition>type(fieldmappingtype), dimension(:), allocatable catchemapi_mod::fieldmappingregistrytype::emis_mappings</definition>
+        <argsstring></argsstring>
+        <name>emis_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::emis_mappings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="101" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1ad5838ae4eb0ea8774a5d0ec77d532050" prot="public" static="no" mutable="no">
+        <type>type(fieldmappingtype), dimension(:), allocatable</type>
+        <definition>type(fieldmappingtype), dimension(:), allocatable catchemapi_mod::fieldmappingregistrytype::diag_mappings</definition>
+        <argsstring></argsstring>
+        <name>diag_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::diag_mappings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="102" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a4dc300397f5d17165668ba80149925f4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::fieldmappingregistrytype::num_met_mappings</definition>
+        <argsstring></argsstring>
+        <name>num_met_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::num_met_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="103" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a95164da067a5885d69753960954b56ae" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::fieldmappingregistrytype::num_chem_mappings</definition>
+        <argsstring></argsstring>
+        <name>num_chem_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::num_chem_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="104" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a91858938219eb87a2782f02916a07285" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::fieldmappingregistrytype::num_emis_mappings</definition>
+        <argsstring></argsstring>
+        <name>num_emis_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::num_emis_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="105" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a84329e79856a56439025cb3bb76e78aa" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::fieldmappingregistrytype::num_diag_mappings</definition>
+        <argsstring></argsstring>
+        <name>num_diag_mappings</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::num_diag_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="106" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a3fe01c540fdd4227bc4d9eab7646809e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::fieldmappingregistrytype::initialize</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>initialize</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::initialize</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="108" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a852d6a7d4932d70076357ba7b8763a77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::fieldmappingregistrytype::add_met_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>add_met_mapping</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::add_met_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="109" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a76b4532e28378f4232799861fc139ebc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::fieldmappingregistrytype::add_chem_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>add_chem_mapping</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::add_chem_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="110" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a5501d38f1d2a51ac52bbfc9eeae11caa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::fieldmappingregistrytype::add_emis_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>add_emis_mapping</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::add_emis_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="111" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1fieldmappingregistrytype_1a2aad08e776ce188665c4e45c7f696926" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::fieldmappingregistrytype::add_diag_mapping</definition>
+        <argsstring>(this, mapping, rc)</argsstring>
+        <name>add_diag_mapping</name>
+        <qualifiedname>catchemapi_mod::fieldmappingregistrytype::add_diag_mapping</qualifiedname>
+        <param>
+          <type>class(fieldmappingregistrytype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(fieldmappingtype), intent(in)</type>
+          <defname>mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="112" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Field mapping registry for managing host-CATChem field relationships. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>catchemapi_mod::fieldmappingregistrytype</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>chem_mappings</edgelabel>
+          <edgelabel>diag_mappings</edgelabel>
+          <edgelabel>emis_mappings</edgelabel>
+          <edgelabel>met_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>catchemapi_mod::fieldmappingtype</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/api/CATChemAPI_Mod.F90" line="98" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="98" bodyend="113"/>
+    <listofallmembers>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a76b4532e28378f4232799861fc139ebc" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>add_chem_mapping</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a2aad08e776ce188665c4e45c7f696926" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>add_diag_mapping</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a5501d38f1d2a51ac52bbfc9eeae11caa" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>add_emis_mapping</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a852d6a7d4932d70076357ba7b8763a77" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>add_met_mapping</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1ae0accddce0ec13150cefde810838a80b" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>chem_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1ad5838ae4eb0ea8774a5d0ec77d532050" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>diag_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1ad32dfb711a5f65b38b11821ecaee4133" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>emis_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a3fe01c540fdd4227bc4d9eab7646809e" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>initialize</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1af3104582286029f0a10ca3b4b9996f60" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>met_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a95164da067a5885d69753960954b56ae" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>num_chem_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a84329e79856a56439025cb3bb76e78aa" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>num_diag_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a91858938219eb87a2782f02916a07285" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>num_emis_mappings</name></member>
+      <member refid="structcatchemapi__mod_1_1fieldmappingregistrytype_1a4dc300397f5d17165668ba80149925f4" prot="public" virt="non-virtual"><scope>catchemapi_mod::fieldmappingregistrytype</scope><name>num_met_mappings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

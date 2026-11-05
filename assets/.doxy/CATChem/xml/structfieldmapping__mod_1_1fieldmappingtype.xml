@@ -1,0 +1,776 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structfieldmapping__mod_1_1fieldmappingtype" kind="type" language="Fortran" prot="public">
+    <compoundname>fieldmapping_mod::fieldmappingtype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingtype_1a8d466afcdaad93fd295d4da26a50c85a" prot="private" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer fieldmapping_mod::fieldmappingtype::num_mappings</definition>
+        <argsstring></argsstring>
+        <name>num_mappings</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::num_mappings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="98" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="98" bodyend="98"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingtype_1a07a49a8e975c5637439cc9dc6b1ae391" prot="public" static="no" mutable="no">
+        <type>integer, parameter</type>
+        <definition>integer, parameter fieldmapping_mod::fieldmappingtype::max_mappings</definition>
+        <argsstring></argsstring>
+        <name>max_mappings</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::max_mappings</qualifiedname>
+        <initializer>= 1000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="99" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingtype_1ab46fa291ca962383c54c620f3a5ad3db" prot="public" static="no" mutable="no">
+        <type>type(<ref refid="structfieldmapping__mod_1_1fieldmappingentrytype" kindref="compound">fieldmappingentrytype</ref>), dimension(<ref refid="structfieldmapping__mod_1_1fieldmappingtype_1a07a49a8e975c5637439cc9dc6b1ae391" kindref="member">max_mappings</ref>)</type>
+        <definition>type(fieldmappingentrytype), dimension(max_mappings) fieldmapping_mod::fieldmappingtype::mappings</definition>
+        <argsstring></argsstring>
+        <name>mappings</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::mappings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="100" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingtype_1aeb6e447bda04724e5c2460bcf714ff01" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingtype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="101" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="101" bodyend="101"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a87accb6ee6fb6ae1efea2c92347b10e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::init</definition>
+        <argsstring>(this)</argsstring>
+        <name>init</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Initialize the field mapping system. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="105" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a14874ab44b015559549924177eaf6439" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up the field mapping system. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="106" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1aaf74bf251ef6c6298fde8f62ee2b8487" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::add_mapping</definition>
+        <argsstring>(this, host_name, catchem_name, category, rc, units, description, is_required, min_value, max_value)</argsstring>
+        <name>add_mapping</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::add_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>catchem_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>is_required</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>min_value</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(in), optional</type>
+          <defname>max_value</defname>
+        </param>
+        <briefdescription>
+<para>Add a new field mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="107" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a2d845fa8dc7ed06343993e865a002fe3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::remove_mapping</definition>
+        <argsstring>(this, host_name, rc)</argsstring>
+        <name>remove_mapping</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::remove_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Remove a field mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="108" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a352ae4701b4188b026864a853d9c2884" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::clear_all</definition>
+        <argsstring>(this)</argsstring>
+        <name>clear_all</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::clear_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clear all mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="109" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a21be7c56ff4d6b4654430a67ef16d0ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::find_mapping</definition>
+        <argsstring>(this, host_name)</argsstring>
+        <name>find_mapping</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::find_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <briefdescription>
+<para>Find mapping index for a host field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="112" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a18e1dd325643cf8436fe8e6abe11b926" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_catchem_name</definition>
+        <argsstring>(this, host_name, rc)</argsstring>
+        <name>get_catchem_name</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_catchem_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get CATChem field name for a host field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="113" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a1fa31b0cfa946a10cb084f2aec5b8e0b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_host_name</definition>
+        <argsstring>(this, catchem_name, rc)</argsstring>
+        <name>get_host_name</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_host_name</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>catchem_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get host field name for a CATChem field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="114" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1af408a8a22f8efab1b9831783cc9f670d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_category</definition>
+        <argsstring>(this, host_name, rc)</argsstring>
+        <name>get_category</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_category</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get category for a host field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="115" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1aba1119c573b142b0fba89dcfd16bf849" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::is_mapped</definition>
+        <argsstring>(this, host_name)</argsstring>
+        <name>is_mapped</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::is_mapped</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <briefdescription>
+<para>Check if a host field is mapped. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="116" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a14dc86631aeb186369d3b49bd502569f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::is_required</definition>
+        <argsstring>(this, host_name)</argsstring>
+        <name>is_required</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::is_required</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <briefdescription>
+<para>Check if a host field is required. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="117" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a886f0b07eb05581625b2802477f80d5c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_all_mappings</definition>
+        <argsstring>(this, mappings, count)</argsstring>
+        <name>get_all_mappings</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_all_mappings</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structfieldmapping__mod_1_1fieldmappingentrytype" kindref="compound">fieldmappingentrytype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>mappings</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>count</defname>
+        </param>
+        <briefdescription>
+<para>Get all mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="120" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1adcd17c7031500b03be4bb8c5d095270a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_mappings_by_category</definition>
+        <argsstring>(this, category, mappings, count)</argsstring>
+        <name>get_mappings_by_category</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_mappings_by_category</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>category</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structfieldmapping__mod_1_1fieldmappingentrytype" kindref="compound">fieldmappingentrytype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>mappings</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>count</defname>
+        </param>
+        <briefdescription>
+<para>Get mappings by category. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="121" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1af5c31bc17814059cd21e724570a307dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::load_from_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>load_from_file</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::load_from_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Load mappings from a YAML configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="122" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a82c5dc312e72c1ec6a0c1a2ea9d6a5e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::save_to_file</definition>
+        <argsstring>(this, filename, rc)</argsstring>
+        <name>save_to_file</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::save_to_file</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>filename</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Save mappings to a YAML configuration file. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="123" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1ac83b359beade3c8153dd527edae78488" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::validate_mapping</definition>
+        <argsstring>(this, host_name, data, rc)</argsstring>
+        <name>validate_mapping</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::validate_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>host_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate a specific mapping. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="126" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a8776a6f8e7606909c0464eb762f47a9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::validate_all</definition>
+        <argsstring>(this, rc, error_message)</argsstring>
+        <name>validate_all</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::validate_all</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out), optional</type>
+          <defname>error_message</defname>
+        </param>
+        <briefdescription>
+<para>Validate all mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="127" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1aa1b781365c3cac2dae0a61d2a6f69645" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::check_required_fields</definition>
+        <argsstring>(this, missing_fields, count, rc)</argsstring>
+        <name>check_required_fields</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::check_required_fields</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=64), dimension(:), intent(out), allocatable</type>
+          <defname>missing_fields</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>count</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check that all required fields are mapped. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="128" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1adfc44857c03c2f5dec56bd297b21c2c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>print_summary</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print summary of all mappings. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="131" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1acddcdbdff52c639fb11e3d70705324ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::get_stats</definition>
+        <argsstring>(this, total, by_category, categories)</argsstring>
+        <name>get_stats</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::get_stats</qualifiedname>
+        <param>
+          <type>class(<ref refid="structfieldmapping__mod_1_1fieldmappingtype" kindref="compound">fieldmappingtype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>total</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out), allocatable</type>
+          <defname>by_category</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>categories</defname>
+        </param>
+        <briefdescription>
+<para>Get mapping statistics. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="132" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a5ddc4356640df41e2161e0c755651d46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::set_field_dimensions</definition>
+        <argsstring>mapping_set_dimensions</argsstring>
+        <name>set_field_dimensions</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::set_field_dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="135" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a8228d78c89a91aacbc4fddb643836ad5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::setup_reshaping</definition>
+        <argsstring>mapping_setup_reshaping</argsstring>
+        <name>setup_reshaping</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::setup_reshaping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="136" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a64b283cc02ea6ebb86519bad9fab844c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::reshape_data_1d_to_3d</definition>
+        <argsstring>mapping_reshape_1d_to_3d</argsstring>
+        <name>reshape_data_1d_to_3d</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::reshape_data_1d_to_3d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="137" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1abc754da271fb68c3f75363838af236f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::reshape_data_2d_to_3d</definition>
+        <argsstring>mapping_reshape_2d_to_3d</argsstring>
+        <name>reshape_data_2d_to_3d</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::reshape_data_2d_to_3d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="138" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a2370ea611e74bc161c34e5e000904530" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::reshape_data_3d_to_1d</definition>
+        <argsstring>mapping_reshape_3d_to_1d</argsstring>
+        <name>reshape_data_3d_to_1d</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::reshape_data_3d_to_1d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="139" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a0408d2cc7f5e4d860ca4fa18e35c464f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::reshape_data_3d_to_2d</definition>
+        <argsstring>mapping_reshape_3d_to_2d</argsstring>
+        <name>reshape_data_3d_to_2d</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::reshape_data_3d_to_2d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="140" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1a0a31dcf7130c83912947817f0ac565a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::validate_shapes</definition>
+        <argsstring>mapping_validate_shapes</argsstring>
+        <name>validate_shapes</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::validate_shapes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="143" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structfieldmapping__mod_1_1fieldmappingtype_1ab51da760cd47705e8a2d9aca7f36635e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure fieldmapping_mod::fieldmappingtype::compute_reshape_params</definition>
+        <argsstring>mapping_compute_reshape_params</argsstring>
+        <name>compute_reshape_params</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingtype::compute_reshape_params</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="144" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="144" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Main field mapping manager. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>fieldmapping_mod::fieldmappingentrytype</label>
+        <link refid="structfieldmapping__mod_1_1fieldmappingentrytype"/>
+      </node>
+      <node id="1">
+        <label>fieldmapping_mod::fieldmappingtype</label>
+        <link refid="structfieldmapping__mod_1_1fieldmappingtype"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>mappings</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/api/FieldMapping_Mod.F90" line="95" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="95" bodyend="145"/>
+    <listofallmembers>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1aaf74bf251ef6c6298fde8f62ee2b8487" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>add_mapping</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1aa1b781365c3cac2dae0a61d2a6f69645" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>check_required_fields</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a14874ab44b015559549924177eaf6439" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>cleanup</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a352ae4701b4188b026864a853d9c2884" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>clear_all</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1ab51da760cd47705e8a2d9aca7f36635e" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>compute_reshape_params</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a21be7c56ff4d6b4654430a67ef16d0ae" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>find_mapping</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a886f0b07eb05581625b2802477f80d5c" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_all_mappings</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a18e1dd325643cf8436fe8e6abe11b926" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_catchem_name</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1af408a8a22f8efab1b9831783cc9f670d" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_category</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a1fa31b0cfa946a10cb084f2aec5b8e0b" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_host_name</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1adcd17c7031500b03be4bb8c5d095270a" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_mappings_by_category</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1acddcdbdff52c639fb11e3d70705324ac" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>get_stats</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a87accb6ee6fb6ae1efea2c92347b10e3" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>init</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1aeb6e447bda04724e5c2460bcf714ff01" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>is_initialized</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1aba1119c573b142b0fba89dcfd16bf849" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>is_mapped</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a14dc86631aeb186369d3b49bd502569f" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>is_required</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1af5c31bc17814059cd21e724570a307dc" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>load_from_file</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1ab46fa291ca962383c54c620f3a5ad3db" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>mappings</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a07a49a8e975c5637439cc9dc6b1ae391" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>max_mappings</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a8d466afcdaad93fd295d4da26a50c85a" prot="private" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>num_mappings</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1adfc44857c03c2f5dec56bd297b21c2c4" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>print_summary</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a2d845fa8dc7ed06343993e865a002fe3" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>remove_mapping</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a64b283cc02ea6ebb86519bad9fab844c" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>reshape_data_1d_to_3d</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1abc754da271fb68c3f75363838af236f4" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>reshape_data_2d_to_3d</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a2370ea611e74bc161c34e5e000904530" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>reshape_data_3d_to_1d</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a0408d2cc7f5e4d860ca4fa18e35c464f" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>reshape_data_3d_to_2d</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a82c5dc312e72c1ec6a0c1a2ea9d6a5e3" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>save_to_file</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a5ddc4356640df41e2161e0c755651d46" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>set_field_dimensions</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a8228d78c89a91aacbc4fddb643836ad5" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>setup_reshaping</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a8776a6f8e7606909c0464eb762f47a9e" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>validate_all</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1ac83b359beade3c8153dd527edae78488" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>validate_mapping</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingtype_1a0a31dcf7130c83912947817f0ac565a4" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingtype</scope><name>validate_shapes</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

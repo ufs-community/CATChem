@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structemissionconfigvalidator__mod_1_1validationresulttype" kind="type" language="Fortran" prot="public">
+    <compoundname>emissionconfigvalidator_mod::validationresulttype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1validationresulttype_1abb921358579a3c0bb73fc8e4f3786417" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer emissionconfigvalidator_mod::validationresulttype::status</definition>
+        <argsstring></argsstring>
+        <name>status</name>
+        <qualifiedname>emissionconfigvalidator_mod::validationresulttype::status</qualifiedname>
+        <initializer>= VALIDATION_SUCCESS</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="33" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1validationresulttype_1a5879a9a0fcf0945bca9f2ee064360bbd" prot="public" static="no" mutable="no">
+        <type>character(len=512)</type>
+        <definition>character(len=512) emissionconfigvalidator_mod::validationresulttype::message</definition>
+        <argsstring></argsstring>
+        <name>message</name>
+        <qualifiedname>emissionconfigvalidator_mod::validationresulttype::message</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="34" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1validationresulttype_1abcc5bbeac5550f5b268afdb04945ac49" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) emissionconfigvalidator_mod::validationresulttype::species_name</definition>
+        <argsstring></argsstring>
+        <name>species_name</name>
+        <qualifiedname>emissionconfigvalidator_mod::validationresulttype::species_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="35" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1validationresulttype_1ab953bde50d83339803dced32c3550b98" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) emissionconfigvalidator_mod::validationresulttype::emission_source</definition>
+        <argsstring></argsstring>
+        <name>emission_source</name>
+        <qualifiedname>emissionconfigvalidator_mod::validationresulttype::emission_source</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="36" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="36" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Validation result type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/EmissionConfigValidator_Mod.F90" line="32" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="32" bodyend="37"/>
+    <listofallmembers>
+      <member refid="structemissionconfigvalidator__mod_1_1validationresulttype_1ab953bde50d83339803dced32c3550b98" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::validationresulttype</scope><name>emission_source</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1validationresulttype_1a5879a9a0fcf0945bca9f2ee064360bbd" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::validationresulttype</scope><name>message</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1validationresulttype_1abcc5bbeac5550f5b268afdb04945ac49" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::validationresulttype</scope><name>species_name</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1validationresulttype_1abb921358579a3c0bb73fc8e4f3786417" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::validationresulttype</scope><name>status</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structerror__mod_1_1errorcontexttype" kind="type" language="Fortran" prot="public">
+    <compoundname>error_mod::errorcontexttype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structerror__mod_1_1errorcontexttype_1a80e1da100205aabd09777965f39dc200" prot="public" static="no" mutable="no">
+        <type>character(len=100)</type>
+        <definition>character(len=100) error_mod::errorcontexttype::routine_name</definition>
+        <argsstring></argsstring>
+        <name>routine_name</name>
+        <qualifiedname>error_mod::errorcontexttype::routine_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Name of the routine. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="142" column="1" bodyfile="src/core/error_mod.F90" bodystart="142" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errorcontexttype_1a094be8136d96e62151a549846e46ed8e" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) error_mod::errorcontexttype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>error_mod::errorcontexttype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Context description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="143" column="1" bodyfile="src/core/error_mod.F90" bodystart="143" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errorcontexttype_1a71428b1e7b48dce8a084bbea670839a9" prot="public" static="no" mutable="no">
+        <type>character(len=100)</type>
+        <definition>character(len=100) error_mod::errorcontexttype::file_name</definition>
+        <argsstring></argsstring>
+        <name>file_name</name>
+        <qualifiedname>error_mod::errorcontexttype::file_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Source file name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="144" column="1" bodyfile="src/core/error_mod.F90" bodystart="144" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errorcontexttype_1a1b5d8e065272d60064d39a287d72a985" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer error_mod::errorcontexttype::line_number</definition>
+        <argsstring></argsstring>
+        <name>line_number</name>
+        <qualifiedname>error_mod::errorcontexttype::line_number</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Line number. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="145" column="1" bodyfile="src/core/error_mod.F90" bodystart="145" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="variable" id="structerror__mod_1_1errorcontexttype_1a65daca8db8c3bbaf85ccf01a8bbbc860" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) error_mod::errorcontexttype::timestamp</definition>
+        <argsstring></argsstring>
+        <name>timestamp</name>
+        <qualifiedname>error_mod::errorcontexttype::timestamp</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Context timestamp. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="146" column="1" bodyfile="src/core/error_mod.F90" bodystart="146" bodyend="146"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structerror__mod_1_1errorcontexttype_1ad3b14e35419fbd7b20aa30f73057ba97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errorcontexttype::init</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>init</name>
+        <qualifiedname>error_mod::errorcontexttype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="148" column="1" bodyfile="src/core/error_mod.F90" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structerror__mod_1_1errorcontexttype_1a64d00950d01afa72f70c4238099678bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errorcontexttype::clear</definition>
+        <argsstring>(this)</argsstring>
+        <name>clear</name>
+        <qualifiedname>error_mod::errorcontexttype::clear</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clear error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="149" column="1" bodyfile="src/core/error_mod.F90" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structerror__mod_1_1errorcontexttype_1a28645b338e4ec3f4cb148cf804033c6e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure error_mod::errorcontexttype::to_string</definition>
+        <argsstring>(this)</argsstring>
+        <name>to_string</name>
+        <qualifiedname>error_mod::errorcontexttype::to_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structerror__mod_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Convert error context to string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/error_mod.F90" line="150" column="1" bodyfile="src/core/error_mod.F90" bodystart="150" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Error context structure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Tracks the context stack for error reporting, including routine names, file locations, and call hierarchy. </para>
+    </detaileddescription>
+    <location file="src/core/error_mod.F90" line="141" column="1" bodyfile="src/core/error_mod.F90" bodystart="141" bodyend="151"/>
+    <listofallmembers>
+      <member refid="structerror__mod_1_1errorcontexttype_1a64d00950d01afa72f70c4238099678bb" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>clear</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a094be8136d96e62151a549846e46ed8e" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>description</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a71428b1e7b48dce8a084bbea670839a9" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>file_name</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1ad3b14e35419fbd7b20aa30f73057ba97" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>init</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a1b5d8e065272d60064d39a287d72a985" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>line_number</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a80e1da100205aabd09777965f39dc200" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>routine_name</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a65daca8db8c3bbaf85ccf01a8bbbc860" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>timestamp</name></member>
+      <member refid="structerror__mod_1_1errorcontexttype_1a28645b338e4ec3f4cb148cf804033c6e" prot="public" virt="non-virtual"><scope>error_mod::errorcontexttype</scope><name>to_string</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

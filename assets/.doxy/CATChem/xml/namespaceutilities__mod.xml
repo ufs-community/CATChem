@@ -1,0 +1,534 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespaceutilities__mod" kind="namespace" language="Fortran">
+    <compoundname>utilities_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceutilities__mod_1a4baf33c9d9cf03a97d281983c1ff8963" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public utilities_mod::validate_atmospheric_constants</definition>
+        <argsstring>(rc, error_mgr)</argsstring>
+        <name>validate_atmospheric_constants</name>
+        <qualifiedname>utilities_mod::validate_atmospheric_constants</qualifiedname>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), optional</type>
+          <defname>error_mgr</defname>
+        </param>
+        <briefdescription>
+<para>Validate atmospheric constants for physical consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine performs runtime validation of atmospheric constants to ensure physical consistency and catch any compilation issues.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code (CC_SUCCESS if all constants are valid) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">error_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional error manager for enhanced reporting </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="60" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="61" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a138b7b2f00ea68f63611d697a965736d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::convert_pressure_units</definition>
+        <argsstring>(pressure_in, unit_in, unit_out, rc)</argsstring>
+        <name>convert_pressure_units</name>
+        <qualifiedname>utilities_mod::convert_pressure_units</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>pressure_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>unit_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>unit_out</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert pressure between different units. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function converts pressure values between common atmospheric units.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure_in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input pressure value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit_in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input unit (&apos;Pa&apos;, &apos;hPa&apos;, &apos;mbar&apos;, &apos;atm&apos;, &apos;mmHg&apos;, &apos;torr&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit_out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output unit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="117" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="118" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a0cf78265d7b269f8bbf8935185234b65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::convert_temperature_units</definition>
+        <argsstring>(temp_in, unit_in, unit_out, rc)</argsstring>
+        <name>convert_temperature_units</name>
+        <qualifiedname>utilities_mod::convert_temperature_units</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>temp_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>unit_in</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>unit_out</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Convert temperature between different units. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function converts temperature values between Kelvin, Celsius, and Fahrenheit.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temp_in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input temperature value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit_in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input unit (&apos;K&apos;, &apos;C&apos;, &apos;F&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">unit_out</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output unit </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="169" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="170" bodyend="206"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a19a2e40207285ed381ad5805a3236dcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::calculate_air_density</definition>
+        <argsstring>(pressure, temperature, rc)</argsstring>
+        <name>calculate_air_density</name>
+        <qualifiedname>utilities_mod::calculate_air_density</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate air density using ideal gas law. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="214" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="215" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a56949356111c45590d1c54e8b253d68e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::calculate_scale_height</definition>
+        <argsstring>(temperature, rc, z)</argsstring>
+        <name>calculate_scale_height</name>
+        <qualifiedname>utilities_mod::calculate_scale_height</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in), optional</type>
+          <defname>z</defname>
+        </param>
+        <briefdescription>
+<para>Calculate atmospheric scale height using geopotential height. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">z</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>(optional) Geometric height above surface [m] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="243" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="244" bodyend="267"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1ae28ab28e2f9e59e9108b30e0be90373d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function, public</type>
+        <definition>logical function, public utilities_mod::is_valid_temperature</definition>
+        <argsstring>(temperature)</argsstring>
+        <name>is_valid_temperature</name>
+        <qualifiedname>utilities_mod::is_valid_temperature</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>temperature</defname>
+        </param>
+        <briefdescription>
+<para>Check if temperature is in valid range. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">temperature</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Temperature [K] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="273" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="274" bodyend="280"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a0d08fdb07b2b0866615182bdf2d85f84" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function, public</type>
+        <definition>logical function, public utilities_mod::is_valid_pressure</definition>
+        <argsstring>(pressure)</argsstring>
+        <name>is_valid_pressure</name>
+        <qualifiedname>utilities_mod::is_valid_pressure</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>pressure</defname>
+        </param>
+        <briefdescription>
+<para>Check if pressure is in valid range. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pressure</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure [Pa] </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="286" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="287" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1ae833282510d444f43a362fbfd6fd0237" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public utilities_mod::check_array_bounds</definition>
+        <argsstring>(index, array_size, array_name, rc)</argsstring>
+        <name>check_array_bounds</name>
+        <qualifiedname>utilities_mod::check_array_bounds</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>index</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>array_size</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>array_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check array bounds safely. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Index to check </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Size of array </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">array_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of array for error reporting </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="302" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="303" bodyend="313"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a0c70c27e473dd24c6fc3b1881354c3ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::safe_divide</definition>
+        <argsstring>(numerator, denominator, rc)</argsstring>
+        <name>safe_divide</name>
+        <qualifiedname>utilities_mod::safe_divide</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>numerator</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>denominator</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Safe division with zero check. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">numerator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Numerator </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">denominator</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Denominator </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="321" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="322" bodyend="335"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceutilities__mod_1a2a02d4f73c7f4559f29723c4cee0f5dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>) function, public</type>
+        <definition>real(fp) function, public utilities_mod::calculate_geopotential_height</definition>
+        <argsstring>(p1, p2, tv_mean, rc)</argsstring>
+        <name>calculate_geopotential_height</name>
+        <qualifiedname>utilities_mod::calculate_geopotential_height</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p1</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>p2</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespaceprecision__mod_1a17ed772a2c905ecc16434e8b173c15f7" kindref="member">fp</ref>), intent(in)</type>
+          <defname>tv_mean</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Calculate geopotential height difference between two pressure levels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">p1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure at lower level [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">p2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pressure at upper level [Pa] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">Tv_mean</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mean virtual temperature between levels [K] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/utilities_mod.F90" line="344" column="1" bodyfile="src/core/utilities_mod.F90" bodystart="345" bodyend="365"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/utilities_mod.F90" line="30" column="1"/>
+  </compounddef>
+</doxygen>

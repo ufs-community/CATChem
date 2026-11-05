@@ -1,0 +1,569 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structgridmanager__mod_1_1gridgeometrytype" kind="type" language="Fortran" prot="public">
+    <compoundname>gridmanager_mod::gridgeometrytype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a88e46fee11a8419f594fd2bb41b7d5bc" prot="private" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::gridgeometrytype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::nx</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of grid points in x-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="56" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="56" bodyend="56"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a90f0d1409646ad4ddbe8a180fb8a23b7" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::gridgeometrytype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::ny</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of grid points in y-direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="57" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a408ebe1599f529626c386ef08a38b0d4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::gridgeometrytype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::nz</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of vertical levels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="58" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a2cf3c0ee5a75f4562c8339309aa5f19c" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::gridgeometrytype::grid_type</definition>
+        <argsstring></argsstring>
+        <name>grid_type</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::grid_type</qualifiedname>
+        <initializer>= GRID_TYPE_COLUMN</initializer>
+        <briefdescription>
+<para>Grid type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="59" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a94ebe0706aeaae1e8f568610217d86f4" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::gridgeometrytype::coord_system</definition>
+        <argsstring></argsstring>
+        <name>coord_system</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::coord_system</qualifiedname>
+        <initializer>= COORD_CARTESIAN</initializer>
+        <briefdescription>
+<para>Coordinate system. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="60" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a467a95ad7f11b3085d2ae96fcf1bfda0" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::dx</definition>
+        <argsstring></argsstring>
+        <name>dx</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::dx</qualifiedname>
+        <initializer>= 1000.0_fp</initializer>
+        <briefdescription>
+<para>Grid spacing in x-direction [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="63" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1af8a74c8eaafc24974c35b16e4cb705cc" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::dy</definition>
+        <argsstring></argsstring>
+        <name>dy</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::dy</qualifiedname>
+        <initializer>= 1000.0_fp</initializer>
+        <briefdescription>
+<para>Grid spacing in y-direction [m]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="64" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a03cb20396c53f90a3dce491d11dae2aa" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable gridmanager_mod::gridgeometrytype::dz</definition>
+        <argsstring></argsstring>
+        <name>dz</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::dz</qualifiedname>
+        <briefdescription>
+<para>Layer thickness [m] (nz) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="65" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a43b3cdf8a18efde28dced5ab5302aad7" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:), allocatable</type>
+        <definition>real(fp), dimension(:), allocatable gridmanager_mod::gridgeometrytype::z_levels</definition>
+        <argsstring></argsstring>
+        <name>z_levels</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::z_levels</qualifiedname>
+        <briefdescription>
+<para>Level heights [m] (nz+1) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="66" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1ac8033f9b0394aa81807f172576cebcd7" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::x_min</definition>
+        <argsstring></argsstring>
+        <name>x_min</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::x_min</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Minimum x-coordinate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="69" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a56e52a7f1b6b2dc5ee9c13f849d39cfb" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::x_max</definition>
+        <argsstring></argsstring>
+        <name>x_max</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::x_max</qualifiedname>
+        <initializer>= 1000.0_fp</initializer>
+        <briefdescription>
+<para>Maximum x-coordinate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="70" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a4e2078e8674c1efea38aa36941248eb6" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::y_min</definition>
+        <argsstring></argsstring>
+        <name>y_min</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::y_min</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Minimum y-coordinate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="71" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a21f05f181d7ddd6eb428ea06f6c89b81" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) gridmanager_mod::gridgeometrytype::y_max</definition>
+        <argsstring></argsstring>
+        <name>y_max</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::y_max</qualifiedname>
+        <initializer>= 1000.0_fp</initializer>
+        <briefdescription>
+<para>Maximum y-coordinate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="72" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1acc6f3d4fdfa3cf45b3918838105ef4cd" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable gridmanager_mod::gridgeometrytype::lon</definition>
+        <argsstring></argsstring>
+        <name>lon</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::lon</qualifiedname>
+        <briefdescription>
+<para>Longitude [degrees] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="75" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1ab9bbee7d3900f59742fd41a8847e862d" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable gridmanager_mod::gridgeometrytype::lat</definition>
+        <argsstring></argsstring>
+        <name>lat</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::lat</qualifiedname>
+        <briefdescription>
+<para>Latitude [degrees] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="76" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a5cdc721433ba1732ec3a12bc8b488378" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable gridmanager_mod::gridgeometrytype::grid_area</definition>
+        <argsstring></argsstring>
+        <name>grid_area</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::grid_area</qualifiedname>
+        <briefdescription>
+<para>Grid cell area [m²] (nx,ny) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="77" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1gridgeometrytype_1a2163c86ae5be1b62ea2aa36d35d15dfe" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical gridmanager_mod::gridgeometrytype::is_initialized</definition>
+        <argsstring></argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::is_initialized</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Initialization status. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="79" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1ac024e0a3274bd85969f461b3da0393cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::init</definition>
+        <argsstring>(this, nx, ny, nz, grid_type, coord_system, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>grid_type</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>coord_system</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="82" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a6ccc8157ef5cc8b062615284349453fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::cleanup</definition>
+        <argsstring>(this)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clean up grid geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="83" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a749bf90114c380c4277081d7578360ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_nx</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nx</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_nx</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of x grid points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="84" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a575497b02dd71ac9b833d8b26867bc65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_ny</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_ny</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_ny</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of y grid points. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="85" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a0e2dfe1e632fa6c16094c682d9e22cb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_nz</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_nz</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_nz</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get number of vertical levels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="86" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a3268494c07a8cb2f629b2f1501e8c377" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_grid_type</definition>
+        <argsstring>(this)</argsstring>
+        <name>get_grid_type</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_grid_type</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="87" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a8d40344853cbf8b9d04d991f9a4183bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_dimensions</definition>
+        <argsstring>(this, nx, ny, nz)</argsstring>
+        <name>get_dimensions</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>nz</defname>
+        </param>
+        <briefdescription>
+<para>Get all grid dimensions at once. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="88" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1aca853c7574ebf64b0f3fa91eaf83dc56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_cell_area</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>get_cell_area</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_cell_area</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get grid cell area at position (i,j) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="89" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a07a0dc36941f17946adb60007b7f32d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::get_cell_volume</definition>
+        <argsstring>(this, i, j, k)</argsstring>
+        <name>get_cell_volume</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::get_cell_volume</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>k</defname>
+        </param>
+        <briefdescription>
+<para>Get grid cell volume at position (i,j,k) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="90" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1gridgeometrytype_1a361fc4a0a5c1c25ece585d60cb300fe0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::gridgeometrytype::is_valid_position</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>is_valid_position</name>
+        <qualifiedname>gridmanager_mod::gridgeometrytype::is_valid_position</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Check if position (i,j) is valid. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="91" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="91" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Grid geometry configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Contains all geometric information about the grid including dimensions, coordinate systems, and spacing. </para>
+    </detaileddescription>
+    <location file="src/core/GridManager_Mod.F90" line="52" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="52" bodyend="92"/>
+    <listofallmembers>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a6ccc8157ef5cc8b062615284349453fe" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>cleanup</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a94ebe0706aeaae1e8f568610217d86f4" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>coord_system</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a467a95ad7f11b3085d2ae96fcf1bfda0" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>dx</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1af8a74c8eaafc24974c35b16e4cb705cc" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>dy</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a03cb20396c53f90a3dce491d11dae2aa" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>dz</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1aca853c7574ebf64b0f3fa91eaf83dc56" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_cell_area</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a07a0dc36941f17946adb60007b7f32d6" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_cell_volume</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a8d40344853cbf8b9d04d991f9a4183bb" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_dimensions</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a3268494c07a8cb2f629b2f1501e8c377" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_grid_type</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a749bf90114c380c4277081d7578360ae" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_nx</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a575497b02dd71ac9b833d8b26867bc65" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_ny</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a0e2dfe1e632fa6c16094c682d9e22cb8" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>get_nz</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a5cdc721433ba1732ec3a12bc8b488378" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>grid_area</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a2cf3c0ee5a75f4562c8339309aa5f19c" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>grid_type</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1ac024e0a3274bd85969f461b3da0393cf" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>init</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a2163c86ae5be1b62ea2aa36d35d15dfe" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>is_initialized</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a361fc4a0a5c1c25ece585d60cb300fe0" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>is_valid_position</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1ab9bbee7d3900f59742fd41a8847e862d" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>lat</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1acc6f3d4fdfa3cf45b3918838105ef4cd" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>lon</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a88e46fee11a8419f594fd2bb41b7d5bc" prot="private" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>nx</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a90f0d1409646ad4ddbe8a180fb8a23b7" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>ny</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a408ebe1599f529626c386ef08a38b0d4" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>nz</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a56e52a7f1b6b2dc5ee9c13f849d39cfb" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>x_max</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1ac8033f9b0394aa81807f172576cebcd7" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>x_min</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a21f05f181d7ddd6eb428ea06f6c89b81" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>y_max</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a4e2078e8674c1efea38aa36941248eb6" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>y_min</name></member>
+      <member refid="structgridmanager__mod_1_1gridgeometrytype_1a43b3cdf8a18efde28dced5ab5302aad7" prot="public" virt="non-virtual"><scope>gridmanager_mod::gridgeometrytype</scope><name>z_levels</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

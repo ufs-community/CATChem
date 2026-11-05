@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacesettlingprocesscreator__mod" kind="namespace" language="Fortran">
+    <compoundname>settlingprocesscreator_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacesettlingprocesscreator__mod_1a8cdd5a52ad4c7368c156add3d5a4a797" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public settlingprocesscreator_mod::create_settling_process</definition>
+        <argsstring>(process, rc)</argsstring>
+        <name>create_settling_process</name>
+        <qualifiedname>settlingprocesscreator_mod::create_settling_process</qualifiedname>
+        <param>
+          <type>class(<ref refid="structprocessinterface__mod_1_1processinterface" kindref="compound">processinterface</ref>), intent(out), allocatable</type>
+          <defname>process</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create a new settling process instance. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This factory function creates and returns a new instance of the settling process. The process is not initialized - the caller must call the init() method with appropriate configuration.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">process</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Allocated process instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingProcessCreator_Mod.F90" line="35" column="1" bodyfile="src/process/settling/SettlingProcessCreator_Mod.F90" bodystart="36" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingprocesscreator__mod_1a1d440bb2c0bcd8cbac2b38bed6ce9814" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public settlingprocesscreator_mod::register_settling_process</definition>
+        <argsstring>(process_mgr, rc)</argsstring>
+        <name>register_settling_process</name>
+        <qualifiedname>settlingprocesscreator_mod::register_settling_process</qualifiedname>
+        <param>
+          <type>type(<ref refid="structprocessmanager__mod_1_1processmanagertype" kindref="compound">processmanagertype</ref>), intent(inout)</type>
+          <defname>process_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Register the settling process with a ProcessManager. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine registers the settling process with a ProcessManager&apos;s factory. This is the correct way to register processes for use in applications and integration tests.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">process_mgr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ProcessManager to register with </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingProcessCreator_Mod.F90" line="64" column="1" bodyfile="src/process/settling/SettlingProcessCreator_Mod.F90" bodystart="65" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacesettlingprocesscreator__mod_1a280db54c78d2c2c79bb05a8428b460ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public settlingprocesscreator_mod::get_settling_default_config</definition>
+        <argsstring>(config_data)</argsstring>
+        <name>get_settling_default_config</name>
+        <qualifiedname>settlingprocesscreator_mod::get_settling_default_config</qualifiedname>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>config_data</defname>
+        </param>
+        <briefdescription>
+<para>Get default configuration for settling process. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This function returns a default configuration string that can be used to initialize the settling process with reasonable defaults.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">config_data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Default configuration string </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/settling/SettlingProcessCreator_Mod.F90" line="88" column="1" bodyfile="src/process/settling/SettlingProcessCreator_Mod.F90" bodystart="89" bodyend="112"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/settling/SettlingProcessCreator_Mod.F90" line="11" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,533 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemapi__mod_1_1flexibledataexchangetype" kind="type" language="Fortran" prot="private">
+    <compoundname>catchemapi_mod::flexibledataexchangetype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a21e09be744372a192eb070c88413fc21" prot="public" static="no" mutable="no">
+        <type>type(fieldmappingregistrytype)</type>
+        <definition>type(fieldmappingregistrytype) catchemapi_mod::flexibledataexchangetype::field_mapping_registry</definition>
+        <argsstring></argsstring>
+        <name>field_mapping_registry</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::field_mapping_registry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="118" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a9209bdf1fe7b72e8a3d12c52c21ffd85" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::met_data_3d</definition>
+        <argsstring></argsstring>
+        <name>met_data_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::met_data_3d</qualifiedname>
+        <briefdescription>
+<para>3D meteorological data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="121" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1aa9f9c9db072d2d5ea8501a41911c9f8f" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::met_data_2d</definition>
+        <argsstring></argsstring>
+        <name>met_data_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::met_data_2d</qualifiedname>
+        <briefdescription>
+<para>2D meteorological data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="122" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a7b36258c74eba62f839f4f1252ce6a60" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::chem_data</definition>
+        <argsstring></argsstring>
+        <name>chem_data</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::chem_data</qualifiedname>
+        <briefdescription>
+<para>Chemical species data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="123" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="123" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a7f8bbf29c4533ceab85dd3f4b8e96082" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::emis_data_3d</definition>
+        <argsstring></argsstring>
+        <name>emis_data_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::emis_data_3d</qualifiedname>
+        <briefdescription>
+<para>3D emission data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="124" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a1dadef8342d07dafbf813be94df4fba1" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::emis_data_2d</definition>
+        <argsstring></argsstring>
+        <name>emis_data_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::emis_data_2d</qualifiedname>
+        <briefdescription>
+<para>2D emission data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="125" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a20c3b3402df1abd31b63a95f7088c33f" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::diag_data_3d</definition>
+        <argsstring></argsstring>
+        <name>diag_data_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::diag_data_3d</qualifiedname>
+        <briefdescription>
+<para>3D diagnostic data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="126" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a864537a0a61c1ebd1453ee3dda4c110e" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchemapi_mod::flexibledataexchangetype::diag_data_2d</definition>
+        <argsstring></argsstring>
+        <name>diag_data_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::diag_data_2d</qualifiedname>
+        <briefdescription>
+<para>2D diagnostic data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="127" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1ac6d6b92d5bd46dfe10515c84017f6750" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable catchemapi_mod::flexibledataexchangetype::met_field_names</definition>
+        <argsstring></argsstring>
+        <name>met_field_names</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::met_field_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="130" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a7f3a14c7cd1b55ac3e24206f4415e77c" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable catchemapi_mod::flexibledataexchangetype::chem_field_names</definition>
+        <argsstring></argsstring>
+        <name>chem_field_names</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::chem_field_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="131" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1aa66dfa2e2d8d4c2406cb37250623c920" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable catchemapi_mod::flexibledataexchangetype::emis_field_names</definition>
+        <argsstring></argsstring>
+        <name>emis_field_names</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::emis_field_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="132" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a689eec547d5b6643f7505e0f4e385905" prot="public" static="no" mutable="no">
+        <type>character(len=64), dimension(:), allocatable</type>
+        <definition>character(len=64), dimension(:), allocatable catchemapi_mod::flexibledataexchangetype::diag_field_names</definition>
+        <argsstring></argsstring>
+        <name>diag_field_names</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::diag_field_names</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="133" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1ab958f93fbbcef8706026bf78aab8184b" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::nx</definition>
+        <argsstring></argsstring>
+        <name>nx</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::nx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="136" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="136" bodyend="136"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a146fa170238a73ece3fdc5a7c84daa8f" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::ny</definition>
+        <argsstring></argsstring>
+        <name>ny</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::ny</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="136" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1aa7356f3a85cb60c7a7fc7d588c403d29" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::nz</definition>
+        <argsstring></argsstring>
+        <name>nz</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::nz</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="136" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1ab3807b7868986ccbbdd420d85e3c8c6a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_met_3d</definition>
+        <argsstring></argsstring>
+        <name>n_met_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_met_3d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="137" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="137" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a45547c8b10cd5244dc7ae1385edd1b70" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_met_2d</definition>
+        <argsstring></argsstring>
+        <name>n_met_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_met_2d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="137" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a70f4647ba61f517d2682b574befb4b48" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_chem</definition>
+        <argsstring></argsstring>
+        <name>n_chem</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_chem</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="138" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="138" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a99accc1a4b7fe421fa49a8961f5f0b35" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_emis_3d</definition>
+        <argsstring></argsstring>
+        <name>n_emis_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_emis_3d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="138" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1af50ea3e0241fac31d670ce5d371e3f28" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_emis_2d</definition>
+        <argsstring></argsstring>
+        <name>n_emis_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_emis_2d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="138" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1ae1406480c47852d3b96bcbde992d6772" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_diag_3d</definition>
+        <argsstring></argsstring>
+        <name>n_diag_3d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_diag_3d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="139" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a2325e0bff9eb108a0e05a2737d2f1256" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::flexibledataexchangetype::n_diag_2d</definition>
+        <argsstring></argsstring>
+        <name>n_diag_2d</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::n_diag_2d</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="139" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="139" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a33fc6e06e0f9a19088b3303349d37cb3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::flexibledataexchangetype::setup_flexible_exchange</definition>
+        <argsstring>(this, nx, ny, nz, rc)</argsstring>
+        <name>setup_flexible_exchange</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::setup_flexible_exchange</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nx</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>ny</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>nz</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="142" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a872b496358677419cdb97b9d1adcbe2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::flexibledataexchangetype::map_host_field</definition>
+        <argsstring>(this, field_name, host_data, rc)</argsstring>
+        <name>map_host_field</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::map_host_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>host_data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="143" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a357b1d22eeb275a36e392d7ab525cfd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::flexibledataexchangetype::get_mapped_field</definition>
+        <argsstring>(this, field_name, data, rc)</argsstring>
+        <name>get_mapped_field</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::get_mapped_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(out), allocatable</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="144" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1flexibledataexchangetype_1a9b08b7724cb64694e301180bf31cae50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::flexibledataexchangetype::set_mapped_field</definition>
+        <argsstring>(this, field_name, data, rc)</argsstring>
+        <name>set_mapped_field</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::set_mapped_field</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:), intent(in)</type>
+          <defname>data</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="145" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchemapi__mod_1_1flexibledataexchangetype_1aefa71379acc862a91369833ae10d39b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchemapi_mod::flexibledataexchangetype::validate_mappings</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>validate_mappings</name>
+        <qualifiedname>catchemapi_mod::flexibledataexchangetype::validate_mappings</qualifiedname>
+        <param>
+          <type>class(flexibledataexchangetype), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="146" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="146" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Enhanced data exchange type with flexible field mapping. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>catchemapi_mod::fieldmappingregistrytype</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>chem_mappings</edgelabel>
+          <edgelabel>diag_mappings</edgelabel>
+          <edgelabel>emis_mappings</edgelabel>
+          <edgelabel>met_mappings</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>catchemapi_mod::fieldmappingtype</label>
+      </node>
+      <node id="1">
+        <label>catchemapi_mod::flexibledataexchangetype</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>field_mapping_registry</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/api/CATChemAPI_Mod.F90" line="116" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="116" bodyend="147"/>
+    <listofallmembers>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a7b36258c74eba62f839f4f1252ce6a60" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>chem_data</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a7f3a14c7cd1b55ac3e24206f4415e77c" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>chem_field_names</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a864537a0a61c1ebd1453ee3dda4c110e" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>diag_data_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a20c3b3402df1abd31b63a95f7088c33f" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>diag_data_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a689eec547d5b6643f7505e0f4e385905" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>diag_field_names</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a1dadef8342d07dafbf813be94df4fba1" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>emis_data_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a7f8bbf29c4533ceab85dd3f4b8e96082" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>emis_data_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1aa66dfa2e2d8d4c2406cb37250623c920" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>emis_field_names</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a21e09be744372a192eb070c88413fc21" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>field_mapping_registry</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a357b1d22eeb275a36e392d7ab525cfd7" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>get_mapped_field</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a872b496358677419cdb97b9d1adcbe2f" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>map_host_field</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1aa9f9c9db072d2d5ea8501a41911c9f8f" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>met_data_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a9209bdf1fe7b72e8a3d12c52c21ffd85" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>met_data_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1ac6d6b92d5bd46dfe10515c84017f6750" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>met_field_names</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a70f4647ba61f517d2682b574befb4b48" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_chem</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a2325e0bff9eb108a0e05a2737d2f1256" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_diag_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1ae1406480c47852d3b96bcbde992d6772" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_diag_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1af50ea3e0241fac31d670ce5d371e3f28" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_emis_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a99accc1a4b7fe421fa49a8961f5f0b35" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_emis_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a45547c8b10cd5244dc7ae1385edd1b70" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_met_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1ab3807b7868986ccbbdd420d85e3c8c6a" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>n_met_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1ab958f93fbbcef8706026bf78aab8184b" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>nx</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a146fa170238a73ece3fdc5a7c84daa8f" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>ny</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1aa7356f3a85cb60c7a7fc7d588c403d29" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>nz</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a9b08b7724cb64694e301180bf31cae50" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>set_mapped_field</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1a33fc6e06e0f9a19088b3303349d37cb3" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>setup_flexible_exchange</name></member>
+      <member refid="structcatchemapi__mod_1_1flexibledataexchangetype_1aefa71379acc862a91369833ae10d39b9" prot="public" virt="non-virtual"><scope>catchemapi_mod::flexibledataexchangetype</scope><name>validate_mappings</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

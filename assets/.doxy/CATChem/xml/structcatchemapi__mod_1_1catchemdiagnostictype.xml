@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchemapi__mod_1_1catchemdiagnostictype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchemapi_mod::catchemdiagnostictype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a5a3b41866fe58fa05755370d2eb53959" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) catchemapi_mod::catchemdiagnostictype::field_name</definition>
+        <argsstring></argsstring>
+        <name>field_name</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::field_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Diagnostic field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="174" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="174" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a61c68fd36a9611e072cbef2472a08ea7" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) catchemapi_mod::catchemdiagnostictype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="175" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="175" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a310e1aa209851a0d30487272da7632f6" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) catchemapi_mod::catchemdiagnostictype::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="176" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="176" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1aa3bf1a792fdfbf80ee439104bba60ba8" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) catchemapi_mod::catchemdiagnostictype::process_name</definition>
+        <argsstring></argsstring>
+        <name>process_name</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::process_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Source process name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="177" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="177" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a7af334a9f8d2f3add3032246d54039ae" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchemapi_mod::catchemdiagnostictype::dimensions</definition>
+        <argsstring></argsstring>
+        <name>dimensions</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::dimensions</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of dimensions (2D or 3D) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="178" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="178" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a4b705e73f0fa7fc578b93a3cd80c3438" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical catchemapi_mod::catchemdiagnostictype::is_available</definition>
+        <argsstring></argsstring>
+        <name>is_available</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::is_available</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether field is available. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="179" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a35003aab4d1ac769485b4491c493db5e" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:), allocatable catchemapi_mod::catchemdiagnostictype::data_2d</definition>
+        <argsstring></argsstring>
+        <name>data_2d</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::data_2d</qualifiedname>
+        <briefdescription>
+<para>2D diagnostic data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="180" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="180" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a12be7734fc4b0c840424df23119e5905" prot="public" static="no" mutable="no">
+        <type>real(fp), dimension(:,:,:), allocatable</type>
+        <definition>real(fp), dimension(:,:,:), allocatable catchemapi_mod::catchemdiagnostictype::data_3d</definition>
+        <argsstring></argsstring>
+        <name>data_3d</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::data_3d</qualifiedname>
+        <briefdescription>
+<para>3D diagnostic data </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="181" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="181" bodyend="181"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchemapi__mod_1_1catchemdiagnostictype_1a7ba11c3c93063f61bbcfd0740595c649" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchemapi_mod::catchemdiagnostictype::scalar_data</definition>
+        <argsstring></argsstring>
+        <name>scalar_data</name>
+        <qualifiedname>catchemapi_mod::catchemdiagnostictype::scalar_data</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Scalar diagnostic data. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChemAPI_Mod.F90" line="182" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="182" bodyend="182"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Diagnostic field information type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChemAPI_Mod.F90" line="173" column="1" bodyfile="src/api/CATChemAPI_Mod.F90" bodystart="173" bodyend="183"/>
+    <listofallmembers>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a35003aab4d1ac769485b4491c493db5e" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>data_2d</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a12be7734fc4b0c840424df23119e5905" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>data_3d</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a61c68fd36a9611e072cbef2472a08ea7" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>description</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a7af334a9f8d2f3add3032246d54039ae" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>dimensions</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a5a3b41866fe58fa05755370d2eb53959" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>field_name</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a4b705e73f0fa7fc578b93a3cd80c3438" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>is_available</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1aa3bf1a792fdfbf80ee439104bba60ba8" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>process_name</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a7ba11c3c93063f61bbcfd0740595c649" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>scalar_data</name></member>
+      <member refid="structcatchemapi__mod_1_1catchemdiagnostictype_1a310e1aa209851a0d30487272da7632f6" prot="public" virt="non-virtual"><scope>catchemapi_mod::catchemdiagnostictype</scope><name>units</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

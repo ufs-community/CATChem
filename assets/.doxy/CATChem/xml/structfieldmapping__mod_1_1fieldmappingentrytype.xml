@@ -1,0 +1,339 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structfieldmapping__mod_1_1fieldmappingentrytype" kind="type" language="Fortran" prot="public">
+    <compoundname>fieldmapping_mod::fieldmappingentrytype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a0bc06fc335226706ec1ff21747175835" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) fieldmapping_mod::fieldmappingentrytype::host_name</definition>
+        <argsstring></argsstring>
+        <name>host_name</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::host_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Host model field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="64" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a7b613b1cbbe00d127742e34def656bd3" prot="public" static="no" mutable="no">
+        <type>character(len=64)</type>
+        <definition>character(len=64) fieldmapping_mod::fieldmappingentrytype::catchem_name</definition>
+        <argsstring></argsstring>
+        <name>catchem_name</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::catchem_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>CATChem field name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="65" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1ab8d71bdceb268be89e3300c47c16e4f3" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) fieldmapping_mod::fieldmappingentrytype::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::category</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field category (meteo, chemistry, etc.) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="66" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1ad5a5e3038e71c1997ccc98d108ea9231" prot="public" static="no" mutable="no">
+        <type>character(len=32)</type>
+        <definition>character(len=32) fieldmapping_mod::fieldmappingentrytype::units</definition>
+        <argsstring></argsstring>
+        <name>units</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::units</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Expected units. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="67" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a372c21afc4e0f43e4a474fbcd19369b9" prot="public" static="no" mutable="no">
+        <type>character(len=128)</type>
+        <definition>character(len=128) fieldmapping_mod::fieldmappingentrytype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Field description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="68" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a3cf02bfad6d73e39d91e5257e62c538a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::is_required</definition>
+        <argsstring></argsstring>
+        <name>is_required</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::is_required</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether field is required. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="69" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1ad0e6a0760a0780a673a82c50a7f857cd" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::is_mapped</definition>
+        <argsstring></argsstring>
+        <name>is_mapped</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::is_mapped</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether mapping is active. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="70" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1ac8b513634642f944faa9e90e997b0ffd" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer fieldmapping_mod::fieldmappingentrytype::mapping_direction</definition>
+        <argsstring></argsstring>
+        <name>mapping_direction</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::mapping_direction</qualifiedname>
+        <initializer>= MAPPING_HOST_TO_CATCHEM</initializer>
+        <briefdescription>
+<para>Mapping direction. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="71" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a1362b4a9224b1d63b1862905126a99fa" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer fieldmapping_mod::fieldmappingentrytype::host_dims</definition>
+        <argsstring></argsstring>
+        <name>host_dims</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::host_dims</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Host field dimensionality (1D, 2D, 3D) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="74" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1adef62ae5ab9fa2fe6c7aa10f7450b400" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer fieldmapping_mod::fieldmappingentrytype::catchem_dims</definition>
+        <argsstring></argsstring>
+        <name>catchem_dims</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::catchem_dims</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>CATChem field dimensionality. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="75" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a186a608865db387666def446923dd796" prot="public" static="no" mutable="no">
+        <type>integer, dimension(3)</type>
+        <definition>integer, dimension(3) fieldmapping_mod::fieldmappingentrytype::host_shape</definition>
+        <argsstring></argsstring>
+        <name>host_shape</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::host_shape</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Host field shape [dim1, dim2, dim3]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="76" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="76" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a53adce81c5a632940c2fb425a3a1d382" prot="public" static="no" mutable="no">
+        <type>integer, dimension(3)</type>
+        <definition>integer, dimension(3) fieldmapping_mod::fieldmappingentrytype::catchem_shape</definition>
+        <argsstring></argsstring>
+        <name>catchem_shape</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::catchem_shape</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>CATChem field shape [nx, ny, nz]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="77" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a1fb6275a198c2449f6230143729de373" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::needs_reshape</definition>
+        <argsstring></argsstring>
+        <name>needs_reshape</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::needs_reshape</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether reshaping is needed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="78" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1ada436cac897bfd5b7e57a1872b66c17e" prot="public" static="no" mutable="no">
+        <type>integer, dimension(3)</type>
+        <definition>integer, dimension(3) fieldmapping_mod::fieldmappingentrytype::host_dim_map</definition>
+        <argsstring></argsstring>
+        <name>host_dim_map</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::host_dim_map</qualifiedname>
+        <initializer>= [1, 2, 3]</initializer>
+        <briefdescription>
+<para>Default: 1D-&gt;nx, 2D-&gt;nx,ny, 3D-&gt;nx,ny,nz. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="82" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a7a0056ae8f57188cc92dea62922c2c51" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::is_column_data</definition>
+        <argsstring></argsstring>
+        <name>is_column_data</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::is_column_data</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>True if host field is column-based (nHoriz, nLev) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="85" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a56e8073bb224d678b07e85e16ae27754" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::expand_horizontal</definition>
+        <argsstring></argsstring>
+        <name>expand_horizontal</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::expand_horizontal</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>True if nHoriz should expand to nx*ny. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="86" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a6068e38308e7b7be082655ff8a9403ee" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) fieldmapping_mod::fieldmappingentrytype::min_value</definition>
+        <argsstring></argsstring>
+        <name>min_value</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::min_value</qualifiedname>
+        <initializer>= -huge(1.0_fp)</initializer>
+        <briefdescription>
+<para>Minimum valid value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="89" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a81cf50859e24527d594d0583a3263bd2" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) fieldmapping_mod::fieldmappingentrytype::max_value</definition>
+        <argsstring></argsstring>
+        <name>max_value</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::max_value</qualifiedname>
+        <initializer>= huge(1.0_fp)</initializer>
+        <briefdescription>
+<para>Maximum valid value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="90" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="structfieldmapping__mod_1_1fieldmappingentrytype_1a31988ffa05a8fc3db05dbebaed94fb8a" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical fieldmapping_mod::fieldmappingentrytype::check_bounds</definition>
+        <argsstring></argsstring>
+        <name>check_bounds</name>
+        <qualifiedname>fieldmapping_mod::fieldmappingentrytype::check_bounds</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether to check bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/FieldMapping_Mod.F90" line="91" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="91" bodyend="91"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Individual field mapping entry. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/FieldMapping_Mod.F90" line="63" column="1" bodyfile="src/api/FieldMapping_Mod.F90" bodystart="63" bodyend="92"/>
+    <listofallmembers>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1adef62ae5ab9fa2fe6c7aa10f7450b400" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>catchem_dims</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a7b613b1cbbe00d127742e34def656bd3" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>catchem_name</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a53adce81c5a632940c2fb425a3a1d382" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>catchem_shape</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1ab8d71bdceb268be89e3300c47c16e4f3" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>category</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a31988ffa05a8fc3db05dbebaed94fb8a" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>check_bounds</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a372c21afc4e0f43e4a474fbcd19369b9" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>description</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a56e8073bb224d678b07e85e16ae27754" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>expand_horizontal</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1ada436cac897bfd5b7e57a1872b66c17e" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>host_dim_map</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a1362b4a9224b1d63b1862905126a99fa" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>host_dims</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a0bc06fc335226706ec1ff21747175835" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>host_name</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a186a608865db387666def446923dd796" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>host_shape</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a7a0056ae8f57188cc92dea62922c2c51" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>is_column_data</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1ad0e6a0760a0780a673a82c50a7f857cd" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>is_mapped</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a3cf02bfad6d73e39d91e5257e62c538a" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>is_required</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1ac8b513634642f944faa9e90e997b0ffd" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>mapping_direction</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a81cf50859e24527d594d0583a3263bd2" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>max_value</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a6068e38308e7b7be082655ff8a9403ee" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>min_value</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1a1fb6275a198c2449f6230143729de373" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>needs_reshape</name></member>
+      <member refid="structfieldmapping__mod_1_1fieldmappingentrytype_1ad5a5e3038e71c1997ccc98d108ea9231" prot="public" virt="non-virtual"><scope>fieldmapping_mod::fieldmappingentrytype</scope><name>units</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structgridmanager__mod_1_1griddecompositiontype" kind="type" language="Fortran" prot="public">
+    <compoundname>gridmanager_mod::griddecompositiontype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1a06c567cd8f1b76da8264c6fc7ca6c844" prot="private" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::n_procs</definition>
+        <argsstring></argsstring>
+        <name>n_procs</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::n_procs</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Number of processors. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="102" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="102" bodyend="102"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1a1d2d72182c9c476d64b16e18bb4a8464" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::my_rank</definition>
+        <argsstring></argsstring>
+        <name>my_rank</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::my_rank</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Current processor rank. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="103" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1a9b8857afa11b5066a1fa5f239382b35d" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::i_start</definition>
+        <argsstring></argsstring>
+        <name>i_start</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::i_start</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Starting i-index for this proc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="104" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1ad7275b8c625747a3ca81e5ec0756389a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::i_end</definition>
+        <argsstring></argsstring>
+        <name>i_end</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::i_end</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Ending i-index for this proc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="105" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1a43e6e92cb0900f7614f73051ee2b003e" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::j_start</definition>
+        <argsstring></argsstring>
+        <name>j_start</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::j_start</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Starting j-index for this proc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="106" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1aa3a2981d088454739a27a72b95324698" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::j_end</definition>
+        <argsstring></argsstring>
+        <name>j_end</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::j_end</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+<para>Ending j-index for this proc. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="107" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1aee4e24f0c5be3060df03cf46caf6b9e9" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer gridmanager_mod::griddecompositiontype::halo_width</definition>
+        <argsstring></argsstring>
+        <name>halo_width</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::halo_width</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Halo cell width. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="110" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgridmanager__mod_1_1griddecompositiontype_1a13a3ed3049f8fc806eaf775e572d5a64" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical gridmanager_mod::griddecompositiontype::has_halos</definition>
+        <argsstring></argsstring>
+        <name>has_halos</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::has_halos</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+<para>Whether halo cells are needed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="111" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="111" bodyend="111"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structgridmanager__mod_1_1griddecompositiontype_1a0db9a658ac2ac6dfd091b3cfa5cacc2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::griddecompositiontype::init</definition>
+        <argsstring>(this, geometry, n_procs, my_rank, rc)</argsstring>
+        <name>init</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structgridmanager__mod_1_1gridgeometrytype" kindref="compound">gridgeometrytype</ref>), intent(in)</type>
+          <defname>geometry</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_procs</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>my_rank</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize grid decomposition. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="114" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1griddecompositiontype_1a374c559e131118e3e4305b7b17a6fdab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::griddecompositiontype::get_local_bounds</definition>
+        <argsstring>(this, i_start, i_end, j_start, j_end)</argsstring>
+        <name>get_local_bounds</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::get_local_bounds</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i_start</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>i_end</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j_start</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>j_end</defname>
+        </param>
+        <briefdescription>
+<para>Get local domain bounds. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="115" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structgridmanager__mod_1_1griddecompositiontype_1a67da0950effdf621a6c795ef7f9bb494" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure gridmanager_mod::griddecompositiontype::is_local_column</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>is_local_column</name>
+        <qualifiedname>gridmanager_mod::griddecompositiontype::is_local_column</qualifiedname>
+        <param>
+          <type>class(<ref refid="structgridmanager__mod_1_1griddecompositiontype" kindref="compound">griddecompositiontype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Check if column (i,j) is local to this processor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/GridManager_Mod.F90" line="116" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="116" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Grid decomposition for parallel execution. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Manages domain decomposition for parallel processing while maintaining column virtualization interface. </para>
+    </detaileddescription>
+    <location file="src/core/GridManager_Mod.F90" line="98" column="1" bodyfile="src/core/GridManager_Mod.F90" bodystart="98" bodyend="117"/>
+    <listofallmembers>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a374c559e131118e3e4305b7b17a6fdab" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>get_local_bounds</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1aee4e24f0c5be3060df03cf46caf6b9e9" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>halo_width</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a13a3ed3049f8fc806eaf775e572d5a64" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>has_halos</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1ad7275b8c625747a3ca81e5ec0756389a" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>i_end</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a9b8857afa11b5066a1fa5f239382b35d" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>i_start</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a0db9a658ac2ac6dfd091b3cfa5cacc2f" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>init</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a67da0950effdf621a6c795ef7f9bb494" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>is_local_column</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1aa3a2981d088454739a27a72b95324698" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>j_end</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a43e6e92cb0900f7614f73051ee2b003e" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>j_start</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a1d2d72182c9c476d64b16e18bb4a8464" prot="public" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>my_rank</name></member>
+      <member refid="structgridmanager__mod_1_1griddecompositiontype_1a06c567cd8f1b76da8264c6fc7ca6c844" prot="private" virt="non-virtual"><scope>gridmanager_mod::griddecompositiontype</scope><name>n_procs</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

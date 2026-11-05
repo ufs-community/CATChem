@@ -1,0 +1,590 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacechemstate__mod" kind="namespace" language="Fortran">
+    <compoundname>chemstate_mod</compoundname>
+    <innerclass refid="structchemstate__mod_1_1chemstatetype" prot="public">chemstate_mod::chemstatetype</innerclass>
+    <sectiondef kind="func">
+      <member refid="group__core__modules_1ga6b42a6366c0a4d5e74a526f6661ec3db" kind="function"><name>find_number_of_species</name></member>
+      <member refid="group__core__modules_1ga0f4bed4ec5273e84346e57d9d2c0cb92" kind="function"><name>chemstate_init</name></member>
+      <memberdef kind="function" id="namespacechemstate__mod_1a6694de6ff4f6a0c7ac800344be160b38" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_cleanup</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>chemstate_cleanup</name>
+        <qualifiedname>chemstate_mod::chemstate_cleanup</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Clean up and deallocate ChemStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="747" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="748" bodyend="790"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a6bef73312cdf2e2f0a7183e7590f6939" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_validate</definition>
+        <argsstring>(this, error_mgr, rc)</argsstring>
+        <name>chemstate_validate</name>
+        <qualifiedname>chemstate_mod::chemstate_validate</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout), pointer</type>
+          <defname>error_mgr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate ChemStateType for consistency. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="794" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="795" bodyend="846"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a6d601aa8cab621c2ce8248375cd4d8ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_reset</definition>
+        <argsstring>(this, rc)</argsstring>
+        <name>chemstate_reset</name>
+        <qualifiedname>chemstate_mod::chemstate_reset</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Reset ChemStateType to initial values. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="850" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="851" bodyend="883"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a036f8a84fa41d5f8ce5ed2610025ee9a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemstate_mod::chemstate_is_allocated</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_is_allocated</name>
+        <qualifiedname>chemstate_mod::chemstate_is_allocated</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Check if required arrays are allocated. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="887" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="888" bodyend="893"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a974b4e24f1ad196f452dedf1bd435cef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(kind=8) function</type>
+        <definition>integer(kind=8) function chemstate_mod::chemstate_get_memory_usage</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_get_memory_usage</name>
+        <qualifiedname>chemstate_mod::chemstate_get_memory_usage</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get approximate memory usage in bytes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="897" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="898" bodyend="944"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1af51d5da064daef49d3dbe3a04e87aef8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_print_summary</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_print_summary</name>
+        <qualifiedname>chemstate_mod::chemstate_print_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Print summary of ChemStateType. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="948" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="949" bodyend="966"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a554fef3d04ca491252868f4ee46a06c2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function chemstate_mod::chemstate_find_species</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>chemstate_find_species</name>
+        <qualifiedname>chemstate_mod::chemstate_find_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+<para>Find species index by name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="970" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="971" bodyend="988"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1abb70ca5c11b0d881808509206ac2b0ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>) function</type>
+        <definition>type(speciestype) function chemstate_mod::chemstate_get_concentration</definition>
+        <argsstring>(this, species_index)</argsstring>
+        <name>chemstate_get_concentration</name>
+        <qualifiedname>chemstate_mod::chemstate_get_concentration</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>species_index</defname>
+        </param>
+        <briefdescription>
+<para>Get species concentration by index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="992" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="993" bodyend="1005"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a6b903b9e56e7211f6804ac98225430bd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_set_concentration</definition>
+        <argsstring>(this, species_index, concentration, rc)</argsstring>
+        <name>chemstate_set_concentration</name>
+        <qualifiedname>chemstate_mod::chemstate_set_concentration</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>species_index</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(in)</type>
+          <defname>concentration</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set species concentration by index. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1009" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1010" bodyend="1029"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a7c40a88ed90cf1770ecea59944601c2d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_get_column_ptr</definition>
+        <argsstring>(this, field_name, i, j, col_ptr, rc)</argsstring>
+        <name>chemstate_get_column_ptr</name>
+        <qualifiedname>chemstate_mod::chemstate_get_column_ptr</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>field_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), pointer</type>
+          <defname>col_ptr</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get a pointer to a vertical column for a given field name and (i,j) indices (type-safe) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1033" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1034" bodyend="1068"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a52d7cb0d97e4566e3ea80d1d38fee859" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function chemstate_mod::chemstate_get_num_species</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_get_num_species</name>
+        <qualifiedname>chemstate_mod::chemstate_get_num_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get the number of species in the chemical state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1072" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1073" bodyend="1080"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1ab5c9bde980cafd3737cbbf5eb46d353b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=64) function, dimension(:), allocatable</type>
+        <definition>character(len=64) function, dimension(:), allocatable chemstate_mod::chemstate_get_species</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_get_species</name>
+        <qualifiedname>chemstate_mod::chemstate_get_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get species names array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1084" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1085" bodyend="1093"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a1d6e7085647bde6daeb1c78672a7e2a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>real(fp) function, dimension(:,:), allocatable</type>
+        <definition>real(fp) function, dimension(:,:), allocatable chemstate_mod::chemstate_get_concentrations</definition>
+        <argsstring>(this, i, j)</argsstring>
+        <name>chemstate_get_concentrations</name>
+        <qualifiedname>chemstate_mod::chemstate_get_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <briefdescription>
+<para>Get concentrations for all species at a grid point. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1097" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1098" bodyend="1114"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a295a83e268181a486d938866b160e713" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_set_concentrations</definition>
+        <argsstring>(this, i, j, concentrations, rc)</argsstring>
+        <name>chemstate_set_concentrations</name>
+        <qualifiedname>chemstate_mod::chemstate_set_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>i</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>j</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set concentrations for all species at a grid point. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1118" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1119" bodyend="1135"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a25a6737bb16f73b1378eecf5ac45ffe9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemstate_mod::chemstate_has_species</definition>
+        <argsstring>(this, species_name)</argsstring>
+        <name>chemstate_has_species</name>
+        <qualifiedname>chemstate_mod::chemstate_has_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <briefdescription>
+<para>Check if a species exists in the chemical state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1139" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1140" bodyend="1144"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a7c5472a4c7c0ae896f80b5887e502dd0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function, dimension(3)</type>
+        <definition>integer function, dimension(3) chemstate_mod::chemstate_get_dimensions</definition>
+        <argsstring>(this)</argsstring>
+        <name>chemstate_get_dimensions</name>
+        <qualifiedname>chemstate_mod::chemstate_get_dimensions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Get grid dimensions. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1148" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1149" bodyend="1156"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1aaad3a3881392997af115c2f69659a2ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_get_all_concentrations</definition>
+        <argsstring>(this, concentrations, rc)</argsstring>
+        <name>chemstate_get_all_concentrations</name>
+        <qualifiedname>chemstate_mod::chemstate_get_all_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(out), allocatable</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get all concentrations as a full 4D array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the complete concentration array for all species and grid points. This is useful for processes that need to work with the entire domain.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemStateType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Full 4D concentration array (nx, ny, nz, n_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1167" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1168" bodyend="1192"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1ac42c24a0f92cebf2ce2f2e7596fc2a94" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_set_all_concentrations</definition>
+        <argsstring>(this, concentrations, rc)</argsstring>
+        <name>chemstate_set_all_concentrations</name>
+        <qualifiedname>chemstate_mod::chemstate_set_all_concentrations</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:,:,:,:), intent(in)</type>
+          <defname>concentrations</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Set all concentrations from a full 4D array. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the complete concentration arrays for all species and grid points. This is useful for processes that compute tendencies for the entire domain.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemStateType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">concentrations</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Full 4D concentration array (nx, ny, nz, n_species) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1203" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1204" bodyend="1227"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemstate__mod_1a7958aaac877004d5edb20d2f7fa1ed39" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemstate_mod::chemstate_init_mie_data</definition>
+        <argsstring>(this, n_mie_files, mie_names, mie_full_paths, rc)</argsstring>
+        <name>chemstate_init_mie_data</name>
+        <qualifiedname>chemstate_mod::chemstate_init_mie_data</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemstate__mod_1_1chemstatetype" kindref="compound">chemstatetype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_mie_files</defname>
+        </param>
+        <param>
+          <type>character(len=30), dimension(:), intent(in)</type>
+          <defname>mie_names</defname>
+        </param>
+        <param>
+          <type>character(len=512), dimension(:), intent(in)</type>
+          <defname>mie_full_paths</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize Mie data for aerosol optical properties. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine allocates and initializes Mie scattering data based on the configuration file information and species Mie name mappings.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemStateType object </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">n_mie_files</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of Mie files </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mie_names</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of Mie type names (e.g., &apos;SS&apos;, &apos;DU&apos;, &apos;BC&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">mie_full_paths</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of full file paths to Mie data files </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/chemstate_mod.F90" line="1240" column="1" bodyfile="src/core/chemstate_mod.F90" bodystart="1241" bodyend="1323"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/chemstate_mod.F90" line="10" column="1"/>
+  </compounddef>
+</doxygen>

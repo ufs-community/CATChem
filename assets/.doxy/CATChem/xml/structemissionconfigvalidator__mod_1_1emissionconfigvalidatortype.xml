@@ -1,0 +1,519 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kind="type" language="Fortran" prot="public">
+    <compoundname>emissionconfigvalidator_mod::emissionconfigvalidatortype</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5af3a4cbb1b09b370daa71957d9e118a" prot="private" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical emissionconfigvalidator_mod::emissionconfigvalidatortype::strict_mode</definition>
+        <argsstring></argsstring>
+        <name>strict_mode</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::strict_mode</qualifiedname>
+        <initializer>= .false.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="44" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3bc2fabfca132098e700c7ebf3f8c981" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical emissionconfigvalidator_mod::emissionconfigvalidatortype::require_mass_conservation</definition>
+        <argsstring></argsstring>
+        <name>require_mass_conservation</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::require_mass_conservation</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="45" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a051c0b2cfafc6572924a3a94ea7645b6" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) emissionconfigvalidator_mod::emissionconfigvalidatortype::mass_conservation_tolerance</definition>
+        <argsstring></argsstring>
+        <name>mass_conservation_tolerance</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::mass_conservation_tolerance</qualifiedname>
+        <initializer>= 1.0e-6_fp</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="46" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a175842e0cdeac188a85c8dd22b0f9e93" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical emissionconfigvalidator_mod::emissionconfigvalidatortype::check_species_existence</definition>
+        <argsstring></argsstring>
+        <name>check_species_existence</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::check_species_existence</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="47" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3fa1942af64974c6dde46802c2c8664e" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_units</definition>
+        <argsstring></argsstring>
+        <name>validate_units</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_units</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="48" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a068f53bb9079cb1c1b4326787a9fb95f" prot="public" static="no" mutable="no">
+        <type>logical</type>
+        <definition>logical emissionconfigvalidator_mod::emissionconfigvalidatortype::check_scale_factors</definition>
+        <argsstring></argsstring>
+        <name>check_scale_factors</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::check_scale_factors</qualifiedname>
+        <initializer>= .true.</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="49" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5269dd0c49ec49427a522e0c6498c79d" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer emissionconfigvalidator_mod::emissionconfigvalidatortype::n_warnings</definition>
+        <argsstring></argsstring>
+        <name>n_warnings</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::n_warnings</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="52" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ae07233f8a28fb98efaccbea74845ec0a" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer emissionconfigvalidator_mod::emissionconfigvalidatortype::n_errors</definition>
+        <argsstring></argsstring>
+        <name>n_errors</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::n_errors</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="53" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="variable" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5e19bed1f1f80c93ffe3bf86f7113856" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer emissionconfigvalidator_mod::emissionconfigvalidatortype::n_species_validated</definition>
+        <argsstring></argsstring>
+        <name>n_species_validated</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::n_species_validated</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="54" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a6b056eaf67de82a74a73ce384018555b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_emission_config</definition>
+        <argsstring>(this, config_file, container, results, rc)</argsstring>
+        <name>validate_emission_config</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_emission_config</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(out), allocatable</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="58" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ad7bee6e306d146245ff8718c4ef0e85e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_species_mapping</definition>
+        <argsstring>(this, container, results, n_results, rc)</argsstring>
+        <name>validate_species_mapping</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_species_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="60" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ac5c841058138a9caf9497eae074c968a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_emission_sources</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_emission_sources</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_emission_sources</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="62" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ab809e39453c23ada701eafb59ae999af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_vertical_distributions</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_vertical_distributions</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_vertical_distributions</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="64" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ac1c762212dc912e9f297738023cd9f26" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_mass_conservation</definition>
+        <argsstring>(this, results, n_results, rc)</argsstring>
+        <name>validate_mass_conservation</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_mass_conservation</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="66" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ab4a275c9123ddaeee168c76fd3dd4574" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::reset_counters</definition>
+        <argsstring>(this)</argsstring>
+        <name>reset_counters</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::reset_counters</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="70" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a05821f07683e9c352a154bb58c69e2db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::get_validation_summary</definition>
+        <argsstring>(this, summary)</argsstring>
+        <name>get_validation_summary</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::get_validation_summary</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(out)</type>
+          <defname>summary</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="72" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3b6f7025c1274517b50a084dfcbe10a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure emissionconfigvalidator_mod::emissionconfigvalidatortype::set_validation_mode</definition>
+        <argsstring>(this, strict_mode, require_mass_conservation, check_species_existence)</argsstring>
+        <name>set_validation_mode</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::set_validation_mode</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>strict_mode</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>require_mass_conservation</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>check_species_existence</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="74" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="74" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a025774500de8dcf050e79b371aca749a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_single_species</definition>
+        <argsstring>(this, species_name, container, results, n_results, rc)</argsstring>
+        <name>validate_single_species</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_single_species</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="78" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a2c77878dc14646383db38acb7dc781cb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private emissionconfigvalidator_mod::emissionconfigvalidatortype::check_species_in_mechanism</definition>
+        <argsstring>(this, species_name, container, species_exists, rc)</argsstring>
+        <name>check_species_in_mechanism</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::check_species_in_mechanism</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>species_exists</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="80" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a0e2ebcae6e5aa27e89a81ede1b28d277" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure, private</type>
+        <definition>procedure, private emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_scale_factors</definition>
+        <argsstring>(this, scale_factors, n_factors, species_name, results, n_results, rc)</argsstring>
+        <name>validate_scale_factors</name>
+        <qualifiedname>emissionconfigvalidator_mod::emissionconfigvalidatortype::validate_scale_factors</qualifiedname>
+        <param>
+          <type>class(<ref refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype" kindref="compound">emissionconfigvalidatortype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>real(fp), dimension(:), intent(in)</type>
+          <defname>scale_factors</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>n_factors</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structemissionconfigvalidator__mod_1_1validationresulttype" kindref="compound">validationresulttype</ref>), dimension(:), intent(inout)</type>
+          <defname>results</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>n_results</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/EmissionConfigValidator_Mod.F90" line="82" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="82" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Configuration validator type. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/EmissionConfigValidator_Mod.F90" line="40" column="1" bodyfile="src/core/EmissionConfigValidator_Mod.F90" bodystart="40" bodyend="83"/>
+    <listofallmembers>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a068f53bb9079cb1c1b4326787a9fb95f" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>check_scale_factors</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a175842e0cdeac188a85c8dd22b0f9e93" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>check_species_existence</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a2c77878dc14646383db38acb7dc781cb" prot="private" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>check_species_in_mechanism</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a05821f07683e9c352a154bb58c69e2db" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>get_validation_summary</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a051c0b2cfafc6572924a3a94ea7645b6" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>mass_conservation_tolerance</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ae07233f8a28fb98efaccbea74845ec0a" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>n_errors</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5e19bed1f1f80c93ffe3bf86f7113856" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>n_species_validated</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5269dd0c49ec49427a522e0c6498c79d" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>n_warnings</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3bc2fabfca132098e700c7ebf3f8c981" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>require_mass_conservation</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ab4a275c9123ddaeee168c76fd3dd4574" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>reset_counters</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3b6f7025c1274517b50a084dfcbe10a6" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>set_validation_mode</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a5af3a4cbb1b09b370daa71957d9e118a" prot="private" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>strict_mode</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a6b056eaf67de82a74a73ce384018555b" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_emission_config</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ac5c841058138a9caf9497eae074c968a" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_emission_sources</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ac1c762212dc912e9f297738023cd9f26" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_mass_conservation</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a0e2ebcae6e5aa27e89a81ede1b28d277" prot="private" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_scale_factors</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a025774500de8dcf050e79b371aca749a" prot="private" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_single_species</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ad7bee6e306d146245ff8718c4ef0e85e" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_species_mapping</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1a3fa1942af64974c6dde46802c2c8664e" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_units</name></member>
+      <member refid="structemissionconfigvalidator__mod_1_1emissionconfigvalidatortype_1ab809e39453c23ada701eafb59ae999af" prot="public" virt="non-virtual"><scope>emissionconfigvalidator_mod::emissionconfigvalidatortype</scope><name>validate_vertical_distributions</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

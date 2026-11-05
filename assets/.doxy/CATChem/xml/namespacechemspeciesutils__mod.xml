@@ -1,0 +1,1522 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacechemspeciesutils__mod" kind="namespace" language="Fortran">
+    <compoundname>chemspeciesutils_mod</compoundname>
+    <innerclass refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" prot="public">chemspeciesutils_mod::chemspeciesutilstype</innerclass>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a0c3137d0d0792bae4d84ded35f15d3f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function, public</type>
+        <definition>integer function, public chemspeciesutils_mod::get_species_index</definition>
+        <argsstring>(container, species_name, rc)</argsstring>
+        <name>get_species_index</name>
+        <qualifiedname>chemspeciesutils_mod::get_species_index</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get the index of a single chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the species to find </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Species index (&gt; 0 if found, 0 if not found) </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="81" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="82" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a9e2af5740826a65c33821343ef4947b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_species_indices</definition>
+        <argsstring>(container, species_names, species_indices, rc)</argsstring>
+        <name>get_species_indices</name>
+        <qualifiedname>chemspeciesutils_mod::get_species_indices</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>species_indices</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get indices for multiple chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_names</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of species names to find </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species_indices</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of species indices (0 if not found) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="107" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="108" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1ad1ffe68077b105f7a2da79353fca23e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function, public</type>
+        <definition>logical function, public chemspeciesutils_mod::check_species_exists</definition>
+        <argsstring>(container, species_name, rc)</argsstring>
+        <name>check_species_exists</name>
+        <qualifiedname>chemspeciesutils_mod::check_species_exists</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if a chemical species exists in the mechanism. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the species to check </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if species exists, false otherwise </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="133" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="134" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a4bc222ce8566cdcf653d31469ba5cb8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_species_properties</definition>
+        <argsstring>(container, species_name, species, rc)</argsstring>
+        <name>get_species_properties</name>
+        <qualifiedname>chemspeciesutils_mod::get_species_properties</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(out)</type>
+          <defname>species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get properties of a chemical species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Properties of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="152" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="153" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a1f67bb8a133a6cd469d37468411031ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::create_species_mapping</definition>
+        <argsstring>(container, process_species, species_mapping, rc)</argsstring>
+        <name>create_species_mapping</name>
+        <qualifiedname>chemspeciesutils_mod::create_species_mapping</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>process_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>species_mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create mapping from process species to mechanism species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">process_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of process species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species_mapping</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of mechanism species indices </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="186" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="187" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1ac0d98f09db2c481c973758576c2796ed" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer function</type>
+        <definition>integer function chemspeciesutils_mod::utils_get_species_index</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_get_species_index</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_species_index</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get the index of a single chemical species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="218" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="219" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1af4fbdd59cf3842d2dc1229c9db811db1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_species_indices</definition>
+        <argsstring>(this, container, species_names, species_indices, rc)</argsstring>
+        <name>utils_get_species_indices</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_species_indices</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>species_indices</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get indices for multiple chemical species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="230" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="231" bodyend="238"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a79bffd2796647cdce7f3d6e97b669a28" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_check_species_exists</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_check_species_exists</name>
+        <qualifiedname>chemspeciesutils_mod::utils_check_species_exists</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if a chemical species exists (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="242" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="243" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1acdd2fb99e4ab271badcd2098e4d719a9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_species_properties</definition>
+        <argsstring>(this, container, species_name, species, rc)</argsstring>
+        <name>utils_get_species_properties</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_species_properties</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structspecies__mod_1_1speciestype" kindref="compound">speciestype</ref>), intent(out)</type>
+          <defname>species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get properties of a chemical species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="254" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="255" bodyend="262"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a5fd4b296672ef903c65cdbe0a5479e4b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_create_species_mapping</definition>
+        <argsstring>(this, container, process_species, species_mapping, rc)</argsstring>
+        <name>utils_create_species_mapping</name>
+        <qualifiedname>chemspeciesutils_mod::utils_create_species_mapping</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>process_species</defname>
+        </param>
+        <param>
+          <type>integer, dimension(:), intent(out)</type>
+          <defname>species_mapping</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Create mapping from process species to mechanism species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="266" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="267" bodyend="274"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a0ede80520e54874444710bdf1234829b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_molecular_weight</definition>
+        <argsstring>(this, container, species_name, molecular_weight, rc)</argsstring>
+        <name>utils_get_molecular_weight</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_molecular_weight</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>molecular_weight</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get molecular weight of a species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemSpeciesUtilsType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">molecular_weight</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Molecular weight [kg/mol] </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="284" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="285" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a63f2a9c6ceb036e58ead48c1e8dfdd94" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_species_list</definition>
+        <argsstring>(this, container, species_list, rc)</argsstring>
+        <name>utils_get_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_species_list</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of all available species in the mechanism. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemSpeciesUtilsType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of all species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="308" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="309" bodyend="339"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a1344c710fd972d3662a1a5ef24f3644d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_validate_species_list</definition>
+        <argsstring>(this, container, species_names, all_valid, missing_species, rc)</argsstring>
+        <name>utils_validate_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::utils_validate_species_list</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), dimension(:), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>logical, intent(out)</type>
+          <defname>all_valid</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>missing_species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Validate that a list of species are all available. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">this</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>ChemSpeciesUtilsType instance </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_names</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of species names to validate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">all_valid</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True if all species are available </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">missing_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of missing species (if any) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="350" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="351" bodyend="398"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1adff65bdca7765f56ff4a6e39dc666b3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_gas_species_list</definition>
+        <argsstring>(container, gas_species_list, rc)</argsstring>
+        <name>get_gas_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::get_gas_species_list</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>gas_species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of gas species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">gas_species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of gas species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="410" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="411" bodyend="416"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a09b3788c5637a3dd0a42fd9c08ece1c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_aerosol_species_list</definition>
+        <argsstring>(container, aerosol_species_list, rc)</argsstring>
+        <name>get_aerosol_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::get_aerosol_species_list</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>aerosol_species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of aerosol species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">aerosol_species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of aerosol species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="424" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="425" bodyend="430"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1aa8aa2b224cba6b757311ec746e517983" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_dust_species_list</definition>
+        <argsstring>(container, dust_species_list, rc)</argsstring>
+        <name>get_dust_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::get_dust_species_list</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>dust_species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of dust species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">dust_species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of dust species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="438" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="439" bodyend="444"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a0d05ac8c393824c0c5ea5d57e5d927b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_seasalt_species_list</definition>
+        <argsstring>(container, seasalt_species_list, rc)</argsstring>
+        <name>get_seasalt_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::get_seasalt_species_list</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>seasalt_species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of sea salt species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">seasalt_species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of sea salt species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="452" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="453" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1adcc626d8d088616a3420ad9ecf773e4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_tracer_species_list</definition>
+        <argsstring>(container, tracer_species_list, rc)</argsstring>
+        <name>get_tracer_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::get_tracer_species_list</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>tracer_species_list</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get list of tracer species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tracer_species_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of tracer species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="466" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="467" bodyend="472"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1abf7a871edba43377c4fb06328c6778cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::filter_species_by_type</definition>
+        <argsstring>(container, species_type, filtered_species, rc)</argsstring>
+        <name>filter_species_by_type</name>
+        <qualifiedname>chemspeciesutils_mod::filter_species_by_type</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_type</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>filtered_species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Filter species by type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Type of species (&apos;gas&apos;, &apos;aerosol&apos;, &apos;dust&apos;, &apos;seasalt&apos;, &apos;tracer&apos;) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">filtered_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>List of species names matching the type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="481" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="482" bodyend="532"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1afbdafa43e2738134282774947517e992" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::get_species_concentration_units</definition>
+        <argsstring>(container, species_name, units, rc)</argsstring>
+        <name>get_species_concentration_units</name>
+        <qualifiedname>chemspeciesutils_mod::get_species_concentration_units</qualifiedname>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>character(len=10), intent(out)</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get concentration units for a species. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>StateManager containing chemical state </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">species_name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Name of the species </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">units</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Units string (&apos;v/v&apos;, &apos;kg/kg&apos;, etc.) </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">rc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Return code </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="541" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="542" bodyend="561"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a6473fb63807da789f84a5f535ea2ff1b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public chemspeciesutils_mod::parse_species_list</definition>
+        <argsstring>(species_string, species_array, n_species)</argsstring>
+        <name>parse_species_list</name>
+        <qualifiedname>chemspeciesutils_mod::parse_species_list</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_string</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out)</type>
+          <defname>species_array</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>n_species</defname>
+        </param>
+        <briefdescription>
+<para>Parse a comma-separated species list. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">species_string</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Comma-separated species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">species_array</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Array of parsed species names </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">n_species</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of species parsed </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="569" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="570" bodyend="603"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a7ebb4cb249086d5702e388588476aca4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_density</definition>
+        <argsstring>(this, container, species_name, density, rc)</argsstring>
+        <name>utils_get_density</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_density</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>density</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get density of a species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="611" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="612" bodyend="626"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1ae6c92d85f2589b8a20af44b9e118ce0a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_radius</definition>
+        <argsstring>(this, container, species_name, radius, rc)</argsstring>
+        <name>utils_get_radius</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_radius</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>radius</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get radius of a species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="630" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="631" bodyend="645"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1add0652fcb03704cb943ff7c1fe8fc038" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_is_gas</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_is_gas</name>
+        <qualifiedname>chemspeciesutils_mod::utils_is_gas</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species is a gas (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="649" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="650" bodyend="664"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a53739940983344d7445e92d211306c6a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_is_aerosol</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_is_aerosol</name>
+        <qualifiedname>chemspeciesutils_mod::utils_is_aerosol</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species is an aerosol (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="668" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="669" bodyend="683"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a7b809b0672bba8f6140961cf54560c98" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_is_dust</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_is_dust</name>
+        <qualifiedname>chemspeciesutils_mod::utils_is_dust</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species is dust (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="687" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="688" bodyend="702"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1ae915d0d3cab247f9e4eeb0559bc41e28" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_is_seasalt</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_is_seasalt</name>
+        <qualifiedname>chemspeciesutils_mod::utils_is_seasalt</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species is sea salt (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="706" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="707" bodyend="721"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1ad59e7c6fa93bf3ceb22d5dae41c1481e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_is_tracer</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_is_tracer</name>
+        <qualifiedname>chemspeciesutils_mod::utils_is_tracer</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species is a tracer (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="725" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="726" bodyend="740"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a8e55fb2dd314dba6a7e5b0683c4330c3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_undergoes_drydep</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_undergoes_drydep</name>
+        <qualifiedname>chemspeciesutils_mod::utils_undergoes_drydep</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species undergoes dry deposition (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="744" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="745" bodyend="759"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a828d96c1dc3fb05e8b8212c8f3e85f53" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function chemspeciesutils_mod::utils_undergoes_photolysis</definition>
+        <argsstring>(this, container, species_name, rc)</argsstring>
+        <name>utils_undergoes_photolysis</name>
+        <qualifiedname>chemspeciesutils_mod::utils_undergoes_photolysis</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Check if species undergoes photolysis (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="763" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="764" bodyend="778"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1acf1f2901e29083077dff5d609bda09b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_get_background_concentration</definition>
+        <argsstring>(this, container, species_name, background_conc, rc)</argsstring>
+        <name>utils_get_background_concentration</name>
+        <qualifiedname>chemspeciesutils_mod::utils_get_background_concentration</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_name</defname>
+        </param>
+        <param>
+          <type>real(fp), intent(out)</type>
+          <defname>background_conc</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Get background concentration of a species (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="782" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="783" bodyend="797"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacechemspeciesutils__mod_1a7adbf9412aa398b1e5d8137b631180cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine chemspeciesutils_mod::utils_filter_species_by_type</definition>
+        <argsstring>(this, container, species_type, filtered_species, rc)</argsstring>
+        <name>utils_filter_species_by_type</name>
+        <qualifiedname>chemspeciesutils_mod::utils_filter_species_by_type</qualifiedname>
+        <param>
+          <type>class(<ref refid="structchemspeciesutils__mod_1_1chemspeciesutilstype" kindref="compound">chemspeciesutilstype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>type(<ref refid="structstatemanager__mod_1_1statemanagertype" kindref="compound">statemanagertype</ref>), intent(inout)</type>
+          <defname>container</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>species_type</defname>
+        </param>
+        <param>
+          <type>character(len=32), dimension(:), intent(out), allocatable</type>
+          <defname>filtered_species</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Filter species by type (type-bound method) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/ChemSpeciesUtils_Mod.F90" line="801" column="1" bodyfile="src/core/ChemSpeciesUtils_Mod.F90" bodystart="802" bodyend="809"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/ChemSpeciesUtils_Mod.F90" line="13" column="1"/>
+  </compounddef>
+</doxygen>
