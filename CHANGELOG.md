@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v2.1.1 (2026-11-05)
+
+### Bug Fixes
+
+- **build**: Upgrade UFS WM to spack-stack v2.1.x
+  ([#192](https://github.com/ufs-community/CATChem/pull/192),
+  [`871eadd`](https://github.com/ufs-community/CATChem/commit/871eaddadef887cd8bed13077abb6513d8711089))
+
+
 ## v2.1.0 (2026-10-23)
 
 
