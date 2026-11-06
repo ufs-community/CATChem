@@ -6,6 +6,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/external/yaml_interface/yaml_interface_mod.F90" line="1" column="1"/>
+    <location file="src/api/CATChem_API.F90" line="1" column="1"/>
   </compounddef>
 </doxygen>

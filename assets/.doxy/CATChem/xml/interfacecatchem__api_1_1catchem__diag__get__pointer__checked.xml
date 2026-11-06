@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__get__pointer__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_diag_get_pointer_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__get__pointer__checked_1ab404213f17b9038504dae5e24b35b829" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_diag_get_pointer_checked::catchem_diag_get_pointer_checked</definition>
+        <argsstring>(core_ptr, name, rank, dims, ptr_out)</argsstring>
+        <name>catchem_diag_get_pointer_checked</name>
+        <qualifiedname>catchem_api::catchem_diag_get_pointer_checked::catchem_diag_get_pointer_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>rank</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(*), intent(in)</type>
+          <defname>dims</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), intent(out)</type>
+          <defname>ptr_out</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="364" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="366" bodyend="371"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="364" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="364" bodyend="371"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__get__pointer__checked_1ab404213f17b9038504dae5e24b35b829" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_get_pointer_checked</scope><name>catchem_diag_get_pointer_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -11,10 +11,10 @@
 
 module settlingscheme_gocart_mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use settlingcommon_mod, only: settlingschemegocartconfig
-   use error_mod, only: cc_success, cc_error
-   use constants, only: g0  !load the constants needed for this scheme
+   use catchem_bridge_error, only: cc_success, cc_error
+   use catchem_bridge_constants, only: g0  !load the constants needed for this scheme
    use gocart2g_miemod, only: gocart2g_mie  ! For Mie data in gocart scheme
 
    implicit none

@@ -11,9 +11,9 @@
 
 module seasaltscheme_gong97_mod
 
-   use precision_mod, only: fp,zero, rae
+   use catchem_bridge_precision, only: fp,zero, rae
    use seasaltcommon_mod, only: seasaltschemegong97config
-   use constants, only: pi  !load the constants needed for this scheme
+   use catchem_bridge_constants, only: pi  !load the constants needed for this scheme
 
    implicit none
    private
@@ -104,6 +104,11 @@ contains
       real(fp) :: fhoppel
       real(fp) :: scale
 
+      ! `species_radius`, `species_conc` are part of the shared scheme calling convention and
+      ! intentionally unused by this scheme; reference them so the interface
+      ! stays uniform without an unused-dummy-argument warning.
+      associate(unused_species_radius => species_radius); end associate
+      associate(unused_species_conc => species_conc); end associate
 
       ! Initialize output (pure subroutines must initialize all outputs)
       rc = 0

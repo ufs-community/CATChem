@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_wet_dep_common___mod_8_f90_source.md)
 
-_Common types and utilities for wetdep process._ [More...](#detailed-description)
+
 
 
 
@@ -80,16 +80,6 @@ _Common types and utilities for wetdep process._ [More...](#detailed-description
 
 
 
-## Detailed Description
-
-
-This module defines the configuration types used by the wetdep process and its schemes.
-
-
-Generated on: 2026-09-22T13:06:55.472385 Author: Wei Li Version: 1.0.0 
-
-
-    
 
 ------------------------------
 The documentation for this class was generated from the following file `src/process/wetdep/WetDepCommon_Mod.F90`

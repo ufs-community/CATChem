@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_settling_common___mod_8_f90_source.md)
 
-_Common types and utilities for settling process._ [More...](#detailed-description)
+
 
 
 
@@ -80,16 +80,6 @@ _Common types and utilities for settling process._ [More...](#detailed-descripti
 
 
 
-## Detailed Description
-
-
-This module defines the configuration types used by the settling process and its schemes.
-
-
-Generated on: 2025-12-18T14:12:32.947343 Author: Wei Li Version: 1.0.0 
-
-
-    
 
 ------------------------------
 The documentation for this class was generated from the following file `src/process/settling/SettlingCommon_Mod.F90`

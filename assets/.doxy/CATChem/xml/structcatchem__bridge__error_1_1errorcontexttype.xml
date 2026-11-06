@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structcatchem__bridge__error_1_1errorcontexttype" kind="type" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_error::errorcontexttype</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorcontexttype_1a3b9cf86cc68bed37bc49da589f0e73e9" prot="public" static="no" mutable="no">
+        <type>character(len=100)</type>
+        <definition>character(len=100) catchem_bridge_error::errorcontexttype::routine_name</definition>
+        <argsstring></argsstring>
+        <name>routine_name</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::routine_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Name of the routine. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="270" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="270" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorcontexttype_1a1882841578dc709457747e3ec6354c47" prot="public" static="no" mutable="no">
+        <type>character(len=255)</type>
+        <definition>character(len=255) catchem_bridge_error::errorcontexttype::description</definition>
+        <argsstring></argsstring>
+        <name>description</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::description</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Context description. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="271" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="271" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorcontexttype_1ad59a7b0b669fdaee13175cf5c4cb005f" prot="public" static="no" mutable="no">
+        <type>character(len=100)</type>
+        <definition>character(len=100) catchem_bridge_error::errorcontexttype::file_name</definition>
+        <argsstring></argsstring>
+        <name>file_name</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::file_name</qualifiedname>
+        <initializer>= &apos;&apos;</initializer>
+        <briefdescription>
+<para>Source file name. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="272" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="272" bodyend="272"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorcontexttype_1acc67e40a445d11b4349fb6f2cb64e930" prot="public" static="no" mutable="no">
+        <type>integer</type>
+        <definition>integer catchem_bridge_error::errorcontexttype::line_number</definition>
+        <argsstring></argsstring>
+        <name>line_number</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::line_number</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Line number. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="273" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="273" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="variable" id="structcatchem__bridge__error_1_1errorcontexttype_1abae0afe36b937065ae5dbda5b7dc51d3" prot="public" static="no" mutable="no">
+        <type>real(fp)</type>
+        <definition>real(fp) catchem_bridge_error::errorcontexttype::timestamp</definition>
+        <argsstring></argsstring>
+        <name>timestamp</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::timestamp</qualifiedname>
+        <initializer>= 0.0_fp</initializer>
+        <briefdescription>
+<para>Context timestamp. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="274" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="274" bodyend="274"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errorcontexttype_1af0f9db56e18197e633eb1695b549405b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errorcontexttype::init</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>init</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="276" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="276" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errorcontexttype_1a1e9c0bf5ef422702789de0f9bd8c671f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errorcontexttype::clear</definition>
+        <argsstring>(this)</argsstring>
+        <name>clear</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::clear</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clear error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="277" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="structcatchem__bridge__error_1_1errorcontexttype_1a7e83b94521dee93bef38d7b8e89dcbaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>procedure</type>
+        <definition>procedure catchem_bridge_error::errorcontexttype::to_string</definition>
+        <argsstring>(this)</argsstring>
+        <name>to_string</name>
+        <qualifiedname>catchem_bridge_error::errorcontexttype::to_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Convert error context to string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="278" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="278" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Error context structure. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Tracks the context stack for error reporting, including routine names, file locations, and call hierarchy. </para>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="269" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="269" bodyend="279"/>
+    <listofallmembers>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1a1e9c0bf5ef422702789de0f9bd8c671f" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>clear</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1a1882841578dc709457747e3ec6354c47" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>description</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1ad59a7b0b669fdaee13175cf5c4cb005f" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>file_name</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1af0f9db56e18197e633eb1695b549405b" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>init</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1acc67e40a445d11b4349fb6f2cb64e930" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>line_number</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1a3b9cf86cc68bed37bc49da589f0e73e9" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>routine_name</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1abae0afe36b937065ae5dbda5b7dc51d3" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>timestamp</name></member>
+      <member refid="structcatchem__bridge__error_1_1errorcontexttype_1a7e83b94521dee93bef38d7b8e89dcbaf" prot="public" virt="non-virtual"><scope>catchem_bridge_error::errorcontexttype</scope><name>to_string</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

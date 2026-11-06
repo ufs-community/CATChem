@@ -51,7 +51,7 @@
 
 | Type | Name |
 | ---: | :--- |
-|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**wetdepschemegocartconfig**](namespacewetdepcommon__mod.md#none-wetdepschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) mairden, real(fp), dimension(num\_layers+1), intent(in) pedge, real(fp), dimension(num\_layers+1), intent(in) pfilsan, real(fp), dimension(num\_layers+1), intent(in) pfllsan, real(fp), intent(in) preccon, real(fp), intent(in) preclsc, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, logical, dimension(:), intent(in) species\_is\_aerosol, character(len=32), dimension(:), intent(in) species\_short\_name, real(fp), dimension(:), intent(in) species\_henry\_cr, real(fp), dimension(:), intent(in) species\_henry\_k0, real(fp), dimension(:), intent(in) species\_henry\_pka, real(fp), dimension(:), intent(in) species\_wd\_retfactor, logical, dimension(:), intent(in) species\_wd\_liqandgas, real(fp), dimension(:), intent(in) species\_wd\_convfaci2g, real(fp), dimension(:,:), intent(in) species\_wd\_rainouteff, real(fp), dimension(:), intent(in) species\_wd\_reevap\_frac, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_mw\_g, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional wetdep\_mass\_per\_species\_per\_level, real(fp), dimension(:,:), intent(inout), optional wetdep\_flux\_per\_species\_per\_level, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Science computation for gocart wet-removal scheme._  |
+|  subroutine, public | [**compute\_gocart**](#function-compute_gocart) (integer, intent(in) num\_layers, integer, intent(in) num\_species, type([**wetdepschemegocartconfig**](namespacewetdepcommon__mod.md#none-wetdepschemegocartconfig)), intent(in) params, real(fp), dimension(num\_layers), intent(in) mairden, real(fp), dimension(num\_layers+1), intent(in) pedge, real(fp), dimension(num\_layers+1), intent(in) pfilsan, real(fp), dimension(num\_layers+1), intent(in) pfllsan, real(fp), intent(in) preccon, real(fp), intent(in) preclsc, real(fp), dimension(num\_layers), intent(in) t, real(fp), intent(in) tstep, logical, dimension(:), intent(in) species\_is\_aerosol, logical, dimension(:), intent(in) species\_is\_wetdep, character(len=32), dimension(:), intent(in) species\_short\_name, real(fp), dimension(:,:), intent(in) species\_wd\_rainouteff, real(fp), dimension(:), intent(in) species\_radius, real(fp), dimension(:), intent(in) species\_mw\_g, real(fp), dimension(num\_layers, num\_species), intent(in) species\_conc, real(fp), dimension(num\_layers, num\_species), intent(inout) species\_tendencies, real(fp), dimension(:,:), intent(inout), optional wetdep\_mass\_per\_species\_per\_level, real(fp), dimension(:,:), intent(inout), optional wetdep\_flux\_per\_species\_per\_level, integer, dimension(:), intent(in), optional diagnostic\_species\_id) <br>_Science computation for gocart wet-removal scheme._  |
 
 
 
@@ -102,15 +102,9 @@ subroutine, public wetdepscheme_gocart_mod::compute_gocart (
     real(fp), dimension(num_layers), intent(in) t,
     real(fp), intent(in) tstep,
     logical, dimension(:), intent(in) species_is_aerosol,
+    logical, dimension(:), intent(in) species_is_wetdep,
     character(len=32), dimension(:), intent(in) species_short_name,
-    real(fp), dimension(:), intent(in) species_henry_cr,
-    real(fp), dimension(:), intent(in) species_henry_k0,
-    real(fp), dimension(:), intent(in) species_henry_pka,
-    real(fp), dimension(:), intent(in) species_wd_retfactor,
-    logical, dimension(:), intent(in) species_wd_liqandgas,
-    real(fp), dimension(:), intent(in) species_wd_convfaci2g,
     real(fp), dimension(:,:), intent(in) species_wd_rainouteff,
-    real(fp), dimension(:), intent(in) species_wd_reevap_frac,
     real(fp), dimension(:), intent(in) species_radius,
     real(fp), dimension(:), intent(in) species_mw_g,
     real(fp), dimension(num_layers, num_species), intent(in) species_conc,
@@ -143,15 +137,9 @@ Routes sulfate species (SO4/SO2/DMS/MSA) through GOCART's SU\_Wet\_Removal and a
 * `t` T field (temperature) [K] 
 * `tstep` Time step [s] - retrieved from process interface 
 * `species_is_aerosol` Species is\_aerosol property 
+* `species_is_wetdep` Species is\_wetdep participation flag (non-participants echoed unchanged) 
 * `species_short_name` Species short\_name property 
-* `species_henry_cr` Species henry\_cr property (unused; GOCART routines carry their own) 
-* `species_henry_k0` Species henry\_k0 property (unused) 
-* `species_henry_pKa` Species henry\_pKa property (unused) 
-* `species_wd_retfactor` Species wd\_retfactor property (unused) 
-* `species_wd_LiqAndGas` Species wd\_LiqAndGas property (unused) 
-* `species_wd_convfacI2G` Species wd\_convfacI2G property (unused) 
 * `species_wd_rainouteff` Species wd\_rainouteff property (3 temperature-dependent efficiencies) (num\_species,3) 
-* `species_wd_reevap_frac` Species wd\_reevap\_frac property (unused) 
 * `species_radius` Species radius property [um] 
 * `species_mw_g` Species mw\_g property 
 * `species_conc` Species concentrations [ppm for gases, ug/kg for aerosols] (num\_layers, num\_species) 

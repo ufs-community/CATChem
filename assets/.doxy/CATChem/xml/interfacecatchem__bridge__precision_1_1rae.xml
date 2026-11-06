@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__bridge__precision_1_1rae" kind="interface" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_precision::rae</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1rae_1a03269131fe5c76f6e8ba58f6c56ebc04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchem_bridge_precision::rae::rae_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f4</name>
+        <qualifiedname>catchem_bridge_precision::rae::rae_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="130" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1rae_1a29fc41bcc42ee97688a8b5c99f66417f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchem_bridge_precision::rae::rae_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f8</name>
+        <qualifiedname>catchem_bridge_precision::rae::rae_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="139" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="140" bodyend="144"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="110" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="110" bodyend="111"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__bridge__precision_1_1rae_1a03269131fe5c76f6e8ba58f6c56ebc04" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::rae</scope><name>rae_f4</name></member>
+      <member refid="interfacecatchem__bridge__precision_1_1rae_1a29fc41bcc42ee97688a8b5c99f66417f" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::rae</scope><name>rae_f8</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

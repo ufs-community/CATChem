@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__destroy__checked" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_destroy_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__destroy__checked_1a1776054d72eec3a886c4e8d8238eacd7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_core_destroy_checked::catchem_core_destroy_checked</definition>
+        <argsstring>(core_ptr)</argsstring>
+        <name>catchem_core_destroy_checked</name>
+        <qualifiedname>catchem_api::catchem_core_destroy_checked::catchem_core_destroy_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="31" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="32" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="31" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="31" bodyend="33"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__destroy__checked_1a1776054d72eec3a886c4e8d8238eacd7" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_destroy_checked</scope><name>catchem_core_destroy_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

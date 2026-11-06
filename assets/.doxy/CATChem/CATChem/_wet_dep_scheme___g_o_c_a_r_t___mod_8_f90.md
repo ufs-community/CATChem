@@ -90,6 +90,13 @@ Pure science kernel for gocart scheme in wetdep process. This module wraps the G
 
 
 
+Ported from ufs-community/CATChem PR #206 (feature/standalone) for the C++ core. Two deliberate adaptations relative to the PR source:
+* The PR tree ran on a pre-filtered wetdep species list, so participation was implicit. The C++ core passes the FULL mechanism species list with an explicit species\_is\_wetdep flag (same contract as the Jacob kernel), so this kernel gates every removal route on that flag: non-participants are echoed bit-exactly into species\_tendencies.
+* Module imports use the rework's bridge precision/constants utilities instead of the legacy precision\_mod/Constants.
+
+
+
+
 Author: Wei Li Reference: GOCART2G Process Library (GEOS-ESM/GOCART): SU\_Wet\_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme) 
 
 

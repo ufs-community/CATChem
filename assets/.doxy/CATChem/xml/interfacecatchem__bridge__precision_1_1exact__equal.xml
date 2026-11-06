@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__bridge__precision_1_1exact__equal" kind="interface" language="Fortran" prot="public">
+    <compoundname>catchem_bridge_precision::exact_equal</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1exact__equal_1adaad60a96d6d60f98900ae8ba06a696f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::exact_equal::exact_equal_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>exact_equal_f4</name>
+        <qualifiedname>catchem_bridge_precision::exact_equal::exact_equal_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="148" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="149" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="interfacecatchem__bridge__precision_1_1exact__equal_1a336b855d8a784ba44c2663a950e19d38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::exact_equal::exact_equal_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>exact_equal_f8</name>
+        <qualifiedname>catchem_bridge_precision::exact_equal::exact_equal_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="154" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="155" bodyend="156"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Exact IEEE equality, spelled without == so gfortran&apos;s -Wcompare-reals stays quiet at deliberate exact comparisons (sentinels, literal zeros). </para>
+    </briefdescription>
+    <detaileddescription>
+<para>(a &lt;= b .and. a &gt;= b) is precisely a == b: false for NaN, true for equal infinities and for +0/-0. Not a tolerance test; see <computeroutput>rae</computeroutput> for that. </para>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="118" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="118" bodyend="119"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__bridge__precision_1_1exact__equal_1adaad60a96d6d60f98900ae8ba06a696f" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::exact_equal</scope><name>exact_equal_f4</name></member>
+      <member refid="interfacecatchem__bridge__precision_1_1exact__equal_1a336b855d8a784ba44c2663a950e19d38" prot="public" virt="non-virtual"><scope>catchem_bridge_precision::exact_equal</scope><name>exact_equal_f8</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

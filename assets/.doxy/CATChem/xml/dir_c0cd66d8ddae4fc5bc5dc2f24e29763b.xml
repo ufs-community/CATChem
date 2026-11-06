@@ -9,6 +9,8 @@
     <innerdir refid="dir_1a0bba2ffdf6e6637fcb76856471cb75">src/process/settling</innerdir>
     <innerdir refid="dir_fb8fc0df5ebe1b02f5e46b98d91cbc63">src/process/so4chem</innerdir>
     <innerdir refid="dir_8b9a0ce556ea4a65f6920dfb49dcd69d">src/process/wetdep</innerdir>
+    <innerfile refid="catchem__bridge__utilities_8_f90">catchem_bridge_utilities.F90</innerfile>
+    <innerfile refid="catchem__emis__time__mod_8_f90">catchem_emis_time_mod.F90</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

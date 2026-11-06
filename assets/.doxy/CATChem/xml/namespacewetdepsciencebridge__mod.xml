@@ -1,0 +1,291 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacewetdepsciencebridge__mod" kind="namespace" language="Fortran">
+    <compoundname>wetdepsciencebridge_mod</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacewetdepsciencebridge__mod_1a0bdd4fe30c5f5dd75930afcc676d0e74" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepsciencebridge_mod::run_wetdep_science_bridge</definition>
+        <argsstring>(n_cols, n_levels, n_species, dt, diagnostics, jacob_scale_factor, jacob_radius_threshold, jacob_so4_gocart_resusp, jacob_so4_washout_eff, c_airden_dry, c_mairden, c_pedge, c_pfilsan, c_pfllsan, c_reevapls, c_t_air, species_is_aerosol, species_is_wetdep, species_henry_cr, species_henry_k0, species_henry_pka, species_wd_retfactor, species_wd_liqandgas, species_wd_convfaci2g, species_wd_rainouteff, species_wd_reevap_frac, species_radius, species_mw_g, species_names, c_conc, c_tendency, c_diag_mass, c_diag_flux, diagnostic_species_id, n_diag_species)</argsstring>
+        <name>run_wetdep_science_bridge</name>
+        <qualifiedname>wetdepsciencebridge_mod::run_wetdep_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_cols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>jacob_scale_factor</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>jacob_radius_threshold</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>jacob_so4_gocart_resusp</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>jacob_so4_washout_eff</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_airden_dry</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_mairden</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pedge</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pfilsan</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pfllsan</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_reevapls</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_t_air</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_aerosol</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_wetdep</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_henry_cr</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_henry_k0</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_henry_pka</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_wd_retfactor</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_wd_liqandgas</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_wd_convfaci2g</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species, 3), intent(in)</type>
+          <defname>species_wd_rainouteff</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_wd_reevap_frac</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32, n_species), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_conc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_tendency</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_mass</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_flux</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(n_diag_species), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepScienceBridge.F90" line="12" column="1" bodyfile="src/process/wetdep/WetDepScienceBridge.F90" bodystart="26" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacewetdepsciencebridge__mod_1a7a6a260ce5cc84f2d58e5a36cc897966" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine wetdepsciencebridge_mod::run_wetdep_gocart_science_bridge</definition>
+        <argsstring>(n_cols, n_levels, n_species, dt, diagnostics, gocart_scale_factor, gocart_washout_tuning, gocart_radius_threshold, c_mairden, c_pedge, c_pfilsan, c_pfllsan, c_t_air, c_preccon, c_preclsc, species_is_aerosol, species_is_wetdep, species_wd_rainouteff, species_radius, species_mw_g, species_names, c_conc, c_tendency, c_diag_mass, c_diag_flux, diagnostic_species_id, n_diag_species)</argsstring>
+        <name>run_wetdep_gocart_science_bridge</name>
+        <qualifiedname>wetdepsciencebridge_mod::run_wetdep_gocart_science_bridge</qualifiedname>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_cols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_levels</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_species</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>dt</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>diagnostics</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>gocart_scale_factor</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>gocart_washout_tuning</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>gocart_radius_threshold</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_mairden</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pedge</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pfilsan</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_pfllsan</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_t_air</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_preccon</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_preclsc</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_aerosol</defname>
+        </param>
+        <param>
+          <type>logical(c_bool), dimension(n_species), intent(in)</type>
+          <defname>species_is_wetdep</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species, 3), intent(in)</type>
+          <defname>species_wd_rainouteff</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_radius</defname>
+        </param>
+        <param>
+          <type>real(c_double), dimension(n_species), intent(in)</type>
+          <defname>species_mw_g</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(32, n_species), intent(in)</type>
+          <defname>species_names</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_conc</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_tendency</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_mass</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>c_diag_flux</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(n_diag_species), intent(in)</type>
+          <defname>diagnostic_species_id</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>n_diag_species</defname>
+        </param>
+        <briefdescription>
+<para>GOCART2G wet-removal entry point (scheme &apos;gocart&apos;). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Separate bind(C) entry from the Jacob bridge so the protected Jacob surface (run_wetdep_science_bridge) stays byte-identical. Shares this module&apos;s species-array marshalling idiom; differs in the scheme configuration record (WetDepSchemeGOCARTConfig) and the two additional surface precipitation inputs PRECCON/PRECLSC required by the GOCART kernel (instantaneous rain amounts [m], divided by tstep inside the kernel to rates [m/s]). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/wetdep/WetDepScienceBridge.F90" line="233" column="1" bodyfile="src/process/wetdep/WetDepScienceBridge.F90" bodystart="248" bodyend="420"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/wetdep/WetDepScienceBridge.F90" line="1" column="1"/>
+  </compounddef>
+</doxygen>

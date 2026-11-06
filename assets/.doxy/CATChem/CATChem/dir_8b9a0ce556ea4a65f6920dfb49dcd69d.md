@@ -21,9 +21,8 @@
 
 | Type | Name |
 | ---: | :--- |
-| file | [**ProcessWetDepInterface\_Mod.F90**](_process_wet_dep_interface___mod_8_f90.md) <br> |
-| file | [**WetDepCommon\_Mod.F90**](_wet_dep_common___mod_8_f90.md) <br>_Common types and utilities for wetdep process._  |
-| file | [**WetDepProcessCreator\_Mod.F90**](_wet_dep_process_creator___mod_8_f90.md) <br>_Factory for creating wetdep process instances._  |
+| file | [**WetDepCommon\_Mod.F90**](_wet_dep_common___mod_8_f90.md) <br> |
+| file | [**WetDepScienceBridge.F90**](_wet_dep_science_bridge_8_f90.md) <br> |
 
 
 ## Directories

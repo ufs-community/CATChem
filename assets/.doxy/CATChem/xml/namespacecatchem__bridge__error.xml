@@ -1,0 +1,911 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchem__bridge__error" kind="namespace" language="Fortran">
+    <compoundname>catchem_bridge_error</compoundname>
+    <innerclass refid="structcatchem__bridge__error_1_1errorcontexttype" prot="public">catchem_bridge_error::errorcontexttype</innerclass>
+    <innerclass refid="structcatchem__bridge__error_1_1errorinfotype" prot="public">catchem_bridge_error::errorinfotype</innerclass>
+    <innerclass refid="structcatchem__bridge__error_1_1errormanagertype" prot="public">catchem_bridge_error::errormanagertype</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a1f49777e914bacf8dac0ba054995b9a0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::cc_success</definition>
+        <argsstring></argsstring>
+        <name>cc_success</name>
+        <qualifiedname>catchem_bridge_error::cc_success</qualifiedname>
+        <initializer>=  0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="201" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="201" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a78dca64b3f8ee6d950d57d778aa21e05" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::cc_failure</definition>
+        <argsstring></argsstring>
+        <name>cc_failure</name>
+        <qualifiedname>catchem_bridge_error::cc_failure</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="202" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="202" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1af75b3b8925f74ed343c42db27702f0c6" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_none</definition>
+        <argsstring></argsstring>
+        <name>error_none</name>
+        <qualifiedname>catchem_bridge_error::error_none</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="208" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="208" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ad2a9adcc329796a70f906375ca9a4107" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_invalid_input</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_input</name>
+        <qualifiedname>catchem_bridge_error::error_invalid_input</qualifiedname>
+        <initializer>= 1001</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="209" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="209" bodyend="209"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a1cc9110dde427aaf11b1d285afc31595" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_invalid_config</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_config</name>
+        <qualifiedname>catchem_bridge_error::error_invalid_config</qualifiedname>
+        <initializer>= 1002</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="210" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="210" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1adc166338195f1ac07dbbeb561e9d522a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_invalid_state</definition>
+        <argsstring></argsstring>
+        <name>error_invalid_state</name>
+        <qualifiedname>catchem_bridge_error::error_invalid_state</qualifiedname>
+        <initializer>= 1003</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="211" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="211" bodyend="211"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a3172770176c5d07aff79d0f9beb40cc1" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_file_not_found</definition>
+        <argsstring></argsstring>
+        <name>error_file_not_found</name>
+        <qualifiedname>catchem_bridge_error::error_file_not_found</qualifiedname>
+        <initializer>= 1004</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="212" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="212" bodyend="212"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a29902023466d4f251bb85bbcbf90ac4c" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_file_read</definition>
+        <argsstring></argsstring>
+        <name>error_file_read</name>
+        <qualifiedname>catchem_bridge_error::error_file_read</qualifiedname>
+        <initializer>= 1005</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="213" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="213" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a442fd67ca2e5fb2faa5d76cf824946a5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_file_write</definition>
+        <argsstring></argsstring>
+        <name>error_file_write</name>
+        <qualifiedname>catchem_bridge_error::error_file_write</qualifiedname>
+        <initializer>= 1006</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="214" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="214" bodyend="214"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ac56bcccf1e59472a4fa0e3453e475706" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_memory_allocation</definition>
+        <argsstring></argsstring>
+        <name>error_memory_allocation</name>
+        <qualifiedname>catchem_bridge_error::error_memory_allocation</qualifiedname>
+        <initializer>= 1007</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="215" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="215" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a5e441c1e97e9308bc703c4a7b572d0a9" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_memory_deallocation</definition>
+        <argsstring></argsstring>
+        <name>error_memory_deallocation</name>
+        <qualifiedname>catchem_bridge_error::error_memory_deallocation</qualifiedname>
+        <initializer>= 1008</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="216" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="216" bodyend="216"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a66948135db5c76be13b25af4ee724991" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_dimension_mismatch</definition>
+        <argsstring></argsstring>
+        <name>error_dimension_mismatch</name>
+        <qualifiedname>catchem_bridge_error::error_dimension_mismatch</qualifiedname>
+        <initializer>= 1009</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="217" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="217" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ad17d965357873d1d02994fed3e9f5b05" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_bounds_check</definition>
+        <argsstring></argsstring>
+        <name>error_bounds_check</name>
+        <qualifiedname>catchem_bridge_error::error_bounds_check</qualifiedname>
+        <initializer>= 1010</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="218" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="218" bodyend="218"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a5bc302a89d5f5bac7d673aaa46efc59a" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_convergence</definition>
+        <argsstring></argsstring>
+        <name>error_convergence</name>
+        <qualifiedname>catchem_bridge_error::error_convergence</qualifiedname>
+        <initializer>= 1011</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="219" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="219" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a3647515ea9bb853ff5174955a5beb4ff" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_numerical_instability</definition>
+        <argsstring></argsstring>
+        <name>error_numerical_instability</name>
+        <qualifiedname>catchem_bridge_error::error_numerical_instability</qualifiedname>
+        <initializer>= 1012</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="220" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="220" bodyend="220"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ab8680971d61de397bc5bc2b1e720ba0d" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_mpi_communication</definition>
+        <argsstring></argsstring>
+        <name>error_mpi_communication</name>
+        <qualifiedname>catchem_bridge_error::error_mpi_communication</qualifiedname>
+        <initializer>= 1013</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="221" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="221" bodyend="221"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1abccb16726b7e6f3aa94acba4b03fa248" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_process_initialization</definition>
+        <argsstring></argsstring>
+        <name>error_process_initialization</name>
+        <qualifiedname>catchem_bridge_error::error_process_initialization</qualifiedname>
+        <initializer>= 1014</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="222" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="222" bodyend="222"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ab252cedc6a3319b633b1a5b86712e428" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_state_inconsistency</definition>
+        <argsstring></argsstring>
+        <name>error_state_inconsistency</name>
+        <qualifiedname>catchem_bridge_error::error_state_inconsistency</qualifiedname>
+        <initializer>= 1015</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="223" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="223" bodyend="223"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1aaa91587d385906e00ab69ae8879f8ad5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_unsupported_operation</definition>
+        <argsstring></argsstring>
+        <name>error_unsupported_operation</name>
+        <qualifiedname>catchem_bridge_error::error_unsupported_operation</qualifiedname>
+        <initializer>= 1016</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="224" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="224" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ac9a67d05810e8293edbe8f14864ebba0" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_duplicate_entry</definition>
+        <argsstring></argsstring>
+        <name>error_duplicate_entry</name>
+        <qualifiedname>catchem_bridge_error::error_duplicate_entry</qualifiedname>
+        <initializer>= 1017</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="225" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="225" bodyend="225"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a9c1e97a2fc07d5bea7ffe201c84d5117" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::error_not_found</definition>
+        <argsstring></argsstring>
+        <name>error_not_found</name>
+        <qualifiedname>catchem_bridge_error::error_not_found</qualifiedname>
+        <initializer>= 1018</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="226" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="226" bodyend="226"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1aeebf1ec8a37b194b0846a3c0b386cc81" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::severity_info</definition>
+        <argsstring></argsstring>
+        <name>severity_info</name>
+        <qualifiedname>catchem_bridge_error::severity_info</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="232" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="232" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ac68410211521d73298b54a8f589ea4e1" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::severity_warning</definition>
+        <argsstring></argsstring>
+        <name>severity_warning</name>
+        <qualifiedname>catchem_bridge_error::severity_warning</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="233" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="233" bodyend="233"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1aee51d7018a94e91b386c5d3fb227c515" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::severity_error</definition>
+        <argsstring></argsstring>
+        <name>severity_error</name>
+        <qualifiedname>catchem_bridge_error::severity_error</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="234" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="234" bodyend="234"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1acec838a518aafc76970a388a11133a0c" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::severity_critical</definition>
+        <argsstring></argsstring>
+        <name>severity_critical</name>
+        <qualifiedname>catchem_bridge_error::severity_critical</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="235" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="235" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1ac61b4e8cc69ae41aea64f3a4d6039f8f" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::severity_fatal</definition>
+        <argsstring></argsstring>
+        <name>severity_fatal</name>
+        <qualifiedname>catchem_bridge_error::severity_fatal</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="236" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="236" bodyend="236"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a10c321616b4f2295140ed3dbf9b71e41" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_general</definition>
+        <argsstring></argsstring>
+        <name>category_general</name>
+        <qualifiedname>catchem_bridge_error::category_general</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="242" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="242" bodyend="242"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a5f7272a85414eb7481b82697d66427ea" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_input</definition>
+        <argsstring></argsstring>
+        <name>category_input</name>
+        <qualifiedname>catchem_bridge_error::category_input</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="243" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="243" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a474949614045047354304db5c8e3a784" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_computation</definition>
+        <argsstring></argsstring>
+        <name>category_computation</name>
+        <qualifiedname>catchem_bridge_error::category_computation</qualifiedname>
+        <initializer>= 2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="244" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="244" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a7b98b15379462d33189ced73c1065967" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_memory</definition>
+        <argsstring></argsstring>
+        <name>category_memory</name>
+        <qualifiedname>catchem_bridge_error::category_memory</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="245" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="245" bodyend="245"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1af1fa21cb29a2ceb97720c60a5ea38053" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_io</definition>
+        <argsstring></argsstring>
+        <name>category_io</name>
+        <qualifiedname>catchem_bridge_error::category_io</qualifiedname>
+        <initializer>= 4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="246" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="246" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a710aee1efb50830931a069c9ffe7fd19" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_mpi</definition>
+        <argsstring></argsstring>
+        <name>category_mpi</name>
+        <qualifiedname>catchem_bridge_error::category_mpi</qualifiedname>
+        <initializer>= 5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="247" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="247" bodyend="247"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__error_1a932ac8cc93757139f54c8fc652a8d1e5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_error::category_process</definition>
+        <argsstring></argsstring>
+        <name>category_process</name>
+        <qualifiedname>catchem_bridge_error::category_process</qualifiedname>
+        <initializer>= 6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="248" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="248" bodyend="248"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a7469ae24ab2931027453cee5c23e51bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_bridge_error::cc_fatal</definition>
+        <argsstring>(errmsg, thisloc)</argsstring>
+        <name>cc_fatal</name>
+        <qualifiedname>catchem_bridge_error::cc_fatal</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>errmsg</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>thisloc</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="318" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="319" bodyend="324"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a588d981ef2596b56d73d766e05ac8065" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_bridge_error::cc_error</definition>
+        <argsstring>(errmsg, rc, thisloc, instr)</argsstring>
+        <name>cc_error</name>
+        <qualifiedname>catchem_bridge_error::cc_error</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>errmsg</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>thisloc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>instr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="343" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="344" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1abf35755e98de0d05a286dab34b2c57e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_bridge_error::cc_warning</definition>
+        <argsstring>(warnmsg, rc, thisloc, instr)</argsstring>
+        <name>cc_warning</name>
+        <qualifiedname>catchem_bridge_error::cc_warning</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>warnmsg</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>thisloc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>instr</defname>
+        </param>
+        <briefdescription>
+<para>CC_Warning. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine prints a warning message and sets RC to CC_SUCCESS.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>WarnMsg</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The warning message </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ThisLoc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the warning </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Instr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Other instructions <blockquote><para><zwj/> </para>
+</blockquote></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="408" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="409" bodyend="454"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1ad1d24be17023873c703bb6074bd86470" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine, public</type>
+        <definition>subroutine, public catchem_bridge_error::cc_checkvar</definition>
+        <argsstring>(variable, operation, rc)</argsstring>
+        <name>cc_checkvar</name>
+        <qualifiedname>catchem_bridge_error::cc_checkvar</qualifiedname>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>variable</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>operation</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>CC_CheckVar. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>This subroutine checks if a variable is allocated.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>Variable</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The variable to check </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>Operation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0=Allocate 1=Register 2=Deallocate </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>RC</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The return code</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<blockquote><para><zwj/> </para>
+</blockquote></para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="467" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="468" bodyend="508"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a0d5221fa14b583acfcf8b14f476a35fc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_context_init</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>error_context_init</name>
+        <qualifiedname>catchem_bridge_error::error_context_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="516" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="517" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a62a23cb59acb18dde33efc9aca27a9fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_context_clear</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_context_clear</name>
+        <qualifiedname>catchem_bridge_error::error_context_clear</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Clear error context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="532" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="533" bodyend="540"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a1df39633d5915fdc95cd2814f5253cfb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>character(len=1024) function</type>
+        <definition>character(len=1024) function catchem_bridge_error::error_context_to_string</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_context_to_string</name>
+        <qualifiedname>catchem_bridge_error::error_context_to_string</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errorcontexttype" kindref="compound">errorcontexttype</ref>), intent(in)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Convert error context to string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="544" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="545" bodyend="553"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a2a0177a2569e450b96490117cc35182b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_manager_init</definition>
+        <argsstring>(this, verbose, track_performance, rc)</argsstring>
+        <name>error_manager_init</name>
+        <qualifiedname>catchem_bridge_error::error_manager_init</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>verbose</defname>
+        </param>
+        <param>
+          <type>logical, intent(in), optional</type>
+          <defname>track_performance</defname>
+        </param>
+        <param>
+          <type>integer, intent(out), optional</type>
+          <defname>rc</defname>
+        </param>
+        <briefdescription>
+<para>Initialize error manager. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="557" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="558" bodyend="577"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1adf59e246c701e2a3e39e1c03fca0070a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_manager_push_context</definition>
+        <argsstring>(this, routine_name, description, file_name, line_number)</argsstring>
+        <name>error_manager_push_context</name>
+        <qualifiedname>catchem_bridge_error::error_manager_push_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>routine_name</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>description</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>file_name</defname>
+        </param>
+        <param>
+          <type>integer, intent(in), optional</type>
+          <defname>line_number</defname>
+        </param>
+        <briefdescription>
+<para>Push context onto error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="581" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="582" bodyend="595"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a46510a98747ef9c2553aef1a6df0ad95" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_manager_pop_context</definition>
+        <argsstring>(this)</argsstring>
+        <name>error_manager_pop_context</name>
+        <qualifiedname>catchem_bridge_error::error_manager_pop_context</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <briefdescription>
+<para>Pop context from error context stack. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="599" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="600" bodyend="606"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1a9bc98f06de3d158c1a1dcb0307c6862f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::error_manager_report_error</definition>
+        <argsstring>(this, error_code, message, rc, location, suggestion)</argsstring>
+        <name>error_manager_report_error</name>
+        <qualifiedname>catchem_bridge_error::error_manager_report_error</qualifiedname>
+        <param>
+          <type>class(<ref refid="structcatchem__bridge__error_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
+          <defname>this</defname>
+        </param>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in)</type>
+          <defname>message</defname>
+        </param>
+        <param>
+          <type>integer, intent(inout)</type>
+          <defname>rc</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>location</defname>
+        </param>
+        <param>
+          <type>character(len=*), intent(in), optional</type>
+          <defname>suggestion</defname>
+        </param>
+        <briefdescription>
+<para>Report error with enhanced information. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="610" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="611" bodyend="655"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__error_1adab87fce7ba4926e6e5cc36296f54eb4" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_bridge_error::get_error_properties</definition>
+        <argsstring>(error_code, severity, category)</argsstring>
+        <name>get_error_properties</name>
+        <qualifiedname>catchem_bridge_error::get_error_properties</qualifiedname>
+        <param>
+          <type>integer, intent(in)</type>
+          <defname>error_code</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>severity</defname>
+        </param>
+        <param>
+          <type>integer, intent(out)</type>
+          <defname>category</defname>
+        </param>
+        <briefdescription>
+<para>Get error properties from error code. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="659" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="660" bodyend="692"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="174" column="1"/>
+  </compounddef>
+</doxygen>

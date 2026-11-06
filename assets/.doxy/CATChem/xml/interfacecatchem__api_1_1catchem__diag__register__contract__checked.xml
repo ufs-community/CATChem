@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__register__contract__checked" kind="interface" language="Fortran" prot="public">
+    <compoundname>catchem_api::catchem_diag_register_contract_checked</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__register__contract__checked_1a384fea3bc134efdbea6495b2b67ee91d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>integer(c_int) function</type>
+        <definition>integer(c_int) function catchem_api::catchem_diag_register_contract_checked::catchem_diag_register_contract_checked</definition>
+        <argsstring>(core_ptr, name, desc, units, rank, dims, axes, policy, reset_value)</argsstring>
+        <name>catchem_diag_register_contract_checked</name>
+        <qualifiedname>catchem_api::catchem_diag_register_contract_checked::catchem_diag_register_contract_checked</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>desc</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>units</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>rank</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(*), intent(in)</type>
+          <defname>dims</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(*), intent(in)</type>
+          <defname>axes</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>policy</defname>
+        </param>
+        <param>
+          <type>real(c_double), value</type>
+          <defname>reset_value</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="422" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="425" bodyend="430"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="422" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="422" bodyend="430"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__register__contract__checked_1a384fea3bc134efdbea6495b2b67ee91d" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_register_contract_checked</scope><name>catchem_diag_register_contract_checked</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

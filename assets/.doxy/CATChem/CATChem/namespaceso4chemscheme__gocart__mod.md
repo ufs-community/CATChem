@@ -180,8 +180,8 @@ This is a pure computational kernel implementing GOCART SO2 to SO4 production sc
 * `z0h` Z0H field [appropriate units] 
 * `species_mw_g` Species mw\_g property 
 * `species_short_name` Species short\_name property 
-* `species_conc` Species concentrations [ppm or ug/kg] (num\_layers, num\_species) 
-* `species_tendencies` Species tendency terms [mol/mol/s] (num\_layers, num\_species) Persistent state variables (per-column): 
+* `species_conc` Species concentrations: DMS/SO2 in ppmv, SO4/MSA in ug/kg (num\_layers, num\_species) 
+* `species_tendencies` Updated concentrations in the same units Persistent state variables (per-column): 
 * `firsttime` flag for first time step 
 * `nymd_last` last day of H2O2 update 
 * `nhms_last_recycle` last time step of H2O2 recycle 

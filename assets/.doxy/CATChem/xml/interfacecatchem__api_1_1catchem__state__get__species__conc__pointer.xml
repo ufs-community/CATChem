@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_state_get_species_conc_pointer</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer_1aea4d6e4776a8e74077de3cb0e048e9ac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(c_ptr) function</type>
+        <definition>type(c_ptr) function catchem_api::catchem_state_get_species_conc_pointer::catchem_state_get_species_conc_pointer</definition>
+        <argsstring>(state_ptr, index)</argsstring>
+        <name>catchem_state_get_species_conc_pointer</name>
+        <qualifiedname>catchem_api::catchem_state_get_species_conc_pointer::catchem_state_get_species_conc_pointer</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>state_ptr</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>index</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="212" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="214" bodyend="216"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="212" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="212" bodyend="216"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer_1aea4d6e4776a8e74077de3cb0e048e9ac" prot="public" virt="non-virtual"><scope>catchem_api::catchem_state_get_species_conc_pointer</scope><name>catchem_state_get_species_conc_pointer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

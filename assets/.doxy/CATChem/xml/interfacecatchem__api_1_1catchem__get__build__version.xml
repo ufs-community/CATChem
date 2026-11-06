@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__get__build__version" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_get_build_version</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__get__build__version_1a280bffd07dbb761da7889cc66d60d60a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_get_build_version::catchem_get_build_version</definition>
+        <argsstring>(buffer, max_len)</argsstring>
+        <name>catchem_get_build_version</name>
+        <qualifiedname>catchem_api::catchem_get_build_version::catchem_get_build_version</qualifiedname>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(out)</type>
+          <defname>buffer</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>max_len</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="331" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="333" bodyend="335"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="331" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="331" bodyend="335"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__get__build__version_1a280bffd07dbb761da7889cc66d60d60a" prot="public" virt="non-virtual"><scope>catchem_api::catchem_get_build_version</scope><name>catchem_get_build_version</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

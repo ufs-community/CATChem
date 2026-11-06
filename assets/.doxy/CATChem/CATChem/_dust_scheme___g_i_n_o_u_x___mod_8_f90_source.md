@@ -11,7 +11,7 @@
 
 module dustscheme_ginoux_mod
 
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    use dustcommon_mod, only: dustschemeginouxconfig
 
    implicit none
@@ -82,6 +82,11 @@ contains
       real(fp) :: w10m
       real(fp) :: emission_temp
 
+      ! `species_conc` is part of the shared scheme calling convention and
+      ! intentionally unused by this scheme; reference it so the interface
+      ! stays uniform without an unused-dummy-argument warning.
+      associate(unused_species_conc => species_conc); end associate
+
       !needs to reinitialize otherwise the skip condition below will cause weird maps.
       if (present(utar_threshold_per_bin)) utar_threshold_per_bin = 0.0_fp
       if (present(dust_emission_total)) dust_emission_total = 0.0_fp
@@ -121,7 +126,8 @@ contains
       w10m = sqrt(u10m ** 2 + v10m ** 2)
 
       ! Main computation loop
-      do k = 1, num_layers
+      ! Dust emission is a surface flux, so it is only applied to the first layer (k=1)
+      do k = 1, 1
 
          ! Apply to each species
          do species_idx = 1, num_species
@@ -207,6 +213,11 @@ contains
       ! Local Variables
       !-----------------
       real(fp) :: diameter
+
+      if (radius <= 0.0_fp .or. soil_density <= 0.0_fp .or. air_density <= 0.0_fp) then
+         ustar_threshold = 0.0_fp
+         return
+      end if
 
       diameter = 2.0_fp * radius * 1.0e-6_fp 
       ustar_threshold = 0.13_fp * sqrt(soil_density*g0*diameter/air_density) &

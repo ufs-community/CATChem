@@ -21,9 +21,8 @@
 
 | Type | Name |
 | ---: | :--- |
-| file | [**DustCommon\_Mod.F90**](_dust_common___mod_8_f90.md) <br>_Common types and utilities for dust process._  |
-| file | [**DustProcessCreator\_Mod.F90**](_dust_process_creator___mod_8_f90.md) <br>_Factory for creating dust process instances._  |
-| file | [**ProcessDustInterface\_Mod.F90**](_process_dust_interface___mod_8_f90.md) <br> |
+| file | [**DustCommon\_Mod.F90**](_dust_common___mod_8_f90.md) <br> |
+| file | [**DustScienceBridge.F90**](_dust_science_bridge_8_f90.md) <br> |
 
 
 ## Directories

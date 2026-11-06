@@ -11,7 +11,7 @@
 
 module carbchemscheme_gocart_mod
 
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use carbchemcommon_mod, only: carbchemschemegocartconfig
    use gocart2g_process, only: carbonchemloss, phobictophilic, chem_utilidow, chem_utilcdow
 

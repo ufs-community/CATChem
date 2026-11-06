@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_core_create_from_config_with_grid</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid_1a2c43b333880f99d6142023a0ee2887e8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>type(c_ptr) function</type>
+        <definition>type(c_ptr) function catchem_api::catchem_core_create_from_config_with_grid::catchem_core_create_from_config_with_grid</definition>
+        <argsstring>(config_file, ncols, nlevels)</argsstring>
+        <name>catchem_core_create_from_config_with_grid</name>
+        <qualifiedname>catchem_api::catchem_core_create_from_config_with_grid::catchem_core_create_from_config_with_grid</qualifiedname>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>config_file</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>ncols</defname>
+        </param>
+        <param>
+          <type>integer(c_int), value</type>
+          <defname>nlevels</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="54" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="56" bodyend="58"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="54" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="54" bodyend="58"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid_1a2c43b333880f99d6142023a0ee2887e8" prot="public" virt="non-virtual"><scope>catchem_api::catchem_core_create_from_config_with_grid</scope><name>catchem_core_create_from_config_with_grid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

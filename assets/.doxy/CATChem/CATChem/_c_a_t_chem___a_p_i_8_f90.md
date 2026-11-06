@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_c_a_t_chem___a_p_i_8_f90_source.md)
 
-_Streamlined CATChem API for host model integration._ [More...](#detailed-description)
+_Modernized high-level BIND(C) API for host model integration._ [More...](#detailed-description)
 
 
 
@@ -28,8 +28,15 @@ _Streamlined CATChem API for host model integration._ [More...](#detailed-descri
 | Type | Name |
 | ---: | :--- |
 | namespace | [**catchem\_api**](namespacecatchem__api.md) <br> |
+| namespace | [**iso\_c\_binding**](namespaceiso__c__binding.md) <br> |
 
 
+## Classes
+
+| Type | Name |
+| ---: | :--- |
+| interface | [**catchem\_diag\_get\_contract**](interfacecatchem__api_1_1catchem__diag__get__contract.md) <br> |
+| interface | [**catchem\_diag\_register\_contract\_checked**](interfacecatchem__api_1_1catchem__diag__register__contract__checked.md) <br> |
 
 
 
@@ -83,51 +90,7 @@ _Streamlined CATChem API for host model integration._ [More...](#detailed-descri
 ## Detailed Description
 
 
-
-
-**Author:**
-
-CATChem Development Team 
-
-
-
-
-**Date:**
-
-2025 
-
-
-
-
-**Version:**
-
-2.1
-
-
-This module provides a streamlined, lightweight API for integrating CATChem into different modeling architectures. It leverages the existing core architecture without duplicating functionality, providing clean interfaces for the most common integration patterns.
-
-
-Key design principles:
-* Lightweight wrapper around existing core components
-* Support for multiple processes and run phases
-* Streamlined data exchange with host models
-* Clear error handling and status reporting
-* No duplication of existing types (ConfigManager, StateManager, etc.)
-
-
-
-
-Usage pattern:
-* Initialize with configuration file
-* Setup grid geometry
-* Add processes as needed
-* Configure run phases (optional)
-* Execute timesteps or phases
-* Exchange data with host model
-* Retrieve diagnostics
-* Finalize 
-
-
+This module provides the standard, backward-compatible CATChem\_Model derived type used by Earth System drivers (like NUOPC and UFS). It delegates all memory management, synchronization, and process scheduling directly to the modernized top-down C++ Core via standard BIND(C) bridges. 
 
 
     

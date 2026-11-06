@@ -3,9 +3,8 @@
   <compounddef id="dir_1a0bba2ffdf6e6637fcb76856471cb75" kind="dir">
     <compoundname>src/process/settling</compoundname>
     <innerdir refid="dir_34df91cc26d24067840a7381fe21b817">src/process/settling/schemes</innerdir>
-    <innerfile refid="_process_settling_interface___mod_8_f90">ProcessSettlingInterface_Mod.F90</innerfile>
     <innerfile refid="_settling_common___mod_8_f90">SettlingCommon_Mod.F90</innerfile>
-    <innerfile refid="_settling_process_creator___mod_8_f90">SettlingProcessCreator_Mod.F90</innerfile>
+    <innerfile refid="_settling_science_bridge_8_f90">SettlingScienceBridge.F90</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

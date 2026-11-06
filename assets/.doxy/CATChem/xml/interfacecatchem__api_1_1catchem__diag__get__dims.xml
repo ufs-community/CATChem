@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__diag__get__dims" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_diag_get_dims</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__diag__get__dims_1abf7f915ed1425a38d500706802a0cb8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_diag_get_dims::catchem_diag_get_dims</definition>
+        <argsstring>(core_ptr, name, dims_out)</argsstring>
+        <name>catchem_diag_get_dims</name>
+        <qualifiedname>catchem_api::catchem_diag_get_dims::catchem_diag_get_dims</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>core_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>integer(c_int), dimension(*), intent(out)</type>
+          <defname>dims_out</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="388" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="389" bodyend="392"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="388" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="388" bodyend="392"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__diag__get__dims_1abf7f915ed1425a38d500706802a0cb8c" prot="public" virt="non-virtual"><scope>catchem_api::catchem_diag_get_dims</scope><name>catchem_diag_get_dims</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

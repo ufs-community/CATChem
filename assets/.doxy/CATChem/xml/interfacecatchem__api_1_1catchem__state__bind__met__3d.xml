@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="interfacecatchem__api_1_1catchem__state__bind__met__3d" kind="interface" language="Fortran" prot="private">
+    <compoundname>catchem_api::catchem_state_bind_met_3d</compoundname>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="interfacecatchem__api_1_1catchem__state__bind__met__3d_1afe71616b6f49b8b3f93a0ccd457d907d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>subroutine</type>
+        <definition>subroutine catchem_api::catchem_state_bind_met_3d::catchem_state_bind_met_3d</definition>
+        <argsstring>(state_ptr, name, ptr)</argsstring>
+        <name>catchem_state_bind_met_3d</name>
+        <qualifiedname>catchem_api::catchem_state_bind_met_3d::catchem_state_bind_met_3d</qualifiedname>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>state_ptr</defname>
+        </param>
+        <param>
+          <type>character(kind=c_char), dimension(*), intent(in)</type>
+          <defname>name</defname>
+        </param>
+        <param>
+          <type>type(c_ptr), value</type>
+          <defname>ptr</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/api/CATChem_API.F90" line="139" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="140" bodyend="143"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/api/CATChem_API.F90" line="139" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="139" bodyend="143"/>
+    <listofallmembers>
+      <member refid="interfacecatchem__api_1_1catchem__state__bind__met__3d_1afe71616b6f49b8b3f93a0ccd457d907d" prot="public" virt="non-virtual"><scope>catchem_api::catchem_state_bind_met_3d</scope><name>catchem_state_bind_met_3d</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

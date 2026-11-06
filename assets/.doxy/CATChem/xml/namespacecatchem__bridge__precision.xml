@@ -1,0 +1,465 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="namespacecatchem__bridge__precision" kind="namespace" language="Fortran">
+    <compoundname>catchem_bridge_precision</compoundname>
+    <innerclass refid="interfacecatchem__bridge__precision_1_1exact__equal" prot="public">catchem_bridge_precision::exact_equal</innerclass>
+    <innerclass refid="interfacecatchem__bridge__precision_1_1is__exact__zero" prot="public">catchem_bridge_precision::is_exact_zero</innerclass>
+    <innerclass refid="interfacecatchem__bridge__precision_1_1rae" prot="public">catchem_bridge_precision::rae</innerclass>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_precision::f4</definition>
+        <argsstring></argsstring>
+        <name>f4</name>
+        <qualifiedname>catchem_bridge_precision::f4</qualifiedname>
+        <initializer>= KIND( 0.0_4 )</initializer>
+        <briefdescription>
+<para>KIND parameter for 4-byte precision. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="28" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_precision::f8</definition>
+        <argsstring></argsstring>
+        <name>f8</name>
+        <qualifiedname>catchem_bridge_precision::f8</qualifiedname>
+        <initializer>= KIND( 0.0_8 )</initializer>
+        <briefdescription>
+<para>KIND parameter for 8-byte precision. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="31" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1adee6e6ad0b98a77160e2b5c1735396b5" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_precision::default_real_kind</definition>
+        <argsstring></argsstring>
+        <name>default_real_kind</name>
+        <qualifiedname>catchem_bridge_precision::default_real_kind</qualifiedname>
+        <initializer>= KIND(0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="37" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_precision::fp</definition>
+        <argsstring></argsstring>
+        <name>fp</name>
+        <qualifiedname>catchem_bridge_precision::fp</qualifiedname>
+        <initializer>= <ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref></initializer>
+        <briefdescription>
+<para>8-byte (default) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="54" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a62a6c743d9b25d6aeb310a8f7f4e1d79" prot="private" static="no" mutable="no">
+        <type>integer, dimension(1 - 2 *merge(0, 1, <ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>==<ref refid="namespacecatchem__bridge__precision_1adee6e6ad0b98a77160e2b5c1735396b5" kindref="member">default_real_kind</ref>)), parameter, private</type>
+        <definition>integer, dimension(1 - 2*merge(0, 1, fp == default_real_kind)), parameter, private catchem_bridge_precision::catchem_fp_precision_guard</definition>
+        <argsstring></argsstring>
+        <name>catchem_fp_precision_guard</name>
+        <qualifiedname>catchem_bridge_precision::catchem_fp_precision_guard</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="72" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="72" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a8c59e2410fc939d5c7a5b7fb349e146c" prot="public" static="no" mutable="no">
+        <type>logical, parameter, public</type>
+        <definition>logical, parameter, public catchem_bridge_precision::missing_bool</definition>
+        <argsstring></argsstring>
+        <name>missing_bool</name>
+        <qualifiedname>catchem_bridge_precision::missing_bool</qualifiedname>
+        <initializer>= .FALSE.</initializer>
+        <briefdescription>
+<para>Missing boolean value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="78" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="78" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a081833c239434c06e0367ef937317116" prot="public" static="no" mutable="no">
+        <type>integer, parameter, public</type>
+        <definition>integer, parameter, public catchem_bridge_precision::missing_int</definition>
+        <argsstring></argsstring>
+        <name>missing_int</name>
+        <qualifiedname>catchem_bridge_precision::missing_int</qualifiedname>
+        <initializer>= -999</initializer>
+        <briefdescription>
+<para>Missing integer value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="79" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="79" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a8d5d47a32bdd1e34b42eeafc9e15e83a" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_precision::missing</definition>
+        <argsstring></argsstring>
+        <name>missing</name>
+        <qualifiedname>catchem_bridge_precision::missing</qualifiedname>
+        <initializer>= -999.0_fp</initializer>
+        <briefdescription>
+<para>Missing real value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="80" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a6f5ad7dac983cebda6c6305d87c47fd1" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public catchem_bridge_precision::missing_real</definition>
+        <argsstring></argsstring>
+        <name>missing_real</name>
+        <qualifiedname>catchem_bridge_precision::missing_real</qualifiedname>
+        <initializer>= -999.0_f4</initializer>
+        <briefdescription>
+<para>Missing real value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="81" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a5e25d7125f7427d5397026ed9ef7f616" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public catchem_bridge_precision::missing_dble</definition>
+        <argsstring></argsstring>
+        <name>missing_dble</name>
+        <qualifiedname>catchem_bridge_precision::missing_dble</qualifiedname>
+        <initializer>= -999.0_f8</initializer>
+        <briefdescription>
+<para>Missing real value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="82" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a7fcf7cf05b500b2c5cee72064a66dbce" prot="public" static="no" mutable="no">
+        <type>character(len=7), parameter, public</type>
+        <definition>character(len=7), parameter, public catchem_bridge_precision::missing_str</definition>
+        <argsstring></argsstring>
+        <name>missing_str</name>
+        <qualifiedname>catchem_bridge_precision::missing_str</qualifiedname>
+        <initializer>= &quot;UNKNOWN&quot;</initializer>
+        <briefdescription>
+<para>Missing string. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="83" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1ad607dc0f9f13b5991827def8767c88dc" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_precision::zero</definition>
+        <argsstring></argsstring>
+        <name>zero</name>
+        <qualifiedname>catchem_bridge_precision::zero</qualifiedname>
+        <initializer>=  0.0_fp</initializer>
+        <briefdescription>
+<para>Zero value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="88" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1adaa97190627cf573bdbd4c92fed5c047" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public catchem_bridge_precision::zero_real</definition>
+        <argsstring></argsstring>
+        <name>zero_real</name>
+        <qualifiedname>catchem_bridge_precision::zero_real</qualifiedname>
+        <initializer>=  0.0_f4</initializer>
+        <briefdescription>
+<para>Zero value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="89" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a2a5c11817be8f98b1c14c9a8a5cb1f86" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public catchem_bridge_precision::zero_dble</definition>
+        <argsstring></argsstring>
+        <name>zero_dble</name>
+        <qualifiedname>catchem_bridge_precision::zero_dble</qualifiedname>
+        <initializer>=  0.0_f8</initializer>
+        <briefdescription>
+<para>Zero value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="90" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a2b9c86c9b9e74f95571cee3c586ebe6b" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public catchem_bridge_precision::tiny_real</definition>
+        <argsstring></argsstring>
+        <name>tiny_real</name>
+        <qualifiedname>catchem_bridge_precision::tiny_real</qualifiedname>
+        <initializer>=  1.0e-16_f4</initializer>
+        <briefdescription>
+<para>A small value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="95" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a1147519ea346ebd0bd77d6a14e641b86" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public catchem_bridge_precision::tiny_dble</definition>
+        <argsstring></argsstring>
+        <name>tiny_dble</name>
+        <qualifiedname>catchem_bridge_precision::tiny_dble</qualifiedname>
+        <initializer>=  1.0e-31_f8</initializer>
+        <briefdescription>
+<para>A small value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="96" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1aea9173f40a2ee26bfaf3a3f7e74a1666" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_precision::tiny_</definition>
+        <argsstring></argsstring>
+        <name>tiny_</name>
+        <qualifiedname>catchem_bridge_precision::tiny_</qualifiedname>
+        <initializer>= TINY_REAL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="100" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a69cd123101530dfcf7dd18c7f1748da3" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>), parameter, public</type>
+        <definition>real(fp), parameter, public catchem_bridge_precision::one</definition>
+        <argsstring></argsstring>
+        <name>one</name>
+        <qualifiedname>catchem_bridge_precision::one</qualifiedname>
+        <initializer>=  1.0_fp</initializer>
+        <briefdescription>
+<para>One value (kind=fp) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="106" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1a8903f48f630c407649253e7f609f54f2" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), parameter, public</type>
+        <definition>real(f4), parameter, public catchem_bridge_precision::one_real</definition>
+        <argsstring></argsstring>
+        <name>one_real</name>
+        <qualifiedname>catchem_bridge_precision::one_real</qualifiedname>
+        <initializer>=  1.0_f4</initializer>
+        <briefdescription>
+<para>One value (kind=f4) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="107" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="variable" id="namespacecatchem__bridge__precision_1ab276e88b4a9cc79a503222be86ae7b62" prot="public" static="no" mutable="no">
+        <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), parameter, public</type>
+        <definition>real(f8), parameter, public catchem_bridge_precision::one_dble</definition>
+        <argsstring></argsstring>
+        <name>one_dble</name>
+        <qualifiedname>catchem_bridge_precision::one_dble</qualifiedname>
+        <initializer>=  1.0_f8</initializer>
+        <briefdescription>
+<para>One value (kind=f8) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="108" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="108" bodyend="108"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1ac14a650a59e975a6e603f41501fd7abd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchem_bridge_precision::rae_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f4</name>
+        <qualifiedname>catchem_bridge_precision::rae_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="130" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="131" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1aba0f1413bfe2bcd50faf4f9510c8661f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>logical function</type>
+        <definition>logical function catchem_bridge_precision::rae_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>rae_f8</name>
+        <qualifiedname>catchem_bridge_precision::rae_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="139" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="140" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1a2d2dfc6859114ed4e6c4891adb4a8e98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::exact_equal_f4</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>exact_equal_f4</name>
+        <qualifiedname>catchem_bridge_precision::exact_equal_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="148" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="149" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1a04dfc8e610c499487eb146764e7ddf0d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::exact_equal_f8</definition>
+        <argsstring>(a, b)</argsstring>
+        <name>exact_equal_f8</name>
+        <qualifiedname>catchem_bridge_precision::exact_equal_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>a</defname>
+        </param>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>b</defname>
+        </param>
+        <briefdescription>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="154" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="155" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1af47f725614737dbad8586903be8faead" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::is_exact_zero_f4</definition>
+        <argsstring>(x)</argsstring>
+        <name>is_exact_zero_f4</name>
+        <qualifiedname>catchem_bridge_precision::is_exact_zero_f4</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" kindref="member">f4</ref>), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <briefdescription>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="160" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="161" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacecatchem__bridge__precision_1a1ae4ff2422ef06e2d6fd68460a1f1297" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>elemental logical function</type>
+        <definition>elemental logical function catchem_bridge_precision::is_exact_zero_f8</definition>
+        <argsstring>(x)</argsstring>
+        <name>is_exact_zero_f8</name>
+        <qualifiedname>catchem_bridge_precision::is_exact_zero_f8</qualifiedname>
+        <param>
+          <type>real(<ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref>), intent(in)</type>
+          <defname>x</defname>
+        </param>
+        <briefdescription>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/process/catchem_bridge_utilities.F90" line="166" column="1" bodyfile="src/process/catchem_bridge_utilities.F90" bodystart="167" bodyend="168"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/process/catchem_bridge_utilities.F90" line="24" column="1"/>
+  </compounddef>
+</doxygen>

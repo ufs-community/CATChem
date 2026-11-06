@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="74" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="74" bodyend="74"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="45" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="45" bodyend="45"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a34f5b311d644813e58c61aac6293f91d" prot="public" static="no" mutable="no">
         <type>character(len=256)</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="75" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="75" bodyend="75"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="46" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a90a3ec73fa396c4920f3c2691e18a7d8" prot="public" static="no" mutable="no">
         <type>character(len=64)</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="76" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="76" bodyend="76"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="47" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="47" bodyend="47"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a7bf8b452846183f45f61301829a92cc0" prot="public" static="no" mutable="no">
         <type>character(len=16)</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="77" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="77" bodyend="77"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="48" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a349100c06efaf792caabd4ffdbb4a5fc" prot="public" static="no" mutable="no">
         <type>logical</type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="80" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="80" bodyend="80"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="51" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="51" bodyend="51"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1af68b503a4426524aee01ecdc59b01411" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -91,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="83" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="83" bodyend="83"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="54" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="54" bodyend="54"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1af341253af7aeb7b18cc3257e18e6fca5" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -106,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="84" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="84" bodyend="84"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="55" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="55" bodyend="55"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a4382620d995b040c0571221801f4fa15" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="85" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="85" bodyend="85"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="56" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="56" bodyend="56"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a49e9e843139458563c46b6906e9bec72" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -136,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="86" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="86" bodyend="86"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="57" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="57" bodyend="57"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1aa4218f8d910a11eaf2dc905f35e9c33c" prot="public" static="no" mutable="no">
         <type>real(fp)</type>
@@ -151,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="87" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="87" bodyend="87"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="58" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1ad98002d7c62f32d20add70bd8226f7ae" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -166,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="88" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="88" bodyend="88"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="59" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="59" bodyend="59"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a008a7a33f7d41b916f7e2d18b8609153" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -181,7 +181,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="89" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="89" bodyend="89"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="60" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="60" bodyend="60"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a26da6d69780ba8f56c6a1329b55981b5" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -196,7 +196,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="90" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="90" bodyend="90"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="61" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="61" bodyend="61"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a526a06dab669f05c4bf380d9e1213ff2" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -211,7 +211,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="91" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="91" bodyend="91"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="62" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="62" bodyend="62"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a6d6a0db5cf13f4f496b6735a5ab78349" prot="public" static="no" mutable="no">
         <type>integer</type>
@@ -226,7 +226,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="94" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="94" bodyend="94"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="65" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="65" bodyend="65"/>
       </memberdef>
       <memberdef kind="variable" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a070e7e747675d5380cbc0f400acef2dc" prot="public" static="no" mutable="no">
         <type>character(len=32), dimension(15)</type>
@@ -240,59 +240,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="95" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="95" bodyend="95"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustschemefengshaconfig_1aef0631f31ffa3856730038d257e2ebf2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustschemefengshaconfig::validate</definition>
-        <argsstring>(this, error_handler)</argsstring>
-        <name>validate</name>
-        <qualifiedname>dustcommon_mod::dustschemefengshaconfig::validate</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustschemefengshaconfig" kindref="compound">dustschemefengshaconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <param>
-          <type>type(<ref refid="structerror__mod_1_1errormanagertype" kindref="compound">errormanagertype</ref>), intent(inout)</type>
-          <defname>error_handler</defname>
-        </param>
-        <briefdescription>
-<para>Validate fengsha scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="98" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="98" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="function" id="structdustcommon__mod_1_1dustschemefengshaconfig_1a6ade2ecdf8e338bbc702dd4c4cf77fa5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>procedure, public</type>
-        <definition>procedure, public dustcommon_mod::dustschemefengshaconfig::finalize</definition>
-        <argsstring>(this)</argsstring>
-        <name>finalize</name>
-        <qualifiedname>dustcommon_mod::dustschemefengshaconfig::finalize</qualifiedname>
-        <param>
-          <type>class(<ref refid="structdustcommon__mod_1_1dustschemefengshaconfig" kindref="compound">dustschemefengshaconfig</ref>), intent(inout)</type>
-          <defname>this</defname>
-        </param>
-        <briefdescription>
-<para>Finalize fengsha scheme configuration. </para>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/process/dust/DustCommon_Mod.F90" line="99" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="99" bodyend="-1"/>
+        <location file="src/process/dust/DustCommon_Mod.F90" line="66" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="66" bodyend="66"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
-<para>Configuration type for fengsha scheme. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/process/dust/DustCommon_Mod.F90" line="71" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="71" bodyend="100"/>
+    <location file="src/process/dust/DustCommon_Mod.F90" line="42" column="1" bodyfile="src/process/dust/DustCommon_Mod.F90" bodystart="42" bodyend="68"/>
     <listofallmembers>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a349100c06efaf792caabd4ffdbb4a5fc" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>affects_full_column</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a7bf8b452846183f45f61301829a92cc0" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>algorithm_type</name></member>
@@ -302,7 +257,6 @@
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a526a06dab669f05c4bf380d9e1213ff2" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>distribution_option</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1ad98002d7c62f32d20add70bd8226f7ae" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>drag_option</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a4382620d995b040c0571221801f4fa15" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>drylimit_factor</name></member>
-      <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a6ade2ecdf8e338bbc702dd4c4cf77fa5" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>finalize</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1af341253af7aeb7b18cc3257e18e6fca5" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>gamma</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a008a7a33f7d41b916f7e2d18b8609153" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>horizflux_option</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1aa4218f8d910a11eaf2dc905f35e9c33c" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>kvhmax</name></member>
@@ -311,7 +265,6 @@
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a6d6a0db5cf13f4f496b6735a5ab78349" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>n_required_met_fields</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a070e7e747675d5380cbc0f400acef2dc" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>required_met_fields</name></member>
       <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1a2c1eeaf0cc981e5305bdfa39b97cea6b" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>scheme_name</name></member>
-      <member refid="structdustcommon__mod_1_1dustschemefengshaconfig_1aef0631f31ffa3856730038d257e2ebf2" prot="public" virt="non-virtual"><scope>dustcommon_mod::dustschemefengshaconfig</scope><name>validate</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

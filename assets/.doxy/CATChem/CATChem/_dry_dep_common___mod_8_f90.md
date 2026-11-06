@@ -8,7 +8,7 @@
 
 [Go to the source code of this file](_dry_dep_common___mod_8_f90_source.md)
 
-_Common types and utilities for drydep process._ [More...](#detailed-description)
+
 
 
 
@@ -80,16 +80,6 @@ _Common types and utilities for drydep process._ [More...](#detailed-description
 
 
 
-## Detailed Description
-
-
-This module defines the configuration types used by the drydep process and its schemes.
-
-
-Generated on: 2025-11-25T22:20:02.319771 Author: Wei Li Version: 1.0.0 
-
-
-    
 
 ------------------------------
 The documentation for this class was generated from the following file `src/process/drydep/DryDepCommon_Mod.F90`
