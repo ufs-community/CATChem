@@ -96,6 +96,13 @@ namespace catchem {
                     Logger::warn(*state, "Active species not found in MICM solver variable map", {{"species", name}});
                 }
             }
+
+            Logger::info(*state, "GasChemProcess: initialized MICM state",
+                         {{"column_count", std::to_string(state->column_count())},
+                          {"level_count", std::to_string(state->level_count())},
+                          {"columns_per_batch", std::to_string(columns_per_batch_)},
+                          {"micm_grid_cells", std::to_string(micm_state_->NumberOfGridCells())},
+                          {"micm_species_count", std::to_string(micm_state_->NumberOfSpecies())}});
         } catch (const std::exception& e) {
             Logger::error(*state, "GasChemProcess: failed to initialize MICM", {{"error", e.what()}});
             initialized_ = false;
