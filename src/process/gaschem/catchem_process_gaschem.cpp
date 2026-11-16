@@ -44,6 +44,20 @@ namespace catchem {
             }
         }
 
+        int cols_per_batch = 1;
+        if (state->config_manager()) {
+            if (!state->config_manager()->get_string("processes/gaschem/columns_per_batch", "").empty()) {
+                cols_per_batch = state->config_manager()->get_int("processes/gaschem/columns_per_batch", 1);
+            } else if (!state->config_manager()->get_string("process/gaschem/columns_per_batch", "").empty()) {
+                cols_per_batch = state->config_manager()->get_int("process/gaschem/columns_per_batch", 1);
+            }
+        }
+        if (cols_per_batch < 1) {
+            throw std::invalid_argument("GasChemProcess: columns_per_batch must be >= 1, got " +
+                                        std::to_string(cols_per_batch));
+        }
+        this->columns_per_batch_ = static_cast<std::size_t>(cols_per_batch);
+
         if (this->config_dir_.empty()) {
             if (!state->configuration_path().empty()) {
                 std::string path = state->configuration_path();
@@ -81,8 +95,8 @@ namespace catchem {
         // 2. Initialize MICM and State using musica library
         try {
             micm_instance_ = std::make_unique<musica::MICM>(micm_config_path, musica::RosenbrockStandardOrder);
-            micm_state_ =
-                std::make_unique<musica::State>(*micm_instance_, state->column_count() * state->level_count());
+            const std::size_t batch_cells = this->columns_per_batch_ * static_cast<std::size_t>(state->level_count());
+            micm_state_ = std::make_unique<musica::State>(*micm_instance_, batch_cells);
             initialized_ = true;
             std::clog << "[INFO] GasChemProcess: initialized MICM successfully!" << std::endl;
 
@@ -158,116 +172,137 @@ namespace catchem {
         // Dry air molecular weight in kg/mol (sourced from catchem::constants)
         constexpr double air_mw_kg = catchem::constants::AIR_MW * 1.0e-3;
 
-        // 2. Map environmental variables and input concentrations to state
-        for (int ilev = 0; ilev < nl; ++ilev) {
-            for (int icol = 0; icol < nc; ++icol) {
-                int i_cell = ilev * nc + icol;
-
-                double t_val = temp(icol, ilev, 0);
-                double p_val = pmid(icol, ilev, 0);
-                double density_dry_kg = airden_dry(icol, ilev, 0);
-
-                if (!std::isfinite(t_val) || t_val <= 0.0 || !std::isfinite(p_val) || p_val <= 0.0 ||
-                    !std::isfinite(density_dry_kg) || density_dry_kg <= 0.0)
-                    throw std::domain_error("GasChem received non-physical T, PMID, or AIRDEN_DRY");
-
-                // Convert dry air density: kg/m3 to mol/m3
-                double air_density_mol = density_dry_kg / air_mw_kg;
-
-                micm_conditions[i_cell].temperature_ = t_val;
-                micm_conditions[i_cell].pressure_ = p_val;
-                micm_conditions[i_cell].air_density_ = air_density_mol;
-
-                // Copy concentrations: ppmv -> mol/m3
-                for (int ispec = 0; ispec < ns; ++ispec) {
-                    std::string name = state->chemistry().species_list[ispec].short_name;
-                    for (auto& c : name)
-                        c = std::toupper(c);
-
-                    auto it = variable_map.find(name);
-                    if (it != variable_map.end()) {
-                        size_t i_micm_spec = it->second;
-                        double ppmv_val = conc(icol, ilev, ispec);
-                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                            throw std::domain_error("GasChem received a negative or non-finite concentration for " +
-                                                    name);
-
-                        double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
-
-                        size_t group_index = i_cell / vector_size_;
-                        size_t row_in_group = i_cell % vector_size_;
-                        size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
-                        micm_concs[idx] = conc_molar;
-                    }
-                }
-
-                // 3. Dynamic Photolysis Mapping (PHOTO.<label> to photolysis_rate_<label>)
-                for (const auto& [param_name, i_param] : rate_param_map) {
-                    size_t group_index = i_cell / vector_size_;
-                    size_t row_in_group = i_cell % vector_size_;
-                    size_t idx = (group_index * n_rate_params + i_param) * vector_size_ + row_in_group;
-
-                    if (param_name.rfind("PHOTO.", 0) == 0) {
-                        std::string label = param_name.substr(6);
-                        std::string diag_name = "photolysis_rate_" + label;
-
-                        double rate_val = 0.0;
-                        if (state->diagnostic_manager() && state->diagnostic_manager()->has_field(diag_name)) {
-                            double* diag_ptr =
-                                static_cast<double*>(state->diagnostic_manager()->get_host_pointer(diag_name));
-                            if (diag_ptr) {
-                                int diag_idx = ilev * nc + icol;
-                                rate_val = diag_ptr[diag_idx];
-                            }
-                        }
-                        micm_rate_params[idx] = rate_val;
-                    } else if (param_name.rfind("LOSS.", 0) == 0) {
-                        micm_rate_params[idx] = 1.0;
-                    }
-                }
-            }
-        }
-
-        // 4. Run standard CPU solver
         double tstep = state->clock().timestep;
         if (tstep <= 0.0) {
             Logger::error(*state, "Invalid timestep encountered", {{"timestep", std::to_string(tstep)}});
             throw std::runtime_error("GasChemProcess: timestep must be greater than zero.");
         }
-        auto solver_result = micm_instance_->Solve(micm_state_.get(), tstep);
-        if (solver_result.state_ != micm::SolverState::Converged &&
-            solver_result.state_ != micm::SolverState::AcceptingUnconvergedIntegration) {
-            Logger::error(*state, "MICM Solver did not reach convergence!",
-                          {{"final_state", micm::SolverStateToString(solver_result.state_)}});
-            throw std::runtime_error("GasChemProcess: MICM Solver failed to reach convergence or acceptable state: " +
-                                     micm::SolverStateToString(solver_result.state_));
-        }
 
-        // 5. Convert output concentrations back: mol/m3 -> ppmv
-        for (int ilev = 0; ilev < nl; ++ilev) {
-            for (int icol = 0; icol < nc; ++icol) {
-                int i_cell = ilev * nc + icol;
-                double air_density_mol = micm_conditions[i_cell].air_density_;
+        const int batch_cols = static_cast<int>(columns_per_batch_);
+        const int n_batches = (nc + batch_cols - 1) / batch_cols;
 
-                for (int ispec = 0; ispec < ns; ++ispec) {
-                    std::string name = state->chemistry().species_list[ispec].short_name;
-                    for (auto& c : name)
-                        c = std::toupper(c);
+        for (int batch_idx = 0; batch_idx < n_batches; ++batch_idx) {
+            const int col_start = batch_idx * batch_cols;
+            const int col_count = std::min(batch_cols, nc - col_start);
 
-                    auto it = variable_map.find(name);
-                    if (it != variable_map.end()) {
-                        size_t i_micm_spec = it->second;
+            // 2. Map environmental variables and input concentrations to state for this batch.
+            // Unused trailing columns in a short final batch (bcol >= col_count) are filled
+            // with a copy of the last valid column in the batch so all cells in the fixed-size
+            // MICM state hold valid physical state during Solve().
+            for (int ilev = 0; ilev < nl; ++ilev) {
+                for (int bcol = 0; bcol < batch_cols; ++bcol) {
+                    const int icol = col_start + std::min(bcol, col_count - 1);
+                    const std::size_t i_cell =
+                        static_cast<std::size_t>(ilev) * columns_per_batch_ + static_cast<std::size_t>(bcol);
 
+                    double t_val = temp(icol, ilev, 0);
+                    double p_val = pmid(icol, ilev, 0);
+                    double density_dry_kg = airden_dry(icol, ilev, 0);
+
+                    if (!std::isfinite(t_val) || t_val <= 0.0 || !std::isfinite(p_val) || p_val <= 0.0 ||
+                        !std::isfinite(density_dry_kg) || density_dry_kg <= 0.0)
+                        throw std::domain_error("GasChem received non-physical T, PMID, or AIRDEN_DRY");
+
+                    // Convert dry air density: kg/m3 to mol/m3
+                    double air_density_mol = density_dry_kg / air_mw_kg;
+
+                    micm_conditions[i_cell].temperature_ = t_val;
+                    micm_conditions[i_cell].pressure_ = p_val;
+                    micm_conditions[i_cell].air_density_ = air_density_mol;
+
+                    // Copy concentrations: ppmv -> mol/m3
+                    for (int ispec = 0; ispec < ns; ++ispec) {
+                        std::string name = state->chemistry().species_list[ispec].short_name;
+                        for (auto& c : name)
+                            c = std::toupper(c);
+
+                        auto it = variable_map.find(name);
+                        if (it != variable_map.end()) {
+                            size_t i_micm_spec = it->second;
+                            double ppmv_val = conc(icol, ilev, ispec);
+                            if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                                throw std::domain_error("GasChem received a negative or non-finite concentration for " +
+                                                        name);
+
+                            double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
+
+                            size_t group_index = i_cell / vector_size_;
+                            size_t row_in_group = i_cell % vector_size_;
+                            size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
+                            micm_concs[idx] = conc_molar;
+                        }
+                    }
+
+                    // 3. Dynamic Photolysis Mapping (PHOTO.<label> to photolysis_rate_<label>)
+                    for (const auto& [param_name, i_param] : rate_param_map) {
                         size_t group_index = i_cell / vector_size_;
                         size_t row_in_group = i_cell % vector_size_;
-                        size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
-                        double conc_molar = micm_concs[idx];
+                        size_t idx = (group_index * n_rate_params + i_param) * vector_size_ + row_in_group;
 
-                        double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
-                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                            throw std::domain_error(
-                                "GasChem solver returned a negative or non-finite concentration for " + name);
-                        conc(icol, ilev, ispec) = ppmv_val;
+                        if (param_name.rfind("PHOTO.", 0) == 0) {
+                            std::string label = param_name.substr(6);
+                            std::string diag_name = "photolysis_rate_" + label;
+
+                            double rate_val = 0.0;
+                            if (state->diagnostic_manager() && state->diagnostic_manager()->has_field(diag_name)) {
+                                double* diag_ptr =
+                                    static_cast<double*>(state->diagnostic_manager()->get_host_pointer(diag_name));
+                                if (diag_ptr) {
+                                    int diag_idx = ilev * nc + icol;
+                                    rate_val = diag_ptr[diag_idx];
+                                }
+                            }
+                            micm_rate_params[idx] = rate_val;
+                        } else if (param_name.rfind("LOSS.", 0) == 0) {
+                            micm_rate_params[idx] = 1.0;
+                        }
+                    }
+                }
+            }
+
+            // 4. Run standard CPU solver for this batch
+            auto solver_result = micm_instance_->Solve(micm_state_.get(), tstep);
+            if (solver_result.state_ != micm::SolverState::Converged &&
+                solver_result.state_ != micm::SolverState::AcceptingUnconvergedIntegration) {
+                Logger::error(*state, "MICM Solver did not reach convergence!",
+                              {{"batch", std::to_string(batch_idx)},
+                               {"col_start", std::to_string(col_start)},
+                               {"col_count", std::to_string(col_count)},
+                               {"final_state", micm::SolverStateToString(solver_result.state_)}});
+                throw std::runtime_error(
+                    "GasChemProcess: MICM Solver failed to reach convergence or acceptable state in batch " +
+                    std::to_string(batch_idx) + " (col_start=" + std::to_string(col_start) + ", col_count=" +
+                    std::to_string(col_count) + "): " + micm::SolverStateToString(solver_result.state_));
+            }
+
+            // 5. Convert output concentrations back: mol/m3 -> ppmv (valid columns only)
+            for (int ilev = 0; ilev < nl; ++ilev) {
+                for (int bcol = 0; bcol < col_count; ++bcol) {
+                    const int icol = col_start + bcol;
+                    const std::size_t i_cell =
+                        static_cast<std::size_t>(ilev) * columns_per_batch_ + static_cast<std::size_t>(bcol);
+                    double air_density_mol = micm_conditions[i_cell].air_density_;
+
+                    for (int ispec = 0; ispec < ns; ++ispec) {
+                        std::string name = state->chemistry().species_list[ispec].short_name;
+                        for (auto& c : name)
+                            c = std::toupper(c);
+
+                        auto it = variable_map.find(name);
+                        if (it != variable_map.end()) {
+                            size_t i_micm_spec = it->second;
+
+                            size_t group_index = i_cell / vector_size_;
+                            size_t row_in_group = i_cell % vector_size_;
+                            size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
+                            double conc_molar = micm_concs[idx];
+
+                            double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
+                            if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                                throw std::domain_error(
+                                    "GasChem solver returned a negative or non-finite concentration for " + name);
+                            conc(icol, ilev, ispec) = ppmv_val;
+                        }
                     }
                 }
             }

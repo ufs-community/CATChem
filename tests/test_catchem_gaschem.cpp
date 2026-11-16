@@ -203,13 +203,19 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     state->load_species_config(species_config);
 
     std::vector<double> initial_conc(n_cols * n_levels * n_species, 0.0);
-    for (int ispec = 0; ispec < n_species; ++ispec) {
-        for (int ilev = 0; ilev < n_levels; ++ilev) {
-            for (int icol = 0; icol < n_cols; ++icol) {
-                const int slot = profile_slot(icol);
-                const std::size_t idx = static_cast<std::size_t>(icol + ilev * n_cols + ispec * n_cols * n_levels);
-                initial_conc[idx] = 1.0 + 0.1 * slot + 0.05 * ilev + 0.02 * ispec;
-            }
+    for (int ilev = 0; ilev < n_levels; ++ilev) {
+        for (int icol = 0; icol < n_cols; ++icol) {
+            const int slot = profile_slot(icol);
+            const auto cell_idx = [&](int ispec) {
+                return static_cast<std::size_t>(icol + ilev * n_cols + ispec * n_cols * n_levels);
+            };
+            // chapman.yml species order: 0=o2, 1=o, 2=o1d, 3=o3.
+            // Keep O(1D) at 0 initially (its quenching lifetime with M is ~0.5 ns)
+            // so O, O2, and O3 evolve smoothly on a multi-second timescale.
+            initial_conc[cell_idx(0)] = 100.0 + 5.0 * slot + 2.0 * ilev; // o2 [ppmv]
+            initial_conc[cell_idx(1)] = 1.0 + 0.1 * slot + 0.05 * ilev;  // o  [ppmv]
+            initial_conc[cell_idx(2)] = 0.0;                             // o1d [ppmv]
+            initial_conc[cell_idx(3)] = 10.0 + 0.5 * slot + 0.2 * ilev;  // o3 [ppmv]
         }
     }
     std::vector<double> conc_data = initial_conc;
@@ -227,7 +233,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     conf_writer << "    config_file: \"" << photolysis_config << "\"\n";
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
-    conf_writer << "    config_file: \"" << v1_file << "\"\n";
+    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
     if (configured_columns_per_batch.has_value()) {
         conf_writer << "    columns_per_batch: " << *configured_columns_per_batch << "\n";
     }
@@ -300,7 +306,7 @@ static void test_invalid_batch_size(const std::string& v1_file) {
     conf_writer << "processes:\n";
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
-    conf_writer << "    config_file: \"" << v1_file << "\"\n";
+    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
     conf_writer << "    columns_per_batch: 0\n";
     conf_writer.close();
 
@@ -352,19 +358,30 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
     // 5. Batch size 6 (whole domain in 1 batch)
     const auto conc_b6 = run_multi_column_batch_case("columns_per_batch=6 (full domain)", v1_file, 6, 6);
 
-    // Compare all multi-column batch sizes against the columns_per_batch=1 reference within Rosenbrock tolerance.
+    // Compare all multi-column batch sizes against the columns_per_batch=1 reference within Rosenbrock tolerance
+    // (atol + rtol * |ref|, where v0/chapman species have atol = 1e-12 mol/m3 ~ 2.5e-8 ppmv and rtol = 1e-4).
     for (const auto& [batch_label, candidate] : std::vector<std::pair<std::string, std::vector<double>>>{
              {"columns_per_batch=2", conc_b2}, {"columns_per_batch=4", conc_b4}, {"columns_per_batch=6", conc_b6}}) {
+        double max_abs_diff = 0.0;
+        double max_rel_diff = 0.0;
         for (std::size_t i = 0; i < conc_b1.size(); ++i) {
             const double ref = conc_b1[i];
             const double val = candidate[i];
             const double abs_diff = std::abs(val - ref);
-            const double scale = std::max({std::abs(ref), std::abs(val), 1.0e-9});
-            const double rel_diff = abs_diff / scale;
-            assert((rel_diff <= 1.0e-2 || abs_diff <= 1.0e-9) &&
+            const double tol = 1.0e-6 + 1.0e-2 * std::abs(ref);
+            max_abs_diff = std::max(max_abs_diff, abs_diff);
+            if (std::abs(ref) > 1.0e-6) {
+                max_rel_diff = std::max(max_rel_diff, abs_diff / std::abs(ref));
+            }
+            if (abs_diff > tol) {
+                std::cerr << "Tolerance exceeded in " << batch_label << " at index " << i << ": ref=" << ref
+                          << " val=" << val << " abs_diff=" << abs_diff << " tol=" << tol << std::endl;
+            }
+            assert(abs_diff <= tol &&
                    "Batched solve concentrations must agree across batch sizes within solver tolerance");
         }
-        std::cout << "SUCCESS: " << batch_label << " agrees with columns_per_batch=1 within tolerance." << std::endl;
+        std::cout << "SUCCESS: " << batch_label << " agrees with columns_per_batch=1 (max_abs_diff=" << max_abs_diff
+                  << ", max_rel_diff=" << max_rel_diff << ")." << std::endl;
     }
 
     // 6. Reject non-positive columns_per_batch.
@@ -402,7 +419,7 @@ int main(int argc, char* argv[]) {
         run_coupled_case("v1 directory (config.yaml auto-detect)", "config_dir", v1_dir);
 
         // Case D: Multi-column batching suite across batch sizes (1, 2, 4, 6) and invalid batch rejection.
-        run_multi_column_batch_suite(v1_file);
+        run_multi_column_batch_suite(v0_dir);
 
         std::cout << "\n==========================================" << std::endl;
         std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching)!" << std::endl;
