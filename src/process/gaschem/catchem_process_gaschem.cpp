@@ -100,14 +100,49 @@ namespace catchem {
             initialized_ = true;
             std::clog << "[INFO] GasChemProcess: initialized MICM successfully!" << std::endl;
 
-            // Validate that all active CATChem species are mapped inside the MICM solver
+            // Precompute species and rate-parameter index mappings once so run() performs
+            // no per-cell string constructions or hash-map lookups.
+            vector_size_ = micm_instance_->GetVectorSize();
             auto variable_map = micm_state_->GetVariableMap();
+            n_micm_species_ = variable_map.size();
+            species_mappings_.clear();
+            species_mappings_.reserve(static_cast<std::size_t>(state->species_count()));
+
             for (int ispec = 0; ispec < state->species_count(); ++ispec) {
-                std::string name = state->chemistry().species_list[ispec].short_name;
-                for (auto& c : name)
-                    c = std::toupper(c);
-                if (variable_map.find(name) == variable_map.end()) {
-                    Logger::warn(*state, "Active species not found in MICM solver variable map", {{"species", name}});
+                const std::string& raw_name = state->chemistry().species_list[ispec].short_name;
+                std::string upper_name = raw_name;
+                std::transform(upper_name.begin(), upper_name.end(), upper_name.begin(),
+                               [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+                std::string lower_name = raw_name;
+                std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(),
+                               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+
+                auto it = variable_map.find(raw_name);
+                if (it == variable_map.end()) {
+                    it = variable_map.find(upper_name);
+                }
+                if (it == variable_map.end()) {
+                    it = variable_map.find(lower_name);
+                }
+
+                if (it != variable_map.end()) {
+                    species_mappings_.push_back(SpeciesMapping{ispec, it->second, it->first});
+                } else {
+                    Logger::warn(*state, "Active species not found in MICM solver variable map",
+                                 {{"species", upper_name}});
+                }
+            }
+
+            auto rate_param_map = micm_state_->GetRateParameterMap();
+            n_rate_params_ = rate_param_map.size();
+            rate_param_mappings_.clear();
+            rate_param_mappings_.reserve(n_rate_params_);
+            for (const auto& [param_name, i_param] : rate_param_map) {
+                if (param_name.rfind("PHOTO.", 0) == 0) {
+                    rate_param_mappings_.push_back(RateParamMapping{i_param, RateParamKind::Photolysis,
+                                                                    "photolysis_rate_" + param_name.substr(6)});
+                } else if (param_name.rfind("LOSS.", 0) == 0) {
+                    rate_param_mappings_.push_back(RateParamMapping{i_param, RateParamKind::Loss, {}});
                 }
             }
 
@@ -160,14 +195,6 @@ namespace catchem {
 
         int nc = state->column_count();
         int nl = state->level_count();
-        int ns = state->species_count();
-
-        size_t vector_size_ = micm_instance_->GetVectorSize();
-        auto variable_map = micm_state_->GetVariableMap();
-        size_t n_micm_species = variable_map.size();
-
-        auto rate_param_map = micm_state_->GetRateParameterMap();
-        size_t n_rate_params = rate_param_map.size();
 
         // Dry air molecular weight in kg/mol (sourced from catchem::constants)
         constexpr double air_mw_kg = catchem::constants::AIR_MW * 1.0e-3;
@@ -176,6 +203,18 @@ namespace catchem {
         if (tstep <= 0.0) {
             Logger::error(*state, "Invalid timestep encountered", {{"timestep", std::to_string(tstep)}});
             throw std::runtime_error("GasChemProcess: timestep must be greater than zero.");
+        }
+
+        // Resolve photolysis diagnostic host pointers once per timestep rather than per cell.
+        std::vector<const double*> photo_diag_ptrs(rate_param_mappings_.size(), nullptr);
+        if (auto* diag_mgr = state->diagnostic_manager().get()) {
+            for (std::size_t idx_map = 0; idx_map < rate_param_mappings_.size(); ++idx_map) {
+                const auto& mapping = rate_param_mappings_[idx_map];
+                if (mapping.kind == RateParamKind::Photolysis && diag_mgr->has_field(mapping.diag_name)) {
+                    photo_diag_ptrs[idx_map] =
+                        static_cast<const double*>(diag_mgr->get_host_pointer(mapping.diag_name));
+                }
+            }
         }
 
         const int batch_cols = static_cast<int>(columns_per_batch_);
@@ -210,50 +249,32 @@ namespace catchem {
                     micm_conditions[i_cell].pressure_ = p_val;
                     micm_conditions[i_cell].air_density_ = air_density_mol;
 
+                    const std::size_t group_index = i_cell / vector_size_;
+                    const std::size_t row_in_group = i_cell % vector_size_;
+                    const std::size_t species_group_base = group_index * n_micm_species_;
+                    const std::size_t param_group_base = group_index * n_rate_params_;
+
                     // Copy concentrations: ppmv -> mol/m3
-                    for (int ispec = 0; ispec < ns; ++ispec) {
-                        std::string name = state->chemistry().species_list[ispec].short_name;
-                        for (auto& c : name)
-                            c = std::toupper(c);
+                    for (const auto& sp : species_mappings_) {
+                        const double ppmv_val = conc(icol, ilev, sp.catchem_idx);
+                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                            throw std::domain_error("GasChem received a negative or non-finite concentration for " +
+                                                    sp.name);
 
-                        auto it = variable_map.find(name);
-                        if (it != variable_map.end()) {
-                            size_t i_micm_spec = it->second;
-                            double ppmv_val = conc(icol, ilev, ispec);
-                            if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                                throw std::domain_error("GasChem received a negative or non-finite concentration for " +
-                                                        name);
-
-                            double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
-
-                            size_t group_index = i_cell / vector_size_;
-                            size_t row_in_group = i_cell % vector_size_;
-                            size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
-                            micm_concs[idx] = conc_molar;
-                        }
+                        const double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
+                        const std::size_t idx = (species_group_base + sp.micm_idx) * vector_size_ + row_in_group;
+                        micm_concs[idx] = conc_molar;
                     }
 
                     // 3. Dynamic Photolysis Mapping (PHOTO.<label> to photolysis_rate_<label>)
-                    for (const auto& [param_name, i_param] : rate_param_map) {
-                        size_t group_index = i_cell / vector_size_;
-                        size_t row_in_group = i_cell % vector_size_;
-                        size_t idx = (group_index * n_rate_params + i_param) * vector_size_ + row_in_group;
-
-                        if (param_name.rfind("PHOTO.", 0) == 0) {
-                            std::string label = param_name.substr(6);
-                            std::string diag_name = "photolysis_rate_" + label;
-
-                            double rate_val = 0.0;
-                            if (state->diagnostic_manager() && state->diagnostic_manager()->has_field(diag_name)) {
-                                double* diag_ptr =
-                                    static_cast<double*>(state->diagnostic_manager()->get_host_pointer(diag_name));
-                                if (diag_ptr) {
-                                    int diag_idx = ilev * nc + icol;
-                                    rate_val = diag_ptr[diag_idx];
-                                }
-                            }
-                            micm_rate_params[idx] = rate_val;
-                        } else if (param_name.rfind("LOSS.", 0) == 0) {
+                    const int diag_idx = ilev * nc + icol;
+                    for (std::size_t idx_map = 0; idx_map < rate_param_mappings_.size(); ++idx_map) {
+                        const auto& param = rate_param_mappings_[idx_map];
+                        const std::size_t idx = (param_group_base + param.micm_param_idx) * vector_size_ + row_in_group;
+                        if (param.kind == RateParamKind::Photolysis) {
+                            const double* diag_ptr = photo_diag_ptrs[idx_map];
+                            micm_rate_params[idx] = diag_ptr ? diag_ptr[diag_idx] : 0.0;
+                        } else {
                             micm_rate_params[idx] = 1.0;
                         }
                     }
@@ -283,26 +304,19 @@ namespace catchem {
                         static_cast<std::size_t>(ilev) * columns_per_batch_ + static_cast<std::size_t>(bcol);
                     double air_density_mol = micm_conditions[i_cell].air_density_;
 
-                    for (int ispec = 0; ispec < ns; ++ispec) {
-                        std::string name = state->chemistry().species_list[ispec].short_name;
-                        for (auto& c : name)
-                            c = std::toupper(c);
+                    const std::size_t group_index = i_cell / vector_size_;
+                    const std::size_t row_in_group = i_cell % vector_size_;
+                    const std::size_t species_group_base = group_index * n_micm_species_;
 
-                        auto it = variable_map.find(name);
-                        if (it != variable_map.end()) {
-                            size_t i_micm_spec = it->second;
+                    for (const auto& sp : species_mappings_) {
+                        const std::size_t idx = (species_group_base + sp.micm_idx) * vector_size_ + row_in_group;
+                        const double conc_molar = micm_concs[idx];
 
-                            size_t group_index = i_cell / vector_size_;
-                            size_t row_in_group = i_cell % vector_size_;
-                            size_t idx = (group_index * n_micm_species + i_micm_spec) * vector_size_ + row_in_group;
-                            double conc_molar = micm_concs[idx];
-
-                            double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
-                            if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                                throw std::domain_error(
-                                    "GasChem solver returned a negative or non-finite concentration for " + name);
-                            conc(icol, ilev, ispec) = ppmv_val;
-                        }
+                        const double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
+                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                            throw std::domain_error(
+                                "GasChem solver returned a negative or non-finite concentration for " + sp.name);
+                        conc(icol, ilev, sp.catchem_idx) = ppmv_val;
                     }
                 }
             }
