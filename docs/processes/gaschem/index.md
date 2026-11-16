@@ -18,23 +18,22 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
     ```cpp
     state->sync_to_host();
     ```
-2.  **3D Grid Column Flattening**: Converts CATChem's row-major 3D grid layouts into a contiguous 1D array structure suited for MICM:
-    $$i_{\text{cell}} = i_{\text{lev}} \times N_{\text{cols}} + i_{\text{col}}$$
+2.  **Column Batching (`columns_per_batch`)**: Rather than allocating a single `musica::State` across the entire MPI rank decomposition (`column_count * level_count`), `GasChemProcess::init` allocates one reusable `musica::State` of size `columns_per_batch * level_count` (default `columns_per_batch = 1`), and `GasChemProcess::run` loops over local columns in batches:
+    $$i_{\text{cell}} = i_{\text{lev}} \times N_{\text{batch\_cols}} + i_{\text{batch\_col}}$$
+    Any trailing unused columns in a partial final batch ($N_{\text{cols}} \bmod N_{\text{batch\_cols}} \neq 0$) are padded with a copy of the last valid column in the batch during the solve and ignored on copy-back.
 3.  **Physical Boundary Safeguards**: Sanitizes input temperature, pressure, and dry air density fields to enforce positive physical bounds.
-4.  **Environmental State Mapping**:
+4.  **Pre-Resolved Species & Environmental State Mapping**:
+    *   During `GasChemProcess::init`, CATChem species indices are mapped once (case-insensitively) to MICM variable indices so the cell loops perform zero string allocations or hash-map lookups.
     *   Converts dry air density (`AIRDEN_DRY` in $\text{kg/m}^3$) to dry air molar density ($\text{mol/m}^3$) using the molecular weight of dry air ($0.0289644\text{ kg/mol}$):
         $$\rho_{\text{molar}} = \frac{\rho_{\text{dry}}}{0.0289644}$$
     *   Converts gas concentrations from Volume Mixing Ratios (VMR, $\text{ppmv}$) to molar densities ($\text{mol/m}^3$) using dry air molar density:
         $$C_{\text{molar}} = C_{\text{ppmv}} \times 10^{-6} \times \rho_{\text{molar}}$$
-5.  **Clamping Stability Bounds**: To prevent solver failure or NaN propagation under extreme conditions, all species concentrations are clamped to a hard floor of `1.0e-20` on both input and output loops.
-6.  **Solver Execution**: Runs the C++ MICM Rosenbrock standard-ordered solver:
+5.  **Clamping Stability Bounds**: Enforces finite non-negative concentrations on both input and output loops.
+6.  **Solver Execution**: Runs the C++ MICM Rosenbrock standard-ordered solver for each batch and reports the batch index and column range if convergence is not reached:
     ```cpp
-    micm_instance->Solve(state, timestep);
+    micm_instance_->Solve(micm_state_.get(), tstep);
     ```
-7.  **Back-Conversion & Synchronization**: Converts output concentrations back to VMR ($\text{ppmv}$), updates the host state views, and flushes data to device memories:
-    ```cpp
-    state->sync_to_device();
-    ```
+7.  **Back-Conversion & Synchronization**: Converts output concentrations back to VMR ($\text{ppmv}$), updates the host state views, and marks host concentrations modified.
 
 ---
 
@@ -42,11 +41,11 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
 
 A standout feature of the C++ core is the dynamic, zero-hardcoded coupling channel with the C++ Photolysis process:
 
-1.  **Scan Rate Parameters**: During initialization and run phases, `GasChemProcess` iterates through the solver's rate parameter map.
+1.  **Pre-Scan Rate Parameters in `init()`**: During initialization, `GasChemProcess::init` iterates through the solver's rate parameter map once.
 2.  **Prefix Extraction**: If a rate parameter matches the pattern `"PHOTO.<label>"` (e.g., `"PHOTO.jfoo"`):
     *   It strips the prefix to extract the raw photolysis reaction identifier: `jfoo`.
-    *   It constructs the diagnostic search key: `"photolysis_rate_jfoo"`.
-3.  **Dynamic Memory Binding**: It queries the global `DiagnosticManager` for `"photolysis_rate_jfoo"`. If registered, it obtains the raw pointer address and copies the calculated photolysis J-rates directly into MICM's rate parameter array at zero-copy speeds.
+    *   It caches the diagnostic search key: `"photolysis_rate_jfoo"` alongside its MICM parameter index.
+3.  **Per-Timestep Pointer Binding**: At the start of `GasChemProcess::run` (outside the batch and cell loops), it queries `DiagnosticManager` once per photolysis parameter to resolve raw host pointers, then copies the calculated photolysis J-rates directly into MICM's rate parameter array inside the batch loop.
 4.  **Loss Coefficient Defaults**: Any mechanism loss coefficients matching `"LOSS.<label>"` are initialized to `1.0` to preserve the chemistry mechanism's built-in scaling factors.
 
 ---
@@ -58,11 +57,14 @@ mechanism is supplied either as a **single-file MUSICA v1 configuration** (`conf
 or as a **v0 CAMP multi-file directory** (`config_dir`). An explicit `config_file`
 always takes precedence; otherwise `config_dir` is probed for a `config.yaml` /
 `config.yml` v1 entry point before falling back to the v0 directory parse.
+`columns_per_batch` (optional, default `1`) controls how many vertical columns are
+packed into the reusable `musica::State` per `Solve()` call.
 
 ```yaml
 processes:
   gaschem:
     activate: true
+    columns_per_batch: 1
     # Option A (preferred): MUSICA v1 single-file mechanism.
     config_file: "src/external/musica/configs/v1/chapman/config.yaml"
     # Option B: v0 CAMP mechanism directory (config.json + species.json + reactions.json).
