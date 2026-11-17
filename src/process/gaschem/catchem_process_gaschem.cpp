@@ -15,18 +15,44 @@ namespace catchem {
 
     namespace {
 
+        // Scientific notation, because fixed six-decimal formatting prints every
+        // tiny negative as "-0.000000" and hides its magnitude.
+        std::string format_scientific(double value) {
+            std::ostringstream text;
+            text << std::scientific << std::setprecision(6) << value;
+            return text.str();
+        }
+
         // Builds the message for the concentration guards in GasChemProcess::run.
-        // The value is written in scientific notation because fixed six-decimal
-        // formatting prints every tiny negative as "-0.000000" and hides its
-        // magnitude. Column, level, and batch are zero-based; column is the index
-        // on this PET, not within the batch.
+        // Column, level, and batch are zero-based; column is the index on this
+        // PET, not within the batch.
         std::string concentration_guard_message(const std::string& what, double value, const std::string& species,
                                                 int column, int level, int batch) {
             std::ostringstream message;
-            message << what << " (" << std::scientific << std::setprecision(6) << value << ") for " << species
-                    << " at column=" << column << ", level=" << level << ", batch=" << batch << " (zero-based indices)";
+            message << what << " (" << format_scientific(value) << ") for " << species << " at column=" << column
+                    << ", level=" << level << ", batch=" << batch << " (zero-based indices)";
             return message.str();
         }
+
+        // The most negative concentration floored during one run() call.
+        struct WorstNegative {
+            std::size_t count = 0;
+            double value = 0.0;
+            const std::string* species = nullptr;
+            int column = -1;
+            int level = -1;
+
+            void record(double candidate, const std::string& name, int icol, int ilev) {
+                ++count;
+                if (candidate < value) {
+                    value = candidate;
+                    species = &name;
+                    column = icol;
+                    level = ilev;
+                }
+            }
+            std::string species_name() const { return species ? *species : std::string("none"); }
+        };
 
     } // namespace
 
@@ -76,6 +102,35 @@ namespace catchem {
                                         std::to_string(cols_per_batch));
         }
         this->columns_per_batch_ = static_cast<std::size_t>(cols_per_batch);
+
+        // Negative concentrations are rejected unless the run opts in to flooring
+        // them. This key is separate from physical_validation/policy, which governs
+        // meteorology, so a run can floor tracer noise from the host and still stop
+        // on a bad temperature.
+        std::string negative_policy = "reject";
+        if (state->config_manager()) {
+            std::string configured =
+                state->config_manager()->get_string("processes/gaschem/negative_concentration_policy", "");
+            if (configured.empty()) {
+                configured = state->config_manager()->get_string("process/gaschem/negative_concentration_policy", "");
+            }
+            if (!configured.empty()) {
+                negative_policy = configured;
+            }
+        }
+        if (negative_policy == "reject") {
+            this->negative_concentration_policy_ = NegativeConcentrationPolicy::Reject;
+        } else if (negative_policy == "clamp") {
+            this->negative_concentration_policy_ = NegativeConcentrationPolicy::Clamp;
+        } else {
+            throw std::invalid_argument("GasChemProcess: negative_concentration_policy must be reject or clamp, got " +
+                                        negative_policy);
+        }
+        this->negative_inputs_clamped_ = 0;
+        this->negative_outputs_clamped_ = 0;
+        this->min_negative_input_ = 0.0;
+        this->min_negative_output_ = 0.0;
+        this->clamp_warning_issued_ = false;
 
         if (this->config_dir_.empty()) {
             if (!state->configuration_path().empty()) {
@@ -169,6 +224,7 @@ namespace catchem {
                          {{"column_count", std::to_string(state->column_count())},
                           {"level_count", std::to_string(state->level_count())},
                           {"columns_per_batch", std::to_string(columns_per_batch_)},
+                          {"negative_concentration_policy", negative_policy},
                           {"micm_grid_cells", std::to_string(micm_state_->NumberOfGridCells())},
                           {"micm_species_count", std::to_string(micm_state_->NumberOfSpecies())}});
         } catch (const std::exception& e) {
@@ -239,6 +295,10 @@ namespace catchem {
         const int batch_cols = static_cast<int>(columns_per_batch_);
         const int n_batches = (nc + batch_cols - 1) / batch_cols;
 
+        const bool reject_negative = negative_concentration_policy_ == NegativeConcentrationPolicy::Reject;
+        WorstNegative floored_inputs;
+        WorstNegative floored_outputs;
+
         for (int batch_idx = 0; batch_idx < n_batches; ++batch_idx) {
             const int col_start = batch_idx * batch_cols;
             const int col_count = std::min(batch_cols, nc - col_start);
@@ -275,11 +335,18 @@ namespace catchem {
 
                     // Copy concentrations: ppmv -> mol/m3
                     for (const auto& sp : species_mappings_) {
-                        const double ppmv_val = conc(icol, ilev, sp.catchem_idx);
-                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                        double ppmv_val = conc(icol, ilev, sp.catchem_idx);
+                        if (!std::isfinite(ppmv_val) || (ppmv_val < 0.0 && reject_negative))
                             throw std::domain_error(
                                 concentration_guard_message("GasChem received a negative or non-finite concentration",
                                                             ppmv_val, sp.name, icol, ilev, batch_idx));
+                        if (ppmv_val < 0.0) {
+                            // Padding cells repeat the last valid column; count each real cell once.
+                            if (bcol < col_count) {
+                                floored_inputs.record(ppmv_val, sp.name, icol, ilev);
+                            }
+                            ppmv_val = 0.0;
+                        }
 
                         const double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
                         const std::size_t idx = (species_group_base + sp.micm_idx) * vector_size_ + row_in_group;
@@ -332,23 +399,71 @@ namespace catchem {
                         const std::size_t idx = (species_group_base + sp.micm_idx) * vector_size_ + row_in_group;
                         const double conc_molar = micm_concs[idx];
 
-                        const double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
-                        if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
+                        double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
+                        if (!std::isfinite(ppmv_val) || (ppmv_val < 0.0 && reject_negative))
                             throw std::domain_error(concentration_guard_message(
                                 "GasChem solver returned a negative or non-finite concentration", ppmv_val, sp.name,
                                 icol, ilev, batch_idx));
+                        if (ppmv_val < 0.0) {
+                            floored_outputs.record(ppmv_val, sp.name, icol, ilev);
+                            ppmv_val = 0.0;
+                        }
                         conc(icol, ilev, sp.catchem_idx) = ppmv_val;
                     }
                 }
             }
         }
 
-        // 6. Sync back to device
+        // 6. Report floored cells: a warning the first time on this PET and debug
+        // after that, so a long run does not log one line per PET per timestep.
+        if (floored_inputs.count + floored_outputs.count > 0) {
+            negative_inputs_clamped_ += floored_inputs.count;
+            negative_outputs_clamped_ += floored_outputs.count;
+            min_negative_input_ = std::min(min_negative_input_, floored_inputs.value);
+            min_negative_output_ = std::min(min_negative_output_, floored_outputs.value);
+
+            const std::string inputs_floored = std::to_string(floored_inputs.count);
+            const std::string min_input = format_scientific(floored_inputs.value);
+            const std::string min_input_species = floored_inputs.species_name();
+            const std::string min_input_column = std::to_string(floored_inputs.column);
+            const std::string min_input_level = std::to_string(floored_inputs.level);
+            const std::string outputs_floored = std::to_string(floored_outputs.count);
+            const std::string min_output = format_scientific(floored_outputs.value);
+            const std::string min_output_species = floored_outputs.species_name();
+            const std::string min_output_column = std::to_string(floored_outputs.column);
+            const std::string min_output_level = std::to_string(floored_outputs.level);
+            const Logger::ContextList context = {{"inputs_floored", inputs_floored},
+                                                 {"min_input", min_input},
+                                                 {"min_input_species", min_input_species},
+                                                 {"min_input_column", min_input_column},
+                                                 {"min_input_level", min_input_level},
+                                                 {"outputs_floored", outputs_floored},
+                                                 {"min_output", min_output},
+                                                 {"min_output_species", min_output_species},
+                                                 {"min_output_column", min_output_column},
+                                                 {"min_output_level", min_output_level}};
+            if (!clamp_warning_issued_) {
+                Logger::warn(*state, "GasChemProcess: floored negative concentrations to zero", context);
+                clamp_warning_issued_ = true;
+            } else {
+                Logger::debug(*state, "GasChemProcess: floored negative concentrations to zero", context);
+            }
+        }
+
+        // 7. Sync back to device
         if (state->chemistry().conc)
             state->chemistry().conc->mark_host_modified();
     }
 
-    void GasChemProcess::finalize() {}
+    void GasChemProcess::finalize() {
+        if (negative_inputs_clamped_ + negative_outputs_clamped_ > 0) {
+            Logger::info("GasChemProcess: negative concentrations floored to zero since init",
+                         {{"inputs_floored", std::to_string(negative_inputs_clamped_)},
+                          {"min_input", format_scientific(min_negative_input_)},
+                          {"outputs_floored", std::to_string(negative_outputs_clamped_)},
+                          {"min_output", format_scientific(min_negative_output_)}});
+        }
+    }
 
 } // namespace catchem
 

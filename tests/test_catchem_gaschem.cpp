@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -135,27 +136,46 @@ static void run_coupled_case(const std::string& label, const std::string& config
     std::cout << "CASE PASSED: " << label << std::endl;
 }
 
-// Overrides one cell of the initial concentration field with a value the
-// gaschem input guard must reject, and lists the fragments its error message
-// must contain.
-struct InputGuardProbe {
+// One cell of a (column, level[, species]) field and the value to put there.
+struct CellValue {
     int icol;
     int ilev;
-    int ispec;
+    int ispec; // ignored for meteorology
     double value;
+};
+
+// Departures from the baseline multi-column case, used by the guard and
+// negative_concentration_policy tests.
+struct BatchCaseOptions {
+    // Written as processes/gaschem/negative_concentration_policy when not empty.
+    std::string negative_concentration_policy;
+    std::optional<CellValue> conc_override;
+    std::optional<CellValue> temperature_override;
+    // Photolysis runs before gaschem and would see a corrupted temperature first.
+    bool with_photolysis = true;
+    // The timestep must throw, and the error must contain every fragment.
+    bool expect_failure = false;
     std::vector<std::string> expected_message_parts;
+};
+
+// What GasChemProcess floored to zero during a case.
+struct ClampStats {
+    std::size_t inputs = 0;
+    std::size_t outputs = 0;
+    double min_input = 0.0;
 };
 
 // Runs a multi-column (n_cols = 6, n_levels = 3, n_species = 4) coupled
 // photolysis + gaschem scenario for a given optional columns_per_batch setting,
 // asserting that GasChemProcess sizes its MICM state to
 // expected_batch_cols * n_levels and returns the final concentration buffer.
-// With a probe, the run must instead fail in the gaschem input guard, and an
+// When options.expect_failure is set, the timestep must throw instead and an
 // empty buffer is returned.
 static std::vector<double> run_multi_column_batch_case(const std::string& label, const std::string& v1_file,
                                                        std::optional<int> configured_columns_per_batch,
                                                        std::size_t expected_batch_cols,
-                                                       const InputGuardProbe* probe = nullptr) {
+                                                       const BatchCaseOptions& options = {},
+                                                       ClampStats* stats = nullptr) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "BATCH CASE: " << label << " (expected columns_per_batch=" << expected_batch_cols << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
@@ -203,6 +223,10 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
         pedge[static_cast<std::size_t>(icol + n_levels * n_cols)] =
             (101300.0 - 500.0 * slot) * std::exp(-n_levels / 10.0);
     }
+    if (options.temperature_override.has_value()) {
+        const auto& cell = *options.temperature_override;
+        temperature[static_cast<std::size_t>(cell.icol + cell.ilev * n_cols)] = cell.value;
+    }
 
     state->bind_met_field_2d("LAT", lat.data());
     state->bind_met_field_2d("LON", lon.data());
@@ -233,9 +257,10 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
             initial_conc[cell_idx(3)] = 10.0 + 0.5 * slot + 0.2 * ilev;  // o3 [ppmv]
         }
     }
-    if (probe != nullptr) {
-        initial_conc[static_cast<std::size_t>(probe->icol + probe->ilev * n_cols + probe->ispec * n_cols * n_levels)] =
-            probe->value;
+    if (options.conc_override.has_value()) {
+        const auto& cell = *options.conc_override;
+        initial_conc[static_cast<std::size_t>(cell.icol + cell.ilev * n_cols + cell.ispec * n_cols * n_levels)] =
+            cell.value;
     }
     std::vector<double> conc_data = initial_conc;
     state->bind_unified_chemistry(conc_data.data());
@@ -247,14 +272,19 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     std::string temp_config = "test_gaschem_batch_config.yml";
     std::ofstream conf_writer(temp_config);
     conf_writer << "processes:\n";
-    conf_writer << "  photolysis:\n";
-    conf_writer << "    activate: true\n";
-    conf_writer << "    config_file: \"" << photolysis_config << "\"\n";
+    if (options.with_photolysis) {
+        conf_writer << "  photolysis:\n";
+        conf_writer << "    activate: true\n";
+        conf_writer << "    config_file: \"" << photolysis_config << "\"\n";
+    }
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
     conf_writer << "    config_dir: \"" << v1_file << "\"\n";
     if (configured_columns_per_batch.has_value()) {
         conf_writer << "    columns_per_batch: " << *configured_columns_per_batch << "\n";
+    }
+    if (!options.negative_concentration_policy.empty()) {
+        conf_writer << "    negative_concentration_policy: " << options.negative_concentration_policy << "\n";
     }
     conf_writer.close();
 
@@ -263,9 +293,11 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
         state->config_manager()->load_from_file(temp_config);
     }
 
-    auto photolysis_proc = catchem::ProcessRegistry::get_instance().create("photolysis");
-    photolysis_proc->init(state);
-    core->add_process(photolysis_proc);
+    if (options.with_photolysis) {
+        auto photolysis_proc = catchem::ProcessRegistry::get_instance().create("photolysis");
+        photolysis_proc->init(state);
+        core->add_process(photolysis_proc);
+    }
 
     auto gaschem_proc = catchem::ProcessRegistry::get_instance().create("gaschem");
     gaschem_proc->init(state);
@@ -278,7 +310,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     assert(gaschem_typed->micm_grid_cell_count() == expected_batch_cols * static_cast<std::size_t>(n_levels) &&
            "MICM state cell count must equal columns_per_batch * n_levels (not n_cols * n_levels)");
 
-    if (probe != nullptr) {
+    if (options.expect_failure) {
         std::string message;
         try {
             core->run_timestep(3600.0);
@@ -286,13 +318,13 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
             message = error.what();
         }
         std::remove(temp_config.c_str());
-        assert(!message.empty() && "A rejected input concentration must raise std::domain_error");
-        for (const auto& part : probe->expected_message_parts) {
+        assert(!message.empty() && "A rejected gaschem input must raise std::domain_error");
+        for (const auto& part : options.expected_message_parts) {
             const bool found = message.find(part) != std::string::npos;
             if (!found) {
                 std::cerr << "Guard message is missing \"" << part << "\": " << message << std::endl;
             }
-            assert(found && "GasChem input guard message must report value, species, and location");
+            assert(found && "GasChem guard message must contain every expected fragment");
         }
         std::cout << "GUARD CASE PASSED: " << label << " -> " << message << std::endl;
         return {};
@@ -300,6 +332,11 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
 
     core->run_timestep(3600.0);
     state->sync_to_host();
+    if (stats != nullptr) {
+        stats->inputs = gaschem_typed->negative_inputs_clamped();
+        stats->outputs = gaschem_typed->negative_outputs_clamped();
+        stats->min_input = gaschem_typed->min_negative_input();
+    }
 
     auto conc_view = state->chemistry().conc->host_view;
     bool any_species_changed = false;
@@ -333,20 +370,21 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     return conc_data;
 }
 
-static void test_invalid_batch_size(const std::string& v1_file) {
+// GasChemProcess::init must reject the given processes/gaschem option line.
+static void test_invalid_gaschem_option(const std::string& v1_file, const std::string& option_line) {
     auto core = std::make_shared<catchem::Core>(2, 3, 4);
     auto state = core->get_state_manager();
 
     std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/chapman.yml";
     state->load_species_config(species_config);
 
-    std::string temp_config = "test_gaschem_invalid_batch.yml";
+    std::string temp_config = "test_gaschem_invalid_option.yml";
     std::ofstream conf_writer(temp_config);
     conf_writer << "processes:\n";
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
     conf_writer << "    config_dir: \"" << v1_file << "\"\n";
-    conf_writer << "    columns_per_batch: 0\n";
+    conf_writer << "    " << option_line << "\n";
     conf_writer.close();
 
     state->set_configuration_path(temp_config);
@@ -358,12 +396,84 @@ static void test_invalid_batch_size(const std::string& v1_file) {
     bool threw = false;
     try {
         gaschem_proc->init(state);
-    } catch (const std::exception&) {
+    } catch (const std::invalid_argument&) {
         threw = true;
     }
     std::remove(temp_config.c_str());
-    assert(threw && "columns_per_batch < 1 must fail initialization");
-    std::cout << "SUCCESS: Invalid columns_per_batch=0 rejected at init." << std::endl;
+    if (!threw) {
+        std::cerr << "Not rejected at init: " << option_line << std::endl;
+    }
+    assert(threw && "An invalid gaschem option must fail initialization with std::invalid_argument");
+    std::cout << "SUCCESS: Invalid option rejected at init: " << option_line << std::endl;
+}
+
+// processes/gaschem/negative_concentration_policy: reject (default) throws on a
+// negative concentration, clamp floors it to zero. Neither relaxes the checks on
+// non-finite concentrations or on meteorology. Atomic oxygen (species 1) carries
+// the bad value because photolysis runs first and reads ozone.
+static void run_negative_concentration_policy_suite(const std::string& v1_file) {
+    constexpr int o_atom = 1;
+    constexpr double tiny_negative = -1.0e-12;
+    const std::string input_guard = "GasChem received a negative or non-finite concentration";
+
+    // 1. Key omitted and explicit reject: the message shows the magnitude and
+    // where it is. Column 4 opens the short final batch when columns_per_batch = 4,
+    // so the reported column must be the PET-local index, not the index in the batch.
+    for (const char* policy : {"", "reject"}) {
+        BatchCaseOptions rejected;
+        rejected.negative_concentration_policy = policy;
+        rejected.conc_override = CellValue{4, 2, o_atom, tiny_negative};
+        rejected.expect_failure = true;
+        rejected.expected_message_parts = {input_guard, "(-1.000000e-12)", " for O ", "column=4", "level=2", "batch=1"};
+        run_multi_column_batch_case(std::string("negative input rejected (policy='") + policy + "')", v1_file, 4, 4,
+                                    rejected);
+    }
+
+    // 2. clamp: the negative cell is solved exactly as if it had been zero.
+    BatchCaseOptions zero_cell;
+    zero_cell.negative_concentration_policy = "clamp";
+    zero_cell.conc_override = CellValue{4, 2, o_atom, 0.0};
+    ClampStats zero_stats;
+    const auto conc_zero = run_multi_column_batch_case("clamp, cell at zero", v1_file, 4, 4, zero_cell, &zero_stats);
+    assert(zero_stats.inputs == 0 && zero_stats.outputs == 0 && "A zero concentration must not be counted as floored");
+
+    BatchCaseOptions negative_cell = zero_cell;
+    negative_cell.conc_override = CellValue{4, 2, o_atom, tiny_negative};
+    ClampStats negative_stats;
+    const auto conc_negative =
+        run_multi_column_batch_case("clamp, cell tiny negative", v1_file, 4, 4, negative_cell, &negative_stats);
+    assert(conc_negative == conc_zero && "A floored negative input must solve bit-for-bit like a zero input");
+    assert(negative_stats.inputs == 1 && "Exactly one input cell must be counted as floored");
+    assert(negative_stats.min_input == tiny_negative && "The most negative floored input must be recorded");
+    assert(negative_stats.outputs == 0 && "No solver output was negative in this case");
+
+    // 3. clamp does not accept a non-finite concentration.
+    BatchCaseOptions nan_cell = negative_cell;
+    nan_cell.conc_override = CellValue{4, 2, o_atom, std::numeric_limits<double>::quiet_NaN()};
+    nan_cell.expect_failure = true;
+    nan_cell.expected_message_parts = {input_guard, " for O ", "column=4", "level=2"};
+    run_multi_column_batch_case("clamp, NaN input rejected", v1_file, 4, 4, nan_cell);
+
+    // 4. clamp counts real cells only. Column 5 is the last valid column of the
+    // short final batch, so its values are copied into the two padding columns.
+    BatchCaseOptions padded_cell = negative_cell;
+    padded_cell.conc_override = CellValue{5, 0, o_atom, tiny_negative};
+    ClampStats padded_stats;
+    run_multi_column_batch_case("clamp, negative in padded column", v1_file, 4, 4, padded_cell, &padded_stats);
+    assert(padded_stats.inputs == 1 && "Padding copies of a floored cell must not be counted");
+
+    // 5. clamp does not relax gaschem's own meteorology check. The state manager
+    // is left at its lenient legacy default here, so only gaschem can stop the run.
+    BatchCaseOptions bad_temperature;
+    bad_temperature.negative_concentration_policy = "clamp";
+    bad_temperature.temperature_override = CellValue{1, 1, 0, -1.0};
+    bad_temperature.with_photolysis = false;
+    bad_temperature.expect_failure = true;
+    bad_temperature.expected_message_parts = {"non-physical T, PMID, or AIRDEN_DRY"};
+    run_multi_column_batch_case("clamp, negative temperature rejected", v1_file, 4, 4, bad_temperature);
+
+    // 6. Only reject and clamp are accepted.
+    test_invalid_gaschem_option(v1_file, "negative_concentration_policy: bogus");
 }
 
 static void run_multi_column_batch_suite(const std::string& v1_file) {
@@ -424,16 +534,7 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
     }
 
     // 6. Reject non-positive columns_per_batch.
-    test_invalid_batch_size(v1_file);
-
-    // 7. A tiny negative input is rejected with a message that shows its magnitude
-    // and where it is. Column 4 is the first column of the short final batch when
-    // columns_per_batch = 4, so the reported column must be the PET-local index,
-    // not the index within the batch. Atomic oxygen (species 1) is used because
-    // photolysis runs first and reads ozone.
-    const InputGuardProbe negative_o{
-        4, 2, 1, -1.0e-12, {"(-1.000000e-12)", " for O ", "column=4", "level=2", "batch=1"}};
-    run_multi_column_batch_case("negative input rejected (columns_per_batch=4)", v1_file, 4, 4, &negative_o);
+    test_invalid_gaschem_option(v1_file, "columns_per_batch: 0");
 }
 
 int main(int argc, char* argv[]) {
@@ -469,8 +570,12 @@ int main(int argc, char* argv[]) {
         // Case D: Multi-column batching suite across batch sizes (1, 2, 4, 6) and invalid batch rejection.
         run_multi_column_batch_suite(v0_dir);
 
+        // Case E: negative_concentration_policy (reject, clamp) and the checks it must not relax.
+        run_negative_concentration_policy_suite(v0_dir);
+
         std::cout << "\n==========================================" << std::endl;
-        std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching)!" << std::endl;
+        std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy)!"
+                  << std::endl;
         std::cout << "==========================================\n" << std::endl;
     }
     Kokkos::finalize();
