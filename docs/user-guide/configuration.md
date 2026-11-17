@@ -94,6 +94,10 @@ physical_validation:
   policy: reject                 # reject | warn_and_clamp | count_and_continue
 ```
 
+This policy covers meteorology. Negative gas-phase concentrations are handled by
+the separate [`gaschem` key](#gas-phase-chemistry-gaschem)
+`negative_concentration_policy`.
+
 ## `mechanism`
 
 Optional metadata describing the chemical mechanism.
@@ -281,6 +285,34 @@ processes:
 `scale_factor` must be positive; a non-positive value fails initialization. The
 scheme requires `PRECCON` and `PRECOSC` precipitation fields and errors naming
 the field if either is unbound.
+
+### Gas-phase chemistry (`gaschem`)
+
+`gaschem` runs a MUSICA/MICM mechanism and has no `scheme:` selector. Its options
+sit directly under the process:
+
+```yaml
+processes:
+  gaschem:
+    activate: true
+    config_file: "src/external/musica/configs/v1/chapman/config.yaml"
+    columns_per_batch: 1                    # columns solved per MICM state
+    negative_concentration_policy: reject   # reject | clamp
+```
+
+| Key | Default | Meaning |
+|---|---|---|
+| `config_file` | none | MUSICA v1 single-file mechanism. Takes precedence over `config_dir`. |
+| `config_dir` | directory of the CATChem config | v0 CAMP mechanism directory, or a directory holding `config.yaml`. |
+| `columns_per_batch` | `1` | Columns packed into the reusable MICM state per solve. Must be at least 1. |
+| `negative_concentration_policy` | `reject` | `reject` throws on a negative concentration; `clamp` floors it to zero and reports it. |
+
+An invalid `columns_per_batch` or `negative_concentration_policy` fails
+initialization. `negative_concentration_policy` is independent of
+`physical_validation.policy`: non-finite concentrations and non-physical
+temperature, pressure, or air density stop the run under either value. See the
+[gaschem process page](../processes/gaschem/index.md) for the log lines and the
+photolysis coupling.
 
 ### Sulfate dry-deposition routing (the GOCART trio)
 

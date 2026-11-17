@@ -480,6 +480,8 @@ processes:
   # otherwise a config_dir holding config.yaml/config.yml auto-routes to the v1 parser.
   # columns_per_batch (default 1) sizes the reusable MICM state to
   # columns_per_batch * number_of_levels cells and solves local columns in batches.
+  # negative_concentration_policy (default reject) throws on a negative concentration;
+  # clamp floors it to zero and reports it. Independent of physical_validation.policy.
   # Photolysis coupling: each "PHOTO.<label>" rate parameter binds to the
   # "photolysis_rate_<label>" diagnostic, so mechanism photolysis names must match
   # the TUV-x radiator labels. See docs/processes/gaschem/index.md.
@@ -487,5 +489,6 @@ processes:
   #   activate: false
   #   diagnostics: true
   #   columns_per_batch: 1
+  #   negative_concentration_policy: reject
   #   config_file: "src/external/musica/configs/v1/chapman/config.yaml"
   #   # config_dir: "src/external/musica/configs/v0/chapman/"

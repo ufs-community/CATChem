@@ -21,14 +21,14 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
 2.  **Column Batching (`columns_per_batch`)**: Rather than allocating a single `musica::State` across the entire MPI rank decomposition (`column_count * level_count`), `GasChemProcess::init` allocates one reusable `musica::State` of size `columns_per_batch * level_count` (default `columns_per_batch = 1`), and `GasChemProcess::run` loops over local columns in batches:
     $$i_{\text{cell}} = i_{\text{lev}} \times N_{\text{batch\_cols}} + i_{\text{batch\_col}}$$
     Any trailing unused columns in a partial final batch ($N_{\text{cols}} \bmod N_{\text{batch\_cols}} \neq 0$) are padded with a copy of the last valid column in the batch during the solve and ignored on copy-back.
-3.  **Physical Boundary Safeguards**: Sanitizes input temperature, pressure, and dry air density fields to enforce positive physical bounds.
+3.  **Meteorology Guard**: Throws `std::domain_error` if temperature, pressure, or dry air density is non-finite or not positive in any cell. This check is not affected by `negative_concentration_policy`.
 4.  **Pre-Resolved Species & Environmental State Mapping**:
     *   During `GasChemProcess::init`, CATChem species indices are mapped once (case-insensitively) to MICM variable indices so the cell loops perform zero string allocations or hash-map lookups.
     *   Converts dry air density (`AIRDEN_DRY` in $\text{kg/m}^3$) to dry air molar density ($\text{mol/m}^3$) using the molecular weight of dry air ($0.0289644\text{ kg/mol}$):
         $$\rho_{\text{molar}} = \frac{\rho_{\text{dry}}}{0.0289644}$$
     *   Converts gas concentrations from Volume Mixing Ratios (VMR, $\text{ppmv}$) to molar densities ($\text{mol/m}^3$) using dry air molar density:
         $$C_{\text{molar}} = C_{\text{ppmv}} \times 10^{-6} \times \rho_{\text{molar}}$$
-5.  **Clamping Stability Bounds**: Enforces finite non-negative concentrations on both input and output loops.
+5.  **Concentration Guards (`negative_concentration_policy`)**: Checks every mapped species on input and again on solver output. A non-finite value always throws. A negative value throws by default, or is floored to zero when the policy is `clamp`. See [Negative concentrations](#negative-concentrations-negative_concentration_policy).
 6.  **Solver Execution**: Runs the C++ MICM Rosenbrock standard-ordered solver for each batch and reports the batch index and column range if convergence is not reached:
     ```cpp
     micm_instance_->Solve(micm_state_.get(), tstep);
@@ -59,12 +59,15 @@ always takes precedence; otherwise `config_dir` is probed for a `config.yaml` /
 `config.yml` v1 entry point before falling back to the v0 directory parse.
 `columns_per_batch` (optional, default `1`) controls how many vertical columns are
 packed into the reusable `musica::State` per `Solve()` call.
+`negative_concentration_policy` (optional, default `reject`) selects what happens to a
+negative concentration; see the next section.
 
 ```yaml
 processes:
   gaschem:
     activate: true
     columns_per_batch: 1
+    negative_concentration_policy: reject   # reject | clamp
     # Option A (preferred): MUSICA v1 single-file mechanism.
     config_file: "src/external/musica/configs/v1/chapman/config.yaml"
     # Option B: v0 CAMP mechanism directory (config.json + species.json + reactions.json).
@@ -76,6 +79,49 @@ processes:
 > match the TUV-x radiator labels: `gaschem` binds each `"PHOTO.<label>"` rate
 > parameter to the `photolysis_rate_<label>` diagnostic produced by the photolysis
 > process (e.g. v0 `jO3->O1D` vs v1 `jo3_b` are *different* labels).
+
+### Negative concentrations (`negative_concentration_policy`)
+
+A host model can hand back mixing ratios that are slightly below zero. Transport and
+mixing undershoot next to sharp gradients, for example just above a surface emission
+on a near-zero background. `negative_concentration_policy` decides what `gaschem` does
+with such a value, for the species that map into the MICM mechanism.
+
+| Value | Negative input from the host | Negative output from the solver |
+|---|---|---|
+| `reject` (default) | throws `std::domain_error` | throws `std::domain_error` |
+| `clamp` | set to zero before the solve | set to zero before it is written back |
+
+Under both values:
+
+*   A non-finite concentration (NaN or infinity) throws.
+*   Non-physical temperature, pressure, or dry air density throws.
+*   Any other value for the key fails `GasChemProcess::init` with `std::invalid_argument`.
+
+The key is independent of [`physical_validation.policy`](../../user-guide/configuration.md#physical_validation),
+which governs meteorology. `gaschem` does not read that policy, so a run can floor
+tracer noise from the host and still stop on a bad temperature.
+
+A rejected value is reported in scientific notation with its species and zero-based,
+PET-local location:
+
+```text
+GasChem received a negative or non-finite concentration (-1.000000e-12) for O at column=4, level=2, batch=1 (zero-based indices)
+```
+
+Under `clamp`, each PET logs one warning the first time it floors a value, with the
+number of cells and the most negative value and where it was. Later timesteps log the
+same line at debug level, and `finalize` logs the totals since `init`:
+
+```text
+[WARN ] GasChemProcess: floored negative concentrations to zero | inputs_floored=1 min_input=-1.000000e-12 min_input_species=O min_input_column=4 min_input_level=2 outputs_floored=0 min_output=0.000000e+00 min_output_species=none min_output_column=-1 min_output_level=-1
+[INFO ] GasChemProcess: negative concentrations floored to zero since init | inputs_floored=1 min_input=-1.000000e-12 outputs_floored=0 min_output=0.000000e+00
+```
+
+Flooring adds mass equal to the sum of the floored values. Check `min_input` after
+enabling `clamp`: values near machine noise are expected, while a large negative
+points to a problem upstream that the floor would otherwise hide. The policy in effect
+is printed on the `GasChemProcess: initialized MICM state` log line.
 
 ---
 
@@ -95,3 +141,8 @@ Runs a coupled multi-level atmospheric column simulation containing both the C++
 2.  Synthesizes physical conditions modeling a noon summer atmospheric column.
 3.  Executes `core->run_timestep(3600.0)`.
 4.  Asserts that photolysis rate diagnostics are successfully populated and mapped to MICM, and that solver concentrations successfully converge with stable mass balance.
+
+The same target runs a six-column case across `columns_per_batch` values of 1, 2, 4,
+and 6, and a `negative_concentration_policy` suite: `reject` throws with the value and
+location in the message, `clamp` solves bit-for-bit like a zero input and counts each
+floored cell once, and neither accepts NaN or a non-physical temperature.
