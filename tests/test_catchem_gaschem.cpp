@@ -14,6 +14,7 @@
 #include <iostream>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 extern "C" {
@@ -134,13 +135,27 @@ static void run_coupled_case(const std::string& label, const std::string& config
     std::cout << "CASE PASSED: " << label << std::endl;
 }
 
+// Overrides one cell of the initial concentration field with a value the
+// gaschem input guard must reject, and lists the fragments its error message
+// must contain.
+struct InputGuardProbe {
+    int icol;
+    int ilev;
+    int ispec;
+    double value;
+    std::vector<std::string> expected_message_parts;
+};
+
 // Runs a multi-column (n_cols = 6, n_levels = 3, n_species = 4) coupled
 // photolysis + gaschem scenario for a given optional columns_per_batch setting,
 // asserting that GasChemProcess sizes its MICM state to
 // expected_batch_cols * n_levels and returns the final concentration buffer.
+// With a probe, the run must instead fail in the gaschem input guard, and an
+// empty buffer is returned.
 static std::vector<double> run_multi_column_batch_case(const std::string& label, const std::string& v1_file,
                                                        std::optional<int> configured_columns_per_batch,
-                                                       std::size_t expected_batch_cols) {
+                                                       std::size_t expected_batch_cols,
+                                                       const InputGuardProbe* probe = nullptr) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "BATCH CASE: " << label << " (expected columns_per_batch=" << expected_batch_cols << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
@@ -218,6 +233,10 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
             initial_conc[cell_idx(3)] = 10.0 + 0.5 * slot + 0.2 * ilev;  // o3 [ppmv]
         }
     }
+    if (probe != nullptr) {
+        initial_conc[static_cast<std::size_t>(probe->icol + probe->ilev * n_cols + probe->ispec * n_cols * n_levels)] =
+            probe->value;
+    }
     std::vector<double> conc_data = initial_conc;
     state->bind_unified_chemistry(conc_data.data());
 
@@ -258,6 +277,26 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
            "GasChemProcess::columns_per_batch() must match configured batch size");
     assert(gaschem_typed->micm_grid_cell_count() == expected_batch_cols * static_cast<std::size_t>(n_levels) &&
            "MICM state cell count must equal columns_per_batch * n_levels (not n_cols * n_levels)");
+
+    if (probe != nullptr) {
+        std::string message;
+        try {
+            core->run_timestep(3600.0);
+        } catch (const std::domain_error& error) {
+            message = error.what();
+        }
+        std::remove(temp_config.c_str());
+        assert(!message.empty() && "A rejected input concentration must raise std::domain_error");
+        for (const auto& part : probe->expected_message_parts) {
+            const bool found = message.find(part) != std::string::npos;
+            if (!found) {
+                std::cerr << "Guard message is missing \"" << part << "\": " << message << std::endl;
+            }
+            assert(found && "GasChem input guard message must report value, species, and location");
+        }
+        std::cout << "GUARD CASE PASSED: " << label << " -> " << message << std::endl;
+        return {};
+    }
 
     core->run_timestep(3600.0);
     state->sync_to_host();
@@ -386,6 +425,15 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
 
     // 6. Reject non-positive columns_per_batch.
     test_invalid_batch_size(v1_file);
+
+    // 7. A tiny negative input is rejected with a message that shows its magnitude
+    // and where it is. Column 4 is the first column of the short final batch when
+    // columns_per_batch = 4, so the reported column must be the PET-local index,
+    // not the index within the batch. Atomic oxygen (species 1) is used because
+    // photolysis runs first and reads ozone.
+    const InputGuardProbe negative_o{
+        4, 2, 1, -1.0e-12, {"(-1.000000e-12)", " for O ", "column=4", "level=2", "batch=1"}};
+    run_multi_column_batch_case("negative input rejected (columns_per_batch=4)", v1_file, 4, 4, &negative_o);
 }
 
 int main(int argc, char* argv[]) {

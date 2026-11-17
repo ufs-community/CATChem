@@ -7,9 +7,28 @@
 #include <algorithm>
 #include <cctype>
 #include <filesystem>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 namespace catchem {
+
+    namespace {
+
+        // Builds the message for the concentration guards in GasChemProcess::run.
+        // The value is written in scientific notation because fixed six-decimal
+        // formatting prints every tiny negative as "-0.000000" and hides its
+        // magnitude. Column, level, and batch are zero-based; column is the index
+        // on this PET, not within the batch.
+        std::string concentration_guard_message(const std::string& what, double value, const std::string& species,
+                                                int column, int level, int batch) {
+            std::ostringstream message;
+            message << what << " (" << std::scientific << std::setprecision(6) << value << ") for " << species
+                    << " at column=" << column << ", level=" << level << ", batch=" << batch << " (zero-based indices)";
+            return message.str();
+        }
+
+    } // namespace
 
     ProcessContract GasChemProcess::get_contract() const {
         return make_contract(get_name(),
@@ -258,8 +277,9 @@ namespace catchem {
                     for (const auto& sp : species_mappings_) {
                         const double ppmv_val = conc(icol, ilev, sp.catchem_idx);
                         if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                            throw std::domain_error("GasChem received a negative or non-finite concentration for " +
-                                                    sp.name);
+                            throw std::domain_error(
+                                concentration_guard_message("GasChem received a negative or non-finite concentration",
+                                                            ppmv_val, sp.name, icol, ilev, batch_idx));
 
                         const double conc_molar = ppmv_val * 1.0e-6 * air_density_mol;
                         const std::size_t idx = (species_group_base + sp.micm_idx) * vector_size_ + row_in_group;
@@ -314,8 +334,9 @@ namespace catchem {
 
                         const double ppmv_val = (conc_molar / air_density_mol) * 1.0e6;
                         if (!std::isfinite(ppmv_val) || ppmv_val < 0.0)
-                            throw std::domain_error(
-                                "GasChem solver returned a negative or non-finite concentration for " + sp.name);
+                            throw std::domain_error(concentration_guard_message(
+                                "GasChem solver returned a negative or non-finite concentration", ppmv_val, sp.name,
+                                icol, ilev, batch_idx));
                         conc(icol, ilev, sp.catchem_idx) = ppmv_val;
                     }
                 }
