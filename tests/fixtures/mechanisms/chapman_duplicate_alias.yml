@@ -1,0 +1,17 @@
+# A deliberately wrong species list for the MICM chapman mechanism: atomic
+# oxygen carries the alias O1D, so the mechanism's O and O1D both resolve to
+# the same CATChem species. The gaschem process must refuse to initialize.
+- name: o2
+  __description: Molecular oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.03200
+- name: o
+  aliases: [O1D]
+  __description: Atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o3
+  __description: Ozone
+  __is_gas: true
+  roles: [photolysis.ozone]
+  molecular weight [kg mol-1]: 0.04800

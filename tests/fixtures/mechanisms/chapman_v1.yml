@@ -1,0 +1,26 @@
+# Species list for the MUSICA v1 chapman mechanism
+# (src/external/musica/configs/v1/chapman/config.yaml). It is chapman.yml,
+# in the same order, plus molecular nitrogen: the v1 mechanism has N2 as a
+# solved variable, and the gaschem process requires every MICM variable to be
+# in the CATChem species list. M is a third body, not a MICM variable.
+- name: o2
+  __description: Molecular oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.03200
+- name: o
+  __description: Atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o1d
+  __description: Excited atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o3
+  __description: Ozone
+  __is_gas: true
+  roles: [photolysis.ozone]
+  molecular weight [kg mol-1]: 0.04800
+- name: n2
+  __description: Molecular nitrogen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.02801
