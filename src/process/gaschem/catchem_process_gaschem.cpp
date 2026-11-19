@@ -543,6 +543,10 @@ namespace catchem {
             state->chemistry().conc->mark_host_modified();
     }
 
+    double GasChemProcess::solver_relative_tolerance() const {
+        return micm_instance_ ? micm_instance_->GetRosenbrockSolverParameters().relative_tolerance : 0.0;
+    }
+
     void GasChemProcess::finalize() {
         if (negative_inputs_clamped_ + negative_outputs_clamped_ > 0) {
             Logger::info("GasChemProcess: negative concentrations floored to zero since init",

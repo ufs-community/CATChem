@@ -191,7 +191,9 @@ Runs a coupled multi-level atmospheric column simulation containing both the C++
 4.  Asserts that photolysis rate diagnostics are successfully populated and mapped to MICM, and that solver concentrations successfully converge with stable mass balance.
 
 The same target runs a six-column case across `columns_per_batch` values of 1, 2, 4,
-and 6, and a `negative_concentration_policy` suite: `reject` throws with the value and
+and 6 and requires every batch size to match the single-column result within ten times
+the solver's own tolerances (its relative tolerance, plus the mechanism's declared
+absolute tolerance converted to ppmv). It also runs a `negative_concentration_policy` suite: `reject` throws with the value and
 location in the message, `clamp` solves bit-for-bit like a zero input and counts each
 floored cell once, and neither accepts NaN or a non-physical temperature. A further
 suite runs three timesteps and checks that floored inputs and floored solver outputs

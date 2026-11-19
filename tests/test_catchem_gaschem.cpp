@@ -1,5 +1,6 @@
 #include "catchem_api.hpp"
 #include "catchem_config_manager.hpp"
+#include "catchem_constants.hpp"
 #include "catchem_core.hpp"
 #include "catchem_diagnostic_manager.hpp"
 #include "catchem_logger.hpp"
@@ -23,6 +24,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 extern "C" {
 void catchem_register_photolysis_cpp();
@@ -189,13 +191,36 @@ struct BatchCaseOptions {
     std::function<void(BatchCaseRun&)> after_first_step;
 };
 
-// What GasChemProcess floored to zero during a case.
-struct ClampStats {
+// What GasChemProcess reported after a case: the cells it floored to zero and
+// the relative tolerance its solver ran with.
+struct CaseStats {
     std::size_t inputs = 0;
     std::size_t outputs = 0;
     double min_input = 0.0;
     double min_output = 0.0;
+    double solver_relative_tolerance = 0.0;
 };
+
+// Dry air density [kg/m3] of the multi-column case for a profile slot and level.
+static double batch_case_air_density(int slot, int ilev) {
+    return (1.2 - 0.02 * slot) * std::exp(-ilev / 10.0);
+}
+
+// The largest "absolute tolerance" [mol/m3] a v0 CAMP mechanism declares for
+// its species, read from species.json in the mechanism directory.
+static double largest_declared_absolute_tolerance(const std::string& mechanism_dir) {
+    const YAML::Node species =
+        YAML::LoadFile((std::filesystem::path(mechanism_dir) / "species.json").string())["camp-data"];
+    assert(species && species.IsSequence() && "species.json must hold a camp-data list");
+    double largest = 0.0;
+    for (const auto& entry : species) {
+        if (entry["absolute tolerance"]) {
+            largest = std::max(largest, entry["absolute tolerance"].as<double>());
+        }
+    }
+    assert(largest > 0.0 && "The mechanism must declare an absolute tolerance for a species");
+    return largest;
+}
 
 // Runs a multi-column (n_cols = 6, n_levels = 3, n_species = 4) coupled
 // photolysis + gaschem scenario for a given optional columns_per_batch setting,
@@ -203,11 +228,11 @@ struct ClampStats {
 // expected_batch_cols * n_levels and returns the final concentration buffer.
 // When options.expect_failure is set, the timestep must throw instead and an
 // empty buffer is returned.
-static std::vector<double> run_multi_column_batch_case(const std::string& label, const std::string& v1_file,
+static std::vector<double> run_multi_column_batch_case(const std::string& label, const std::string& mechanism_dir,
                                                        std::optional<int> configured_columns_per_batch,
                                                        std::size_t expected_batch_cols,
                                                        const BatchCaseOptions& options = {},
-                                                       ClampStats* stats = nullptr) {
+                                                       CaseStats* stats = nullptr) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "BATCH CASE: " << label << " (expected columns_per_batch=" << expected_batch_cols << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
@@ -247,7 +272,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
         for (int ilev = 0; ilev < n_levels; ++ilev) {
             const std::size_t idx = static_cast<std::size_t>(icol + ilev * n_cols);
             temperature[idx] = 280.0 + 1.5 * slot - 0.5 * ilev;
-            airden[idx] = (1.2 - 0.02 * slot) * std::exp(-ilev / 10.0);
+            airden[idx] = batch_case_air_density(slot, ilev);
             pmid[idx] = (101300.0 - 500.0 * slot) * std::exp(-ilev / 10.0);
             pedge[idx] = pmid[idx];
             bxheight[idx] = 1000.0;
@@ -312,7 +337,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     }
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
-    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
+    conf_writer << "    config_dir: \"" << mechanism_dir << "\"\n";
     if (configured_columns_per_batch.has_value()) {
         conf_writer << "    columns_per_batch: " << *configured_columns_per_batch << "\n";
     }
@@ -379,6 +404,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
         stats->outputs = gaschem_typed->negative_outputs_clamped();
         stats->min_input = gaschem_typed->min_negative_input();
         stats->min_output = gaschem_typed->min_negative_output();
+        stats->solver_relative_tolerance = gaschem_typed->solver_relative_tolerance();
     }
 
     auto conc_view = state->chemistry().conc->host_view;
@@ -414,7 +440,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
 }
 
 // GasChemProcess::init must reject the given processes/gaschem option line.
-static void test_invalid_gaschem_option(const std::string& v1_file, const std::string& option_line) {
+static void test_invalid_gaschem_option(const std::string& mechanism_dir, const std::string& option_line) {
     auto core = std::make_shared<catchem::Core>(2, 3, 4);
     auto state = core->get_state_manager();
 
@@ -426,7 +452,7 @@ static void test_invalid_gaschem_option(const std::string& v1_file, const std::s
     conf_writer << "processes:\n";
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
-    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
+    conf_writer << "    config_dir: \"" << mechanism_dir << "\"\n";
     conf_writer << "    " << option_line << "\n";
     conf_writer.close();
 
@@ -501,26 +527,27 @@ static void expect_init_error(const std::string& what, const std::string& messag
 // MICM variables are resolved to CATChem species through the mechanism
 // definition: case-insensitively, through aliases, at most one MICM variable
 // per CATChem species, and with no MICM variable left without one.
-static void run_species_resolution_suite(const std::string& v1_file, const std::string& v1_mechanism_file) {
+static void run_species_resolution_suite(const std::string& mechanism_dir, const std::string& v1_mechanism_file) {
     // 1. A species list in mixed case, with one species reachable only through an
     // alias, maps the same four species and so solves bit-for-bit like chapman.yml.
-    const auto conc_reference = run_multi_column_batch_case("species resolution reference", v1_file, 4, 4);
+    const auto conc_reference = run_multi_column_batch_case("species resolution reference", mechanism_dir, 4, 4);
     BatchCaseOptions renamed;
     renamed.species_fixture = "chapman_alias_mixed_case.yml";
-    const auto conc_renamed = run_multi_column_batch_case("mixed-case names and an alias", v1_file, 4, 4, renamed);
+    const auto conc_renamed =
+        run_multi_column_batch_case("mixed-case names and an alias", mechanism_dir, 4, 4, renamed);
     assert(conc_renamed == conc_reference &&
            "Species resolved by case-insensitive name or alias must solve bit-for-bit like exact names");
 
     // 2. Two MICM variables resolving to one CATChem species is a configuration error.
     expect_init_error("Duplicate species mapping",
-                      gaschem_init_error("config_dir", v1_file, "chapman_duplicate_alias.yml", 3),
+                      gaschem_init_error("config_dir", mechanism_dir, "chapman_duplicate_alias.yml", 3),
                       {"O and O1D", "both resolve to CATChem species o"});
 
     // 3. Every MICM variable must be in the species list. MICM solves for all of
     // them, and with a state reused across column batches an unsupplied one would
     // start from another column's result. The v0 mechanism solves for O.
     expect_init_error("Species list without atomic oxygen (v0 mechanism)",
-                      gaschem_init_error("config_dir", v1_file, "chapman_without_o.yml", 3),
+                      gaschem_init_error("config_dir", mechanism_dir, "chapman_without_o.yml", 3),
                       {"missing from the CATChem species list: O.", "is_advected: false"});
 
     // 4. The v1 mechanism also solves for N2, which chapman.yml does not list.
@@ -533,7 +560,7 @@ static void run_species_resolution_suite(const std::string& v1_file, const std::
 // negative concentration, clamp floors it to zero. Neither relaxes the checks on
 // non-finite concentrations or on meteorology. Atomic oxygen (species 1) carries
 // the bad value because photolysis runs first and reads ozone.
-static void run_negative_concentration_policy_suite(const std::string& v1_file) {
+static void run_negative_concentration_policy_suite(const std::string& mechanism_dir) {
     constexpr int o_atom = 1;
     constexpr double tiny_negative = -1.0e-12;
     const std::string input_guard = "GasChem received a negative or non-finite concentration";
@@ -547,23 +574,24 @@ static void run_negative_concentration_policy_suite(const std::string& v1_file) 
         rejected.conc_override = CellValue{4, 2, o_atom, tiny_negative};
         rejected.expect_failure = true;
         rejected.expected_message_parts = {input_guard, "(-1.000000e-12)", " for O ", "column=4", "level=2", "batch=1"};
-        run_multi_column_batch_case(std::string("negative input rejected (policy='") + policy + "')", v1_file, 4, 4,
-                                    rejected);
+        run_multi_column_batch_case(std::string("negative input rejected (policy='") + policy + "')", mechanism_dir, 4,
+                                    4, rejected);
     }
 
     // 2. clamp: the negative cell is solved exactly as if it had been zero.
     BatchCaseOptions zero_cell;
     zero_cell.negative_concentration_policy = "clamp";
     zero_cell.conc_override = CellValue{4, 2, o_atom, 0.0};
-    ClampStats zero_stats;
-    const auto conc_zero = run_multi_column_batch_case("clamp, cell at zero", v1_file, 4, 4, zero_cell, &zero_stats);
+    CaseStats zero_stats;
+    const auto conc_zero =
+        run_multi_column_batch_case("clamp, cell at zero", mechanism_dir, 4, 4, zero_cell, &zero_stats);
     assert(zero_stats.inputs == 0 && zero_stats.outputs == 0 && "A zero concentration must not be counted as floored");
 
     BatchCaseOptions negative_cell = zero_cell;
     negative_cell.conc_override = CellValue{4, 2, o_atom, tiny_negative};
-    ClampStats negative_stats;
+    CaseStats negative_stats;
     const auto conc_negative =
-        run_multi_column_batch_case("clamp, cell tiny negative", v1_file, 4, 4, negative_cell, &negative_stats);
+        run_multi_column_batch_case("clamp, cell tiny negative", mechanism_dir, 4, 4, negative_cell, &negative_stats);
     assert(conc_negative == conc_zero && "A floored negative input must solve bit-for-bit like a zero input");
     assert(negative_stats.inputs == 1 && "Exactly one input cell must be counted as floored");
     assert(negative_stats.min_input == tiny_negative && "The most negative floored input must be recorded");
@@ -574,14 +602,14 @@ static void run_negative_concentration_policy_suite(const std::string& v1_file) 
     nan_cell.conc_override = CellValue{4, 2, o_atom, std::numeric_limits<double>::quiet_NaN()};
     nan_cell.expect_failure = true;
     nan_cell.expected_message_parts = {input_guard, " for O ", "column=4", "level=2"};
-    run_multi_column_batch_case("clamp, NaN input rejected", v1_file, 4, 4, nan_cell);
+    run_multi_column_batch_case("clamp, NaN input rejected", mechanism_dir, 4, 4, nan_cell);
 
     // 4. clamp counts real cells only. Column 5 is the last valid column of the
     // short final batch, so its values are copied into the two padding columns.
     BatchCaseOptions padded_cell = negative_cell;
     padded_cell.conc_override = CellValue{5, 0, o_atom, tiny_negative};
-    ClampStats padded_stats;
-    run_multi_column_batch_case("clamp, negative in padded column", v1_file, 4, 4, padded_cell, &padded_stats);
+    CaseStats padded_stats;
+    run_multi_column_batch_case("clamp, negative in padded column", mechanism_dir, 4, 4, padded_cell, &padded_stats);
     assert(padded_stats.inputs == 1 && "Padding copies of a floored cell must not be counted");
 
     // 5. clamp does not relax gaschem's own meteorology check. The state manager
@@ -592,10 +620,10 @@ static void run_negative_concentration_policy_suite(const std::string& v1_file) 
     bad_temperature.with_photolysis = false;
     bad_temperature.expect_failure = true;
     bad_temperature.expected_message_parts = {"non-physical T, PMID, or AIRDEN_DRY"};
-    run_multi_column_batch_case("clamp, negative temperature rejected", v1_file, 4, 4, bad_temperature);
+    run_multi_column_batch_case("clamp, negative temperature rejected", mechanism_dir, 4, 4, bad_temperature);
 
     // 6. Only reject and clamp are accepted.
-    test_invalid_gaschem_option(v1_file, "negative_concentration_policy: bogus");
+    test_invalid_gaschem_option(mechanism_dir, "negative_concentration_policy: bogus");
 }
 
 // GasChemProcess whose solver "returns" a negative concentration for every
@@ -660,7 +688,7 @@ private:
 
 // What one run of the three-step clamp sequence left behind.
 struct ClampSequenceResult {
-    ClampStats stats;
+    CaseStats stats;
     std::vector<double> conc;
     std::size_t warnings = 0;
     std::size_t input_warnings = 0;
@@ -916,8 +944,8 @@ static void run_settings_suite(const std::string& mechanism_dir) {
     modern.conc_override = CellValue{4, 2, 1, -1.0e-12};
     BatchCaseOptions legacy = modern;
     legacy.process_block = "process";
-    ClampStats modern_stats;
-    ClampStats legacy_stats;
+    CaseStats modern_stats;
+    CaseStats legacy_stats;
     const auto conc_modern =
         run_multi_column_batch_case("processes: block", mechanism_dir, 4, 4, modern, &modern_stats);
     const auto conc_legacy =
@@ -934,16 +962,17 @@ static void run_settings_suite(const std::string& mechanism_dir) {
                       {"failed to initialize MICM"}, "by MICM");
 }
 
-static void run_multi_column_batch_suite(const std::string& v1_file) {
+static void run_multi_column_batch_suite(const std::string& mechanism_dir) {
     constexpr int n_cols = 6;
     constexpr int n_levels = 3;
     constexpr int n_species = 4;
 
     // 1. Default (omitted columns_per_batch -> 1)
-    const auto conc_default = run_multi_column_batch_case("default (omitted -> 1)", v1_file, std::nullopt, 1);
+    const auto conc_default = run_multi_column_batch_case("default (omitted -> 1)", mechanism_dir, std::nullopt, 1);
 
     // 2. Explicit batch size 1 (6 batches of 1 column)
-    const auto conc_b1 = run_multi_column_batch_case("columns_per_batch=1", v1_file, 1, 1);
+    CaseStats reference_stats;
+    const auto conc_b1 = run_multi_column_batch_case("columns_per_batch=1", mechanism_dir, 1, 1, {}, &reference_stats);
     assert(conc_default == conc_b1 && "Omitted columns_per_batch must be bit-for-bit identical to columns_per_batch=1");
 
     // Verify identical-input columns (1 and 4) match bit-for-bit when solved in single-column batches.
@@ -957,16 +986,31 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
     }
 
     // 3. Batch size 2 (even divisor: 3 batches of 2 columns)
-    const auto conc_b2 = run_multi_column_batch_case("columns_per_batch=2 (even divisor)", v1_file, 2, 2);
+    const auto conc_b2 = run_multi_column_batch_case("columns_per_batch=2 (even divisor)", mechanism_dir, 2, 2);
 
     // 4. Batch size 4 (non-divisor partial final batch: batch 0 has 4 cols, batch 1 has 2 valid + 2 padded cols)
-    const auto conc_b4 = run_multi_column_batch_case("columns_per_batch=4 (partial final batch)", v1_file, 4, 4);
+    const auto conc_b4 = run_multi_column_batch_case("columns_per_batch=4 (partial final batch)", mechanism_dir, 4, 4);
 
     // 5. Batch size 6 (whole domain in 1 batch)
-    const auto conc_b6 = run_multi_column_batch_case("columns_per_batch=6 (full domain)", v1_file, 6, 6);
+    const auto conc_b6 = run_multi_column_batch_case("columns_per_batch=6 (full domain)", mechanism_dir, 6, 6);
 
-    // Compare all multi-column batch sizes against the columns_per_batch=1 reference within Rosenbrock tolerance
-    // (atol + rtol * |ref|, where v0/chapman species have atol = 1e-12 mol/m3 ~ 2.5e-8 ppmv and rtol = 1e-4).
+    // Compare every batch size against the columns_per_batch=1 reference. MICM controls its step size
+    // with one error norm over all cells of a batch, so two batch sizes may step the same cell differently,
+    // each to within the solver's local error tolerance of atol + rtol * |y|. The bound is ten times that
+    // tolerance; the factor of ten is the allowance for comparing two independently stepped solutions over a
+    // whole timestep. rtol is the value the solver ran with, which is MICM's default of 1e-6 because the
+    // mechanism and the process set none. atol is the largest absolute tolerance the mechanism declares
+    // (1e-12 mol/m3), converted to ppmv at the lowest air density in the case, where it is largest. O2
+    // declares none, but oxygen conservation ties its error to the other three, so the same bound applies.
+    const double rtol = reference_stats.solver_relative_tolerance;
+    assert(rtol > 0.0 && rtol <= 1.0e-4 &&
+           "The solver must report a relative tolerance tight enough for this comparison to mean something");
+    constexpr double air_mw_kg_mol = catchem::constants::AIR_MW * 1.0e-3;
+    const double lowest_air_density_mol = batch_case_air_density(n_cols - 1, n_levels - 1) / air_mw_kg_mol;
+    const double atol_ppmv = largest_declared_absolute_tolerance(mechanism_dir) / lowest_air_density_mol * 1.0e6;
+    constexpr double independent_solutions_factor = 10.0;
+    std::cout << "Batch comparison bound: " << independent_solutions_factor << " * (" << atol_ppmv << " ppmv + " << rtol
+              << " * |ref|)" << std::endl;
     for (const auto& [batch_label, candidate] : std::vector<std::pair<std::string, std::vector<double>>>{
              {"columns_per_batch=2", conc_b2}, {"columns_per_batch=4", conc_b4}, {"columns_per_batch=6", conc_b6}}) {
         double max_abs_diff = 0.0;
@@ -975,7 +1019,7 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
             const double ref = conc_b1[i];
             const double val = candidate[i];
             const double abs_diff = std::abs(val - ref);
-            const double tol = 1.0e-6 + 1.0e-2 * std::abs(ref);
+            const double tol = independent_solutions_factor * (atol_ppmv + rtol * std::abs(ref));
             max_abs_diff = std::max(max_abs_diff, abs_diff);
             if (std::abs(ref) > 1.0e-6) {
                 max_rel_diff = std::max(max_rel_diff, abs_diff / std::abs(ref));
@@ -992,7 +1036,7 @@ static void run_multi_column_batch_suite(const std::string& v1_file) {
     }
 
     // 6. Reject non-positive columns_per_batch.
-    test_invalid_gaschem_option(v1_file, "columns_per_batch: 0");
+    test_invalid_gaschem_option(mechanism_dir, "columns_per_batch: 0");
 }
 
 int main(int argc, char* argv[]) {

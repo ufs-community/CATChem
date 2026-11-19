@@ -88,6 +88,8 @@ namespace catchem {
         std::size_t negative_outputs_clamped() const noexcept { return negative_outputs_clamped_; }
         double min_negative_input() const noexcept { return min_negative_input_; }
         double min_negative_output() const noexcept { return min_negative_output_; }
+        // Relative tolerance the Rosenbrock solver runs with; 0 before init().
+        double solver_relative_tolerance() const;
         bool input_clamp_warned() const noexcept { return input_clamp_warned_; }
         bool output_clamp_warned() const noexcept { return output_clamp_warned_; }
 
