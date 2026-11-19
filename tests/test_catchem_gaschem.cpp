@@ -147,6 +147,9 @@ struct CellValue {
 // Departures from the baseline multi-column case, used by the guard and
 // negative_concentration_policy tests.
 struct BatchCaseOptions {
+    // Species file under tests/fixtures/mechanisms. Alternatives must keep the
+    // four chapman species in the same order.
+    std::string species_fixture = "chapman.yml";
     // Written as processes/gaschem/negative_concentration_policy when not empty.
     std::string negative_concentration_policy;
     std::optional<CellValue> conc_override;
@@ -237,7 +240,8 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     state->bind_met_field_3d("PMID", pmid.data());
     state->bind_met_field_3d("BXHEIGHT", bxheight.data());
 
-    std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/chapman.yml";
+    std::string species_config =
+        std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/" + options.species_fixture;
     assert(file_exists(species_config) && "ERROR: Could not find the chapman mechanism fixture!");
     state->load_species_config(species_config);
 
@@ -407,6 +411,57 @@ static void test_invalid_gaschem_option(const std::string& v1_file, const std::s
     std::cout << "SUCCESS: Invalid option rejected at init: " << option_line << std::endl;
 }
 
+// MICM variables are resolved to CATChem species through the mechanism
+// definition: case-insensitively, through aliases, and at most one MICM
+// variable per CATChem species.
+static void run_species_resolution_suite(const std::string& v1_file) {
+    // 1. A species list in mixed case, with one species reachable only through an
+    // alias, maps the same four species and so solves bit-for-bit like chapman.yml.
+    const auto conc_reference = run_multi_column_batch_case("species resolution reference", v1_file, 4, 4);
+    BatchCaseOptions renamed;
+    renamed.species_fixture = "chapman_alias_mixed_case.yml";
+    const auto conc_renamed = run_multi_column_batch_case("mixed-case names and an alias", v1_file, 4, 4, renamed);
+    assert(conc_renamed == conc_reference &&
+           "Species resolved by case-insensitive name or alias must solve bit-for-bit like exact names");
+
+    // 2. Two MICM variables resolving to one CATChem species is a configuration error.
+    auto core = std::make_shared<catchem::Core>(2, 3, 3);
+    auto state = core->get_state_manager();
+    state->load_species_config(std::string(catchem::test::TEST_DIR) +
+                               "/fixtures/mechanisms/chapman_duplicate_alias.yml");
+    const std::string temp_config = "test_gaschem_duplicate_mapping.yml";
+    std::ofstream conf_writer(temp_config);
+    conf_writer << "processes:\n";
+    conf_writer << "  gaschem:\n";
+    conf_writer << "    activate: true\n";
+    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
+    conf_writer.close();
+    state->set_configuration_path(temp_config);
+    if (state->config_manager()) {
+        state->config_manager()->load_from_file(temp_config);
+    }
+    auto gaschem_proc = catchem::ProcessRegistry::get_instance().create("gaschem");
+    std::string message;
+    try {
+        gaschem_proc->init(state);
+    } catch (const std::invalid_argument& error) {
+        message = error.what();
+    }
+    std::remove(temp_config.c_str());
+    if (message.empty()) {
+        std::cerr << "Duplicate species mapping was not rejected at init." << std::endl;
+    }
+    assert(!message.empty() && "Two MICM variables mapping to one CATChem species must fail initialization");
+    for (const char* part : {"O and O1D", "both resolve to CATChem species o"}) {
+        const bool found = message.find(part) != std::string::npos;
+        if (!found) {
+            std::cerr << "Duplicate-mapping message is missing \"" << part << "\": " << message << std::endl;
+        }
+        assert(found && "Duplicate-mapping message must name both MICM variables and the CATChem species");
+    }
+    std::cout << "SUCCESS: Duplicate species mapping rejected at init -> " << message << std::endl;
+}
+
 // processes/gaschem/negative_concentration_policy: reject (default) throws on a
 // negative concentration, clamp floors it to zero. Neither relaxes the checks on
 // non-finite concentrations or on meteorology. Atomic oxygen (species 1) carries
@@ -573,8 +628,12 @@ int main(int argc, char* argv[]) {
         // Case E: negative_concentration_policy (reject, clamp) and the checks it must not relax.
         run_negative_concentration_policy_suite(v0_dir);
 
+        // Case F: species resolution through the mechanism definition (case, aliases, duplicates).
+        run_species_resolution_suite(v0_dir);
+
         std::cout << "\n==========================================" << std::endl;
-        std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy)!"
+        std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy, "
+                     "species resolution)!"
                   << std::endl;
         std::cout << "==========================================\n" << std::endl;
     }

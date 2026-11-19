@@ -23,7 +23,13 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
     Any trailing unused columns in a partial final batch ($N_{\text{cols}} \bmod N_{\text{batch\_cols}} \neq 0$) are padded with a copy of the last valid column in the batch during the solve and ignored on copy-back.
 3.  **Meteorology Guard**: Throws `std::domain_error` if temperature, pressure, or dry air density is non-finite or not positive in any cell. This check is not affected by `negative_concentration_policy`.
 4.  **Pre-Resolved Species & Environmental State Mapping**:
-    *   During `GasChemProcess::init`, CATChem species indices are mapped once (case-insensitively) to MICM variable indices so the cell loops perform zero string allocations or hash-map lookups.
+    *   During `GasChemProcess::init`, every MICM variable is resolved once to a CATChem species through the active mechanism definition (`state->chemistry().mechanism`), so the cell loops perform zero string allocations or hash-map lookups. Resolution is case-insensitive and honours species `aliases`, so a mechanism that names a species differently from the host can be bridged from the species file:
+        ```yaml
+        - name: o3p
+          aliases: [O]      # the MICM mechanism calls this species O
+        ```
+    *   Two MICM variables that resolve to the same CATChem species fail initialization.
+    *   Initialization logs one line listing CATChem gas species that the mechanism does not contain (they are left untouched), and one line listing MICM variables that have no CATChem counterpart.
     *   Converts dry air density (`AIRDEN_DRY` in $\text{kg/m}^3$) to dry air molar density ($\text{mol/m}^3$) using the molecular weight of dry air ($0.0289644\text{ kg/mol}$):
         $$\rho_{\text{molar}} = \frac{\rho_{\text{dry}}}{0.0289644}$$
     *   Converts gas concentrations from Volume Mixing Ratios (VMR, $\text{ppmv}$) to molar densities ($\text{mol/m}^3$) using dry air molar density:

@@ -5,7 +5,6 @@
 #include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include <algorithm>
-#include <cctype>
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
@@ -32,6 +31,17 @@ namespace catchem {
             message << what << " (" << format_scientific(value) << ") for " << species << " at column=" << column
                     << ", level=" << level << ", batch=" << batch << " (zero-based indices)";
             return message.str();
+        }
+
+        std::string join_names(const std::vector<std::string>& names) {
+            std::string joined;
+            for (const auto& name : names) {
+                if (!joined.empty()) {
+                    joined += ',';
+                }
+                joined += name;
+            }
+            return joined;
         }
 
         // The most negative concentration floored during one run() call.
@@ -171,67 +181,99 @@ namespace catchem {
             micm_instance_ = std::make_unique<musica::MICM>(micm_config_path, musica::RosenbrockStandardOrder);
             const std::size_t batch_cells = this->columns_per_batch_ * static_cast<std::size_t>(state->level_count());
             micm_state_ = std::make_unique<musica::State>(*micm_instance_, batch_cells);
-            initialized_ = true;
             std::clog << "[INFO] GasChemProcess: initialized MICM successfully!" << std::endl;
-
-            // Precompute species and rate-parameter index mappings once so run() performs
-            // no per-cell string constructions or hash-map lookups.
-            vector_size_ = micm_instance_->GetVectorSize();
-            auto variable_map = micm_state_->GetVariableMap();
-            n_micm_species_ = variable_map.size();
-            species_mappings_.clear();
-            species_mappings_.reserve(static_cast<std::size_t>(state->species_count()));
-
-            for (int ispec = 0; ispec < state->species_count(); ++ispec) {
-                const std::string& raw_name = state->chemistry().species_list[ispec].short_name;
-                std::string upper_name = raw_name;
-                std::transform(upper_name.begin(), upper_name.end(), upper_name.begin(),
-                               [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
-                std::string lower_name = raw_name;
-                std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(),
-                               [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
-
-                auto it = variable_map.find(raw_name);
-                if (it == variable_map.end()) {
-                    it = variable_map.find(upper_name);
-                }
-                if (it == variable_map.end()) {
-                    it = variable_map.find(lower_name);
-                }
-
-                if (it != variable_map.end()) {
-                    species_mappings_.push_back(SpeciesMapping{ispec, it->second, it->first});
-                } else {
-                    Logger::warn(*state, "Active species not found in MICM solver variable map",
-                                 {{"species", upper_name}});
-                }
-            }
-
-            auto rate_param_map = micm_state_->GetRateParameterMap();
-            n_rate_params_ = rate_param_map.size();
-            rate_param_mappings_.clear();
-            rate_param_mappings_.reserve(n_rate_params_);
-            for (const auto& [param_name, i_param] : rate_param_map) {
-                if (param_name.rfind("PHOTO.", 0) == 0) {
-                    rate_param_mappings_.push_back(RateParamMapping{i_param, RateParamKind::Photolysis,
-                                                                    "photolysis_rate_" + param_name.substr(6)});
-                } else if (param_name.rfind("LOSS.", 0) == 0) {
-                    rate_param_mappings_.push_back(RateParamMapping{i_param, RateParamKind::Loss, {}});
-                }
-            }
-
-            Logger::info(*state, "GasChemProcess: initialized MICM state",
-                         {{"column_count", std::to_string(state->column_count())},
-                          {"level_count", std::to_string(state->level_count())},
-                          {"columns_per_batch", std::to_string(columns_per_batch_)},
-                          {"negative_concentration_policy", negative_policy},
-                          {"micm_grid_cells", std::to_string(micm_state_->NumberOfGridCells())},
-                          {"micm_species_count", std::to_string(micm_state_->NumberOfSpecies())}});
         } catch (const std::exception& e) {
             Logger::error(*state, "GasChemProcess: failed to initialize MICM", {{"error", e.what()}});
             initialized_ = false;
             throw std::runtime_error(std::string("GasChemProcess: failed to initialize MICM: ") + e.what());
         }
+
+        // 3. Resolve every MICM variable to a CATChem species through the active
+        // mechanism definition, which matches names case-insensitively and honours
+        // species aliases. Doing this once here keeps string construction and
+        // hash-map lookups out of the cell loops in run().
+        vector_size_ = micm_instance_->GetVectorSize();
+        const auto variable_map = micm_state_->GetVariableMap();
+        n_micm_species_ = variable_map.size();
+        species_mappings_.clear();
+        species_mappings_.reserve(n_micm_species_);
+        unmapped_micm_species_.clear();
+
+        const auto& mechanism = state->chemistry().mechanism;
+        for (const auto& [micm_name, micm_idx] : variable_map) {
+            if (!mechanism || !mechanism->contains(micm_name)) {
+                unmapped_micm_species_.push_back(micm_name);
+                continue;
+            }
+            species_mappings_.push_back(
+                SpeciesMapping{static_cast<int>(mechanism->index_of(micm_name)), micm_idx, micm_name});
+        }
+        std::sort(unmapped_micm_species_.begin(), unmapped_micm_species_.end());
+
+        // The variable map is unordered. Sort by CATChem species index so run()
+        // visits species in a fixed order, and so two MICM variables that resolve
+        // to the same CATChem species end up next to each other.
+        std::sort(species_mappings_.begin(), species_mappings_.end(),
+                  [](const SpeciesMapping& a, const SpeciesMapping& b) {
+                      return a.catchem_idx != b.catchem_idx ? a.catchem_idx < b.catchem_idx : a.name < b.name;
+                  });
+        for (std::size_t i = 1; i < species_mappings_.size(); ++i) {
+            const auto& previous = species_mappings_[i - 1];
+            const auto& current = species_mappings_[i];
+            if (previous.catchem_idx == current.catchem_idx) {
+                const auto& target = state->chemistry().species_list[static_cast<std::size_t>(current.catchem_idx)];
+                throw std::invalid_argument("GasChemProcess: MICM species " + previous.name + " and " + current.name +
+                                            " both resolve to CATChem species " + target.short_name);
+            }
+        }
+
+        // Gas species the host carries that the mechanism does not contain are left
+        // untouched by run(). Report them once, in one line, along with any MICM
+        // variable that has no CATChem counterpart.
+        std::vector<char> in_mechanism(static_cast<std::size_t>(state->species_count()), 0);
+        for (const auto& sp : species_mappings_) {
+            in_mechanism[static_cast<std::size_t>(sp.catchem_idx)] = 1;
+        }
+        std::vector<std::string> gas_outside_mechanism;
+        for (const int ispec : state->chemistry().indices(SpeciesCategory::Gas)) {
+            if (!in_mechanism[static_cast<std::size_t>(ispec)]) {
+                gas_outside_mechanism.push_back(
+                    state->chemistry().species_list[static_cast<std::size_t>(ispec)].short_name);
+            }
+        }
+        if (!gas_outside_mechanism.empty()) {
+            Logger::warn(*state, "GasChemProcess: CATChem gas species not in the MICM mechanism",
+                         {{"count", std::to_string(gas_outside_mechanism.size())},
+                          {"species", join_names(gas_outside_mechanism)}});
+        }
+        if (!unmapped_micm_species_.empty()) {
+            Logger::warn(*state, "GasChemProcess: MICM species not in the CATChem species list",
+                         {{"count", std::to_string(unmapped_micm_species_.size())},
+                          {"species", join_names(unmapped_micm_species_)}});
+        }
+
+        const auto rate_param_map = micm_state_->GetRateParameterMap();
+        n_rate_params_ = rate_param_map.size();
+        rate_param_mappings_.clear();
+        rate_param_mappings_.reserve(n_rate_params_);
+        for (const auto& [param_name, i_param] : rate_param_map) {
+            if (param_name.rfind("PHOTO.", 0) == 0) {
+                rate_param_mappings_.push_back(
+                    RateParamMapping{i_param, RateParamKind::Photolysis, "photolysis_rate_" + param_name.substr(6)});
+            } else if (param_name.rfind("LOSS.", 0) == 0) {
+                rate_param_mappings_.push_back(RateParamMapping{i_param, RateParamKind::Loss, {}});
+            }
+        }
+
+        initialized_ = true;
+        Logger::info(*state, "GasChemProcess: initialized MICM state",
+                     {{"column_count", std::to_string(state->column_count())},
+                      {"level_count", std::to_string(state->level_count())},
+                      {"columns_per_batch", std::to_string(columns_per_batch_)},
+                      {"negative_concentration_policy", negative_policy},
+                      {"micm_grid_cells", std::to_string(micm_state_->NumberOfGridCells())},
+                      {"micm_species_count", std::to_string(micm_state_->NumberOfSpecies())},
+                      {"mapped_species_count", std::to_string(species_mappings_.size())}});
     }
 
     void GasChemProcess::run(std::shared_ptr<StateManager> state) {
