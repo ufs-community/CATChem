@@ -197,18 +197,28 @@ namespace catchem {
         n_micm_species_ = variable_map.size();
         species_mappings_.clear();
         species_mappings_.reserve(n_micm_species_);
-        unmapped_micm_species_.clear();
+        std::vector<std::string> unmapped_micm_species;
 
         const auto& mechanism = state->chemistry().mechanism;
         for (const auto& [micm_name, micm_idx] : variable_map) {
             if (!mechanism || !mechanism->contains(micm_name)) {
-                unmapped_micm_species_.push_back(micm_name);
+                unmapped_micm_species.push_back(micm_name);
                 continue;
             }
             species_mappings_.push_back(
                 SpeciesMapping{static_cast<int>(mechanism->index_of(micm_name)), micm_idx, micm_name});
         }
-        std::sort(unmapped_micm_species_.begin(), unmapped_micm_species_.end());
+
+        // MICM integrates every species in its mechanism, so a species the host does
+        // not supply would start from whatever an earlier solve left in the reused
+        // state. Require complete coverage instead of choosing a value for it.
+        if (!unmapped_micm_species.empty()) {
+            std::sort(unmapped_micm_species.begin(), unmapped_micm_species.end());
+            throw std::invalid_argument(
+                "GasChemProcess: MICM mechanism species missing from the CATChem species list: " +
+                join_names(unmapped_micm_species) +
+                ". Add them to the species file; use is_advected: false for species the host should not transport.");
+        }
 
         // The variable map is unordered. Sort by CATChem species index so run()
         // visits species in a fixed order, and so two MICM variables that resolve
@@ -228,8 +238,7 @@ namespace catchem {
         }
 
         // Gas species the host carries that the mechanism does not contain are left
-        // untouched by run(). Report them once, in one line, along with any MICM
-        // variable that has no CATChem counterpart.
+        // untouched by run(). Report them once, in one line.
         std::vector<char> in_mechanism(static_cast<std::size_t>(state->species_count()), 0);
         for (const auto& sp : species_mappings_) {
             in_mechanism[static_cast<std::size_t>(sp.catchem_idx)] = 1;
@@ -245,11 +254,6 @@ namespace catchem {
             Logger::warn(*state, "GasChemProcess: CATChem gas species not in the MICM mechanism",
                          {{"count", std::to_string(gas_outside_mechanism.size())},
                           {"species", join_names(gas_outside_mechanism)}});
-        }
-        if (!unmapped_micm_species_.empty()) {
-            Logger::warn(*state, "GasChemProcess: MICM species not in the CATChem species list",
-                         {{"count", std::to_string(unmapped_micm_species_.size())},
-                          {"species", join_names(unmapped_micm_species_)}});
         }
 
         const auto rate_param_map = micm_state_->GetRateParameterMap();
@@ -375,7 +379,9 @@ namespace catchem {
                     const std::size_t species_group_base = group_index * n_micm_species_;
                     const std::size_t param_group_base = group_index * n_rate_params_;
 
-                    // Copy concentrations: ppmv -> mol/m3
+                    // Copy concentrations: ppmv -> mol/m3. init() guarantees every MICM
+                    // species is mapped, so this overwrites the whole cell and nothing
+                    // from the previous batch survives in the reused state.
                     for (const auto& sp : species_mappings_) {
                         double ppmv_val = conc(icol, ilev, sp.catchem_idx);
                         if (!std::isfinite(ppmv_val) || (ppmv_val < 0.0 && reject_negative))

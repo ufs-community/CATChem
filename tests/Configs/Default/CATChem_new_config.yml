@@ -482,6 +482,9 @@ processes:
   # columns_per_batch * number_of_levels cells and solves local columns in batches.
   # negative_concentration_policy (default reject) throws on a negative concentration;
   # clamp floors it to zero and reports it. Independent of physical_validation.policy.
+  # Species coverage: the species file must list every species of the MICM mechanism
+  # (by name or alias), or initialization fails. Use is_advected: false for species
+  # the host should not transport.
   # Photolysis coupling: each "PHOTO.<label>" rate parameter binds to the
   # "photolysis_rate_<label>" diagnostic, so mechanism photolysis names must match
   # the TUV-x radiator labels. See docs/processes/gaschem/index.md.

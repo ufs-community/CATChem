@@ -29,7 +29,8 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
           aliases: [O]      # the MICM mechanism calls this species O
         ```
     *   Two MICM variables that resolve to the same CATChem species fail initialization.
-    *   Initialization logs one line listing CATChem gas species that the mechanism does not contain (they are left untouched), and one line listing MICM variables that have no CATChem counterpart.
+    *   **Every species in the MICM mechanism must be in the CATChem species file.** A MICM variable with no CATChem counterpart fails initialization with a message naming it. MICM integrates every species in its mechanism, and the solver state is reused from one column batch to the next, so an unsupplied species would otherwise start from another column's result.
+    *   Initialization logs one line listing CATChem gas species that the mechanism does not contain. Those are left untouched.
     *   Converts dry air density (`AIRDEN_DRY` in $\text{kg/m}^3$) to dry air molar density ($\text{mol/m}^3$) using the molecular weight of dry air ($0.0289644\text{ kg/mol}$):
         $$\rho_{\text{molar}} = \frac{\rho_{\text{dry}}}{0.0289644}$$
     *   Converts gas concentrations from Volume Mixing Ratios (VMR, $\text{ppmv}$) to molar densities ($\text{mol/m}^3$) using dry air molar density:
@@ -85,6 +86,25 @@ processes:
 > match the TUV-x radiator labels: `gaschem` binds each `"PHOTO.<label>"` rate
 > parameter to the `photolysis_rate_<label>` diagnostic produced by the photolysis
 > process (e.g. v0 `jO3->O1D` vs v1 `jo3_b` are *different* labels).
+
+### Species coverage
+
+The species file must list every species of the MICM mechanism, by name or by alias.
+Third-body species such as `M` are not MICM variables and need no entry. A species
+that the host model should not transport still needs an entry, marked as not advected:
+
+```yaml
+- name: o1d
+  __is_gas: true
+  __is_advected: false     # solved by MICM, carried by CATChem, not transported by the host
+  molecular weight [kg mol-1]: 0.01600
+```
+
+If any mechanism species is missing, initialization stops:
+
+```text
+GasChemProcess: MICM mechanism species missing from the CATChem species list: N2. Add them to the species file; use is_advected: false for species the host should not transport.
+```
 
 ### Negative concentrations (`negative_concentration_policy`)
 

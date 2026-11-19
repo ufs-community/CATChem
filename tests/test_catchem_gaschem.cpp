@@ -29,8 +29,10 @@ bool file_exists(const std::string& name) {
 
 // Runs the full coupled photolysis+gaschem scenario once for a given gaschem
 // mechanism configuration (a v0 CAMP directory, a v1 single file, or a v1
-// directory relying on config.yaml auto-detection).
-static void run_coupled_case(const std::string& label, const std::string& config_key, const std::string& config_value) {
+// directory relying on config.yaml auto-detection). The species fixture must
+// list every MICM variable of that mechanism.
+static void run_coupled_case(const std::string& label, const std::string& config_key, const std::string& config_value,
+                             const std::string& species_fixture = "chapman.yml", int n_species = 4) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "CASE: gaschem mechanism via " << config_key << " (" << label << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
@@ -38,7 +40,6 @@ static void run_coupled_case(const std::string& label, const std::string& config
     // 2. Set up core and states
     int n_cols = 1;
     int n_levels = 3;
-    int n_species = 4; // matches tests/fixtures/mechanisms/chapman.yml
 
     auto core = std::make_shared<catchem::Core>(n_cols, n_levels, n_species);
     auto state = core->get_state_manager();
@@ -77,13 +78,18 @@ static void run_coupled_case(const std::string& label, const std::string& config
     state->bind_met_field_3d("PMID", pedge.data()); // PMID maps to PMID in tests
     state->bind_met_field_3d("BXHEIGHT", bxheight.data());
 
-    // Load a mechanism whose species mirror chapman v0 (so every CATChem
-    // species maps into the MICM variable map) and that carries the
+    // Load a species list that covers the mechanism under test and carries the
     // photolysis.ozone role the photolysis contract requires.
-    std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/chapman.yml";
+    std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/" + species_fixture;
     assert(file_exists(species_config) && "ERROR: Could not find the chapman mechanism fixture!");
     state->load_species_config(species_config);
     std::vector<double> conc_data(n_cols * n_levels * n_species, 1.0); // 1.0 ppmv initially
+    // Molecular nitrogen, where the mechanism solves for it, starts at its
+    // atmospheric mixing ratio rather than 1 ppmv.
+    const auto n2 = state->chemistry().species_name_to_index.find("N2");
+    if (n2 != state->chemistry().species_name_to_index.end()) {
+        std::fill_n(conc_data.begin() + n2->second * n_cols * n_levels, n_cols * n_levels, 7.8084e5);
+    }
     state->bind_unified_chemistry(conc_data.data());
 
     // 3. Resolve configs explicitly using configured header
@@ -411,30 +417,20 @@ static void test_invalid_gaschem_option(const std::string& v1_file, const std::s
     std::cout << "SUCCESS: Invalid option rejected at init: " << option_line << std::endl;
 }
 
-// MICM variables are resolved to CATChem species through the mechanism
-// definition: case-insensitively, through aliases, and at most one MICM
-// variable per CATChem species.
-static void run_species_resolution_suite(const std::string& v1_file) {
-    // 1. A species list in mixed case, with one species reachable only through an
-    // alias, maps the same four species and so solves bit-for-bit like chapman.yml.
-    const auto conc_reference = run_multi_column_batch_case("species resolution reference", v1_file, 4, 4);
-    BatchCaseOptions renamed;
-    renamed.species_fixture = "chapman_alias_mixed_case.yml";
-    const auto conc_renamed = run_multi_column_batch_case("mixed-case names and an alias", v1_file, 4, 4, renamed);
-    assert(conc_renamed == conc_reference &&
-           "Species resolved by case-insensitive name or alias must solve bit-for-bit like exact names");
-
-    // 2. Two MICM variables resolving to one CATChem species is a configuration error.
-    auto core = std::make_shared<catchem::Core>(2, 3, 3);
+// Initializes gaschem alone for one mechanism and species fixture and returns
+// the std::invalid_argument message it raised, or an empty string if
+// initialization succeeded.
+static std::string gaschem_init_error(const std::string& config_key, const std::string& config_value,
+                                      const std::string& species_fixture, int n_species) {
+    auto core = std::make_shared<catchem::Core>(2, 3, n_species);
     auto state = core->get_state_manager();
-    state->load_species_config(std::string(catchem::test::TEST_DIR) +
-                               "/fixtures/mechanisms/chapman_duplicate_alias.yml");
-    const std::string temp_config = "test_gaschem_duplicate_mapping.yml";
+    state->load_species_config(std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/" + species_fixture);
+    const std::string temp_config = "test_gaschem_init_error.yml";
     std::ofstream conf_writer(temp_config);
     conf_writer << "processes:\n";
     conf_writer << "  gaschem:\n";
     conf_writer << "    activate: true\n";
-    conf_writer << "    config_dir: \"" << v1_file << "\"\n";
+    conf_writer << "    " << config_key << ": \"" << config_value << "\"\n";
     conf_writer.close();
     state->set_configuration_path(temp_config);
     if (state->config_manager()) {
@@ -448,18 +444,55 @@ static void run_species_resolution_suite(const std::string& v1_file) {
         message = error.what();
     }
     std::remove(temp_config.c_str());
+    return message;
+}
+
+// Asserts that an initialization error was raised and contains every fragment.
+static void expect_init_error(const std::string& what, const std::string& message,
+                              const std::vector<std::string>& fragments) {
     if (message.empty()) {
-        std::cerr << "Duplicate species mapping was not rejected at init." << std::endl;
+        std::cerr << "Not rejected at init: " << what << std::endl;
     }
-    assert(!message.empty() && "Two MICM variables mapping to one CATChem species must fail initialization");
-    for (const char* part : {"O and O1D", "both resolve to CATChem species o"}) {
-        const bool found = message.find(part) != std::string::npos;
+    assert(!message.empty() && "gaschem initialization must be refused");
+    for (const auto& fragment : fragments) {
+        const bool found = message.find(fragment) != std::string::npos;
         if (!found) {
-            std::cerr << "Duplicate-mapping message is missing \"" << part << "\": " << message << std::endl;
+            std::cerr << what << ": message is missing \"" << fragment << "\": " << message << std::endl;
         }
-        assert(found && "Duplicate-mapping message must name both MICM variables and the CATChem species");
+        assert(found && "gaschem initialization error must contain every expected fragment");
     }
-    std::cout << "SUCCESS: Duplicate species mapping rejected at init -> " << message << std::endl;
+    std::cout << "SUCCESS: " << what << " rejected at init -> " << message << std::endl;
+}
+
+// MICM variables are resolved to CATChem species through the mechanism
+// definition: case-insensitively, through aliases, at most one MICM variable
+// per CATChem species, and with no MICM variable left without one.
+static void run_species_resolution_suite(const std::string& v1_file, const std::string& v1_mechanism_file) {
+    // 1. A species list in mixed case, with one species reachable only through an
+    // alias, maps the same four species and so solves bit-for-bit like chapman.yml.
+    const auto conc_reference = run_multi_column_batch_case("species resolution reference", v1_file, 4, 4);
+    BatchCaseOptions renamed;
+    renamed.species_fixture = "chapman_alias_mixed_case.yml";
+    const auto conc_renamed = run_multi_column_batch_case("mixed-case names and an alias", v1_file, 4, 4, renamed);
+    assert(conc_renamed == conc_reference &&
+           "Species resolved by case-insensitive name or alias must solve bit-for-bit like exact names");
+
+    // 2. Two MICM variables resolving to one CATChem species is a configuration error.
+    expect_init_error("Duplicate species mapping",
+                      gaschem_init_error("config_dir", v1_file, "chapman_duplicate_alias.yml", 3),
+                      {"O and O1D", "both resolve to CATChem species o"});
+
+    // 3. Every MICM variable must be in the species list. MICM solves for all of
+    // them, and with a state reused across column batches an unsupplied one would
+    // start from another column's result. The v0 mechanism solves for O.
+    expect_init_error("Species list without atomic oxygen (v0 mechanism)",
+                      gaschem_init_error("config_dir", v1_file, "chapman_without_o.yml", 3),
+                      {"missing from the CATChem species list: O.", "is_advected: false"});
+
+    // 4. The v1 mechanism also solves for N2, which chapman.yml does not list.
+    expect_init_error("Species list without N2 (v1 mechanism)",
+                      gaschem_init_error("config_file", v1_mechanism_file, "chapman.yml", 4),
+                      {"missing from the CATChem species list: N2.", "is_advected: false"});
 }
 
 // processes/gaschem/negative_concentration_policy: reject (default) throws on a
@@ -611,16 +644,17 @@ int main(int argc, char* argv[]) {
                "ERROR: Could not find gaschem v0 config dir explicitly!");
         run_coupled_case("v0 CAMP directory", "config_dir", v0_dir);
 
-        // Case B: MUSICA v1 single-file mechanism passed via the new config_file key.
+        // Case B: MUSICA v1 single-file mechanism passed via the new config_file key. The v1
+        // mechanism solves for N2 as well, so cases B and C use a species list that includes it.
         std::string v1_file =
             std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/config.yaml";
         assert(file_exists(v1_file) && "ERROR: Could not find gaschem v1 config file explicitly!");
-        run_coupled_case("v1 single file (config_file)", "config_file", v1_file);
+        run_coupled_case("v1 single file (config_file)", "config_file", v1_file, "chapman_v1.yml", 5);
 
         // Case C: v1 mechanism directory exercising config.yaml auto-detection.
         std::string v1_dir = std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/";
         assert(file_exists(v1_dir + "config.yaml") && "ERROR: Could not find gaschem v1 config dir explicitly!");
-        run_coupled_case("v1 directory (config.yaml auto-detect)", "config_dir", v1_dir);
+        run_coupled_case("v1 directory (config.yaml auto-detect)", "config_dir", v1_dir, "chapman_v1.yml", 5);
 
         // Case D: Multi-column batching suite across batch sizes (1, 2, 4, 6) and invalid batch rejection.
         run_multi_column_batch_suite(v0_dir);
@@ -629,7 +663,7 @@ int main(int argc, char* argv[]) {
         run_negative_concentration_policy_suite(v0_dir);
 
         // Case F: species resolution through the mechanism definition (case, aliases, duplicates).
-        run_species_resolution_suite(v0_dir);
+        run_species_resolution_suite(v0_dir, v1_file);
 
         std::cout << "\n==========================================" << std::endl;
         std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy, "

@@ -46,8 +46,6 @@ namespace catchem {
         std::size_t n_micm_species_ = 0;
         std::size_t n_rate_params_ = 0;
         std::vector<SpeciesMapping> species_mappings_;
-        // MICM variables that no CATChem species or alias resolves to, sorted by name.
-        std::vector<std::string> unmapped_micm_species_;
         std::vector<RateParamMapping> rate_param_mappings_;
         std::unique_ptr<musica::MICM> micm_instance_;
         std::unique_ptr<musica::State> micm_state_;
