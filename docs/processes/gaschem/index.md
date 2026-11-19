@@ -135,14 +135,23 @@ PET-local location:
 GasChem received a negative or non-finite concentration (-1.000000e-12) for O at column=4, level=2, batch=1 (zero-based indices)
 ```
 
-Under `clamp`, each PET logs one warning the first time it floors a value, with the
-number of cells and the most negative value and where it was. Later timesteps log the
-same line at debug level, and `finalize` logs the totals since `init`:
+Under `clamp`, each PET logs up to two warnings: one the first time it floors an
+input from the host, and one the first time it floors an output from the solver. The
+two are tracked separately because a negative from the solver is a different problem
+from noise in the host's tracers, and an earlier input warning must not hide it. The
+`first_occurrence` field says which the line is for (`inputs`, `solver_outputs`, or
+`inputs,solver_outputs` when both first happen on the same timestep). Each line gives
+the number of cells and the most negative value and where it was. Later timesteps log
+the same line at debug level with `first_occurrence=none`, and `finalize` logs the
+totals since `init`:
 
 ```text
-[WARN ] GasChemProcess: floored negative concentrations to zero | inputs_floored=1 min_input=-1.000000e-12 min_input_species=O min_input_column=4 min_input_level=2 outputs_floored=0 min_output=0.000000e+00 min_output_species=none min_output_column=-1 min_output_level=-1
+[WARN ] GasChemProcess: floored negative concentrations to zero | first_occurrence=inputs inputs_floored=1 min_input=-1.000000e-12 min_input_species=O min_input_column=4 min_input_level=2 outputs_floored=0 min_output=0.000000e+00 min_output_species=none min_output_column=-1 min_output_level=-1
 [INFO ] GasChemProcess: negative concentrations floored to zero since init | inputs_floored=1 min_input=-1.000000e-12 outputs_floored=0 min_output=0.000000e+00
 ```
+
+The counters and minima are updated on every timestep whatever the log level. The
+per-timestep line is only formatted when it will be written.
 
 Flooring adds mass equal to the sum of the floored values. Check `min_input` after
 enabling `clamp`: values near machine noise are expected, while a large negative
@@ -171,4 +180,9 @@ Runs a coupled multi-level atmospheric column simulation containing both the C++
 The same target runs a six-column case across `columns_per_batch` values of 1, 2, 4,
 and 6, and a `negative_concentration_policy` suite: `reject` throws with the value and
 location in the message, `clamp` solves bit-for-bit like a zero input and counts each
-floored cell once, and neither accepts NaN or a non-physical temperature.
+floored cell once, and neither accepts NaN or a non-physical temperature. A further
+suite runs three timesteps and checks that floored inputs and floored solver outputs
+are each warned about once, that the counters do not depend on the log level, and that
+`reject` stops on a negative from the solver. The Chapman mechanism never returns a
+negative, so these cases use a `GasChemProcess` subclass that overrides the protected
+`adjust_solver_output_for_testing` hook, which does nothing in the process itself.

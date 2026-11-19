@@ -41,7 +41,11 @@ namespace catchem {
         std::size_t negative_outputs_clamped_ = 0;
         double min_negative_input_ = 0.0;
         double min_negative_output_ = 0.0;
-        bool clamp_warning_issued_ = false;
+        // Whether this PET has already warned about a floored input and about a
+        // floored solver output. Kept apart so that an early warning about host
+        // noise cannot hide a later negative from the solver.
+        bool input_clamp_warned_ = false;
+        bool output_clamp_warned_ = false;
         std::size_t vector_size_ = 1;
         std::size_t n_micm_species_ = 0;
         std::size_t n_rate_params_ = 0;
@@ -63,10 +67,21 @@ namespace catchem {
         std::size_t negative_inputs_clamped() const noexcept { return negative_inputs_clamped_; }
         std::size_t negative_outputs_clamped() const noexcept { return negative_outputs_clamped_; }
         double min_negative_input() const noexcept { return min_negative_input_; }
+        double min_negative_output() const noexcept { return min_negative_output_; }
+        bool input_clamp_warned() const noexcept { return input_clamp_warned_; }
+        bool output_clamp_warned() const noexcept { return output_clamp_warned_; }
 
         void init(std::shared_ptr<StateManager> state) override;
         void run(std::shared_ptr<StateManager> state) override;
         void finalize() override;
+
+    protected:
+        // Test seam. run() calls this once per batch, after a solve that converged
+        // and before the solver-output guard, with the MICM concentration array
+        // (mol/m3, MICM ordering, padding cells included). It does nothing here.
+        // A test overrides it to make the solver return a negative value, which
+        // the mechanisms in the test suite never do on their own.
+        virtual void adjust_solver_output_for_testing(std::vector<double>& /*concentrations*/, int /*batch*/) {}
     };
 
 } // namespace catchem

@@ -1,6 +1,7 @@
 #include "catchem_api.hpp"
 #include "catchem_core.hpp"
 #include "catchem_diagnostic_manager.hpp"
+#include "catchem_logger.hpp"
 #include "catchem_process_gaschem.hpp"
 #include "catchem_process_registry.hpp"
 #include "catchem_state_manager.hpp"
@@ -11,11 +12,15 @@
 #include <cmath>
 #include <filesystem>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <optional>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 extern "C" {
@@ -150,6 +155,13 @@ struct CellValue {
     double value;
 };
 
+// What a scripted case can reach after its first timestep.
+struct BatchCaseRun {
+    catchem::Core& core;
+    catchem::StateManager& state;
+    catchem::GasChemProcess& gaschem;
+};
+
 // Departures from the baseline multi-column case, used by the guard and
 // negative_concentration_policy tests.
 struct BatchCaseOptions {
@@ -165,6 +177,13 @@ struct BatchCaseOptions {
     // The timestep must throw, and the error must contain every fragment.
     bool expect_failure = false;
     std::vector<std::string> expected_message_parts;
+    // Builds the gaschem process; the registry builds it when this is empty. A
+    // case uses it to run a GasChemProcess subclass that overrides the
+    // solver-output test seam.
+    std::function<std::shared_ptr<catchem::GasChemProcess>()> make_gaschem;
+    // Called after the first timestep and before the final checks, to inspect
+    // the process, change inputs, and run further timesteps.
+    std::function<void(BatchCaseRun&)> after_first_step;
 };
 
 // What GasChemProcess floored to zero during a case.
@@ -172,6 +191,7 @@ struct ClampStats {
     std::size_t inputs = 0;
     std::size_t outputs = 0;
     double min_input = 0.0;
+    double min_output = 0.0;
 };
 
 // Runs a multi-column (n_cols = 6, n_levels = 3, n_species = 4) coupled
@@ -309,7 +329,12 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
         core->add_process(photolysis_proc);
     }
 
-    auto gaschem_proc = catchem::ProcessRegistry::get_instance().create("gaschem");
+    std::shared_ptr<catchem::ProcessInterface> gaschem_proc;
+    if (options.make_gaschem) {
+        gaschem_proc = options.make_gaschem();
+    } else {
+        gaschem_proc = catchem::ProcessRegistry::get_instance().create("gaschem");
+    }
     gaschem_proc->init(state);
     core->add_process(gaschem_proc);
 
@@ -328,7 +353,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
             message = error.what();
         }
         std::remove(temp_config.c_str());
-        assert(!message.empty() && "A rejected gaschem input must raise std::domain_error");
+        assert(!message.empty() && "A rejected gaschem concentration must raise std::domain_error");
         for (const auto& part : options.expected_message_parts) {
             const bool found = message.find(part) != std::string::npos;
             if (!found) {
@@ -341,11 +366,16 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
     }
 
     core->run_timestep(3600.0);
+    if (options.after_first_step) {
+        BatchCaseRun run{*core, *state, *gaschem_typed};
+        options.after_first_step(run);
+    }
     state->sync_to_host();
     if (stats != nullptr) {
         stats->inputs = gaschem_typed->negative_inputs_clamped();
         stats->outputs = gaschem_typed->negative_outputs_clamped();
         stats->min_input = gaschem_typed->min_negative_input();
+        stats->min_output = gaschem_typed->min_negative_output();
     }
 
     auto conc_view = state->chemistry().conc->host_view;
@@ -564,6 +594,216 @@ static void run_negative_concentration_policy_suite(const std::string& v1_file) 
     test_invalid_gaschem_option(v1_file, "negative_concentration_policy: bogus");
 }
 
+// GasChemProcess whose solver "returns" a negative concentration for every
+// cell of one batch on one run() call, through the test seam. The Chapman
+// mechanism never produces a negative on its own.
+class NegativeOutputGasChem : public catchem::GasChemProcess {
+public:
+    static constexpr double forced_mol_m3 = -1.0e-20;
+
+    // on_run counts run() calls from 1; in_batch is zero-based.
+    NegativeOutputGasChem(int on_run, int in_batch) : on_run_(on_run), in_batch_(in_batch) {}
+
+    void run(std::shared_ptr<catchem::StateManager> state) override {
+        ++run_count_;
+        catchem::GasChemProcess::run(std::move(state));
+    }
+
+protected:
+    void adjust_solver_output_for_testing(std::vector<double>& concentrations, int batch) override {
+        if (run_count_ == on_run_ && batch == in_batch_) {
+            std::fill(concentrations.begin(), concentrations.end(), forced_mol_m3);
+        }
+    }
+
+private:
+    int on_run_;
+    int in_batch_;
+    int run_count_ = 0;
+};
+
+// Holds everything written to std::clog, where Logger sends its debug, info and
+// warn lines, and passes it on when destroyed so the test log stays complete.
+class ClogCapture {
+public:
+    ClogCapture() : previous_(std::clog.rdbuf(buffer_.rdbuf())) {}
+    ~ClogCapture() {
+        std::clog.rdbuf(previous_);
+        std::clog << buffer_.str() << std::flush;
+    }
+    ClogCapture(const ClogCapture&) = delete;
+    ClogCapture& operator=(const ClogCapture&) = delete;
+
+    // Number of "floored negative concentrations to zero" lines at one level
+    // ("WARN" or "DEBUG") that also contain the fragment.
+    std::size_t floored_lines(const std::string& level, const std::string& fragment = "") const {
+        std::istringstream lines(buffer_.str());
+        std::string line;
+        std::size_t count = 0;
+        while (std::getline(lines, line)) {
+            if (line.find("floored negative concentrations to zero") != std::string::npos &&
+                line.find(level) != std::string::npos && line.find(fragment) != std::string::npos) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
+private:
+    std::ostringstream buffer_;
+    std::streambuf* previous_;
+};
+
+// What one run of the three-step clamp sequence left behind.
+struct ClampSequenceResult {
+    ClampStats stats;
+    std::vector<double> conc;
+    std::size_t warnings = 0;
+    std::size_t input_warnings = 0;
+    std::size_t output_warnings = 0;
+    std::size_t debug_lines = 0;
+};
+
+// Three timesteps under clamp at the given log level: a negative input on step
+// 1, a negative from the solver for all of batch 1 on step 2, and another
+// negative input on step 3. With columns_per_batch = 4, batch 1 holds columns 4
+// and 5 plus two padding columns.
+static ClampSequenceResult run_clamp_warning_sequence(const std::string& mechanism_dir, catchem::Logger::Level level,
+                                                      const std::string& label) {
+    constexpr int n_cols = 6;
+    constexpr int n_levels = 3;
+    constexpr int n_species = 4;
+    constexpr int o2 = 0;
+    constexpr int o_atom = 1;
+    constexpr double tiny_negative = -1.0e-12;
+    // The real cells of batch 1: columns 4 and 5, every level and species.
+    constexpr std::size_t cells_in_final_batch = 2 * n_levels * n_species;
+
+    BatchCaseOptions sequence;
+    sequence.negative_concentration_policy = "clamp";
+    sequence.conc_override = CellValue{4, 2, o_atom, tiny_negative};
+    sequence.make_gaschem = [] { return std::make_shared<NegativeOutputGasChem>(2, 1); };
+    sequence.after_first_step = [&](BatchCaseRun& run) {
+        // Step 1 floored one input and nothing from the solver.
+        assert(run.gaschem.input_clamp_warned() && "The first floored input must be warned about");
+        assert(!run.gaschem.output_clamp_warned() && "A floored input must not count as a solver-output warning");
+        assert(run.gaschem.negative_inputs_clamped() == 1 && run.gaschem.negative_outputs_clamped() == 0);
+
+        // Step 2: the solver returns negatives. They are floored, counted once
+        // per real cell, and written back as zero.
+        run.core.run_timestep(3600.0);
+        run.state.sync_to_host();
+        assert(run.gaschem.output_clamp_warned() && "The first floored solver output must be warned about");
+        assert(run.gaschem.negative_inputs_clamped() == 1 && "Step 2 had no negative input");
+        if (run.gaschem.negative_outputs_clamped() != cells_in_final_batch) {
+            std::cerr << "outputs floored: " << run.gaschem.negative_outputs_clamped() << std::endl;
+        }
+        assert(run.gaschem.negative_outputs_clamped() == cells_in_final_batch &&
+               "Every real cell of the batch must be counted once, and no padding cell");
+        assert(run.gaschem.min_negative_output() < 0.0 && run.gaschem.min_negative_output() > -1.0e-12 &&
+               "The most negative floored solver output must be recorded in ppmv");
+        auto conc = run.state.chemistry().conc->host_view;
+        for (int icol = 0; icol < n_cols; ++icol) {
+            for (int ilev = 0; ilev < n_levels; ++ilev) {
+                if (icol < 4) {
+                    assert(conc(icol, ilev, o2) > 0.0 && "Batch 0 must keep its own solver results");
+                    continue;
+                }
+                for (int ispec = 0; ispec < n_species; ++ispec) {
+                    assert(conc(icol, ilev, ispec) == 0.0 && "A floored solver output must be written as zero");
+                }
+            }
+        }
+
+        // Step 3: a floored input in batch 0. Both warnings are already out.
+        run.state.chemistry().conc->host_write();
+        conc(0, 1, o_atom) = tiny_negative;
+        run.core.run_timestep(3600.0);
+        assert(run.gaschem.input_clamp_warned() && run.gaschem.output_clamp_warned());
+        assert(run.gaschem.negative_inputs_clamped() == 2 && "The step 3 input must be counted");
+        assert(run.gaschem.negative_outputs_clamped() == cells_in_final_batch && "Step 3 had no negative output");
+    };
+
+    ClampSequenceResult result;
+    catchem::Logger::set_level(level);
+    {
+        ClogCapture log;
+        result.conc = run_multi_column_batch_case(label, mechanism_dir, 4, 4, sequence, &result.stats);
+        result.warnings = log.floored_lines("WARN");
+        result.input_warnings = log.floored_lines("WARN", "first_occurrence=inputs inputs_floored=1 ");
+        result.output_warnings = log.floored_lines("WARN", "first_occurrence=solver_outputs inputs_floored=0 ");
+        result.debug_lines = log.floored_lines("DEBUG", "first_occurrence=none ");
+    }
+    catchem::Logger::clear_level();
+    return result;
+}
+
+// Under clamp a PET warns once about floored inputs and once about floored
+// solver outputs, and what it counts does not depend on the log level. Under
+// reject a negative from the solver stops the run.
+static void run_clamp_warning_suite(const std::string& mechanism_dir) {
+    // 1. An input warning on step 1 does not silence the solver-output warning
+    // on step 2, and step 3 logs at debug only.
+    const auto with_debug =
+        run_clamp_warning_sequence(mechanism_dir, catchem::Logger::Level::Debug, "clamp warnings, debug logging on");
+    if (with_debug.warnings != 2 || with_debug.input_warnings != 1 || with_debug.output_warnings != 1 ||
+        with_debug.debug_lines != 1) {
+        std::cerr << "warnings=" << with_debug.warnings << " input_warnings=" << with_debug.input_warnings
+                  << " output_warnings=" << with_debug.output_warnings << " debug_lines=" << with_debug.debug_lines
+                  << std::endl;
+    }
+    assert(with_debug.warnings == 2 && "Exactly two warnings: one for inputs, one for solver outputs");
+    assert(with_debug.input_warnings == 1 && "Step 1 must warn about the floored input");
+    assert(with_debug.output_warnings == 1 && "Step 2 must warn about the floored solver outputs");
+    assert(with_debug.debug_lines == 1 && "Step 3 must log at debug, not warn again");
+
+    // 2. With debug logging off the same warnings appear, no debug line is
+    // written, and the counters, minima and concentrations are unchanged.
+    const auto without_debug =
+        run_clamp_warning_sequence(mechanism_dir, catchem::Logger::Level::Warn, "clamp warnings, debug logging off");
+    assert(without_debug.warnings == 2 && without_debug.input_warnings == 1 && without_debug.output_warnings == 1);
+    assert(without_debug.debug_lines == 0 && "No debug line may be written at warn level");
+    assert(without_debug.stats.inputs == with_debug.stats.inputs &&
+           without_debug.stats.outputs == with_debug.stats.outputs &&
+           without_debug.stats.min_input == with_debug.stats.min_input &&
+           without_debug.stats.min_output == with_debug.stats.min_output &&
+           "Clamp counters and minima must not depend on the log level");
+    assert(without_debug.conc == with_debug.conc && "Concentrations must not depend on the log level");
+    assert(with_debug.stats.inputs == 2 && with_debug.stats.min_input == -1.0e-12);
+
+    // 3. Inputs and solver outputs floored for the first time on the same step
+    // share one warning that names both.
+    BatchCaseOptions both_at_once;
+    both_at_once.negative_concentration_policy = "clamp";
+    both_at_once.conc_override = CellValue{4, 2, 1, -1.0e-12};
+    both_at_once.make_gaschem = [] { return std::make_shared<NegativeOutputGasChem>(1, 1); };
+    both_at_once.after_first_step = [](BatchCaseRun& run) {
+        assert(run.gaschem.input_clamp_warned() && run.gaschem.output_clamp_warned());
+    };
+    {
+        ClogCapture log;
+        run_multi_column_batch_case("clamp, input and solver output floored on one step", mechanism_dir, 4, 4,
+                                    both_at_once);
+        assert(log.floored_lines("WARN") == 1 &&
+               log.floored_lines("WARN", "first_occurrence=inputs,solver_outputs inputs_floored=1 ") == 1 &&
+               "One warning must name both inputs and solver outputs");
+    }
+
+    // 4. reject: a negative from the solver throws, with the value in ppmv and
+    // its location. Batch 1 starts at column 4; O2 is the first mapped species.
+    BatchCaseOptions rejected_output;
+    rejected_output.make_gaschem = [] { return std::make_shared<NegativeOutputGasChem>(1, 1); };
+    rejected_output.expect_failure = true;
+    rejected_output.expected_message_parts = {"GasChem solver returned a negative or non-finite concentration",
+                                              "(-2.",
+                                              "e-16)",
+                                              " for O2 ",
+                                              "column=4",
+                                              "level=0",
+                                              "batch=1"};
+    run_multi_column_batch_case("negative solver output rejected", mechanism_dir, 4, 4, rejected_output);
+}
+
 static void run_multi_column_batch_suite(const std::string& v1_file) {
     constexpr int n_cols = 6;
     constexpr int n_levels = 3;
@@ -665,9 +905,12 @@ int main(int argc, char* argv[]) {
         // Case F: species resolution through the mechanism definition (case, aliases, duplicates).
         run_species_resolution_suite(v0_dir, v1_file);
 
+        // Case G: separate clamp warnings for inputs and solver outputs, and the solver-output guard.
+        run_clamp_warning_suite(v0_dir);
+
         std::cout << "\n==========================================" << std::endl;
         std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy, "
-                     "species resolution)!"
+                     "species resolution, clamp warnings)!"
                   << std::endl;
         std::cout << "==========================================\n" << std::endl;
     }

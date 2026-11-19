@@ -140,7 +140,8 @@ namespace catchem {
         this->negative_outputs_clamped_ = 0;
         this->min_negative_input_ = 0.0;
         this->min_negative_output_ = 0.0;
-        this->clamp_warning_issued_ = false;
+        this->input_clamp_warned_ = false;
+        this->output_clamp_warned_ = false;
 
         if (this->config_dir_.empty()) {
             if (!state->configuration_path().empty()) {
@@ -430,6 +431,7 @@ namespace catchem {
                     std::to_string(batch_idx) + " (col_start=" + std::to_string(col_start) + ", col_count=" +
                     std::to_string(col_count) + "): " + micm::SolverStateToString(solver_result.state_));
             }
+            adjust_solver_output_for_testing(micm_concs, batch_idx);
 
             // 5. Convert output concentrations back: mol/m3 -> ppmv (valid columns only)
             for (int ilev = 0; ilev < nl; ++ilev) {
@@ -462,39 +464,54 @@ namespace catchem {
             }
         }
 
-        // 6. Report floored cells: a warning the first time on this PET and debug
-        // after that, so a long run does not log one line per PET per timestep.
+        // 6. Report floored cells. This PET warns once for inputs and once for
+        // solver outputs, the first time each is floored, and logs at debug after
+        // that, so a long run does not log one line per PET per timestep. A
+        // negative from the solver is a different problem from noise in the host's
+        // tracers, so an earlier input warning does not silence it.
         if (floored_inputs.count + floored_outputs.count > 0) {
             negative_inputs_clamped_ += floored_inputs.count;
             negative_outputs_clamped_ += floored_outputs.count;
             min_negative_input_ = std::min(min_negative_input_, floored_inputs.value);
             min_negative_output_ = std::min(min_negative_output_, floored_outputs.value);
 
-            const std::string inputs_floored = std::to_string(floored_inputs.count);
-            const std::string min_input = format_scientific(floored_inputs.value);
-            const std::string min_input_species = floored_inputs.species_name();
-            const std::string min_input_column = std::to_string(floored_inputs.column);
-            const std::string min_input_level = std::to_string(floored_inputs.level);
-            const std::string outputs_floored = std::to_string(floored_outputs.count);
-            const std::string min_output = format_scientific(floored_outputs.value);
-            const std::string min_output_species = floored_outputs.species_name();
-            const std::string min_output_column = std::to_string(floored_outputs.column);
-            const std::string min_output_level = std::to_string(floored_outputs.level);
-            const Logger::ContextList context = {{"inputs_floored", inputs_floored},
-                                                 {"min_input", min_input},
-                                                 {"min_input_species", min_input_species},
-                                                 {"min_input_column", min_input_column},
-                                                 {"min_input_level", min_input_level},
-                                                 {"outputs_floored", outputs_floored},
-                                                 {"min_output", min_output},
-                                                 {"min_output_species", min_output_species},
-                                                 {"min_output_column", min_output_column},
-                                                 {"min_output_level", min_output_level}};
-            if (!clamp_warning_issued_) {
-                Logger::warn(*state, "GasChemProcess: floored negative concentrations to zero", context);
-                clamp_warning_issued_ = true;
-            } else {
-                Logger::debug(*state, "GasChemProcess: floored negative concentrations to zero", context);
+            const bool first_input = floored_inputs.count > 0 && !input_clamp_warned_;
+            const bool first_output = floored_outputs.count > 0 && !output_clamp_warned_;
+            input_clamp_warned_ = input_clamp_warned_ || first_input;
+            output_clamp_warned_ = output_clamp_warned_ || first_output;
+            const bool warning_due = first_input || first_output;
+
+            // Format the context only when a line will be written.
+            if (warning_due || Logger::enabled(Logger::Level::Debug)) {
+                const std::string_view first_occurrence = first_input
+                                                              ? (first_output ? "inputs,solver_outputs" : "inputs")
+                                                              : (first_output ? "solver_outputs" : "none");
+                const std::string inputs_floored = std::to_string(floored_inputs.count);
+                const std::string min_input = format_scientific(floored_inputs.value);
+                const std::string min_input_species = floored_inputs.species_name();
+                const std::string min_input_column = std::to_string(floored_inputs.column);
+                const std::string min_input_level = std::to_string(floored_inputs.level);
+                const std::string outputs_floored = std::to_string(floored_outputs.count);
+                const std::string min_output = format_scientific(floored_outputs.value);
+                const std::string min_output_species = floored_outputs.species_name();
+                const std::string min_output_column = std::to_string(floored_outputs.column);
+                const std::string min_output_level = std::to_string(floored_outputs.level);
+                const Logger::ContextList context = {{"first_occurrence", first_occurrence},
+                                                     {"inputs_floored", inputs_floored},
+                                                     {"min_input", min_input},
+                                                     {"min_input_species", min_input_species},
+                                                     {"min_input_column", min_input_column},
+                                                     {"min_input_level", min_input_level},
+                                                     {"outputs_floored", outputs_floored},
+                                                     {"min_output", min_output},
+                                                     {"min_output_species", min_output_species},
+                                                     {"min_output_column", min_output_column},
+                                                     {"min_output_level", min_output_level}};
+                if (warning_due) {
+                    Logger::warn(*state, "GasChemProcess: floored negative concentrations to zero", context);
+                } else {
+                    Logger::debug(*state, "GasChemProcess: floored negative concentrations to zero", context);
+                }
             }
         }
 
