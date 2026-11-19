@@ -1,4 +1,5 @@
 #include "catchem_api.hpp"
+#include "catchem_config_manager.hpp"
 #include "catchem_core.hpp"
 #include "catchem_diagnostic_manager.hpp"
 #include "catchem_logger.hpp"
@@ -108,10 +109,10 @@ static void run_coupled_case(const std::string& label, const std::string& config
     std::ofstream main_conf_writer(temp_main_coupled_config);
     main_conf_writer << "process:\n";
     main_conf_writer << "  photolysis:\n";
-    main_conf_writer << "    active: true\n";
+    main_conf_writer << "    activate: true\n";
     main_conf_writer << "    config_file: \"" << photolysis_config << "\"\n";
     main_conf_writer << "  gaschem:\n";
-    main_conf_writer << "    active: true\n";
+    main_conf_writer << "    activate: true\n";
     main_conf_writer << "    " << config_key << ": \"" << config_value << "\"\n";
     main_conf_writer.close();
 
@@ -170,6 +171,8 @@ struct BatchCaseOptions {
     std::string species_fixture = "chapman.yml";
     // Written as processes/gaschem/negative_concentration_policy when not empty.
     std::string negative_concentration_policy;
+    // Top-level key of the process blocks: "processes", or the legacy "process".
+    std::string process_block = "processes";
     std::optional<CellValue> conc_override;
     std::optional<CellValue> temperature_override;
     // Photolysis runs before gaschem and would see a corrupted temperature first.
@@ -301,7 +304,7 @@ static std::vector<double> run_multi_column_batch_case(const std::string& label,
 
     std::string temp_config = "test_gaschem_batch_config.yml";
     std::ofstream conf_writer(temp_config);
-    conf_writer << "processes:\n";
+    conf_writer << options.process_block << ":\n";
     if (options.with_photolysis) {
         conf_writer << "  photolysis:\n";
         conf_writer << "    activate: true\n";
@@ -477,21 +480,22 @@ static std::string gaschem_init_error(const std::string& config_key, const std::
     return message;
 }
 
-// Asserts that an initialization error was raised and contains every fragment.
+// Asserts that a configuration error was raised and contains every fragment.
+// stage says where the error was expected, for the log.
 static void expect_init_error(const std::string& what, const std::string& message,
-                              const std::vector<std::string>& fragments) {
+                              const std::vector<std::string>& fragments, const std::string& stage = "at init") {
     if (message.empty()) {
-        std::cerr << "Not rejected at init: " << what << std::endl;
+        std::cerr << "Not rejected " << stage << ": " << what << std::endl;
     }
-    assert(!message.empty() && "gaschem initialization must be refused");
+    assert(!message.empty() && "the gaschem configuration must be refused");
     for (const auto& fragment : fragments) {
         const bool found = message.find(fragment) != std::string::npos;
         if (!found) {
             std::cerr << what << ": message is missing \"" << fragment << "\": " << message << std::endl;
         }
-        assert(found && "gaschem initialization error must contain every expected fragment");
+        assert(found && "gaschem configuration error must contain every expected fragment");
     }
-    std::cout << "SUCCESS: " << what << " rejected at init -> " << message << std::endl;
+    std::cout << "SUCCESS: " << what << " rejected " << stage << " -> " << message << std::endl;
 }
 
 // MICM variables are resolved to CATChem species through the mechanism
@@ -804,6 +808,132 @@ static void run_clamp_warning_suite(const std::string& mechanism_dir) {
     run_multi_column_batch_case("negative solver output rejected", mechanism_dir, 4, 4, rejected_output);
 }
 
+// Loads a runtime YAML whose gaschem block holds the given option lines and
+// returns the parsed gaschem ProcessConfig. block is "processes" or the legacy
+// "process".
+static catchem::ProcessConfig gaschem_process_config(const std::vector<std::string>& option_lines,
+                                                     const std::string& block = "processes") {
+    const std::string temp_config = "test_gaschem_settings.yml";
+    std::ofstream conf_writer(temp_config);
+    conf_writer << block << ":\n";
+    conf_writer << "  gaschem:\n";
+    conf_writer << "    activate: true\n";
+    for (const auto& line : option_lines) {
+        conf_writer << "    " << line << "\n";
+    }
+    conf_writer.close();
+    catchem::ConfigManager config;
+    config.load_from_file(temp_config);
+    std::remove(temp_config.c_str());
+    return config.data.processes.at("gaschem");
+}
+
+// The settings validator registered for gaschem must reject these option lines.
+static void expect_settings_rejected(const std::string& what, const std::vector<std::string>& option_lines,
+                                     const std::vector<std::string>& fragments) {
+    std::string message;
+    try {
+        catchem::ProcessRegistry::get_instance().validate_settings("gaschem", gaschem_process_config(option_lines));
+    } catch (const std::invalid_argument& error) {
+        message = error.what();
+    }
+    expect_init_error(what, message, fragments, "by the settings validator");
+}
+
+// Builds a Core from a runtime YAML that schedules gaschem with the given
+// option lines and a mechanism directory that does not exist, and returns the
+// message of the error that stops it.
+static std::string configured_core_error(const std::vector<std::string>& option_lines) {
+    const std::string temp_config = "test_gaschem_configured_core.yml";
+    std::ofstream conf_writer(temp_config);
+    conf_writer << "simulation:\n";
+    conf_writer << "  name: gaschem-settings\n";
+    conf_writer << "  species_filename: \"" << catchem::test::SOURCE_DIR
+                << "/tests/fixtures/platform_integrity_species.yml\"\n";
+    conf_writer << "  nx: 2\n  ny: 1\n  nz: 3\n  timestep: 60\n  nsteps: 1\n";
+    conf_writer << "grid:\n  number_of_levels: 3\n";
+    conf_writer << "diagnostics:\n  output:\n    enabled: false\n  collection:\n    enabled: false\n";
+    conf_writer << "run_phases:\n  chemistry:\n    processes: [gaschem]\n";
+    conf_writer << "processes:\n";
+    conf_writer << "  gaschem:\n";
+    conf_writer << "    activate: true\n";
+    conf_writer << "    config_dir: \"/nonexistent/mechanism/\"\n";
+    for (const auto& line : option_lines) {
+        conf_writer << "    " << line << "\n";
+    }
+    conf_writer.close();
+    std::string message;
+    try {
+        catchem::Core core(temp_config);
+    } catch (const std::exception& error) {
+        message = error.what();
+    }
+    std::remove(temp_config.c_str());
+    return message;
+}
+
+// gaschem options are read by GasChemProcess::parse_settings. It is registered
+// as the settings validator, which the core runs before init(), and init()
+// calls it again for a process that is initialized directly.
+static void run_settings_suite(const std::string& mechanism_dir) {
+    using Policy = catchem::GasChemSettings::NegativeConcentrationPolicy;
+    auto& registry = catchem::ProcessRegistry::get_instance();
+
+    // 1. Defaults, then every option set next to framework keys, which are not options.
+    const auto defaults = catchem::GasChemProcess::parse_settings(gaschem_process_config({}));
+    assert(defaults.config_file.empty() && defaults.config_dir.empty() && defaults.columns_per_batch == 1 &&
+           defaults.negative_concentration_policy == Policy::Reject && "gaschem option defaults");
+    const auto all_set = gaschem_process_config({"diagnostics: true", "diag_species: [o3]",
+                                                 "config_file: mechanism.yaml", "config_dir: mechanism/",
+                                                 "columns_per_batch: 8", "negative_concentration_policy: clamp"});
+    registry.validate_settings("gaschem", all_set);
+    const auto parsed = catchem::GasChemProcess::parse_settings(all_set);
+    assert(parsed.config_file == "mechanism.yaml" && parsed.config_dir == "mechanism/" &&
+           parsed.columns_per_batch == 8 && parsed.negative_concentration_policy == Policy::Clamp &&
+           "every gaschem option must be read from its key");
+
+    // 2. The registered validator rejects a bad value, a misspelt key and a nested block.
+    expect_settings_rejected("columns_per_batch: 0", {"columns_per_batch: 0"},
+                             {"columns_per_batch must be >= 1, got 0"});
+    expect_settings_rejected("columns_per_batch: many", {"columns_per_batch: many"},
+                             {"not an integer", "columns_per_batch = many"});
+    expect_settings_rejected("negative_concentration_policy: bogus", {"negative_concentration_policy: bogus"},
+                             {"negative_concentration_policy must be reject or clamp, got bogus"});
+    expect_settings_rejected(
+        "misspelt column_per_batch", {"column_per_batch: 4"},
+        {"Unknown option(s) for process 'gaschem': column_per_batch.",
+         "Accepted options: columns_per_batch, config_dir, config_file, negative_concentration_policy."});
+    expect_settings_rejected("nested solver block", {"solver:", "  rtol: 1.0e-6"},
+                             {"Unknown option(s) for process 'gaschem': solver/rtol."});
+
+    // 3. A process initialized directly, without the core, rejects an unknown key too.
+    test_invalid_gaschem_option(mechanism_dir, "column_per_batch: 4");
+
+    // 4. Both options take effect from a legacy top-level "process:" block: the
+    // harness asserts the batch size, and one floored input shows clamp is on.
+    BatchCaseOptions modern;
+    modern.negative_concentration_policy = "clamp";
+    modern.conc_override = CellValue{4, 2, 1, -1.0e-12};
+    BatchCaseOptions legacy = modern;
+    legacy.process_block = "process";
+    ClampStats modern_stats;
+    ClampStats legacy_stats;
+    const auto conc_modern =
+        run_multi_column_batch_case("processes: block", mechanism_dir, 4, 4, modern, &modern_stats);
+    const auto conc_legacy =
+        run_multi_column_batch_case("legacy process: block", mechanism_dir, 4, 4, legacy, &legacy_stats);
+    assert(modern_stats.inputs == 1 && legacy_stats.inputs == 1 && "clamp must be in effect from either block");
+    assert(conc_legacy == conc_modern && "The legacy process: block must solve bit-for-bit like processes:");
+
+    // 5. A Core built from the runtime YAML stops on the bad option. The
+    // mechanism directory does not exist, so the same configuration without the
+    // misspelt key gets as far as MICM and fails there instead.
+    expect_init_error("Core with a misspelt gaschem option", configured_core_error({"column_per_batch: 4"}),
+                      {"Unknown option(s) for process 'gaschem': column_per_batch."}, "before MICM is constructed");
+    expect_init_error("Core with a missing mechanism", configured_core_error({"columns_per_batch: 4"}),
+                      {"failed to initialize MICM"}, "by MICM");
+}
+
 static void run_multi_column_batch_suite(const std::string& v1_file) {
     constexpr int n_cols = 6;
     constexpr int n_levels = 3;
@@ -908,9 +1038,12 @@ int main(int argc, char* argv[]) {
         // Case G: separate clamp warnings for inputs and solver outputs, and the solver-output guard.
         run_clamp_warning_suite(v0_dir);
 
+        // Case H: option parsing and validation, unknown keys, and the legacy process: block.
+        run_settings_suite(v0_dir);
+
         std::cout << "\n==========================================" << std::endl;
         std::cout << "COUPLED INTEGRATION TESTS PASSED (v0 dir, v1 file, v1 auto-detect, batching, negative policy, "
-                     "species resolution, clamp warnings)!"
+                     "species resolution, clamp warnings, settings)!"
                   << std::endl;
         std::cout << "==========================================\n" << std::endl;
     }

@@ -5,6 +5,7 @@
 #include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include <algorithm>
+#include <array>
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
@@ -75,67 +76,88 @@ namespace catchem {
     GasChemProcess::GasChemProcess() = default;
     GasChemProcess::~GasChemProcess() = default;
 
-    void GasChemProcess::init(std::shared_ptr<StateManager> state) {
-        Logger::debug(*state, "GasChemProcess::init started");
+    GasChemSettings GasChemProcess::parse_settings(const ProcessConfig& config) {
+        static constexpr std::array<std::string_view, 4> accepted = {"columns_per_batch", "config_dir", "config_file",
+                                                                     "negative_concentration_policy"};
 
-        // 1. Resolve configuration path dynamically via ConfigManager. An explicit
-        // "config_file" selects a single-file MUSICA mechanism (v1 format) and takes
-        // precedence over the "config_dir" directory (v0 CAMP layout) fallback.
-        if (state->config_manager()) {
-            std::string file = state->config_manager()->get_string("processes/gaschem/config_file", "");
-            if (file.empty()) {
-                file = state->config_manager()->get_string("process/gaschem/config_file", "");
-            }
-            if (!file.empty()) {
-                this->config_file_ = file;
-            }
-
-            std::string dir = state->config_manager()->get_string("processes/gaschem/config_dir", "");
-            if (dir.empty()) {
-                dir = state->config_manager()->get_string("process/gaschem/config_dir", "");
-            }
-            if (!dir.empty()) {
-                this->config_dir_ = dir;
+        // Every gaschem option is a flat key, so a nested block is unknown too.
+        std::vector<std::string> unknown;
+        for (const auto& key : config.flat_option_keys()) {
+            if (std::find(accepted.begin(), accepted.end(), key) == accepted.end()) {
+                unknown.push_back(key);
             }
         }
-
-        int cols_per_batch = 1;
-        if (state->config_manager()) {
-            if (!state->config_manager()->get_string("processes/gaschem/columns_per_batch", "").empty()) {
-                cols_per_batch = state->config_manager()->get_int("processes/gaschem/columns_per_batch", 1);
-            } else if (!state->config_manager()->get_string("process/gaschem/columns_per_batch", "").empty()) {
-                cols_per_batch = state->config_manager()->get_int("process/gaschem/columns_per_batch", 1);
-            }
+        for (const auto& path : config.option_paths()) {
+            unknown.push_back(path);
         }
-        if (cols_per_batch < 1) {
+        if (!unknown.empty()) {
+            std::string accepted_names;
+            for (const auto& name : accepted) {
+                if (!accepted_names.empty()) {
+                    accepted_names += ", ";
+                }
+                accepted_names += name;
+            }
+            std::sort(unknown.begin(), unknown.end());
+            std::string unknown_names;
+            for (const auto& name : unknown) {
+                if (!unknown_names.empty()) {
+                    unknown_names += ", ";
+                }
+                unknown_names += name;
+            }
+            throw std::invalid_argument("Unknown option(s) for process 'gaschem': " + unknown_names +
+                                        ". Accepted options: " + accepted_names + ".");
+        }
+
+        GasChemSettings settings;
+        settings.config_file = config.get_string("config_file");
+        settings.config_dir = config.get_string("config_dir");
+
+        const int columns_per_batch = config.get_int("columns_per_batch", 1);
+        if (columns_per_batch < 1) {
             throw std::invalid_argument("GasChemProcess: columns_per_batch must be >= 1, got " +
-                                        std::to_string(cols_per_batch));
+                                        std::to_string(columns_per_batch));
         }
-        this->columns_per_batch_ = static_cast<std::size_t>(cols_per_batch);
+        settings.columns_per_batch = static_cast<std::size_t>(columns_per_batch);
 
         // Negative concentrations are rejected unless the run opts in to flooring
         // them. This key is separate from physical_validation/policy, which governs
         // meteorology, so a run can floor tracer noise from the host and still stop
         // on a bad temperature.
-        std::string negative_policy = "reject";
-        if (state->config_manager()) {
-            std::string configured =
-                state->config_manager()->get_string("processes/gaschem/negative_concentration_policy", "");
-            if (configured.empty()) {
-                configured = state->config_manager()->get_string("process/gaschem/negative_concentration_policy", "");
-            }
-            if (!configured.empty()) {
-                negative_policy = configured;
-            }
-        }
+        const std::string negative_policy = config.get_string("negative_concentration_policy", "reject");
         if (negative_policy == "reject") {
-            this->negative_concentration_policy_ = NegativeConcentrationPolicy::Reject;
+            settings.negative_concentration_policy = NegativeConcentrationPolicy::Reject;
         } else if (negative_policy == "clamp") {
-            this->negative_concentration_policy_ = NegativeConcentrationPolicy::Clamp;
+            settings.negative_concentration_policy = NegativeConcentrationPolicy::Clamp;
         } else {
             throw std::invalid_argument("GasChemProcess: negative_concentration_policy must be reject or clamp, got " +
                                         negative_policy);
         }
+        return settings;
+    }
+
+    void GasChemProcess::init(std::shared_ptr<StateManager> state) {
+        Logger::debug(*state, "GasChemProcess::init started");
+
+        // 1. Read the options. The core has already run parse_settings as the
+        // settings validator when it built this process from the runtime YAML;
+        // calling it here keeps the same checks in force when a test or driver
+        // initializes the process directly. A legacy top-level "process:" block
+        // is parsed into the same ProcessConfig, so it needs no separate lookup.
+        // An explicit config_file (single-file v1 mechanism) takes precedence
+        // over config_dir.
+        GasChemSettings settings;
+        if (const auto config = state->config_manager()) {
+            const auto configured = config->data.processes.find(get_name());
+            if (configured != config->data.processes.end()) {
+                settings = parse_settings(configured->second);
+            }
+        }
+        this->config_file_ = settings.config_file;
+        this->config_dir_ = settings.config_dir;
+        this->columns_per_batch_ = settings.columns_per_batch;
+        this->negative_concentration_policy_ = settings.negative_concentration_policy;
         this->negative_inputs_clamped_ = 0;
         this->negative_outputs_clamped_ = 0;
         this->min_negative_input_ = 0.0;
@@ -275,7 +297,8 @@ namespace catchem {
                      {{"column_count", std::to_string(state->column_count())},
                       {"level_count", std::to_string(state->level_count())},
                       {"columns_per_batch", std::to_string(columns_per_batch_)},
-                      {"negative_concentration_policy", negative_policy},
+                      {"negative_concentration_policy",
+                       negative_concentration_policy_ == NegativeConcentrationPolicy::Clamp ? "clamp" : "reject"},
                       {"micm_grid_cells", std::to_string(micm_state_->NumberOfGridCells())},
                       {"micm_species_count", std::to_string(micm_state_->NumberOfSpecies())},
                       {"mapped_species_count", std::to_string(species_mappings_.size())}});
@@ -535,6 +558,7 @@ namespace catchem {
 extern "C" {
 void catchem_register_gaschem_cpp() {
     catchem::ProcessRegistry::get_instance().register_process(
-        std::string(catchem::ProcessNames::GasChem), []() { return std::make_shared<catchem::GasChemProcess>(); });
+        std::string(catchem::ProcessNames::GasChem), []() { return std::make_shared<catchem::GasChemProcess>(); }, {},
+        [](const catchem::ProcessConfig& config) { (void)catchem::GasChemProcess::parse_settings(config); });
 }
 }

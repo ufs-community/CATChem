@@ -482,6 +482,7 @@ processes:
   # columns_per_batch * number_of_levels cells and solves local columns in batches.
   # negative_concentration_policy (default reject) throws on a negative concentration;
   # clamp floors it to zero and reports it. Independent of physical_validation.policy.
+  # These four are the only gaschem options; any other key fails initialization.
   # Species coverage: the species file must list every species of the MICM mechanism
   # (by name or alias), or initialization fails. Use is_advected: false for species
   # the host should not transport.

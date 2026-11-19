@@ -10,6 +10,7 @@
 #include <cassert>
 #include <cctype>
 #include <cmath>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -112,6 +113,42 @@ void CatchemPropertiesTest_RobustMetDerivations() {
     assert(bxheight_data[0] == 0.0);
 
     std::cout << "=== PASS: CatchemPropertiesTest.RobustMetDerivations ===" << std::endl;
+}
+
+// ProcessConfig reports nested scheme options and flat options separately, and
+// leaves framework keys out of both.
+void CatchemPropertiesTest_ProcessConfigOptionListings() {
+    std::cout << "=== Running CatchemPropertiesTest.ProcessConfigOptionListings ===" << std::endl;
+    const std::string temp_config = "test_process_config_option_listings.yml";
+    {
+        std::ofstream writer(temp_config);
+        writer << "processes:\n"
+               << "  example:\n"
+               << "    activate: true\n"
+               << "    diagnostics: true\n"
+               << "    scheme: first\n"
+               << "    diag_species: [a, b]\n"
+               << "    flat_scalar: 4\n"
+               << "    flat_list: [1, 2]\n"
+               << "    first:\n"
+               << "      alpha: 1.0\n"
+               << "      beta: 2.0\n"
+               << "  bare:\n"
+               << "    activate: true\n";
+    }
+    catchem::ConfigManager config_mgr;
+    config_mgr.load_from_file(temp_config);
+    std::remove(temp_config.c_str());
+
+    const auto& example = config_mgr.data.processes.at("example");
+    assert((example.flat_option_keys() == std::vector<std::string>{"flat_scalar", "flat_list"}));
+    assert((example.option_paths() == std::vector<std::string>{"first/alpha", "first/beta"}));
+
+    const auto& bare = config_mgr.data.processes.at("bare");
+    assert(bare.flat_option_keys().empty() && bare.option_paths().empty());
+    assert(catchem::ProcessConfig{}.flat_option_keys().empty());
+
+    std::cout << "=== PASS: CatchemPropertiesTest.ProcessConfigOptionListings ===" << std::endl;
 }
 
 void CatchemPropertiesTest_ConfigManagerParsesRunPhases() {
@@ -672,6 +709,7 @@ int main(int argc, char* argv[]) {
         CatchemPropertiesTest_GridAndDimensions();
         CatchemPropertiesTest_TimeStateCalculations();
         CatchemPropertiesTest_SpeciesMetadataAPI();
+        CatchemPropertiesTest_ProcessConfigOptionListings();
         CatchemPropertiesTest_ConfigManagerParsesRunPhases();
         CatchemPropertiesTest_ConfigManagerTypedQueries();
         CatchemPropertiesTest_ConfigManagerHandlesScalarAndMissingNodes();

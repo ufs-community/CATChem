@@ -10,6 +10,21 @@
 
 namespace catchem {
 
+    // The options accepted under processes/gaschem in the runtime YAML, as
+    // returned by GasChemProcess::parse_settings.
+    struct GasChemSettings {
+        // What run() does with a negative concentration, on input from the host
+        // or on output from the solver. Non-finite values throw under both.
+        enum class NegativeConcentrationPolicy { Reject, Clamp };
+
+        // Single-file MUSICA mechanism (v1 format). Takes precedence over config_dir.
+        std::string config_file;
+        // Mechanism directory: a v0 CAMP layout, or one holding config.yaml.
+        std::string config_dir;
+        std::size_t columns_per_batch = 1;
+        NegativeConcentrationPolicy negative_concentration_policy = NegativeConcentrationPolicy::Reject;
+    };
+
     class GasChemProcess : public ProcessInterface {
     private:
         struct SpeciesMapping {
@@ -26,9 +41,7 @@ namespace catchem {
             std::string diag_name;
         };
 
-        // What run() does with a negative concentration, on input from the host
-        // or on output from the solver. Non-finite values throw under both.
-        enum class NegativeConcentrationPolicy { Reject, Clamp };
+        using NegativeConcentrationPolicy = GasChemSettings::NegativeConcentrationPolicy;
 
         std::string config_dir_;
         // Optional explicit single-file MUSICA mechanism (v1 format). When set, it
@@ -61,6 +74,13 @@ namespace catchem {
 
         std::string get_name() const override { return std::string(ProcessNames::GasChem); }
         ProcessContract get_contract() const override;
+
+        // Reads and checks the gaschem options. Throws std::invalid_argument for
+        // an option that is not one of the four in GasChemSettings, for
+        // columns_per_batch below 1, and for a negative_concentration_policy
+        // other than reject or clamp. Registered as the settings validator, so
+        // the core runs it before init(), and called again by init().
+        static GasChemSettings parse_settings(const ProcessConfig& config);
 
         std::size_t columns_per_batch() const noexcept { return columns_per_batch_; }
         std::size_t micm_grid_cell_count() const { return micm_state_ ? micm_state_->NumberOfGridCells() : 0; }

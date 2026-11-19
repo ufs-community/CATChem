@@ -308,7 +308,9 @@ processes:
 | `negative_concentration_policy` | `reject` | `reject` throws on a negative concentration; `clamp` floors it to zero and reports it. |
 
 An invalid `columns_per_batch` or `negative_concentration_policy` fails
-initialization. `negative_concentration_policy` is independent of
+initialization, and so does any key under `gaschem` other than these four and the
+framework keys (`activate`, `diagnostics`, `diag_species`), so a misspelt option is
+reported instead of silently ignored. `negative_concentration_policy` is independent of
 `physical_validation.policy`: non-finite concentrations and non-physical
 temperature, pressure, or air density stop the run under either value. See the
 [gaschem process page](../processes/gaschem/index.md) for the log lines and the

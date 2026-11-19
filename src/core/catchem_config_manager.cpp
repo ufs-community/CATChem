@@ -289,11 +289,18 @@ namespace catchem {
         return values;
     }
 
-    std::vector<std::string> ProcessConfig::option_paths() const {
+    namespace {
         // Keys the process layer consumes directly; they are not scheme
         // tuning options and must not appear in the validator schema.
-        static const std::set<std::string> framework_keys = {"activate",   "diagnostics", "scheme",
-                                                             "gas_scheme", "aero_scheme", "diag_species"};
+        const std::set<std::string>& process_framework_keys() {
+            static const std::set<std::string> keys = {"activate",   "diagnostics", "scheme",
+                                                       "gas_scheme", "aero_scheme", "diag_species"};
+            return keys;
+        }
+    } // namespace
+
+    std::vector<std::string> ProcessConfig::option_paths() const {
+        const auto& framework_keys = process_framework_keys();
         std::vector<std::string> paths;
         if (!settings_node_.IsDefined() || !settings_node_.IsMap())
             return paths;
@@ -312,6 +319,21 @@ namespace catchem {
             }
         }
         return paths;
+    }
+
+    std::vector<std::string> ProcessConfig::flat_option_keys() const {
+        const auto& framework_keys = process_framework_keys();
+        std::vector<std::string> keys;
+        if (!settings_node_.IsDefined() || !settings_node_.IsMap())
+            return keys;
+        for (const auto& entry : settings_node_) {
+            const std::string key = entry.first.as<std::string>();
+            // Nested blocks are reported by option_paths().
+            if (framework_keys.count(key) || entry.second.IsMap())
+                continue;
+            keys.push_back(key);
+        }
+        return keys;
     }
 
     bool ConfigManager::get_bool(std::string_view path, bool default_val) const {

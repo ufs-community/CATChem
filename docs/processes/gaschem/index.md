@@ -69,6 +69,19 @@ packed into the reusable `musica::State` per `Solve()` call.
 `negative_concentration_policy` (optional, default `reject`) selects what happens to a
 negative concentration; see the next section.
 
+These four are the only options. Any other key under `gaschem`, including a misspelt
+one such as `column_per_batch` or a nested block, stops the run at start-up with the
+accepted names listed, as does an out-of-range value. The framework keys `activate`,
+`diagnostics` and `diag_species` are not options and are always allowed. The check
+runs before MICM is constructed: `GasChemProcess::parse_settings` is registered as the
+process's settings validator, and `init()` calls the same function, so a process that
+is initialized directly is checked as well. A legacy top-level `process:` block is
+read the same way as `processes:`.
+
+```text
+Unknown option(s) for process 'gaschem': column_per_batch. Accepted options: columns_per_batch, config_dir, config_file, negative_concentration_policy.
+```
+
 ```yaml
 processes:
   gaschem:
@@ -186,3 +199,6 @@ are each warned about once, that the counters do not depend on the log level, an
 `reject` stops on a negative from the solver. The Chapman mechanism never returns a
 negative, so these cases use a `GasChemProcess` subclass that overrides the protected
 `adjust_solver_output_for_testing` hook, which does nothing in the process itself.
+A settings suite checks the option parser through the registered validator, through a
+directly initialized process, through a legacy `process:` block, and through a `Core`
+built from a runtime YAML.
