@@ -49,7 +49,8 @@ namespace catchem {
         std::string config_file_;
         std::size_t columns_per_batch_ = 1;
         NegativeConcentrationPolicy negative_concentration_policy_ = NegativeConcentrationPolicy::Reject;
-        // Cells floored to zero since init(), and the most negative value seen.
+        // Values floored to zero since init(), counted once per species per grid
+        // cell, and the most negative value seen.
         std::size_t negative_inputs_clamped_ = 0;
         std::size_t negative_outputs_clamped_ = 0;
         double min_negative_input_ = 0.0;

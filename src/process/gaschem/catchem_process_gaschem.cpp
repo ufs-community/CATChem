@@ -424,7 +424,7 @@ namespace catchem {
                                 concentration_guard_message("GasChem received a negative or non-finite concentration",
                                                             ppmv_val, sp.name, icol, ilev, batch_idx));
                         if (ppmv_val < 0.0) {
-                            // Padding cells repeat the last valid column; count each real cell once.
+                            // Padding cells repeat the last valid column; count a value only in a real cell.
                             if (bcol < col_count) {
                                 floored_inputs.record(ppmv_val, sp.name, icol, ilev);
                             }
@@ -498,7 +498,7 @@ namespace catchem {
             }
         }
 
-        // 6. Report floored cells. This PET warns once for inputs and once for
+        // 6. Report floored values. This PET warns once for inputs and once for
         // solver outputs, the first time each is floored, and logs at debug after
         // that, so a long run does not log one line per PET per timestep. A
         // negative from the solver is a different problem from noise in the host's

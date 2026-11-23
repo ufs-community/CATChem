@@ -191,7 +191,7 @@ struct BatchCaseOptions {
     std::function<void(BatchCaseRun&)> after_first_step;
 };
 
-// What GasChemProcess reported after a case: the cells it floored to zero and
+// What GasChemProcess reported after a case: the values it floored to zero and
 // the relative tolerance its solver ran with.
 struct CaseStats {
     std::size_t inputs = 0;
@@ -593,7 +593,7 @@ static void run_negative_concentration_policy_suite(const std::string& mechanism
     const auto conc_negative =
         run_multi_column_batch_case("clamp, cell tiny negative", mechanism_dir, 4, 4, negative_cell, &negative_stats);
     assert(conc_negative == conc_zero && "A floored negative input must solve bit-for-bit like a zero input");
-    assert(negative_stats.inputs == 1 && "Exactly one input cell must be counted as floored");
+    assert(negative_stats.inputs == 1 && "Exactly one input value must be counted as floored");
     assert(negative_stats.min_input == tiny_negative && "The most negative floored input must be recorded");
     assert(negative_stats.outputs == 0 && "No solver output was negative in this case");
 
@@ -604,13 +604,13 @@ static void run_negative_concentration_policy_suite(const std::string& mechanism
     nan_cell.expected_message_parts = {input_guard, " for O ", "column=4", "level=2"};
     run_multi_column_batch_case("clamp, NaN input rejected", mechanism_dir, 4, 4, nan_cell);
 
-    // 4. clamp counts real cells only. Column 5 is the last valid column of the
+    // 4. clamp counts values in real cells only. Column 5 is the last valid column of the
     // short final batch, so its values are copied into the two padding columns.
     BatchCaseOptions padded_cell = negative_cell;
     padded_cell.conc_override = CellValue{5, 0, o_atom, tiny_negative};
     CaseStats padded_stats;
     run_multi_column_batch_case("clamp, negative in padded column", mechanism_dir, 4, 4, padded_cell, &padded_stats);
-    assert(padded_stats.inputs == 1 && "Padding copies of a floored cell must not be counted");
+    assert(padded_stats.inputs == 1 && "Padding copies of a floored value must not be counted");
 
     // 5. clamp does not relax gaschem's own meteorology check. The state manager
     // is left at its lenient legacy default here, so only gaschem can stop the run.
@@ -708,8 +708,8 @@ static ClampSequenceResult run_clamp_warning_sequence(const std::string& mechani
     constexpr int o2 = 0;
     constexpr int o_atom = 1;
     constexpr double tiny_negative = -1.0e-12;
-    // The real cells of batch 1: columns 4 and 5, every level and species.
-    constexpr std::size_t cells_in_final_batch = 2 * n_levels * n_species;
+    // The values in the real cells of batch 1: columns 4 and 5, every level and species.
+    constexpr std::size_t values_in_final_batch = 2 * n_levels * n_species;
 
     BatchCaseOptions sequence;
     sequence.negative_concentration_policy = "clamp";
@@ -721,17 +721,17 @@ static ClampSequenceResult run_clamp_warning_sequence(const std::string& mechani
         assert(!run.gaschem.output_clamp_warned() && "A floored input must not count as a solver-output warning");
         assert(run.gaschem.negative_inputs_clamped() == 1 && run.gaschem.negative_outputs_clamped() == 0);
 
-        // Step 2: the solver returns negatives. They are floored, counted once
-        // per real cell, and written back as zero.
+        // Step 2: the solver returns negatives. They are floored, each value in
+        // a real cell is counted once, and zero is written back.
         run.core.run_timestep(3600.0);
         run.state.sync_to_host();
         assert(run.gaschem.output_clamp_warned() && "The first floored solver output must be warned about");
         assert(run.gaschem.negative_inputs_clamped() == 1 && "Step 2 had no negative input");
-        if (run.gaschem.negative_outputs_clamped() != cells_in_final_batch) {
+        if (run.gaschem.negative_outputs_clamped() != values_in_final_batch) {
             std::cerr << "outputs floored: " << run.gaschem.negative_outputs_clamped() << std::endl;
         }
-        assert(run.gaschem.negative_outputs_clamped() == cells_in_final_batch &&
-               "Every real cell of the batch must be counted once, and no padding cell");
+        assert(run.gaschem.negative_outputs_clamped() == values_in_final_batch &&
+               "Every value in a real cell of the batch must be counted once, and none in a padding cell");
         assert(run.gaschem.min_negative_output() < 0.0 && run.gaschem.min_negative_output() > -1.0e-12 &&
                "The most negative floored solver output must be recorded in ppmv");
         auto conc = run.state.chemistry().conc->host_view;
@@ -753,7 +753,7 @@ static ClampSequenceResult run_clamp_warning_sequence(const std::string& mechani
         run.core.run_timestep(3600.0);
         assert(run.gaschem.input_clamp_warned() && run.gaschem.output_clamp_warned());
         assert(run.gaschem.negative_inputs_clamped() == 2 && "The step 3 input must be counted");
-        assert(run.gaschem.negative_outputs_clamped() == cells_in_final_batch && "Step 3 had no negative output");
+        assert(run.gaschem.negative_outputs_clamped() == values_in_final_batch && "Step 3 had no negative output");
     };
 
     ClampSequenceResult result;

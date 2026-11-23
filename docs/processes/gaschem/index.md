@@ -65,7 +65,9 @@ or as a **v0 CAMP multi-file directory** (`config_dir`). An explicit `config_fil
 always takes precedence; otherwise `config_dir` is probed for a `config.yaml` /
 `config.yml` v1 entry point before falling back to the v0 directory parse.
 `columns_per_batch` (optional, default `1`) controls how many vertical columns are
-packed into the reusable `musica::State` per `Solve()` call.
+packed into the reusable `musica::State` per `Solve()` call. Changing it can change
+results within the solver's tolerance, because MICM chooses its step size from all
+cells in a batch, so keep it fixed when results must reproduce.
 `negative_concentration_policy` (optional, default `reject`) selects what happens to a
 negative concentration; see the next section.
 
@@ -156,7 +158,9 @@ two are tracked separately because a negative from the solver is a different pro
 from noise in the host's tracers, and an earlier input warning must not hide it. The
 `first_occurrence` field says which the line is for (`inputs`, `solver_outputs`, or
 `inputs,solver_outputs` when both first happen on the same timestep). Each line gives
-the number of cells and the most negative value and where it was. Later timesteps log
+the number of values floored and the most negative value and where it was. The counts
+are of values, one per species per grid cell, so a cell with three negative species
+adds three. Later timesteps log
 the same line at debug level with `first_occurrence=none`, and `finalize` logs the
 totals since `init`:
 
@@ -183,7 +187,7 @@ We employ a strict Test-Driven Development (TDD) harness containing two robust v
 Verifies mathematical conversion reversibility and clamping safety across a wide physical envelope:
 *   Asserts that $(\text{ppmv} \rightarrow \text{mol/m}^3 \rightarrow \text{ppmv})$ is strictly identity-preserving ($< 1.0\times 10^{-15}$ relative tolerance).
 *   Validates conversion safety across a broad range of dry air densities ($0.5$ to $1.2\text{ kg/m}^3$) and mixing ratios ($10^{-6}$ to $100.0\text{ ppmv}$).
-*   Enforces concentration flooring of `1.0e-20` on negative out-of-bound inputs.
+*   Checks a standalone arithmetic guard that replaces a negative number with `1.0e-20`. This is a property of the test's own expression, not of the process: the process rejects a negative concentration by default and floors it to zero under `clamp`.
 
 ### 2. End-to-End Simulation Tests (`test_catchem_gaschem`)
 Runs a coupled multi-level atmospheric column simulation containing both the C++ `photolysis` and `gaschem` processes:
@@ -197,7 +201,7 @@ and 6 and requires every batch size to match the single-column result within ten
 the solver's own tolerances (its relative tolerance, plus the mechanism's declared
 absolute tolerance converted to ppmv). It also runs a `negative_concentration_policy` suite: `reject` throws with the value and
 location in the message, `clamp` solves bit-for-bit like a zero input and counts each
-floored cell once, and neither accepts NaN or a non-physical temperature. A further
+floored value once, and neither accepts NaN or a non-physical temperature. A further
 suite runs three timesteps and checks that floored inputs and floored solver outputs
 are each warned about once, that the counters do not depend on the log level, and that
 `reject` stops on a negative from the solver. The Chapman mechanism never returns a

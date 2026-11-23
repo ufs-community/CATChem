@@ -304,7 +304,7 @@ processes:
 |---|---|---|
 | `config_file` | none | MUSICA v1 single-file mechanism. Takes precedence over `config_dir`. |
 | `config_dir` | directory of the CATChem config | v0 CAMP mechanism directory, or a directory holding `config.yaml`. |
-| `columns_per_batch` | `1` | Columns packed into the reusable MICM state per solve. Must be at least 1. |
+| `columns_per_batch` | `1` | Columns packed into the reusable MICM state per solve. Must be at least 1. Changing it can change results within the solver's tolerance, because MICM chooses its step size from all cells in a batch. Keep it fixed when results must reproduce. |
 | `negative_concentration_policy` | `reject` | `reject` throws on a negative concentration; `clamp` floors it to zero and reports it. |
 
 An invalid `columns_per_batch` or `negative_concentration_policy` fails

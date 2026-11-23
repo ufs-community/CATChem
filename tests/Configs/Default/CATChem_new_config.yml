@@ -480,6 +480,8 @@ processes:
   # otherwise a config_dir holding config.yaml/config.yml auto-routes to the v1 parser.
   # columns_per_batch (default 1) sizes the reusable MICM state to
   # columns_per_batch * number_of_levels cells and solves local columns in batches.
+  # Changing it can change results within the solver's tolerance; keep it fixed
+  # when results must reproduce.
   # negative_concentration_policy (default reject) throws on a negative concentration;
   # clamp floors it to zero and reports it. Independent of physical_validation.policy.
   # These four are the only gaschem options; any other key fails initialization.
