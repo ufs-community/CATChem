@@ -920,7 +920,7 @@ static void run_settings_suite(const std::string& mechanism_dir) {
            parsed.columns_per_batch == 8 && parsed.negative_concentration_policy == Policy::Clamp &&
            "every gaschem option must be read from its key");
 
-    // 2. The registered validator rejects a bad value, a misspelt key and a nested block.
+    // 2. The registered validator rejects a bad value, a misspelt key and a nested block, empty or not.
     expect_settings_rejected("columns_per_batch: 0", {"columns_per_batch: 0"},
                              {"columns_per_batch must be >= 1, got 0"});
     expect_settings_rejected("columns_per_batch: many", {"columns_per_batch: many"},
@@ -933,6 +933,8 @@ static void run_settings_suite(const std::string& mechanism_dir) {
          "Accepted options: columns_per_batch, config_dir, config_file, negative_concentration_policy."});
     expect_settings_rejected("nested solver block", {"solver:", "  rtol: 1.0e-6"},
                              {"Unknown option(s) for process 'gaschem': solver/rtol."});
+    expect_settings_rejected("empty nested solver block", {"solver: {}"},
+                             {"Unknown option(s) for process 'gaschem': solver."});
 
     // 3. A process initialized directly, without the core, rejects an unknown key too.
     test_invalid_gaschem_option(mechanism_dir, "column_per_batch: 4");

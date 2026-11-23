@@ -119,15 +119,17 @@ namespace catchem {
         /// instead of silently keeping its compiled default.
         std::vector<std::string> option_paths() const;
 
-        /// @brief List every top-level option that is not a nested block.
+        /// @brief List every top-level key that option_paths() does not cover.
         ///
-        /// Framework keys are excluded, as in option_paths().  A process
-        /// whose options sit directly under processes/<name>, with no scheme
-        /// block, uses this in its settings validator to reject a misspelt
-        /// key.  option_paths() skips these entries on purpose, because
-        /// reference configurations still carry flat scalars from the retired
-        /// Fortran configuration path, so only a process that asks for this
-        /// list is checked against it.
+        /// That is every scalar, sequence and empty nested block.  Framework
+        /// keys are excluded, as in option_paths(), so every other key in the
+        /// block is covered by one listing or the other.  A process whose
+        /// options sit directly under processes/<name>, with no scheme block,
+        /// uses this in its settings validator to reject a misspelt key.
+        /// option_paths() skips these entries on purpose, because reference
+        /// configurations still carry flat scalars from the retired Fortran
+        /// configuration path, so only a process that asks for this list is
+        /// checked against it.
         std::vector<std::string> flat_option_keys() const;
     };
 

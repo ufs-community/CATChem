@@ -116,7 +116,8 @@ void CatchemPropertiesTest_RobustMetDerivations() {
 }
 
 // ProcessConfig reports nested scheme options and flat options separately, and
-// leaves framework keys out of both.
+// leaves framework keys out of both. An empty nested block has no options, so
+// it is reported as a flat key and no key goes unreported.
 void CatchemPropertiesTest_ProcessConfigOptionListings() {
     std::cout << "=== Running CatchemPropertiesTest.ProcessConfigOptionListings ===" << std::endl;
     const std::string temp_config = "test_process_config_option_listings.yml";
@@ -130,6 +131,7 @@ void CatchemPropertiesTest_ProcessConfigOptionListings() {
                << "    diag_species: [a, b]\n"
                << "    flat_scalar: 4\n"
                << "    flat_list: [1, 2]\n"
+               << "    empty_block: {}\n"
                << "    first:\n"
                << "      alpha: 1.0\n"
                << "      beta: 2.0\n"
@@ -141,7 +143,7 @@ void CatchemPropertiesTest_ProcessConfigOptionListings() {
     std::remove(temp_config.c_str());
 
     const auto& example = config_mgr.data.processes.at("example");
-    assert((example.flat_option_keys() == std::vector<std::string>{"flat_scalar", "flat_list"}));
+    assert((example.flat_option_keys() == std::vector<std::string>{"flat_scalar", "flat_list", "empty_block"}));
     assert((example.option_paths() == std::vector<std::string>{"first/alpha", "first/beta"}));
 
     const auto& bare = config_mgr.data.processes.at("bare");

@@ -328,8 +328,10 @@ namespace catchem {
             return keys;
         for (const auto& entry : settings_node_) {
             const std::string key = entry.first.as<std::string>();
-            // Nested blocks are reported by option_paths().
-            if (framework_keys.count(key) || entry.second.IsMap())
+            // A nested block with options is reported by option_paths().  An
+            // empty block has no options to report there, so it is listed
+            // here; otherwise neither listing would name it.
+            if (framework_keys.count(key) || (entry.second.IsMap() && entry.second.size() > 0))
                 continue;
             keys.push_back(key);
         }
