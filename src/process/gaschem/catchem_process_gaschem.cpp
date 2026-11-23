@@ -90,6 +90,17 @@ namespace catchem {
         for (const auto& path : config.option_paths()) {
             unknown.push_back(path);
         }
+        // gaschem has no scheme to select. The configuration layer treats the
+        // scheme selectors as framework keys for every process, so neither
+        // listing above reports them and they are checked here.
+        if (!config.scheme.empty()) {
+            unknown.emplace_back("scheme");
+        }
+        for (const char* selector : {"gas_scheme", "aero_scheme"}) {
+            if (!config.get_string(selector).empty()) {
+                unknown.emplace_back(selector);
+            }
+        }
         if (!unknown.empty()) {
             std::string accepted_names;
             for (const auto& name : accepted) {

@@ -72,7 +72,9 @@ negative concentration; see the next section.
 These four are the only options. Any other key under `gaschem`, including a misspelt
 one such as `column_per_batch` or a nested block, stops the run at start-up with the
 accepted names listed, as does an out-of-range value. The framework keys `activate`,
-`diagnostics` and `diag_species` are not options and are always allowed. The check
+`diagnostics` and `diag_species` are not options and are always allowed. The scheme
+selectors that other processes accept (`scheme`, `gas_scheme`, `aero_scheme`) are
+rejected like any unknown key, because `gaschem` has no scheme to select. The check
 runs before MICM is constructed: `GasChemProcess::parse_settings` is registered as the
 process's settings validator, and `init()` calls the same function, so a process that
 is initialized directly is checked as well. A legacy top-level `process:` block is

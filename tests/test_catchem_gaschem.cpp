@@ -936,6 +936,15 @@ static void run_settings_suite(const std::string& mechanism_dir) {
     expect_settings_rejected("empty nested solver block", {"solver: {}"},
                              {"Unknown option(s) for process 'gaschem': solver."});
 
+    // gaschem has no scheme, so the scheme selectors other processes accept are
+    // rejected here. The remaining framework keys were accepted in step 1.
+    for (const char* selector : {"scheme", "gas_scheme", "aero_scheme"}) {
+        expect_settings_rejected(std::string(selector) + " selector", {std::string(selector) + ": wesely"},
+                                 {std::string("Unknown option(s) for process 'gaschem': ") + selector + "."});
+    }
+    expect_settings_rejected("scheme selector next to a misspelt key", {"scheme: wesely", "column_per_batch: 4"},
+                             {"Unknown option(s) for process 'gaschem': column_per_batch, scheme."});
+
     // 3. A process initialized directly, without the core, rejects an unknown key too.
     test_invalid_gaschem_option(mechanism_dir, "column_per_batch: 4");
 

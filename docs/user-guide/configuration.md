@@ -310,7 +310,8 @@ processes:
 An invalid `columns_per_batch` or `negative_concentration_policy` fails
 initialization, and so does any key under `gaschem` other than these four and the
 framework keys (`activate`, `diagnostics`, `diag_species`), so a misspelt option is
-reported instead of silently ignored. `negative_concentration_policy` is independent of
+reported instead of silently ignored. That includes `scheme`, `gas_scheme` and
+`aero_scheme`: `gaschem` has no scheme to select. `negative_concentration_policy` is independent of
 `physical_validation.policy`: non-finite concentrations and non-physical
 temperature, pressure, or air density stop the run under either value. See the
 [gaschem process page](../processes/gaschem/index.md) for the log lines and the

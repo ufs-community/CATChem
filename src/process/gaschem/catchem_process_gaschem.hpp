@@ -76,7 +76,8 @@ namespace catchem {
         ProcessContract get_contract() const override;
 
         // Reads and checks the gaschem options. Throws std::invalid_argument for
-        // an option that is not one of the four in GasChemSettings, for
+        // an option that is not one of the four in GasChemSettings, for a scheme
+        // selector (scheme, gas_scheme, aero_scheme), for
         // columns_per_batch below 1, and for a negative_concentration_policy
         // other than reject or clamp. Registered as the settings validator, so
         // the core runs it before init(), and called again by init().
