@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file CarbChemScheme_GOCART_Mod.F90
+!! \brief GOCART carbon species chemical production and loss scheme
+!!
+!! Pure science kernel for gocart scheme in carbchem process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_gocart (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2026-04-10T16:46:37.803957
+!! Author: Wei Li
+!! Reference: GOCART2G process library carbonChemLoss function
 module carbchemscheme_gocart_mod
 
    use catchem_bridge_precision, only: fp, rae
@@ -26,6 +47,34 @@ module carbchemscheme_gocart_mod
 
 contains
 
+   !> Pure science computation for gocart scheme
+   !!
+   !! This is a pure computational kernel implementing GOCART carbon species chemical production and loss scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  g0    Required constant from Constants module
+   !! @param[in]  year    Time parameter from TimeState (year)
+   !! @param[in]  month    Time parameter from TimeState (month)
+   !! @param[in]  day    Time parameter from TimeState (day)
+   !! @param[in]  hour    Time parameter from TimeState (hour)
+   !! @param[in]  minute    Time parameter from TimeState (minute)
+   !! @param[in]  second    Time parameter from TimeState (second)
+   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  delp    DELP field [appropriate units]
+   !! @param[in]  pmid    PMID field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  species_t_chem_loss    Species t_chem_loss property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] Production_mass_per_species_per_level    Production mass (negative for loss) per species per level [kg/kg] (num_layers, num_species)
+   !! @param[inout] loss_flux_per_species    chemical loss flux per species [kg/m2/s] (num_species)
+   !! @param[inout] PhobicToPhilic_flux_per_species    conversion flux from hydrophobic to hydrophilic per species [kg/m2/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_gocart( &
       num_layers, &
       num_species, &
@@ -330,6 +379,26 @@ contains
    ! Add your custom scientific algorithms here as pure functions/subroutines
    ! Examples: environmental response functions, species-specific calculations, etc.
 
+   !>
+   !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
+   !!
+   !! \param [INOUT] metstate
+   !! \param [INOUT] tmpu
+   !! \param [INOUT] rhoa
+   !! \param [INOUT] hghte
+   !! \param [INOUT] oro
+   !! \param [INOUT] ustar
+   !! \param [INOUT] pblh
+   !! \param [INOUT] shflux
+   !! \param [INOUT] z0h
+   !! \param [INOUT] u10m
+   !! \param [INOUT] v10m
+   !! \param [INOUT] fraclake
+   !! \param [INOUT] gwettop
+   !! \param [OUT] rc
+   !!
+   !! \ingroup core_modules
+   !!!>
    subroutine prepmetvarsforgocart(km,              &
       rhoa,            &
       delp,            &
@@ -349,9 +418,9 @@ contains
       REAL(fp),  intent(in), DIMENSION(:), target :: pmid    ! Pressure at mid-point of layer [Pa]
 
       ! INPUT/OUTPUTS
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_PRESS
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_PRESS  !< air pressure [Pa]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP    !< pressure thickness [Pa]
 
       ! OUTPUTS - Add error handling back in late
       !INTEGER :: rc !< Return code
@@ -370,6 +439,14 @@ contains
 
    end subroutine prepmetvarsforgocart
 
+   !>
+   !! \brief findKlid - Finds corresponding vertical index for defined pressure lid
+   !!
+   !! \param [INOUT] klid
+   !! \param [IN] plid
+   !! \param [IN] ple
+   !! \param [OUT] rc
+   !!!>
    subroutine findklid (klid, plid, ple, rc)
 
       implicit NONE
@@ -423,6 +500,7 @@ contains
 
    end subroutine findklid
 
+   !> \brief Find species index by name
    function find_species_ind(SpeciesNames, species_name) result(species_index)
       implicit none
       character(len=*), intent(in) :: SpeciesNames(:)

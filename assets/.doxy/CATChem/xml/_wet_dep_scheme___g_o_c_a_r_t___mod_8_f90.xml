@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_wet_dep_scheme___g_o_c_a_r_t___mod_8_f90" kind="file" language="Fortran">
     <compoundname>WetDepScheme_GOCART_Mod.F90</compoundname>
     <innernamespace refid="namespacewetdepscheme__gocart__mod">wetdepscheme_gocart_mod</innernamespace>
@@ -20,8 +20,30 @@
 <para>Author: Wei Li Reference: GOCART2G Process Library (GEOS-ESM/GOCART): SU_Wet_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme) </para>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"></codeline>
-<codeline lineno="24" refid="namespacewetdepscheme__gocart__mod" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacewetdepscheme__gocart__mod" kindref="compound">wetdepscheme_gocart_mod</ref></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">!&gt;<sp/>\file<sp/>WetDepScheme_GOCART_Mod.F90</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">!!<sp/>\brief<sp/>GOCART2G<sp/>wet<sp/>removal<sp/>scheme:<sp/>SU_Wet_Removal<sp/>for<sp/>sulfate<sp/>species<sp/>(DMS/SO2/SO4/MSA)<sp/>and<sp/>WetRemovalUFS<sp/>for<sp/>all<sp/>other<sp/>species</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">!!<sp/>Pure<sp/>science<sp/>kernel<sp/>for<sp/>gocart<sp/>scheme<sp/>in<sp/>wetdep<sp/>process.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">!!<sp/>This<sp/>module<sp/>wraps<sp/>the<sp/>GOCART2G<sp/>process-library<sp/>wet-removal<sp/>routines.<sp/>Rather<sp/>than</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">!!<sp/>re-implementing<sp/>the<sp/>science,<sp/>it<sp/>prepares<sp/>the<sp/>column<sp/>meteorology<sp/>in<sp/>the<sp/>layout<sp/>the</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">!!<sp/>GOCART<sp/>routines<sp/>expect<sp/>(top-to-bottom<sp/>ordering,<sp/>(1,1,k)<sp/>shaped<sp/>pointers)<sp/>and<sp/>calls</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">!!<sp/>them<sp/>directly:</highlight></codeline>
+<codeline lineno="9"><highlight class="comment">!!<sp/><sp/><sp/>-<sp/>SU_Wet_Removal<sp/>:<sp/>the<sp/>sulfate<sp/>group<sp/>(DMS/SO2/SO4/MSA)<sp/>in<sp/>a<sp/>single<sp/>call.</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">!!<sp/><sp/><sp/>-<sp/>WetRemovalUFS<sp/><sp/>:<sp/>every<sp/>other<sp/>aerosol<sp/>species,<sp/>one<sp/>call<sp/>per<sp/>species.</highlight></codeline>
+<codeline lineno="11"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">!!<sp/>Ported<sp/>from<sp/>ufs-community/CATChem<sp/>PR<sp/>#206<sp/>(feature/standalone)<sp/>for<sp/>the<sp/>C++<sp/>core.</highlight></codeline>
+<codeline lineno="13"><highlight class="comment">!!<sp/>Two<sp/>deliberate<sp/>adaptations<sp/>relative<sp/>to<sp/>the<sp/>PR<sp/>source:</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">!!<sp/><sp/><sp/>1.<sp/>The<sp/>PR<sp/>tree<sp/>ran<sp/>on<sp/>a<sp/>pre-filtered<sp/>wetdep<sp/>species<sp/>list,<sp/>so<sp/>participation<sp/>was</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/><sp/>implicit.<sp/><sp/>The<sp/>C++<sp/>core<sp/>passes<sp/>the<sp/>FULL<sp/>mechanism<sp/>species<sp/>list<sp/>with<sp/>an</highlight></codeline>
+<codeline lineno="16"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/><sp/>explicit<sp/>species_is_wetdep<sp/>flag<sp/>(same<sp/>contract<sp/>as<sp/>the<sp/>Jacob<sp/>kernel),<sp/>so<sp/>this</highlight></codeline>
+<codeline lineno="17"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/><sp/>kernel<sp/>gates<sp/>every<sp/>removal<sp/>route<sp/>on<sp/>that<sp/>flag:<sp/>non-participants<sp/>are<sp/>echoed</highlight></codeline>
+<codeline lineno="18"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/><sp/>bit-exactly<sp/>into<sp/>species_tendencies.</highlight></codeline>
+<codeline lineno="19"><highlight class="comment">!!<sp/><sp/><sp/>2.<sp/>Module<sp/>imports<sp/>use<sp/>the<sp/>rework&apos;s<sp/>bridge<sp/>precision/constants<sp/>utilities<sp/>instead</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/><sp/>of<sp/>the<sp/>legacy<sp/>precision_mod/Constants.</highlight></codeline>
+<codeline lineno="21"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">!!<sp/>Author:<sp/>Wei<sp/>Li</highlight></codeline>
+<codeline lineno="23"><highlight class="comment">!!<sp/>Reference:<sp/>GOCART2G<sp/>Process<sp/>Library<sp/>(GEOS-ESM/GOCART):<sp/>SU_Wet_Removal<sp/>and<sp/>WetRemovalUFS<sp/>(Jacob<sp/>et<sp/>al.<sp/>[2000]<sp/>Harvard<sp/>scheme)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="namespacewetdepscheme__gocart__mod" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacewetdepscheme__gocart__mod" kindref="compound">wetdepscheme_gocart_mod</ref></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__precision" kindref="compound">catchem_bridge_precision</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>,<sp/><ref refid="interfacecatchem__bridge__precision_1_1rae" kindref="compound">rae</ref></highlight></codeline>
 <codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__error" kindref="compound">catchem_bridge_error</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__error_1abf35755e98de0d05a286dab34b2c57e3" kindref="member">cc_warning</ref>,<sp/><ref refid="namespacecatchem__bridge__error_1a1f49777e914bacf8dac0ba054995b9a0" kindref="member">cc_success</ref></highlight></codeline>
@@ -39,7 +61,35 @@
 <codeline lineno="39"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>plid<sp/>=<sp/>0.01_fp<sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Pressure<sp/>lid<sp/>[hPa]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="40"><highlight class="normal"></highlight></codeline>
 <codeline lineno="41"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="43"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Science<sp/>computation<sp/>for<sp/>gocart<sp/>wet-removal<sp/>scheme.</highlight></codeline>
+<codeline lineno="44"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="45"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Routes<sp/>sulfate<sp/>species<sp/>(SO4/SO2/DMS/MSA)<sp/>through<sp/>GOCART&apos;s<sp/>SU_Wet_Removal<sp/>and<sp/>all<sp/>other</highlight></codeline>
+<codeline lineno="46"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>aerosol<sp/>species<sp/>through<sp/>GOCART&apos;s<sp/>WetRemovalUFS.<sp/>H2O2<sp/>is<sp/>used<sp/>only<sp/>as<sp/>an<sp/>auxiliary<sp/>input</highlight></codeline>
+<codeline lineno="47"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>to<sp/>SU_Wet_Removal<sp/>(to<sp/>cap<sp/>soluble<sp/>SO2)<sp/>and<sp/>is<sp/>not<sp/>itself<sp/>wet-deposited.</highlight></codeline>
+<codeline lineno="48"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="49"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_layers<sp/><sp/><sp/><sp/><sp/>Number<sp/>of<sp/>vertical<sp/>layers</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_species<sp/><sp/><sp/><sp/>Number<sp/>of<sp/>chemical<sp/>species</highlight></codeline>
+<codeline lineno="51"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>params<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Scheme<sp/>parameters<sp/>(pre-validated<sp/>by<sp/>host)</highlight></codeline>
+<codeline lineno="52"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>mairden<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MAIRDEN<sp/>field<sp/>(moist<sp/>air<sp/>density)<sp/>[kg/m3]</highlight></codeline>
+<codeline lineno="53"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>pedge<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PEDGE<sp/>field<sp/>(level-edge<sp/>air<sp/>pressure)<sp/>[Pa]<sp/>(num_layers+1)</highlight></codeline>
+<codeline lineno="54"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>pfilsan<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PFILSAN<sp/>field<sp/>(3D<sp/>flux<sp/>of<sp/>ice<sp/>nonconvective<sp/>precip)<sp/>[kg/m2/s]<sp/>(num_layers+1)</highlight></codeline>
+<codeline lineno="55"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>pfllsan<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PFLLSAN<sp/>field<sp/>(3D<sp/>flux<sp/>of<sp/>liquid<sp/>nonconvective<sp/>precip)<sp/>[kg/m2/s]<sp/>(num_layers+1)</highlight></codeline>
+<codeline lineno="56"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>preccon<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PRECCON<sp/>field<sp/>(convective<sp/>precip<sp/>at<sp/>ground)<sp/>[m]<sp/>-<sp/>divided<sp/>by<sp/>tstep<sp/>-&gt;<sp/>[m/s]</highlight></codeline>
+<codeline lineno="57"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>preclsc<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PRECLSC<sp/>field<sp/>(large-scale<sp/>precip<sp/>at<sp/>ground)<sp/>[m]<sp/>-<sp/>divided<sp/>by<sp/>tstep<sp/>-&gt;<sp/>[m/s]</highlight></codeline>
+<codeline lineno="58"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>t<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T<sp/>field<sp/>(temperature)<sp/>[K]</highlight></codeline>
+<codeline lineno="59"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>tstep<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Time<sp/>step<sp/>[s]<sp/>-<sp/>retrieved<sp/>from<sp/>process<sp/>interface</highlight></codeline>
+<codeline lineno="60"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_is_aerosol<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>is_aerosol<sp/>property</highlight></codeline>
+<codeline lineno="61"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_is_wetdep<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>is_wetdep<sp/>participation<sp/>flag<sp/>(non-participants<sp/>echoed<sp/>unchanged)</highlight></codeline>
+<codeline lineno="62"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_short_name<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>short_name<sp/>property</highlight></codeline>
+<codeline lineno="63"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_wd_rainouteff<sp/><sp/><sp/><sp/>Species<sp/>wd_rainouteff<sp/>property<sp/>(3<sp/>temperature-dependent<sp/>efficiencies)<sp/>(num_species,3)</highlight></codeline>
+<codeline lineno="64"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_radius<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>radius<sp/>property<sp/>[um]</highlight></codeline>
+<codeline lineno="65"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_mw_g<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>mw_g<sp/>property</highlight></codeline>
+<codeline lineno="66"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_conc<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>concentrations<sp/>[ppm<sp/>for<sp/>gases,<sp/>ug/kg<sp/>for<sp/>aerosols]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="67"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>species_tendencies<sp/><sp/><sp/><sp/><sp/>Updated<sp/>species<sp/>concentrations<sp/>(replacement<sp/>mode)<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="68"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>wetdep_mass_per_species_per_level<sp/><sp/>Wet<sp/>deposition<sp/>mass<sp/>loss<sp/>per<sp/>species<sp/>per<sp/>level<sp/>[kg/m2]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="69"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>wetdep_flux_per_species_per_level<sp/><sp/>Wet<sp/>deposition<sp/>flux<sp/>per<sp/>species<sp/>per<sp/>level<sp/>[kg/m2/s]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="70"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>diagnostic_species_id<sp/><sp/><sp/><sp/>Indices<sp/>mapping<sp/>diagnostic<sp/>species<sp/>to<sp/>species<sp/>array<sp/>(optional,<sp/>for<sp/>per-species<sp/>diagnostics)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacewetdepscheme__gocart__mod_1a3e522553cdba40af7ae3111a83c95cb5" kindref="member">compute_gocart</ref>(<sp/>&amp;</highlight></codeline>
 <codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_layers,<sp/>&amp;</highlight></codeline>
 <codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_species,<sp/>&amp;</highlight></codeline>
@@ -309,7 +359,15 @@
 <codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>=======================================================================</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>SCHEME-SPECIFIC<sp/>HELPER<sp/>SUBROUTINES</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>=======================================================================</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="340"><highlight class="normal"></highlight></codeline>
+<codeline lineno="340"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="341"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="342"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>findKlid<sp/>-<sp/>Finds<sp/>corresponding<sp/>vertical<sp/>index<sp/>for<sp/>defined<sp/>pressure<sp/>lid</highlight></codeline>
+<codeline lineno="343"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="344"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>[INOUT]<sp/>klid</highlight></codeline>
+<codeline lineno="345"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>[IN]<sp/>plid</highlight></codeline>
+<codeline lineno="346"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>[IN]<sp/>ple</highlight></codeline>
+<codeline lineno="347"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>[OUT]<sp/>rc</highlight></codeline>
+<codeline lineno="348"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">findklid(klid,<sp/>plid,<sp/>ple,<sp/>rc)</highlight></codeline>
 <codeline lineno="350"><highlight class="normal"></highlight></codeline>
 <codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">implicit<sp/>none</highlight><highlight class="normal"></highlight></codeline>

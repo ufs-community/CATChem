@@ -232,6 +232,14 @@ contains
 
    end subroutine run_wetdep_science_bridge
 
+   !> GOCART2G wet-removal entry point (scheme 'gocart').
+   !!
+   !! Separate bind(C) entry from the Jacob bridge so the protected Jacob surface
+   !! (run_wetdep_science_bridge) stays byte-identical.  Shares this module's
+   !! species-array marshalling idiom; differs in the scheme configuration record
+   !! (WetDepSchemeGOCARTConfig) and the two additional surface precipitation
+   !! inputs PRECCON/PRECLSC required by the GOCART kernel (instantaneous
+   !! rain amounts [m], divided by tstep inside the kernel to rates [m/s]).
    subroutine run_wetdep_gocart_science_bridge( &
       n_cols, n_levels, n_species, dt, &
       diagnostics, &

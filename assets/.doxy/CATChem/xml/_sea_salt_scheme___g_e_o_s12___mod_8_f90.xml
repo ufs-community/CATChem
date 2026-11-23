@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_sea_salt_scheme___g_e_o_s12___mod_8_f90" kind="file" language="Fortran">
     <compoundname>SeaSaltScheme_GEOS12_Mod.F90</compoundname>
     <innernamespace refid="namespaceseasaltscheme__geos12__mod">seasaltscheme_geos12_mod</innernamespace>
@@ -25,8 +25,29 @@
 <para>Generated on: 2026-05-28T17:20:09.399215 Author: Barry Baker Reference: Jaeglé et al. [2011] </para>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"></codeline>
-<codeline lineno="23" refid="namespaceseasaltscheme__geos12__mod" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespaceseasaltscheme__geos12__mod" kindref="compound">seasaltscheme_geos12_mod</ref></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">!&gt;<sp/>\file<sp/>SeaSaltScheme_GEOS12_Mod.F90</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">!!<sp/>\brief<sp/>GEOS-Chem<sp/>2012<sp/>sea<sp/>salt<sp/>emission<sp/>scheme<sp/>with<sp/>observational<sp/>constraints</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">!!<sp/>Pure<sp/>science<sp/>kernel<sp/>for<sp/>geos12<sp/>scheme<sp/>in<sp/>seasalt<sp/>process.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">!!<sp/>This<sp/>module<sp/>contains<sp/>ONLY<sp/>the<sp/>computational<sp/>algorithm<sp/>with<sp/>NO<sp/>infrastructure<sp/>dependencies.</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">!!<sp/>Uses<sp/>only<sp/>basic<sp/>Fortran<sp/>types<sp/>for<sp/>maximum<sp/>portability<sp/>and<sp/>reusability.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">!!<sp/>SCIENCE<sp/>CUSTOMIZATION<sp/>GUIDE:</highlight></codeline>
+<codeline lineno="9"><highlight class="comment">!!<sp/>1.<sp/>Modify<sp/>the<sp/>algorithm<sp/>in<sp/>compute_geos12<sp/>(search<sp/>for<sp/>&quot;TODO&quot;)</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">!!<sp/>2.<sp/>Add<sp/>scheme-specific<sp/>helper<sp/>subroutines<sp/>as<sp/>needed</highlight></codeline>
+<codeline lineno="11"><highlight class="comment">!!<sp/>3.<sp/>Update<sp/>physical<sp/>constants<sp/>for<sp/>your<sp/>scheme</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">!!<sp/>4.<sp/>Customize<sp/>the<sp/>environmental<sp/>response<sp/>functions</highlight></codeline>
+<codeline lineno="13"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">!!<sp/>INFRASTRUCTURE<sp/>RESPONSIBILITIES<sp/>(handled<sp/>by<sp/>host<sp/>model):</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">!!<sp/>-<sp/>Parameter<sp/>initialization<sp/>and<sp/>validation</highlight></codeline>
+<codeline lineno="16"><highlight class="comment">!!<sp/>-<sp/>Input<sp/>array<sp/>validation<sp/>and<sp/>error<sp/>handling</highlight></codeline>
+<codeline lineno="17"><highlight class="comment">!!<sp/>-<sp/>Memory<sp/>management<sp/>and<sp/>array<sp/>allocation</highlight></codeline>
+<codeline lineno="18"><highlight class="comment">!!<sp/>-<sp/>Integration<sp/>with<sp/>host<sp/>model<sp/>time<sp/>stepping</highlight></codeline>
+<codeline lineno="19"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">!!<sp/>Generated<sp/>on:<sp/>2026-05-28T17:20:09.399215</highlight></codeline>
+<codeline lineno="21"><highlight class="comment">!!<sp/>Author:<sp/>Barry<sp/>Baker</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">!!<sp/>Reference:<sp/>Jaeglé<sp/>et<sp/>al.<sp/>[2011]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="namespaceseasaltscheme__geos12__mod" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespaceseasaltscheme__geos12__mod" kindref="compound">seasaltscheme_geos12_mod</ref></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__precision" kindref="compound">catchem_bridge_precision</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>,<sp/><ref refid="namespacecatchem__bridge__precision_1ad607dc0f9f13b5991827def8767c88dc" kindref="member">zero</ref>,<sp/><ref refid="interfacecatchem__bridge__precision_1_1rae" kindref="compound">rae</ref></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespaceseasaltcommon__mod" kindref="compound">seasaltcommon_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" kindref="compound">seasaltschemegeos12config</ref></highlight></codeline>
@@ -38,7 +59,36 @@
 <codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">public</highlight><highlight class="normal"><sp/>::<sp/><ref refid="namespaceseasaltscheme__geos12__mod_1ac2a828c60b4462aa0600aad17c0e36ef" kindref="member">compute_geos12</ref></highlight></codeline>
 <codeline lineno="33"><highlight class="normal"></highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="36"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Pure<sp/>science<sp/>computation<sp/>for<sp/>geos12<sp/>scheme</highlight></codeline>
+<codeline lineno="37"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="38"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>This<sp/>is<sp/>a<sp/>pure<sp/>computational<sp/>kernel<sp/>implementing<sp/>GEOS-Chem<sp/>2012<sp/>sea<sp/>salt<sp/>emission<sp/>scheme<sp/>with<sp/>observational<sp/>constraints.</highlight></codeline>
+<codeline lineno="39"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>NO<sp/>error<sp/>checking,<sp/>validation,<sp/>or<sp/>infrastructure<sp/>concerns.</highlight></codeline>
+<codeline lineno="40"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Host<sp/>model<sp/>must<sp/>ensure<sp/>all<sp/>inputs<sp/>are<sp/>valid<sp/>before<sp/>calling.</highlight></codeline>
+<codeline lineno="41"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="42"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_layers<sp/><sp/><sp/><sp/><sp/>Number<sp/>of<sp/>vertical<sp/>layers</highlight></codeline>
+<codeline lineno="43"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_species<sp/><sp/><sp/><sp/>Number<sp/>of<sp/>chemical<sp/>species</highlight></codeline>
+<codeline lineno="44"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>params<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Scheme<sp/>parameters<sp/>(pre-validated<sp/>by<sp/>host)</highlight></codeline>
+<codeline lineno="45"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>PI<sp/><sp/><sp/><sp/>Required<sp/>constant<sp/>from<sp/>Constants<sp/>module</highlight></codeline>
+<codeline lineno="46"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>frocean<sp/><sp/><sp/><sp/>FROCEAN<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="47"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>frseaice<sp/><sp/><sp/><sp/>FRSEAICE<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="48"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>lat<sp/><sp/><sp/><sp/>LAT<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="49"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>lon<sp/><sp/><sp/><sp/>LON<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>sst<sp/><sp/><sp/><sp/>SST<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="51"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>u10m<sp/><sp/><sp/><sp/>U10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="52"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>ustar<sp/><sp/><sp/><sp/>USTAR<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="53"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>v10m<sp/><sp/><sp/><sp/>V10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="54"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_density<sp/><sp/><sp/><sp/>Species<sp/>density<sp/>property</highlight></codeline>
+<codeline lineno="55"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_radius<sp/><sp/><sp/><sp/>Species<sp/>radius<sp/>property</highlight></codeline>
+<codeline lineno="56"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_lower_radius<sp/><sp/><sp/><sp/>Species<sp/>lower_radius<sp/>property</highlight></codeline>
+<codeline lineno="57"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_upper_radius<sp/><sp/><sp/><sp/>Species<sp/>upper_radius<sp/>property</highlight></codeline>
+<codeline lineno="58"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_conc<sp/><sp/><sp/>Species<sp/>concentrations<sp/>[mol/mol]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="59"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>species_tendencies<sp/><sp/>Species<sp/>tendency<sp/>terms<sp/>[mol/mol/s]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="60"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>seasalt_mass_emission_total<sp/><sp/><sp/><sp/>Total<sp/>mass<sp/>emission<sp/>diagnostic<sp/>[ug/m2/s]</highlight></codeline>
+<codeline lineno="61"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>seasalt_number_emission_total<sp/><sp/>Total<sp/>number<sp/>emission<sp/>diagnostic<sp/>[#/m2/s]</highlight></codeline>
+<codeline lineno="62"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>seasalt_mass_emission_per_bin<sp/><sp/><sp/>Mass<sp/>emission<sp/>per<sp/>bin<sp/>diagnostic<sp/>[kg/m2/s]<sp/>(num_species)</highlight></codeline>
+<codeline lineno="63"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>seasalt_number_emission_per_bin<sp/>Number<sp/>emission<sp/>per<sp/>bin<sp/>diagnostic<sp/>[#/m2/s]<sp/>(num_species)</highlight></codeline>
+<codeline lineno="64"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/>diagnostic_species_id<sp/>Indices<sp/>mapping<sp/>diagnostic<sp/>species<sp/>to<sp/>species<sp/>array<sp/>(optional,<sp/>for<sp/>per-species<sp/>diagnostics)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespaceseasaltscheme__geos12__mod_1ac2a828c60b4462aa0600aad17c0e36ef" kindref="member">compute_geos12</ref>(<sp/>&amp;</highlight></codeline>
 <codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_layers,<sp/>&amp;</highlight></codeline>
 <codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_species,<sp/>&amp;</highlight></codeline>
@@ -93,17 +143,17 @@
 <codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Local<sp/>variables</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>k,<sp/>RC</highlight></codeline>
 <codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>diag_idx<sp/><sp/></highlight><highlight class="comment">!<sp/>For<sp/>diagnostic<sp/>species<sp/>indexing</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>do_seasalt</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>n,<sp/>ir</highlight></codeline>
-<codeline lineno="121"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>w10m</highlight></codeline>
-<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>nr<sp/>=<sp/>10</highlight></codeline>
-<codeline lineno="123"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>::<sp/>r80fac<sp/>=<sp/>1.65_fp<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="124"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>DryRadius</highlight></codeline>
-<codeline lineno="125"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>DeltaDryRadius</highlight></codeline>
-<codeline lineno="126"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>rwet,<sp/>drwet</highlight></codeline>
-<codeline lineno="127"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>NumberEmissions</highlight></codeline>
-<codeline lineno="128"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>MassEmissions</highlight></codeline>
-<codeline lineno="129"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>mass_emission_flux(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>do_seasalt</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Enable<sp/>Dust<sp/>Calculation<sp/>Flag</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>n,<sp/>ir</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Loop<sp/>counter</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>w10m</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>10m<sp/>wind<sp/>speed<sp/>[m/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>nr<sp/>=<sp/>10</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Number<sp/>of<sp/>(linear)<sp/>sub-size<sp/>bins</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>::<sp/>r80fac<sp/>=<sp/>1.65_fp<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!&lt;<sp/>ratio<sp/>of<sp/>radius(RH=0.8)/radius(RH=0.)<sp/>[Gerber]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>DryRadius</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>sub-bin<sp/>radius<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(dry,<sp/>um)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>DeltaDryRadius</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>sub-bin<sp/>radius<sp/>spacing<sp/>(dry,<sp/>um)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>rwet,<sp/>drwet</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>sub-bin<sp/>radius<sp/>spacing<sp/>(rh=80%,<sp/>um)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>NumberEmissions</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>sub-bin<sp/>number<sp/>emission<sp/>rate<sp/>[#/m2/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>MassEmissions</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>sub-bin<sp/>number<sp/>emission<sp/>rate<sp/>[kg/m2/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>mass_emission_flux(num_layers,<sp/>num_species)</highlight></codeline>
 <codeline lineno="130"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>numb_emission_flux(num_layers,<sp/>num_species)</highlight></codeline>
 <codeline lineno="131"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>aFac</highlight></codeline>
 <codeline lineno="132"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>bFac</highlight></codeline>
@@ -280,7 +330,17 @@
 <codeline lineno="303"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">!<sp/>do_seasalt</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="304"><highlight class="normal"></highlight></codeline>
 <codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal"><ref refid="namespaceseasaltscheme__geos12__mod_1ac2a828c60b4462aa0600aad17c0e36ef" kindref="member">compute_geos12</ref></highlight></codeline>
-<codeline lineno="306"><highlight class="normal"></highlight></codeline>
+<codeline lineno="306"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="307"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="308"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>Jeagle<sp/>et<sp/>al.<sp/>2012<sp/>SST<sp/>correction</highlight></codeline>
+<codeline lineno="309"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="310"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Jaeglé,<sp/>L.,<sp/>Quinn,<sp/>P.<sp/>K.,<sp/>Bates,<sp/>T.<sp/>S.,<sp/>Alexander,<sp/>B.,<sp/>and<sp/>Lin,<sp/>J.-T.:</highlight></codeline>
+<codeline lineno="311"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Global<sp/>distribution<sp/>of<sp/>sea<sp/>salt<sp/>aerosols:<sp/>new<sp/>constraints<sp/>from<sp/>in<sp/>situ<sp/>and<sp/>remote</highlight></codeline>
+<codeline lineno="312"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>sensing<sp/>observations,<sp/>Atmos.<sp/>Chem.<sp/>Phys.,<sp/>11,<sp/>3137–3157,</highlight></codeline>
+<codeline lineno="313"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>https://doi.org/10.5194/acp-11-3137-2011,<sp/>2011.</highlight></codeline>
+<codeline lineno="314"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="315"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_seasalt_process</highlight></codeline>
+<codeline lineno="316"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="317"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">pure</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">jeaglesstcorrection(fsstemis,<sp/>sst,<sp/>sstFlag,<sp/>rc)</highlight></codeline>
 <codeline lineno="318"><highlight class="normal"></highlight></codeline>
 <codeline lineno="319"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>!USES:</highlight><highlight class="normal"></highlight></codeline>
@@ -320,14 +380,23 @@
 <codeline lineno="353"><highlight class="normal"></highlight></codeline>
 <codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>rc<sp/>=<sp/>0</highlight></codeline>
 <codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">jeaglesstcorrection</highlight></codeline>
-<codeline lineno="356"><highlight class="normal"></highlight></codeline>
+<codeline lineno="356"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="357"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="358"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>Function<sp/>to<sp/>compute<sp/>sea<sp/>salt<sp/>emissions<sp/>following<sp/>the<sp/>Gong<sp/>style<sp/>parameterization.</highlight></codeline>
+<codeline lineno="359"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="360"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Functional<sp/>form<sp/>is<sp/>from<sp/>Gong<sp/>2003:</highlight></codeline>
+<codeline lineno="361"><highlight class="comment"><sp/><sp/><sp/>!!<sp/><sp/><sp/>\f$dN/dr<sp/>=<sp/>scalefac<sp/>*<sp/>1.373<sp/>*<sp/>(w^wpow)<sp/>*<sp/>(r^-aFac)<sp/>*<sp/>(1+0.057*r^rpow)<sp/>*<sp/>10^(exppow*exp(-bFac^2))\f$</highlight></codeline>
+<codeline lineno="362"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>where<sp/>r<sp/>is<sp/>the<sp/>particle<sp/>radius<sp/>at<sp/>80%<sp/>RH,<sp/>dr<sp/>is<sp/>the<sp/>size<sp/>bin<sp/>width<sp/>at<sp/>80%<sp/>RH,<sp/>and<sp/>w<sp/>is<sp/>the<sp/>wind<sp/>speed</highlight></codeline>
+<codeline lineno="363"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="364"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_seasalt_process</highlight></codeline>
+<codeline lineno="365"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="366"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">pure</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">seasaltemissiongong<sp/>(<sp/>r,<sp/>dr,<sp/>w,<sp/>scalefac,<sp/>aFac,<sp/>bFac,<sp/>rpow,<sp/>exppow,<sp/>wpow<sp/>)</highlight></codeline>
 <codeline lineno="367"><highlight class="normal"></highlight></codeline>
-<codeline lineno="368"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>r</highlight></codeline>
-<codeline lineno="369"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>dr</highlight></codeline>
-<codeline lineno="370"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>w</highlight></codeline>
-<codeline lineno="371"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>scalefac</highlight></codeline>
-<codeline lineno="372"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>aFac</highlight></codeline>
+<codeline lineno="368"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>r</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Wet<sp/>particle<sp/>radius<sp/>[um]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="369"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>dr</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Wet<sp/>particle<sp/>bin<sp/>width<sp/>[um]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="370"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>w</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Grid<sp/>box<sp/>mean<sp/>wind<sp/>speed<sp/>[m<sp/>s-1]<sp/>(10-m<sp/>or<sp/>ustar<sp/>wind)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="371"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>scalefac</highlight><highlight class="comment"><sp/><sp/>!&lt;<sp/>scale<sp/>factor</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="372"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>aFac</highlight></codeline>
 <codeline lineno="373"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>bFac</highlight></codeline>
 <codeline lineno="374"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>rpow</highlight></codeline>
 <codeline lineno="375"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>exppow</highlight></codeline>
@@ -344,7 +413,23 @@
 <codeline lineno="386"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>seasaltemissiongong<sp/>=<sp/>w**wpow<sp/>*<sp/>seasaltemissiongong</highlight></codeline>
 <codeline lineno="387"><highlight class="normal"></highlight></codeline>
 <codeline lineno="388"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">seasaltemissiongong</highlight></codeline>
-<codeline lineno="389"><highlight class="normal"></highlight></codeline>
+<codeline lineno="389"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="390"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="391"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>Calculate<sp/>the<sp/>weibull<sp/>distribution<sp/>for<sp/>10m<sp/>wind<sp/>speed<sp/>(u10,<sp/>v10)</highlight></codeline>
+<codeline lineno="392"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="393"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>The<sp/>Weibull<sp/>distribution<sp/>correction<sp/>ends<sp/>up<sp/>being<sp/>a<sp/>multiplicative<sp/>constant</highlight></codeline>
+<codeline lineno="394"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>(g)<sp/>times<sp/>our<sp/>present<sp/>source<sp/>function<sp/>(see<sp/>Eq.<sp/>12<sp/>in<sp/>Fan<sp/>&amp;<sp/>Toon,<sp/>2011<sp/>and<sp/>notes<sp/>for</highlight></codeline>
+<codeline lineno="395"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>(9/22/11).<sp/>This<sp/>constant<sp/>is<sp/>derived<sp/>from<sp/>the<sp/>incomplete<sp/>and<sp/>complete<sp/>forms<sp/>of<sp/>the<sp/>gamma</highlight></codeline>
+<codeline lineno="396"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>function,<sp/>hence<sp/>the<sp/>utilities<sp/>pasted<sp/>below.<sp/><sp/>The<sp/>Weibull<sp/>function<sp/>and<sp/>shape</highlight></codeline>
+<codeline lineno="397"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>parameters<sp/>(k,<sp/>c)<sp/>assumed<sp/>are<sp/>from<sp/>Justus<sp/>1978.</highlight></codeline>
+<codeline lineno="398"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="399"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[inout]<sp/>gweibull<sp/>Multiplicative<sp/>constant</highlight></codeline>
+<codeline lineno="400"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[in]<sp/><sp/><sp/><sp/>weibullFlag<sp/><sp/>Flag<sp/>for<sp/>weibull<sp/>correction</highlight></codeline>
+<codeline lineno="401"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[in]<sp/><sp/><sp/><sp/>wm<sp/>10m<sp/>wind<sp/>speed</highlight></codeline>
+<codeline lineno="402"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[out]<sp/><sp/><sp/>RC<sp/>Return<sp/>Code</highlight></codeline>
+<codeline lineno="403"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="404"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_seasalt_process</highlight></codeline>
+<codeline lineno="405"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="406"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">weibulldistribution(gweibull,<sp/>weibullFlag,<sp/>wm,<sp/>RC)</highlight></codeline>
 <codeline lineno="407"><highlight class="normal"></highlight></codeline>
 <codeline lineno="408"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">implicit<sp/>none</highlight><highlight class="normal"></highlight></codeline>
@@ -387,8 +472,20 @@
 <codeline lineno="445"><highlight class="normal"></highlight></codeline>
 <codeline lineno="446"><highlight class="normal"></highlight></codeline>
 <codeline lineno="447"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">weibulldistribution</highlight></codeline>
-<codeline lineno="448"><highlight class="normal"></highlight></codeline>
-<codeline lineno="461"><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>function<sp/>igamma(A,<sp/>X,<sp/>RC)</highlight></codeline>
+<codeline lineno="448"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="449"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="450"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>Calculate<sp/>the<sp/>incomplete<sp/>Gamma<sp/>function</highlight></codeline>
+<codeline lineno="451"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="452"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>The<sp/>incomplete<sp/>Gamma<sp/>function<sp/>is<sp/>defined<sp/>as</highlight></codeline>
+<codeline lineno="453"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\int_x^\infty<sp/>t^{A-1}\exp(-t)<sp/>dt</highlight></codeline>
+<codeline lineno="454"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="455"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[in]<sp/><sp/><sp/><sp/>A</highlight></codeline>
+<codeline lineno="456"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[in]<sp/><sp/><sp/><sp/>X</highlight></codeline>
+<codeline lineno="457"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param[out]<sp/><sp/><sp/>RC</highlight></codeline>
+<codeline lineno="458"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="459"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_seasalt_process</highlight></codeline>
+<codeline lineno="460"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="461"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>function<sp/>igamma(A,<sp/>X,<sp/>RC)</highlight></codeline>
 <codeline lineno="462"><highlight class="normal"></highlight></codeline>
 <codeline lineno="463"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">IMPLICIT<sp/>NONE</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="464"><highlight class="normal"></highlight></codeline>

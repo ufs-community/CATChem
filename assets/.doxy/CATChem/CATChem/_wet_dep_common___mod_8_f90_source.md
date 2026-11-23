@@ -80,6 +80,13 @@ module wetdepcommon_mod
    end type
 
 
+   !> Configuration type for the gocart (GOCART2G wet removal) scheme.
+   !! Tuning defaults follow GEOS-ESM/GOCART GOCART2G_Process: overall washout
+   !! scale 1.0, WetRemovalUFS below-cloud tuning 1.0, radius threshold 0.05 um.
+   !! The C++ process layer parses the processes/wetdep/gocart options from the
+   !! runtime YAML and stages these values onto the type before each bridge
+   !! call.  (Note: this file is cpp-preprocessed, so comment text must never
+   !! contain a C-style block-comment opener.)
    type :: wetdepschemegocartconfig
 
       ! Scheme metadata

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_dust_scheme___g_i_n_o_u_x___mod_8_f90" kind="file" language="Fortran">
     <compoundname>DustScheme_GINOUX_Mod.F90</compoundname>
     <innernamespace refid="namespacedustscheme__ginoux__mod">dustscheme_ginoux_mod</innernamespace>
@@ -25,8 +25,29 @@
 <para>Generated on: 2026-04-17T13:57:10.254102 Author: Barry Baker &amp; Wei Li Reference: Ginoux et al. [2001] </para>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"></codeline>
-<codeline lineno="23" refid="namespacedustscheme__ginoux__mod" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacedustscheme__ginoux__mod" kindref="compound">dustscheme_ginoux_mod</ref></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">!&gt;<sp/>\file<sp/>DustScheme_GINOUX_Mod.F90</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">!!<sp/>\brief<sp/>Ginoux<sp/>dust<sp/>emission<sp/>scheme</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">!!<sp/>Pure<sp/>science<sp/>kernel<sp/>for<sp/>ginoux<sp/>scheme<sp/>in<sp/>dust<sp/>process.</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">!!<sp/>This<sp/>module<sp/>contains<sp/>ONLY<sp/>the<sp/>computational<sp/>algorithm<sp/>with<sp/>NO<sp/>infrastructure<sp/>dependencies.</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">!!<sp/>Uses<sp/>only<sp/>basic<sp/>Fortran<sp/>types<sp/>for<sp/>maximum<sp/>portability<sp/>and<sp/>reusability.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">!!<sp/>SCIENCE<sp/>CUSTOMIZATION<sp/>GUIDE:</highlight></codeline>
+<codeline lineno="9"><highlight class="comment">!!<sp/>1.<sp/>Modify<sp/>the<sp/>algorithm<sp/>in<sp/>compute_ginoux<sp/>(search<sp/>for<sp/>&quot;TODO&quot;)</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">!!<sp/>2.<sp/>Add<sp/>scheme-specific<sp/>helper<sp/>subroutines<sp/>as<sp/>needed</highlight></codeline>
+<codeline lineno="11"><highlight class="comment">!!<sp/>3.<sp/>Update<sp/>physical<sp/>constants<sp/>for<sp/>your<sp/>scheme</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">!!<sp/>4.<sp/>Customize<sp/>the<sp/>environmental<sp/>response<sp/>functions</highlight></codeline>
+<codeline lineno="13"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">!!<sp/>INFRASTRUCTURE<sp/>RESPONSIBILITIES<sp/>(handled<sp/>by<sp/>host<sp/>model):</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">!!<sp/>-<sp/>Parameter<sp/>initialization<sp/>and<sp/>validation</highlight></codeline>
+<codeline lineno="16"><highlight class="comment">!!<sp/>-<sp/>Input<sp/>array<sp/>validation<sp/>and<sp/>error<sp/>handling</highlight></codeline>
+<codeline lineno="17"><highlight class="comment">!!<sp/>-<sp/>Memory<sp/>management<sp/>and<sp/>array<sp/>allocation</highlight></codeline>
+<codeline lineno="18"><highlight class="comment">!!<sp/>-<sp/>Integration<sp/>with<sp/>host<sp/>model<sp/>time<sp/>stepping</highlight></codeline>
+<codeline lineno="19"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">!!<sp/>Generated<sp/>on:<sp/>2026-04-17T13:57:10.254102</highlight></codeline>
+<codeline lineno="21"><highlight class="comment">!!<sp/>Author:<sp/>Barry<sp/>Baker<sp/>&amp;<sp/>Wei<sp/>Li</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">!!<sp/>Reference:<sp/>Ginoux<sp/>et<sp/>al.<sp/>[2001]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23" refid="namespacedustscheme__ginoux__mod" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacedustscheme__ginoux__mod" kindref="compound">dustscheme_ginoux_mod</ref></highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight></codeline>
 <codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__precision" kindref="compound">catchem_bridge_precision</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref></highlight></codeline>
 <codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacedustcommon__mod" kindref="compound">dustcommon_mod</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="structdustcommon__mod_1_1dustschemeginouxconfig" kindref="compound">dustschemeginouxconfig</ref></highlight></codeline>
@@ -41,7 +62,34 @@
 <codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/><sp/><sp/><sp/>::<sp/>SSM_THRESH<sp/><sp/>=<sp/>1.0e-02_fp<sp/><sp/></highlight><highlight class="comment">!<sp/>Minimum<sp/>erodibility<sp/>threshold</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="36"><highlight class="normal"></highlight></codeline>
 <codeline lineno="37"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="39"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Pure<sp/>science<sp/>computation<sp/>for<sp/>ginoux<sp/>scheme</highlight></codeline>
+<codeline lineno="40"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="41"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>This<sp/>is<sp/>a<sp/>pure<sp/>computational<sp/>kernel<sp/>implementing<sp/>Ginoux<sp/>dust<sp/>emission<sp/>scheme.</highlight></codeline>
+<codeline lineno="42"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>NO<sp/>error<sp/>checking,<sp/>validation,<sp/>or<sp/>infrastructure<sp/>concerns.</highlight></codeline>
+<codeline lineno="43"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Host<sp/>model<sp/>must<sp/>ensure<sp/>all<sp/>inputs<sp/>are<sp/>valid<sp/>before<sp/>calling.</highlight></codeline>
+<codeline lineno="44"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="45"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_layers<sp/><sp/><sp/><sp/><sp/>Number<sp/>of<sp/>vertical<sp/>layers</highlight></codeline>
+<codeline lineno="46"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_species<sp/><sp/><sp/><sp/>Number<sp/>of<sp/>chemical<sp/>species</highlight></codeline>
+<codeline lineno="47"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>params<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Scheme<sp/>parameters<sp/>(pre-validated<sp/>by<sp/>host)</highlight></codeline>
+<codeline lineno="48"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>g0<sp/><sp/><sp/><sp/>Required<sp/>constant<sp/>from<sp/>Constants<sp/>module</highlight></codeline>
+<codeline lineno="49"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>airden<sp/><sp/><sp/><sp/>AIRDEN<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>frlake<sp/><sp/><sp/><sp/>FRLAKE<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="51"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>frsno<sp/><sp/><sp/><sp/>FRSNO<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="52"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>gwettop<sp/><sp/><sp/><sp/>GWETTOP<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="53"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>lwi<sp/><sp/><sp/><sp/>LWI<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="54"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>ssm<sp/><sp/><sp/><sp/>SSM<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="55"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>tskin<sp/><sp/><sp/><sp/>TSKIN<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="56"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>u10m<sp/><sp/><sp/><sp/>U10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="57"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>v10m<sp/><sp/><sp/><sp/>V10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="58"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_density<sp/><sp/><sp/><sp/>Species<sp/>density<sp/>property</highlight></codeline>
+<codeline lineno="59"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_radius<sp/><sp/><sp/><sp/>Species<sp/>radius<sp/>property</highlight></codeline>
+<codeline lineno="60"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_conc<sp/><sp/><sp/>Species<sp/>concentrations<sp/>[ppm<sp/>or<sp/>ug/kg]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="61"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>species_tendencies<sp/><sp/>Species<sp/>tendency<sp/>terms<sp/>[mol/mol/s]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="62"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>dust_emission_total<sp/><sp/><sp/><sp/>Total<sp/>dust<sp/>emissions<sp/>for<sp/>all<sp/>bins<sp/>[kg/m2/s]</highlight></codeline>
+<codeline lineno="63"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>dust_emission_per_bin<sp/><sp/><sp/><sp/>Dust<sp/>emission<sp/>flux<sp/>per<sp/>bin<sp/>[kg/m2/s]<sp/>(num_species)</highlight></codeline>
+<codeline lineno="64"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>utar_threshold<sp/><sp/><sp/><sp/>Threshold<sp/>friction<sp/>velocity<sp/>to<sp/>have<sp/>dust<sp/>emission<sp/>[m/s]</highlight></codeline>
+<codeline lineno="65"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/>diagnostic_species_id<sp/>Indices<sp/>mapping<sp/>diagnostic<sp/>species<sp/>to<sp/>species<sp/>array<sp/>(optional,<sp/>for<sp/>per-species<sp/>diagnostics)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">pure</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacedustscheme__ginoux__mod_1aeb4fa577d0e88a0f9c31255c1e30cc4d" kindref="member">compute_ginoux</ref>(<sp/>&amp;</highlight></codeline>
 <codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_layers,<sp/>&amp;</highlight></codeline>
 <codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_species,<sp/>&amp;</highlight></codeline>
@@ -93,11 +141,11 @@
 <codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>k,<sp/>species_idx</highlight></codeline>
 <codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/>::<sp/>diag_idx<sp/><sp/></highlight><highlight class="comment">!<sp/>For<sp/>diagnostic<sp/>species<sp/>indexing</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>skip<sp/><sp/></highlight><highlight class="comment">!<sp/>Flag<sp/>to<sp/>determine<sp/>if<sp/>we<sp/>should<sp/>skip<sp/>computation</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>ginoux_scaling</highlight></codeline>
-<codeline lineno="118"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>u_thresh0</highlight></codeline>
-<codeline lineno="119"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>u_thresh</highlight></codeline>
-<codeline lineno="120"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>w10m</highlight></codeline>
-<codeline lineno="121"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>emission_temp</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>ginoux_scaling</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Ginoux<sp/>scaling</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>u_thresh0</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Dry<sp/>threshold<sp/>wind<sp/>speed<sp/>[m/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>u_thresh</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Moisture<sp/>Corrected<sp/>threshold<sp/>wind<sp/>speed<sp/>[m/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>w10m</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>10m<sp/>wind<sp/>speed<sp/>[m/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>emission_temp</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Temporary<sp/>variable<sp/>for<sp/>emission<sp/>calculation</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="122"><highlight class="normal"></highlight></codeline>
 <codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>`species_conc`<sp/>is<sp/>part<sp/>of<sp/>the<sp/>shared<sp/>scheme<sp/>calling<sp/>convention<sp/>and</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>intentionally<sp/>unused<sp/>by<sp/>this<sp/>scheme;<sp/>reference<sp/>it<sp/>so<sp/>the<sp/>interface</highlight><highlight class="normal"></highlight></codeline>
@@ -211,32 +259,46 @@
 <codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>=======================================================================</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Add<sp/>your<sp/>custom<sp/>scientific<sp/>algorithms<sp/>here<sp/>as<sp/>pure<sp/>functions/subroutines</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Examples:<sp/>environmental<sp/>response<sp/>functions,<sp/>species-specific<sp/>calculations,<sp/>etc.</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="235"><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="236"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="237"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>Computes<sp/>the<sp/>Threshold<sp/>Friction<sp/>Velocity<sp/>from<sp/>MB97</highlight></codeline>
+<codeline lineno="238"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="239"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Marticorena,<sp/>B.<sp/>and<sp/>Bergametti,<sp/>G.:<sp/>Modeling<sp/>the<sp/>atmospheric<sp/>dust<sp/>cycle:</highlight></codeline>
+<codeline lineno="240"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>1.<sp/>Design<sp/>of<sp/>a<sp/>soil-derived<sp/>dust<sp/>emission<sp/>scheme,</highlight></codeline>
+<codeline lineno="241"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>J.<sp/>Geophys.<sp/>Res.-Atmos.,<sp/>100,<sp/>16415–16430,<sp/>https://doi.org/10.1029/95JD00690,<sp/>1995<sp/>|<sp/>TODO<sp/>fix<sp/>with<sp/>correct<sp/>reference</highlight></codeline>
+<codeline lineno="242"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="243"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>soil_density<sp/>soil<sp/>density</highlight></codeline>
+<codeline lineno="244"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>air_density<sp/>air<sp/>density</highlight></codeline>
+<codeline lineno="245"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>radius<sp/>particle<sp/>radius</highlight></codeline>
+<codeline lineno="246"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>ustar_threshold<sp/>threshold<sp/>friction<sp/>velocity</highlight></codeline>
+<codeline lineno="247"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="248"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_dust_process</highlight></codeline>
+<codeline lineno="249"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">pure</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">mb97_threshold_velocity(soil_density,<sp/>air_density,<sp/>radius,<sp/>g0,<sp/>ustar_threshold)</highlight></codeline>
 <codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>USES</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">IMPLICIT<sp/>NONE</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="253"><highlight class="normal"></highlight></codeline>
 <codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Input<sp/>Parameters</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!-----------------</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="256"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>radius</highlight></codeline>
-<codeline lineno="257"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>soil_density</highlight></codeline>
-<codeline lineno="258"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>air_density</highlight></codeline>
-<codeline lineno="259"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>g0</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>radius</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>particle<sp/>radius</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>soil_density</highlight><highlight class="comment"><sp/>!&lt;<sp/>soil<sp/>density</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="258"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>air_density</highlight><highlight class="comment"><sp/><sp/>!&lt;<sp/>air<sp/>density</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>g0</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>gravitational<sp/>acceleration</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="260"><highlight class="normal"></highlight></codeline>
 <codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Output<sp/>Parameters</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!------------------</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="263"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>ustar_threshold</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>ustar_threshold</highlight><highlight class="comment"><sp/>!&lt;<sp/>threshold<sp/>friction<sp/>velocity</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="264"><highlight class="normal"></highlight></codeline>
 <codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Local<sp/>Variables</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!-----------------</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="267"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>diameter</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>diameter</highlight><highlight class="comment"><sp/>!&lt;<sp/>diameter<sp/>of<sp/>particle<sp/>[m]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="268"><highlight class="normal"></highlight></codeline>
 <codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(radius<sp/>&lt;=<sp/>0.0_fp<sp/>.or.<sp/>soil_density<sp/>&lt;=<sp/>0.0_fp<sp/>.or.<sp/>air_density<sp/>&lt;=<sp/>0.0_fp)<sp/></highlight><highlight class="keywordflow">then</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ustar_threshold<sp/>=<sp/>0.0_fp</highlight></codeline>
 <codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="272"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>if</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="273"><highlight class="normal"></highlight></codeline>
-<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>diameter<sp/>=<sp/>2.0_fp<sp/>*<sp/>radius<sp/>*<sp/>1.0e-6_fp<sp/></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>diameter<sp/>=<sp/>2.0_fp<sp/>*<sp/>radius<sp/>*<sp/>1.0e-6_fp<sp/></highlight><highlight class="comment">!&lt;<sp/>convert<sp/>radius<sp/>to<sp/>meters</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>ustar_threshold<sp/>=<sp/>0.13_fp<sp/>*<sp/>sqrt(soil_density*g0*diameter/air_density)<sp/>&amp;</highlight></codeline>
 <codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*<sp/>sqrt(1.0_fp<sp/>+<sp/>6.e-7_fp/(soil_density*g0*diameter**2.5_fp))<sp/>&amp;</highlight></codeline>
 <codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>/<sp/>sqrt(1.928_fp*(1331.0_fp*(100._fp*diameter)**1.56_fp+0.38_fp)**0.092_fp<sp/>-<sp/>1.0_fp)</highlight></codeline>

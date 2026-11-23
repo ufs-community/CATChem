@@ -45,25 +45,25 @@
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**cpd**](#variable-cpd)   = `1.00416[**e**](namespacecatchem__bridge__constants.md#variable-e)+3\_fp`<br>_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**cpm**](#variable-cpm)   = `1.00464[**e**](namespacecatchem__bridge__constants.md#variable-e)+3\_fp`<br>_Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**cv**](#variable-cv)   = `7.1760e+2\_fp`<br>_Specific heat of dry air at constant volume [J/kg/K]._  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**e**](#variable-e)   = `2.718281828459045235360287471352\_fp`<br>_Euler's number (dimensionless)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**e**](#variable-e)   = `2.718281828459045235360287471352\_fp`<br>_Euler's number (dimensionless)._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**g0**](#variable-g0)   = `9.80665[**e**](namespacecatchem__bridge__constants.md#variable-e)+0\_fp`<br>_Standard gravity acceleration [m/s^2]._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**g0\_100**](#variable-g0_100)   = `100.0\_fp / [**g0**](namespacecatchem__bridge__constants.md#variable-g0)`<br>_100 divided by standard gravity_  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**h2omw**](#variable-h2omw)   = `18.016\_fp`<br>_Molecular weight of water [g/mol]._  |
 |  integer, parameter, public | [**max\_len\_desc**](#variable-max_len_desc)   = `1024`<br>_Maximum length for descriptions._  |
-|  integer, parameter, public | [**max\_len\_name**](#variable-max_len_name)   = `256`<br>_Maximum length for names (fields, config keys, etc.)_  |
+|  integer, parameter, public | [**max\_len\_name**](#variable-max_len_name)   = `256`<br>_Maximum length for names (fields, config keys, etc.)._  |
 |  integer, parameter, public | [**max\_len\_path**](#variable-max_len_path)   = `512`<br>_Maximum length for file paths._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**mwcarb**](#variable-mwcarb)   = `12.01[**e**](namespacecatchem__bridge__constants.md#variable-e)-3\_fp`<br>_Molecular weight of carbon [kg/mol]._  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**pi**](#variable-pi)   = `3.14159265358979323\_fp`<br>_Pi (dimensionless)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**pi**](#variable-pi)   = `3.14159265358979323\_fp`<br>_Pi (dimensionless)._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**pi\_180**](#variable-pi_180)   = `PI / 180.0\_fp`<br>_Radians per degree conversion factor._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**planck**](#variable-planck)   = `6.62606957[**e**](namespacecatchem__bridge__constants.md#variable-e)-34\_fp`<br>_Planck's constant [J⋅s]._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rd**](#variable-rd)   = `287.0\_fp`<br>_Gas constant for dry air [J/K/kg]._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rdg0**](#variable-rdg0)   = `Rd / [**g0**](namespacecatchem__bridge__constants.md#variable-g0)`<br>_Gas constant for dry air divided by gravity._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**re**](#variable-re)   = `6.3710072[**e**](namespacecatchem__bridge__constants.md#variable-e)+6\_fp`<br>_Earth's radius [m]._  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rgaslatm**](#variable-rgaslatm)   = `8.2057[**e**](namespacecatchem__bridge__constants.md#variable-e)-2\_fp`<br>_Gas constant in L⋅atm/(K⋅mol)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rgaslatm**](#variable-rgaslatm)   = `8.2057[**e**](namespacecatchem__bridge__constants.md#variable-e)-2\_fp`<br>_Gas constant in L⋅atm/(K⋅mol)._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rstarg**](#variable-rstarg)   = `8.3144598\_fp`<br>_Universal gas constant [J/K/mol]._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**rv**](#variable-rv)   = `461.00\_fp`<br>_Gas constant for water vapor [J/K/kg]._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**scale\_height**](#variable-scale_height)   = `7600.0\_fp`<br>_Atmospheric scale height [m]._  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**von\_karman**](#variable-von_karman)   = `0.41\_fp`<br>_Von Karman's constant (dimensionless)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**von\_karman**](#variable-von_karman)   = `0.41\_fp`<br>_Von Karman's constant (dimensionless)._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**xnumolair**](#variable-xnumolair)   = `AVO / ( AIRMW \* 1.[**e**](namespacecatchem__bridge__constants.md#variable-e)-3\_fp )`<br>_Molecules of dry air per kg dry air._  |
 
 
@@ -256,7 +256,7 @@ real(fp), parameter, public catchem_bridge_constants::cv;
 
 ### variable e 
 
-_Euler's number (dimensionless)_ 
+_Euler's number (dimensionless)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_constants::e;
 ```
@@ -326,7 +326,7 @@ integer, parameter, public catchem_bridge_constants::max_len_desc;
 
 ### variable max\_len\_name 
 
-_Maximum length for names (fields, config keys, etc.)_ 
+_Maximum length for names (fields, config keys, etc.)._ 
 ```Fortran
 integer, parameter, public catchem_bridge_constants::max_len_name;
 ```
@@ -368,7 +368,7 @@ real(fp), parameter, public catchem_bridge_constants::mwcarb;
 
 ### variable pi 
 
-_Pi (dimensionless)_ 
+_Pi (dimensionless)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_constants::pi;
 ```
@@ -452,7 +452,7 @@ real(fp), parameter, public catchem_bridge_constants::re;
 
 ### variable rgaslatm 
 
-_Gas constant in L⋅atm/(K⋅mol)_ 
+_Gas constant in L⋅atm/(K⋅mol)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_constants::rgaslatm;
 ```
@@ -508,7 +508,7 @@ real(fp), parameter, public catchem_bridge_constants::scale_height;
 
 ### variable von\_karman 
 
-_Von Karman's constant (dimensionless)_ 
+_Von Karman's constant (dimensionless)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_constants::von_karman;
 ```

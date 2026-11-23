@@ -582,7 +582,6 @@ This subroutine checks if a variable is allocated.
 * `RC` The return code
 
 
->  
 
 
 
@@ -652,7 +651,6 @@ This subroutine prints a warning message and sets RC to CC\_SUCCESS.
 * `RC` The return code 
 * `ThisLoc` The location of the warning 
 * `Instr` Other instructions 
->  
 
 
 

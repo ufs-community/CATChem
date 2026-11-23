@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacedrydepscheme__zhang__mod" kind="namespace" language="Fortran">
     <compoundname>drydepscheme_zhang_mod</compoundname>
     <sectiondef kind="var">
@@ -921,7 +921,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -1036,7 +1036,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -1084,7 +1084,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -1139,7 +1139,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -1291,7 +1291,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">temp</parametername>

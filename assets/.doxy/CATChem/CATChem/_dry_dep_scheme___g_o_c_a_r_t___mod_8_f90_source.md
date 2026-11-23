@@ -8,7 +8,32 @@
 
 
 ```Fortran
-
+!> \file DryDepScheme_GOCART_Mod.F90
+!! \brief GOCART-2G aerosol dry deposition scheme
+!!
+!! Pure science kernel for gocart scheme in drydep process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_gocart (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2025-11-14T22:58:26.525574
+!! Author: Wei Li & Lacey Holland
+!! Reference: Benchmarking GOCART-2G in the Goddard Earth Observing System (GEOS)
+!! Allison B. Collow, Peter R. Colarco, Arlindo M. da Silva, Virginie Buchard,
+!! Huisheng Bian, M Chin, Sampa Das, Ravi Govindaraju, Dongchul Kim, and Valentina Aquila,
+!! Geosci. Model Development, 17, 14431468, 2024
+!! https://doi.org/10.5194/gmd-17-1443-2024
 module drydepscheme_gocart_mod
 
    use catchem_bridge_precision, only: fp
@@ -27,6 +52,37 @@ module drydepscheme_gocart_mod
 
 contains
 
+   !> Pure science computation for gocart scheme
+   !!
+   !! This is a pure computational kernel implementing GOCART-2G aerosol dry deposition scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  frlake    FRLAKE field [appropriate units]
+   !! @param[in]  gwettop    GWETTOP field [appropriate units]
+   !! @param[in]  hflux    HFLUX field [appropriate units]
+   !! @param[in]  lwi    LWI field [appropriate units]
+   !! @param[in]  pblh    PBLH field [appropriate units]
+   !! @param[in]  t    T field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  u10m    U10M field [appropriate units]
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  z0h    Z0H field [appropriate units]
+   !! @param[in]  z    Z field [appropriate units]
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_is_seasalt    Species is_seasalt property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)
+   !! @param[inout] drydep_velocity_per_species    Dry deposition velocity [m/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
 
    subroutine compute_gocart( &
       num_layers, &
@@ -241,6 +297,26 @@ contains
    ! =======================================================================
    ! Add your custom scientific algorithms here as pure functions/subroutines
 
+   !>
+   !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
+   !!
+   !! \param [INOUT] metstate
+   !! \param [INOUT] tmpu
+   !! \param [INOUT] rhoa
+   !! \param [INOUT] hghte
+   !! \param [INOUT] oro
+   !! \param [INOUT] ustar
+   !! \param [INOUT] pblh
+   !! \param [INOUT] shflux
+   !! \param [INOUT] z0h
+   !! \param [INOUT] u10m
+   !! \param [INOUT] v10m
+   !! \param [INOUT] fraclake
+   !! \param [INOUT] gwettop
+   !! \param [OUT] rc
+   !!
+   !! \ingroup core_modules
+   !!!>
    subroutine prepmetvarsforgocart(km,              &
       tmpu,            &
       rhoa,            &
@@ -287,18 +363,18 @@ contains
       REAL(fp),  intent(in), target :: gwettop                ! fraction soil moisture [1]
 
       ! INPUT/OUTPUTS
-      REAL(fp), intent(inout), pointer :: GOCART_TMPU(:,:,:)
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE
-      REAL(fp), intent(inout), pointer :: GOCART_U10(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_V10 (:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_FRACLAKE(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_GWETTOP(:,:)
-      real(fp), intent(inout), pointer :: GOCART_LWI(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)
+      REAL(fp), intent(inout), pointer :: GOCART_TMPU(:,:,:)   !< temperature [K]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE  !< geometric height [m]
+      REAL(fp), intent(inout), pointer :: GOCART_U10(:,:)                 !< 10-m u-wind component [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_V10 (:,:)                !< 10-m v-wind component [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_FRACLAKE(:,:)            !< fraction covered by water [1]
+      REAL(fp), intent(inout), pointer :: GOCART_GWETTOP(:,:)             !< fraction soil moisture [1]
+      real(fp), intent(inout), pointer :: GOCART_LWI(:,:)                 !< orography flag; Land, ocean, ice mask
+      REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)               !< friction speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)                !< PBL height [m]
+      REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
+      REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
 
       ! OUTPUTS - Add error handling back in late
       !INTEGER :: rc !< Return code

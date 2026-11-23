@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file SO4chemScheme_GOCART_Mod.F90
+!! \brief GOCART SO2 to SO4 production scheme
+!!
+!! Pure science kernel for gocart scheme in so4chem process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_gocart (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2026-02-11T13:30:17.194715
+!! Author: Wei Li
+!! Reference: GOCART2G process library SulfateChemDriver function
 module so4chemscheme_gocart_mod
 
    use catchem_bridge_precision, only: fp, rae
@@ -28,6 +49,59 @@ module so4chemscheme_gocart_mod
 
 contains
 
+   !> Pure science computation for gocart scheme
+   !!
+   !! This is a pure computational kernel implementing GOCART SO2 to SO4 production scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  g0    Required constant from Constants module
+   !! @param[in]  Cpd    Required constant from Constants module
+   !! @param[in]  AVO    Required constant from Constants module
+   !! @param[in]  VON_KARMAN    Required constant from Constants module
+   !! @param[in]  AIRMW    Required constant from Constants module
+   !! @param[in]  PI    Required constant from Constants module
+   !! @param[in]  year    Time parameter from TimeState (year)
+   !! @param[in]  month    Time parameter from TimeState (month)
+   !! @param[in]  day    Time parameter from TimeState (day)
+   !! @param[in]  hour    Time parameter from TimeState (hour)
+   !! @param[in]  minute    Time parameter from TimeState (minute)
+   !! @param[in]  second    Time parameter from TimeState (second)
+   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  cldf    CLDF field [appropriate units]
+   !! @param[in]  delp    DELP field [appropriate units]
+   !! @param[in]  hflux    HFLUX field [appropriate units]
+   !! @param[in]  lat    LAT field [appropriate units]
+   !! @param[in]  lon    LON field [appropriate units]
+   !! @param[in]  lwi    LWI field [appropriate units]
+   !! @param[in]  pblh    PBLH field [appropriate units]
+   !! @param[in]  pmid    PMID field [appropriate units]
+   !! @param[in]  t    T field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  u10m    U10M field [appropriate units]
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  z    Z field [appropriate units]
+   !! @param[in]  z0h    Z0H field [appropriate units]
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_conc   Species concentrations: DMS/SO2 in ppmv,
+   !!                            SO4/MSA in ug/kg (num_layers, num_species)
+   !! @param[out] species_tendencies  Updated concentrations in the same units
+   !! Persistent state variables (per-column):
+   !! @param[inout] firsttime    flag for first time step
+   !! @param[inout] nymd_last    last day of H2O2 update
+   !! @param[inout] nhms_last_recycle    last time step of H2O2 recycle
+   !! @param[inout] xh2o2_init    H2O2 column initialization
+   !! @param[inout] PSO4_from_SO2_per_level    total sulfate production rate from SO2 per level [kg/kg/s] (num_layers)
+   !! @param[inout] PSO4_from_gaseous_SO2_per_level    sulfate production rate from gaseous SO2 per level [kg/kg/s] (num_layers)
+   !! @param[inout] PSO4_from_aqueous_SO2_per_level    sulfate production rate from aqueous SO2 per level [kg/kg/s] (num_layers)
+   !! @param[inout] PSO2_from_DMS_per_level    SO2 production rate from DMS per level [kg/kg/s] (num_layers)
+   !! @param[inout] DMS_emission_flux    DMS emission flux at the surface [kg/m2/s]
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_gocart( &
       num_layers, &
       num_species, &
@@ -457,6 +531,26 @@ contains
    ! =======================================================================
    ! Add your custom scientific algorithms here as pure functions/subroutines
 
+   !>
+   !! \brief PrepMetVarsForGOCART - Prep the meteorological variables for GOCART DryDeposition scheme
+   !!
+   !! \param [INOUT] metstate
+   !! \param [INOUT] tmpu
+   !! \param [INOUT] rhoa
+   !! \param [INOUT] hghte
+   !! \param [INOUT] oro
+   !! \param [INOUT] ustar
+   !! \param [INOUT] pblh
+   !! \param [INOUT] shflux
+   !! \param [INOUT] z0h
+   !! \param [INOUT] u10m
+   !! \param [INOUT] v10m
+   !! \param [INOUT] fraclake
+   !! \param [INOUT] gwettop
+   !! \param [OUT] rc
+   !!
+   !! \ingroup core_modules
+   !!!>
    subroutine prepmetvarsforgocart(km,              &
       tmpu,            &
       rhoa,            &
@@ -506,19 +600,19 @@ contains
       REAL(fp),  intent(in), target              :: z0h                                   ! rough height, sens. heat [m]
 
       ! INPUT/OUTPUTS
-      REAL(fp), intent(inout), pointer :: GOCART_TMPU(:,:,:)
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_cloud
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP
-      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_PRESS
-      real(fp), intent(inout), pointer :: GOCART_LWI(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_U10M(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_V10M(:,:)
-      REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)
+      REAL(fp), intent(inout), pointer :: GOCART_TMPU(:,:,:)   !< temperature [K]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_RHOA   !< air density [kg/m^3]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_HGHTE  !< geometric height [m]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_cloud  !< cloud fraction [1]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_DELP    !< pressure thickness [Pa]
+      REAL(fp), intent(inout), pointer, DIMENSION(:,:,:) :: GOCART_PRESS    !< pressure at mid-layer [Pa]
+      real(fp), intent(inout), pointer :: GOCART_LWI(:,:)                 !< orography flag; Land, ocean, ice mask
+      REAL(fp), intent(inout), pointer :: GOCART_USTAR(:,:)               !< friction speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_PBLH(:,:)                !< PBL height [m]
+      REAL(fp), intent(inout), pointer :: GOCART_HFLUX(:,:)               !< sfc. sens. heat flux [W m-2]
+      REAL(fp), intent(inout), pointer :: GOCART_U10M(:,:)               !< 10m wind speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_V10M(:,:)               !< 10m wind speed [m/sec]
+      REAL(fp), intent(inout), pointer :: GOCART_Z0H(:,:)                 !< rough height, sens. heat [m]
 
       ! OUTPUTS - Add error handling back in late
       !INTEGER :: rc !< Return code
@@ -561,6 +655,14 @@ contains
 
    end subroutine prepmetvarsforgocart
 
+   !>
+   !! \brief findKlid - Finds corresponding vertical index for defined pressure lid
+   !!
+   !! \param [INOUT] klid
+   !! \param [IN] plid
+   !! \param [IN] ple
+   !! \param [OUT] rc
+   !!!>
    subroutine findklid (klid, plid, ple, rc)
 
       implicit NONE

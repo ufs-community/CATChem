@@ -8,7 +8,29 @@
 
 
 ```Fortran
-
+!> \file WetDepScheme_GOCART_Mod.F90
+!! \brief GOCART2G wet removal scheme: SU_Wet_Removal for sulfate species (DMS/SO2/SO4/MSA) and WetRemovalUFS for all other species
+!!
+!! Pure science kernel for gocart scheme in wetdep process.
+!! This module wraps the GOCART2G process-library wet-removal routines. Rather than
+!! re-implementing the science, it prepares the column meteorology in the layout the
+!! GOCART routines expect (top-to-bottom ordering, (1,1,k) shaped pointers) and calls
+!! them directly:
+!!   - SU_Wet_Removal : the sulfate group (DMS/SO2/SO4/MSA) in a single call.
+!!   - WetRemovalUFS  : every other aerosol species, one call per species.
+!!
+!! Ported from ufs-community/CATChem PR #206 (feature/standalone) for the C++ core.
+!! Two deliberate adaptations relative to the PR source:
+!!   1. The PR tree ran on a pre-filtered wetdep species list, so participation was
+!!      implicit.  The C++ core passes the FULL mechanism species list with an
+!!      explicit species_is_wetdep flag (same contract as the Jacob kernel), so this
+!!      kernel gates every removal route on that flag: non-participants are echoed
+!!      bit-exactly into species_tendencies.
+!!   2. Module imports use the rework's bridge precision/constants utilities instead
+!!      of the legacy precision_mod/Constants.
+!!
+!! Author: Wei Li
+!! Reference: GOCART2G Process Library (GEOS-ESM/GOCART): SU_Wet_Removal and WetRemovalUFS (Jacob et al. [2000] Harvard scheme)
 module wetdepscheme_gocart_mod
 
    use catchem_bridge_precision, only: fp, rae
@@ -28,6 +50,34 @@ module wetdepscheme_gocart_mod
 
 contains
 
+   !> Science computation for gocart wet-removal scheme.
+   !!
+   !! Routes sulfate species (SO4/SO2/DMS/MSA) through GOCART's SU_Wet_Removal and all other
+   !! aerosol species through GOCART's WetRemovalUFS. H2O2 is used only as an auxiliary input
+   !! to SU_Wet_Removal (to cap soluble SO2) and is not itself wet-deposited.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  mairden        MAIRDEN field (moist air density) [kg/m3]
+   !! @param[in]  pedge          PEDGE field (level-edge air pressure) [Pa] (num_layers+1)
+   !! @param[in]  pfilsan        PFILSAN field (3D flux of ice nonconvective precip) [kg/m2/s] (num_layers+1)
+   !! @param[in]  pfllsan        PFLLSAN field (3D flux of liquid nonconvective precip) [kg/m2/s] (num_layers+1)
+   !! @param[in]  preccon        PRECCON field (convective precip at ground) [m] - divided by tstep -> [m/s]
+   !! @param[in]  preclsc        PRECLSC field (large-scale precip at ground) [m] - divided by tstep -> [m/s]
+   !! @param[in]  t              T field (temperature) [K]
+   !! @param[in]  tstep          Time step [s] - retrieved from process interface
+   !! @param[in]  species_is_aerosol       Species is_aerosol property
+   !! @param[in]  species_is_wetdep        Species is_wetdep participation flag (non-participants echoed unchanged)
+   !! @param[in]  species_short_name       Species short_name property
+   !! @param[in]  species_wd_rainouteff    Species wd_rainouteff property (3 temperature-dependent efficiencies) (num_species,3)
+   !! @param[in]  species_radius           Species radius property [um]
+   !! @param[in]  species_mw_g             Species mw_g property
+   !! @param[in]  species_conc             Species concentrations [ppm for gases, ug/kg for aerosols] (num_layers, num_species)
+   !! @param[inout] species_tendencies     Updated species concentrations (replacement mode) (num_layers, num_species)
+   !! @param[inout] wetdep_mass_per_species_per_level  Wet deposition mass loss per species per level [kg/m2] (num_layers, num_species)
+   !! @param[inout] wetdep_flux_per_species_per_level  Wet deposition flux per species per level [kg/m2/s] (num_layers, num_species)
+   !! @param[in]  diagnostic_species_id    Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_gocart( &
       num_layers, &
       num_species, &
@@ -298,6 +348,14 @@ contains
    ! SCHEME-SPECIFIC HELPER SUBROUTINES
    ! =======================================================================
 
+   !>
+   !! \brief findKlid - Finds corresponding vertical index for defined pressure lid
+   !!
+   !! \param [INOUT] klid
+   !! \param [IN] plid
+   !! \param [IN] ple
+   !! \param [OUT] rc
+   !!!>
    subroutine findklid(klid, plid, ple, rc)
 
       implicit none

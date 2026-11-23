@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespaceseasaltscheme__gong03__mod" kind="namespace" language="Fortran">
     <compoundname>seasaltscheme_gong03_mod</compoundname>
     <sectiondef kind="var">
@@ -345,7 +345,7 @@
         <detaileddescription>
 <para>2012 SST correction</para>
 <para>Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.: Global distribution of sea salt aerosols: new constraints from in situ and remote sensing observations, Atmos. Chem. Phys., 11, 3137–3157, <ulink url="https://doi.org/10.5194/acp-11-3137-2011">https://doi.org/10.5194/acp-11-3137-2011</ulink>, 2011.</para>
-<para><blockquote><para><zwj/> </para>
+<para><blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -399,7 +399,7 @@
         </briefdescription>
         <detaileddescription>
 <para>Functional form is from Gong 2003: <formula id="0">$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))$</formula> where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed</para>
-<para><blockquote><para><zwj/> </para>
+<para><blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">r</parametername>
@@ -462,7 +462,7 @@
           <defname>rc</defname>
         </param>
         <briefdescription>
-<para>Calculate the weibull distribution for 10m wind speed (u10, v10) </para>
+<para>Calculate the weibull distribution for 10m wind speed (u10, v10). </para>
         </briefdescription>
         <detaileddescription>
 <para>The Weibull distribution correction ends up being a multiplicative constant (g) times our present source function (see Eq. 12 in Fan &amp; Toon, 2011 and notes for (9/22/11). This constant is derived from the incomplete and complete forms of the gamma function, hence the utilities pasted below. The Weibull function and shape parameters (k, c) assumed are from Justus 1978.</para>
@@ -499,7 +499,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -553,7 +553,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>

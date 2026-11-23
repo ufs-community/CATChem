@@ -46,21 +46,21 @@
 |  integer, parameter, public | [**f4**](#variable-f4)   = `KIND( 0.0\_4 )`<br>_KIND parameter for 4-byte precision._  |
 |  integer, parameter, public | [**f8**](#variable-f8)   = `KIND( 0.0\_8 )`<br>_KIND parameter for 8-byte precision._  |
 |  integer, parameter, public | [**fp**](#variable-fp)   = `[**f8**](namespacecatchem__bridge__precision.md#variable-f8)`<br>_8-byte (default)_  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**missing**](#variable-missing)   = `-999.0\_fp`<br>_Missing real value (kind=fp)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**missing**](#variable-missing)   = `-999.0\_fp`<br>_Missing real value (kind=fp)._  |
 |  logical, parameter, public | [**missing\_bool**](#variable-missing_bool)   = `.FALSE.`<br>_Missing boolean value._  |
-|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**missing\_dble**](#variable-missing_dble)   = `-999.0\_f8`<br>_Missing real value (kind=f8)_  |
+|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**missing\_dble**](#variable-missing_dble)   = `-999.0\_f8`<br>_Missing real value (kind=f8)._  |
 |  integer, parameter, public | [**missing\_int**](#variable-missing_int)   = `-999`<br>_Missing integer value._  |
-|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**missing\_real**](#variable-missing_real)   = `-999.0\_f4`<br>_Missing real value (kind=f4)_  |
+|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**missing\_real**](#variable-missing_real)   = `-999.0\_f4`<br>_Missing real value (kind=f4)._  |
 |  character(len=7), parameter, public | [**missing\_str**](#variable-missing_str)   = `"UNKNOWN"`<br>_Missing string._  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**one**](#variable-one)   = `1.0\_fp`<br>_One value (kind=fp)_  |
-|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**one\_dble**](#variable-one_dble)   = `1.0\_f8`<br>_One value (kind=f8)_  |
-|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**one\_real**](#variable-one_real)   = `1.0\_f4`<br>_One value (kind=f4)_  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**one**](#variable-one)   = `1.0\_fp`<br>_One value (kind=fp)._  |
+|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**one\_dble**](#variable-one_dble)   = `1.0\_f8`<br>_One value (kind=f8)._  |
+|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**one\_real**](#variable-one_real)   = `1.0\_f4`<br>_One value (kind=f4)._  |
 |  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**tiny\_**](#variable-tiny_)   = `TINY\_REAL`<br> |
-|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**tiny\_dble**](#variable-tiny_dble)   = `1.0e-31\_f8`<br>_A small value (kind=f8)_  |
-|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**tiny\_real**](#variable-tiny_real)   = `1.0e-16\_f4`<br>_A small value (kind=f4)_  |
-|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**zero**](#variable-zero)   = `0.0\_fp`<br>_Zero value (kind=fp)_  |
-|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**zero\_dble**](#variable-zero_dble)   = `0.0\_f8`<br>_Zero value (kind=f8)_  |
-|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**zero\_real**](#variable-zero_real)   = `0.0\_f4`<br>_Zero value (kind=f4)_  |
+|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**tiny\_dble**](#variable-tiny_dble)   = `1.0e-31\_f8`<br>_A small value (kind=f8)._  |
+|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**tiny\_real**](#variable-tiny_real)   = `1.0e-16\_f4`<br>_A small value (kind=f4)._  |
+|  real([**fp**](namespacecatchem__bridge__precision.md#variable-fp)), parameter, public | [**zero**](#variable-zero)   = `0.0\_fp`<br>_Zero value (kind=fp)._  |
+|  real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), parameter, public | [**zero\_dble**](#variable-zero_dble)   = `0.0\_f8`<br>_Zero value (kind=f8)._  |
+|  real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), parameter, public | [**zero\_real**](#variable-zero_real)   = `0.0\_f4`<br>_Zero value (kind=f4)._  |
 
 
 
@@ -81,12 +81,12 @@
 
 | Type | Name |
 | ---: | :--- |
-|  elemental logical function | [**exact\_equal\_f4**](#function-exact_equal_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Exact equality (see the_ `exact_equal` _interface)_ |
-|  elemental logical function | [**exact\_equal\_f8**](#function-exact_equal_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Exact equality (see the_ `exact_equal` _interface)_ |
-|  elemental logical function | [**is\_exact\_zero\_f4**](#function-is_exact_zero_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)_ |
-|  elemental logical function | [**is\_exact\_zero\_f8**](#function-is_exact_zero_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)_ |
-|  logical function | [**rae\_f4**](#function-rae_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` __ |
-|  logical function | [**rae\_f8**](#function-rae_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` __ |
+|  elemental logical function | [**exact\_equal\_f4**](#function-exact_equal_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Exact equality (see the_ `exact_equal` _interface)._ |
+|  elemental logical function | [**exact\_equal\_f8**](#function-exact_equal_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Exact equality (see the_ `exact_equal` _interface)._ |
+|  elemental logical function | [**is\_exact\_zero\_f4**](#function-is_exact_zero_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)._ |
+|  elemental logical function | [**is\_exact\_zero\_f8**](#function-is_exact_zero_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)._ |
+|  logical function | [**rae\_f4**](#function-rae_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` _._ |
+|  logical function | [**rae\_f8**](#function-rae_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` _._ |
 
 
 
@@ -177,7 +177,7 @@ integer, parameter, public catchem_bridge_precision::fp;
 
 ### variable missing 
 
-_Missing real value (kind=fp)_ 
+_Missing real value (kind=fp)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_precision::missing;
 ```
@@ -205,7 +205,7 @@ logical, parameter, public catchem_bridge_precision::missing_bool;
 
 ### variable missing\_dble 
 
-_Missing real value (kind=f8)_ 
+_Missing real value (kind=f8)._ 
 ```Fortran
 real(f8), parameter, public catchem_bridge_precision::missing_dble;
 ```
@@ -233,7 +233,7 @@ integer, parameter, public catchem_bridge_precision::missing_int;
 
 ### variable missing\_real 
 
-_Missing real value (kind=f4)_ 
+_Missing real value (kind=f4)._ 
 ```Fortran
 real(f4), parameter, public catchem_bridge_precision::missing_real;
 ```
@@ -261,7 +261,7 @@ character(len=7), parameter, public catchem_bridge_precision::missing_str;
 
 ### variable one 
 
-_One value (kind=fp)_ 
+_One value (kind=fp)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_precision::one;
 ```
@@ -275,7 +275,7 @@ real(fp), parameter, public catchem_bridge_precision::one;
 
 ### variable one\_dble 
 
-_One value (kind=f8)_ 
+_One value (kind=f8)._ 
 ```Fortran
 real(f8), parameter, public catchem_bridge_precision::one_dble;
 ```
@@ -289,7 +289,7 @@ real(f8), parameter, public catchem_bridge_precision::one_dble;
 
 ### variable one\_real 
 
-_One value (kind=f4)_ 
+_One value (kind=f4)._ 
 ```Fortran
 real(f4), parameter, public catchem_bridge_precision::one_real;
 ```
@@ -316,7 +316,7 @@ real(fp), parameter, public catchem_bridge_precision::tiny_;
 
 ### variable tiny\_dble 
 
-_A small value (kind=f8)_ 
+_A small value (kind=f8)._ 
 ```Fortran
 real(f8), parameter, public catchem_bridge_precision::tiny_dble;
 ```
@@ -330,7 +330,7 @@ real(f8), parameter, public catchem_bridge_precision::tiny_dble;
 
 ### variable tiny\_real 
 
-_A small value (kind=f4)_ 
+_A small value (kind=f4)._ 
 ```Fortran
 real(f4), parameter, public catchem_bridge_precision::tiny_real;
 ```
@@ -344,7 +344,7 @@ real(f4), parameter, public catchem_bridge_precision::tiny_real;
 
 ### variable zero 
 
-_Zero value (kind=fp)_ 
+_Zero value (kind=fp)._ 
 ```Fortran
 real(fp), parameter, public catchem_bridge_precision::zero;
 ```
@@ -358,7 +358,7 @@ real(fp), parameter, public catchem_bridge_precision::zero;
 
 ### variable zero\_dble 
 
-_Zero value (kind=f8)_ 
+_Zero value (kind=f8)._ 
 ```Fortran
 real(f8), parameter, public catchem_bridge_precision::zero_dble;
 ```
@@ -372,7 +372,7 @@ real(f8), parameter, public catchem_bridge_precision::zero_dble;
 
 ### variable zero\_real 
 
-_Zero value (kind=f4)_ 
+_Zero value (kind=f4)._ 
 ```Fortran
 real(f4), parameter, public catchem_bridge_precision::zero_real;
 ```
@@ -388,7 +388,7 @@ real(f4), parameter, public catchem_bridge_precision::zero_real;
 
 ### function exact\_equal\_f4 
 
-_Exact equality (see the_ `exact_equal` _interface)_
+_Exact equality (see the_ `exact_equal` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::exact_equal_f4 (
     real( f4 ), intent(in) a,
@@ -405,7 +405,7 @@ elemental logical function catchem_bridge_precision::exact_equal_f4 (
 
 ### function exact\_equal\_f8 
 
-_Exact equality (see the_ `exact_equal` _interface)_
+_Exact equality (see the_ `exact_equal` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::exact_equal_f8 (
     real( f8 ), intent(in) a,
@@ -422,7 +422,7 @@ elemental logical function catchem_bridge_precision::exact_equal_f8 (
 
 ### function is\_exact\_zero\_f4 
 
-_Exact zero test (see the_ `is_exact_zero` _interface)_
+_Exact zero test (see the_ `is_exact_zero` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::is_exact_zero_f4 (
     real( f4 ), intent(in) x
@@ -438,7 +438,7 @@ elemental logical function catchem_bridge_precision::is_exact_zero_f4 (
 
 ### function is\_exact\_zero\_f8 
 
-_Exact zero test (see the_ `is_exact_zero` _interface)_
+_Exact zero test (see the_ `is_exact_zero` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::is_exact_zero_f8 (
     real( f8 ), intent(in) x
@@ -454,7 +454,7 @@ elemental logical function catchem_bridge_precision::is_exact_zero_f8 (
 
 ### function rae\_f4 
 
-_Real approximately equal:_ `abs(a - b) < tiny(a)` __
+_Real approximately equal:_ `abs(a - b) < tiny(a)` _._
 ```Fortran
 logical function catchem_bridge_precision::rae_f4 (
     real( f4 ), intent(in) a,
@@ -471,7 +471,7 @@ logical function catchem_bridge_precision::rae_f4 (
 
 ### function rae\_f8 
 
-_Real approximately equal:_ `abs(a - b) < tiny(a)` __
+_Real approximately equal:_ `abs(a - b) < tiny(a)` _._
 ```Fortran
 logical function catchem_bridge_precision::rae_f8 (
     real( f8 ), intent(in) a,

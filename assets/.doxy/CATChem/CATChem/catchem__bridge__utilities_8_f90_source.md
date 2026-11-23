@@ -8,15 +8,37 @@
 
 
 ```Fortran
-
+!> \file constants.F90
+!! \brief Physical and mathematical constants for CATChem
+!! \ingroup core_modules
+!!
+!! \author CATChem Development Team
+!! \date 2025
+!! \version 2.0
+!!
+!! This module provides fundamental physical and mathematical constants
+!! used throughout the CATChem atmospheric chemistry modeling system.
+!!
+!! \details
+!! The constants module defines all physical constants, conversion factors,
+!! and mathematical constants used in atmospheric chemistry calculations.
+!! All values are given in SI units unless otherwise specified.
+!!
+!! \section constants_usage Usage Example
+!! \code{.f90}
+!! use catchem_bridge_constants
+!! real(fp) :: air_density
+!! air_density = pressure / (Rd * temperature)
+!! \endcode
+!!
 module catchem_bridge_precision
    implicit none
 
    ! KIND parameter for 4-byte precision
-   INTEGER, PARAMETER, PUBLIC :: f4 = kind( 0.0_4 ) 
+   INTEGER, PARAMETER, PUBLIC :: f4 = kind( 0.0_4 ) !< KIND parameter for 4-byte precision
 
    ! KIND parameter for 8-byte precision
-   INTEGER, PARAMETER, PUBLIC :: f8 = kind( 0.0_8 ) 
+   INTEGER, PARAMETER, PUBLIC :: f8 = kind( 0.0_8 ) !< KIND parameter for 8-byte precision
 
    ! Kind of an unsuffixed real literal.  Under -fdefault-real-8 / -r8 the
    ! compiler promotes this to 8 bytes; without it, 4 bytes.  This is the
@@ -37,9 +59,9 @@ module catchem_bridge_precision
    ! precision is an explicit opt-in via USE_REAL4 for builds that
    ! deliberately want 4-byte reals.
 #ifdef USE_REAL4
-   INTEGER, PARAMETER, PUBLIC :: fp = f4 
+   INTEGER, PARAMETER, PUBLIC :: fp = f4 !< explicit 4-byte opt-in
 #else
-   INTEGER, PARAMETER, PUBLIC :: fp = f8 
+   INTEGER, PARAMETER, PUBLIC :: fp = f8 !< 8-byte (default)
 #endif
 
    !=========================================================================
@@ -63,25 +85,25 @@ module catchem_bridge_precision
    !=========================================================================
    ! Parameters for missing values
    !=========================================================================
-   LOGICAL,          PARAMETER, PUBLIC :: MISSING_BOOL = .false.   
-   INTEGER,          PARAMETER, PUBLIC :: MISSING_INT  = -999
-   REAL(fp),         PARAMETER, PUBLIC :: MISSING      = -999.0_fp 
-   REAL(f4),         PARAMETER, PUBLIC :: MISSING_REAL = -999.0_f4 
-   REAL(f8),         PARAMETER, PUBLIC :: MISSING_DBLE = -999.0_f8 
-   CHARACTER(LEN=7), PARAMETER, PUBLIC :: MISSING_STR  = "UNKNOWN"
+   LOGICAL,          PARAMETER, PUBLIC :: MISSING_BOOL = .false.   !< Missing boolean value
+   INTEGER,          PARAMETER, PUBLIC :: MISSING_INT  = -999      !< Missing integer value
+   REAL(fp),         PARAMETER, PUBLIC :: MISSING      = -999.0_fp !< Missing real value (kind=fp)
+   REAL(f4),         PARAMETER, PUBLIC :: MISSING_REAL = -999.0_f4 !< Missing real value (kind=f4)
+   REAL(f8),         PARAMETER, PUBLIC :: MISSING_DBLE = -999.0_f8 !< Missing real value (kind=f8)
+   CHARACTER(LEN=7), PARAMETER, PUBLIC :: MISSING_STR  = "UNKNOWN" !< Missing string
 
    !=========================================================================
    ! Parameters for zero
    !=========================================================================
-   REAL(fp),         PARAMETER, PUBLIC :: ZERO         =  0.0_fp   
-   REAL(f4),         PARAMETER, PUBLIC :: ZERO_REAL    =  0.0_f4   
-   REAL(f8),         PARAMETER, PUBLIC :: ZERO_DBLE    =  0.0_f8   
+   REAL(fp),         PARAMETER, PUBLIC :: ZERO         =  0.0_fp   !< Zero value (kind=fp)
+   REAL(f4),         PARAMETER, PUBLIC :: ZERO_REAL    =  0.0_f4   !< Zero value (kind=f4)
+   REAL(f8),         PARAMETER, PUBLIC :: ZERO_DBLE    =  0.0_f8   !< Zero value (kind=f8)
 
    !=========================================================================
    ! Parameters for very tiny numbers
    !=========================================================================
-   REAL(f4),         PARAMETER, PUBLIC :: TINY_REAL    =  1.0e-16_f4 
-   REAL(f8),         PARAMETER, PUBLIC :: TINY_DBLE    =  1.0e-31_f8 
+   REAL(f4),         PARAMETER, PUBLIC :: TINY_REAL    =  1.0e-16_f4 !< A small value (kind=f4)
+   REAL(f8),         PARAMETER, PUBLIC :: TINY_DBLE    =  1.0e-31_f8 !< A small value (kind=f8)
 #ifdef USE_REAL8
    REAL(fp),         PARAMETER, PUBLIC :: TINY_        = tiny_dble
 #else
@@ -91,24 +113,30 @@ module catchem_bridge_precision
    !=========================================================================
    ! Parameters for one
    !=========================================================================
-   REAL(fp),         PARAMETER, PUBLIC :: ONE          =  1.0_fp 
-   REAL(f4),         PARAMETER, PUBLIC :: ONE_REAL     =  1.0_f4 
-   REAL(f8),         PARAMETER, PUBLIC :: ONE_DBLE     =  1.0_f8 
+   REAL(fp),         PARAMETER, PUBLIC :: ONE          =  1.0_fp !< One value (kind=fp)
+   REAL(f4),         PARAMETER, PUBLIC :: ONE_REAL     =  1.0_f4 !< One value (kind=f4)
+   REAL(f8),         PARAMETER, PUBLIC :: ONE_DBLE     =  1.0_f8 !< One value (kind=f8)
 
    interface rae
       module procedure rae_f4, rae_f8
    end interface rae
 
+   !> Exact IEEE equality, spelled without == so gfortran's -Wcompare-reals
+   !! stays quiet at deliberate exact comparisons (sentinels, literal zeros).
+   !! (a <= b .and. a >= b) is precisely a == b: false for NaN, true for
+   !! equal infinities and for +0/-0. Not a tolerance test; see `rae` for that.
    interface exact_equal
       module procedure exact_equal_f4, exact_equal_f8
    end interface exact_equal
 
+   !> Exact test for zero: exact_equal(x, 0). True for +0 and -0 only.
    interface is_exact_zero
       module procedure is_exact_zero_f4, is_exact_zero_f8
    end interface is_exact_zero
 
 contains
 
+   !> Real approximately equal: `abs(a - b) < tiny(a)`
    logical function rae_f4(a, b) result(res)
       real(f4), intent(in) :: a, b
       real(f4) :: diff
@@ -117,6 +145,7 @@ contains
       res = diff < tiny(a)
    end function rae_f4
 
+   !> Real approximately equal: `abs(a - b) < tiny(a)`
    logical function rae_f8(a, b) result(res)
       real(f8), intent(in) :: a, b
       real(f8) :: diff
@@ -125,21 +154,25 @@ contains
       res = diff < tiny(a)
    end function rae_f8
 
+   !> Exact equality (see the `exact_equal` interface)
    elemental logical function exact_equal_f4(a, b) result(res)
       real(f4), intent(in) :: a, b
       res = (a <= b .and. a >= b)
    end function exact_equal_f4
 
+   !> Exact equality (see the `exact_equal` interface)
    elemental logical function exact_equal_f8(a, b) result(res)
       real(f8), intent(in) :: a, b
       res = (a <= b .and. a >= b)
    end function exact_equal_f8
 
+   !> Exact zero test (see the `is_exact_zero` interface)
    elemental logical function is_exact_zero_f4(x) result(res)
       real(f4), intent(in) :: x
       res = exact_equal_f4(x, 0.0_f4)
    end function is_exact_zero_f4
 
+   !> Exact zero test (see the `is_exact_zero` interface)
    elemental logical function is_exact_zero_f8(x) result(res)
       real(f8), intent(in) :: x
       res = exact_equal_f8(x, 0.0_f8)
@@ -225,43 +258,55 @@ module catchem_bridge_error
    INTEGER, PUBLIC, PARAMETER :: CATEGORY_PROCESS = 6
    ! \}
 
+   !> \brief Error information structure
+   !! \details
+   !! Stores information about a specific error including code, message,
+   !! severity, category, and optional context information.
    type :: errorinfotype
-      integer :: error_code = error_none         
-      character(len=255) :: message = ''
-      integer :: severity = severity_info        
-      integer :: category = category_general     
-      character(len=100) :: location = ''
-      character(len=255) :: suggestion = ''
-      real(fp) :: timestamp = 0.0_fp            
+      integer :: error_code = error_none         !< Error code
+      character(len=255) :: message = ''         !< Error message
+      integer :: severity = severity_info        !< Error severity level
+      integer :: category = category_general     !< Error category
+      character(len=100) :: location = ''        !< Error location
+      character(len=255) :: suggestion = ''      !< Suggested solution
+      real(fp) :: timestamp = 0.0_fp            !< Error timestamp
    end type errorinfotype
 
+   !> \brief Error context structure
+   !! \details
+   !! Tracks the context stack for error reporting, including routine names,
+   !! file locations, and call hierarchy.
    type :: errorcontexttype
-      character(len=100) :: routine_name = ''
-      character(len=255) :: description = ''
-      character(len=100) :: file_name = ''
-      integer :: line_number = 0
-      real(fp) :: timestamp = 0.0_fp            
+      character(len=100) :: routine_name = ''    !< Name of the routine
+      character(len=255) :: description = ''     !< Context description
+      character(len=100) :: file_name = ''       !< Source file name
+      integer :: line_number = 0                 !< Line number
+      real(fp) :: timestamp = 0.0_fp            !< Context timestamp
    contains
       procedure :: init => error_context_init
       procedure :: clear => error_context_clear
       procedure :: to_string => error_context_to_string
    end type errorcontexttype
 
+   !> \brief Enhanced error manager
+   !! \details
+   !! Provides comprehensive error handling with context tracking,
+   !! severity levels, categories, and performance monitoring.
    type :: errormanagertype
       private
-      type(ErrorContextType), allocatable :: context_stack(:)
-      integer :: stack_depth = 0
-      integer :: total_errors = 0
-      integer :: total_warnings = 0
-      integer :: max_stack_depth = 20
-      integer :: max_errors_before_abort = 100
-      logical :: verbose_errors = .false.                      
-      logical :: track_performance = .false.                   
-      logical :: abort_on_critical = .true.                    
+      type(ErrorContextType), allocatable :: context_stack(:)  !< Context stack
+      integer :: stack_depth = 0                               !< Current stack depth
+      integer :: total_errors = 0                              !< Total error count
+      integer :: total_warnings = 0                            !< Total warning count
+      integer :: max_stack_depth = 20                          !< Maximum stack depth
+      integer :: max_errors_before_abort = 100                 !< Error limit before abort
+      logical :: verbose_errors = .false.                      !< Verbose error reporting
+      logical :: track_performance = .false.                   !< Performance tracking
+      logical :: abort_on_critical = .true.                    !< Abort on critical errors
 
       ! Error statistics
-      integer :: errors_by_severity(0:4) = 0
-      integer :: errors_by_category(0:6) = 0
+      integer :: errors_by_severity(0:4) = 0                   !< Errors by severity
+      integer :: errors_by_category(0:6) = 0                   !< Errors by category
    contains
       procedure :: init => error_manager_init
       procedure :: push_context => error_manager_push_context
@@ -358,6 +403,18 @@ CONTAINS
 
    END SUBROUTINE cc_error
 
+   !>
+   !! \brief CC_Warning
+   !!
+   !! This subroutine prints a warning message and sets RC to CC_SUCCESS.
+   !!
+   !! \ingroup core_modules
+   !!
+   !! \param WarnMsg The warning message
+   !! \param RC The return code
+   !! \param ThisLoc The location of the warning
+   !! \param Instr Other instructions
+   !!!>
    SUBROUTINE cc_warning( WarnMsg, RC, ThisLoc, Instr )
       !
       ! !INPUT PARAMETERS:
@@ -407,6 +464,16 @@ CONTAINS
 
    END SUBROUTINE cc_warning
 
+   !>
+   !! \brief CC_CheckVar
+   !!
+   !! This subroutine checks if a variable is allocated.
+   !!
+   !! \param Variable The variable to check
+   !! \param Operation 0=Allocate 1=Register 2=Deallocate
+   !! \param RC The return code
+   !! \ingroup core_modules
+   !!!>
    SUBROUTINE cc_checkvar( Variable, Operation, RC )
       !
       ! !INPUT PARAMETERS:
@@ -455,6 +522,7 @@ CONTAINS
    ! Enhanced Error Handling Implementation
    !========================================================================
 
+   !> \brief Initialize error context
    subroutine error_context_init(this, routine_name, description, file_name, line_number)
       implicit none
       class(ErrorContextType), intent(inout) :: this
@@ -470,6 +538,7 @@ CONTAINS
       this%timestamp = 0.0_fp  ! Could use system time here
    end subroutine error_context_init
 
+   !> \brief Clear error context
    subroutine error_context_clear(this)
       implicit none
       class(ErrorContextType), intent(inout) :: this
@@ -481,6 +550,7 @@ CONTAINS
       this%timestamp = 0.0_fp
    end subroutine error_context_clear
 
+   !> \brief Convert error context to string
    function error_context_to_string(this) result(context_str)
       implicit none
       class(ErrorContextType), intent(in) :: this
@@ -493,6 +563,7 @@ CONTAINS
       endif
    end function error_context_to_string
 
+   !> \brief Initialize error manager
    subroutine error_manager_init(this, verbose, track_performance, rc)
       implicit none
       class(ErrorManagerType), intent(inout) :: this
@@ -516,6 +587,7 @@ CONTAINS
       if (present(rc)) rc = cc_success
    end subroutine error_manager_init
 
+   !> \brief Push context onto error context stack
    subroutine error_manager_push_context(this, routine_name, description, file_name, line_number)
       implicit none
       class(ErrorManagerType), intent(inout) :: this
@@ -533,6 +605,7 @@ CONTAINS
       endif
    end subroutine error_manager_push_context
 
+   !> \brief Pop context from error context stack
    subroutine error_manager_pop_context(this)
       implicit none
       class(ErrorManagerType), intent(inout) :: this
@@ -543,6 +616,7 @@ CONTAINS
       endif
    end subroutine error_manager_pop_context
 
+   !> \brief Report error with enhanced information
    subroutine error_manager_report_error(this, error_code, message, rc, location, suggestion)
       implicit none
       class(ErrorManagerType), intent(inout) :: this
@@ -591,6 +665,7 @@ CONTAINS
       endif
    end subroutine error_manager_report_error
 
+   !> \brief Get error properties from error code
    subroutine get_error_properties(error_code, severity, category)
       implicit none
       integer, intent(in) :: error_code
@@ -628,6 +703,14 @@ CONTAINS
    end subroutine get_error_properties
    !EOC
 END module catchem_bridge_error
+!>
+!! \file precision_mod.F90
+!! \brief Module PRECISION\_MOD is used to change the precision of
+!!  many variables throughout catchem at compile-time.  Also contains
+!!  parameters that can be used to represent missing values.
+!!
+!! \ingroup core_modules
+!!!>
 
 
 module catchem_bridge_constants
@@ -639,60 +722,66 @@ module catchem_bridge_constants
    ! \name Fundamental Physical Constants (must be defined first for dependencies)
    !! \brief Universal physical constants
    !! \{
-   REAL(fp), PARAMETER, PUBLIC :: AVO = 6.022140857e+23_fp         
-   REAL(fp), PARAMETER, PUBLIC :: g0     = 9.80665e+0_fp           
-   REAL(fp), PARAMETER, PUBLIC :: g0_100 = 100.0_fp / g0           
-   REAL(fp), PARAMETER, PUBLIC :: Re = 6.3710072e+6_fp             
-   REAL(fp), PARAMETER, PUBLIC :: RSTARG = 8.3144598_fp            
-   REAL(fp), PARAMETER, PUBLIC :: BOLTZ = 1.38064852e-23_fp        
-   REAL(fp), PARAMETER, PUBLIC :: PLANCK = 6.62606957e-34_fp       
-   REAL(fp), PARAMETER, PUBLIC :: CCONST = 2.99792458e+8_fp        
+   REAL(fp), PARAMETER, PUBLIC :: AVO = 6.022140857e+23_fp         !< Avogadro's number [particles/mol]
+   REAL(fp), PARAMETER, PUBLIC :: g0     = 9.80665e+0_fp           !< Standard gravity acceleration [m/s^2]
+   REAL(fp), PARAMETER, PUBLIC :: g0_100 = 100.0_fp / g0           !< 100 divided by standard gravity
+   REAL(fp), PARAMETER, PUBLIC :: Re = 6.3710072e+6_fp             !< Earth's radius [m]
+   REAL(fp), PARAMETER, PUBLIC :: RSTARG = 8.3144598_fp            !< Universal gas constant [J/K/mol]
+   REAL(fp), PARAMETER, PUBLIC :: BOLTZ = 1.38064852e-23_fp        !< Boltzmann's constant [J/K]
+   REAL(fp), PARAMETER, PUBLIC :: PLANCK = 6.62606957e-34_fp       !< Planck's constant [J⋅s]
+   REAL(fp), PARAMETER, PUBLIC :: CCONST = 2.99792458e+8_fp        !< Speed of light in vacuum [m/s]
    ! \}
 
    ! \name Atmospheric Properties
    !! \brief Constants related to atmospheric composition and properties
    !! \{
-   REAL(fp), PARAMETER, PUBLIC :: Cp = 1.0046e+3_fp                
-   REAL(fp), PARAMETER, PUBLIC :: Cpd = 1.00416e+3_fp              
-   REAL(fp), PARAMETER, PUBLIC :: Cpm = 1.00464e+3_fp              
-   REAL(fp), PARAMETER, PUBLIC :: Cv = 7.1760e+2_fp                
-   REAL(fp), PARAMETER, PUBLIC :: AIRMW = 28.9644_fp               
-   REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.016_fp                
-   REAL(fp), PARAMETER, PUBLIC :: Rd   = 287.0_fp                  
-   REAL(fp), PARAMETER, PUBLIC :: Rdg0 = rd / g0                   
-   REAL(fp), PARAMETER, PUBLIC :: Rv = 461.00_fp                   
-   REAL(fp), PARAMETER, PUBLIC :: SCALE_HEIGHT = 7600.0_fp         
-   REAL(fp), PARAMETER, PUBLIC :: VON_KARMAN = 0.41_fp             
-   REAL(fp), PARAMETER, PUBLIC :: ATM = 1.01325e+5_fp              
-   REAL(fp), PARAMETER, PUBLIC :: XNUMOLAIR = avo / ( airmw * 1.e-3_fp )  
+   REAL(fp), PARAMETER, PUBLIC :: Cp = 1.0046e+3_fp                !< Specific heat of dry air at constant pressure [J/kg/K]
+   REAL(fp), PARAMETER, PUBLIC :: Cpd = 1.00416e+3_fp              !< Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART
+   REAL(fp), PARAMETER, PUBLIC :: Cpm = 1.00464e+3_fp              !< Specific heat of dry air at constant pressure [J/kg/K]; value in GOCART
+   REAL(fp), PARAMETER, PUBLIC :: Cv = 7.1760e+2_fp                !< Specific heat of dry air at constant volume [J/kg/K]
+   REAL(fp), PARAMETER, PUBLIC :: AIRMW = 28.9644_fp               !< Average molecular weight of dry air [g/mol]
+   REAL(fp), PARAMETER, PUBLIC :: H2OMW = 18.016_fp                !< Molecular weight of water [g/mol]
+   REAL(fp), PARAMETER, PUBLIC :: Rd   = 287.0_fp                  !< Gas constant for dry air [J/K/kg]
+   REAL(fp), PARAMETER, PUBLIC :: Rdg0 = rd / g0                   !< Gas constant for dry air divided by gravity
+   REAL(fp), PARAMETER, PUBLIC :: Rv = 461.00_fp                   !< Gas constant for water vapor [J/K/kg]
+   REAL(fp), PARAMETER, PUBLIC :: SCALE_HEIGHT = 7600.0_fp         !< Atmospheric scale height [m]
+   REAL(fp), PARAMETER, PUBLIC :: VON_KARMAN = 0.41_fp             !< Von Karman's constant (dimensionless)
+   REAL(fp), PARAMETER, PUBLIC :: ATM = 1.01325e+5_fp              !< Standard atmospheric pressure [Pa]
+   REAL(fp), PARAMETER, PUBLIC :: XNUMOLAIR = avo / ( airmw * 1.e-3_fp )  !< Molecules of dry air per kg dry air
    ! \}
 
    ! \name Mathematical Constants
    !! \brief Mathematical constants and conversion factors
    !! \{
-   REAL(fp), PARAMETER, PUBLIC :: PI     = 3.14159265358979323_fp  
-   REAL(fp), PARAMETER, PUBLIC :: PI_180 = pi / 180.0_fp           
-   REAL(fp), PARAMETER, PUBLIC :: E = 2.718281828459045235360287471352_fp  
+   REAL(fp), PARAMETER, PUBLIC :: PI     = 3.14159265358979323_fp  !< Pi (dimensionless)
+   REAL(fp), PARAMETER, PUBLIC :: PI_180 = pi / 180.0_fp           !< Radians per degree conversion factor
+   REAL(fp), PARAMETER, PUBLIC :: E = 2.718281828459045235360287471352_fp  !< Euler's number (dimensionless)
    ! \}
 
    ! \name Chemistry-Specific Constants
    !! \brief Constants for atmospheric chemistry calculations
    !! \{
-   REAL(fp), PARAMETER, PUBLIC :: CONSVAP = 6.1078e+03_fp / ( boltz * 1e+7_fp ) 
-   REAL(fp), PARAMETER, PUBLIC :: RGASLATM = 8.2057e-2_fp          
-   REAL(fp), PARAMETER, PUBLIC :: MWCARB = 12.01e-3_fp             
+   REAL(fp), PARAMETER, PUBLIC :: CONSVAP = 6.1078e+03_fp / ( boltz * 1e+7_fp ) !< Condensation vapor pressure factor
+   REAL(fp), PARAMETER, PUBLIC :: RGASLATM = 8.2057e-2_fp          !< Gas constant in L⋅atm/(K⋅mol)
+   REAL(fp), PARAMETER, PUBLIC :: MWCARB = 12.01e-3_fp             !< Molecular weight of carbon [kg/mol]
    ! \}
 
    ! \name Character lengths
    !! \brief Standard maximum lengths for character strings
    !! \{
-   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_NAME = 256
-   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_DESC = 1024
-   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_PATH = 512
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_NAME = 256  !< Maximum length for names (fields, config keys, etc.)
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_DESC = 1024  !< Maximum length for descriptions
+   INTEGER, PARAMETER, PUBLIC :: MAX_LEN_PATH = 512  !< Maximum length for file paths
    ! \}
 
 contains
 
+   !> \brief Validate atmospheric constants for physical consistency
+   !!
+   !! This subroutine performs runtime validation of atmospheric constants
+   !! to ensure physical consistency and catch any compilation issues.
+   !!
+   !! \param[out] rc Return code
    subroutine validate_atmospheric_constants(rc)
       use catchem_bridge_error, only: cc_success, error_numerical_instability
       implicit none

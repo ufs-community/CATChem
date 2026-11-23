@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacecatchem__bridge__precision" kind="namespace" language="Fortran">
     <compoundname>catchem_bridge_precision</compoundname>
+    <innerclass refid="interfacecatchem__bridge__precision_1_1rae" prot="public">catchem_bridge_precision::rae</innerclass>
     <innerclass refid="interfacecatchem__bridge__precision_1_1exact__equal" prot="public">catchem_bridge_precision::exact_equal</innerclass>
     <innerclass refid="interfacecatchem__bridge__precision_1_1is__exact__zero" prot="public">catchem_bridge_precision::is_exact_zero</innerclass>
-    <innerclass refid="interfacecatchem__bridge__precision_1_1rae" prot="public">catchem_bridge_precision::rae</innerclass>
     <sectiondef kind="var">
       <memberdef kind="variable" id="namespacecatchem__bridge__precision_1abcb1d633b259f696132d0f4b82445007" prot="public" static="no" mutable="no">
         <type>integer, parameter, public</type>
@@ -124,7 +124,7 @@
         <qualifiedname>catchem_bridge_precision::missing</qualifiedname>
         <initializer>= -999.0_fp</initializer>
         <briefdescription>
-<para>Missing real value (kind=fp) </para>
+<para>Missing real value (kind=fp). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -140,7 +140,7 @@
         <qualifiedname>catchem_bridge_precision::missing_real</qualifiedname>
         <initializer>= -999.0_f4</initializer>
         <briefdescription>
-<para>Missing real value (kind=f4) </para>
+<para>Missing real value (kind=f4). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -156,7 +156,7 @@
         <qualifiedname>catchem_bridge_precision::missing_dble</qualifiedname>
         <initializer>= -999.0_f8</initializer>
         <briefdescription>
-<para>Missing real value (kind=f8) </para>
+<para>Missing real value (kind=f8). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -188,7 +188,7 @@
         <qualifiedname>catchem_bridge_precision::zero</qualifiedname>
         <initializer>=  0.0_fp</initializer>
         <briefdescription>
-<para>Zero value (kind=fp) </para>
+<para>Zero value (kind=fp). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -204,7 +204,7 @@
         <qualifiedname>catchem_bridge_precision::zero_real</qualifiedname>
         <initializer>=  0.0_f4</initializer>
         <briefdescription>
-<para>Zero value (kind=f4) </para>
+<para>Zero value (kind=f4). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -220,7 +220,7 @@
         <qualifiedname>catchem_bridge_precision::zero_dble</qualifiedname>
         <initializer>=  0.0_f8</initializer>
         <briefdescription>
-<para>Zero value (kind=f8) </para>
+<para>Zero value (kind=f8). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -236,7 +236,7 @@
         <qualifiedname>catchem_bridge_precision::tiny_real</qualifiedname>
         <initializer>=  1.0e-16_f4</initializer>
         <briefdescription>
-<para>A small value (kind=f4) </para>
+<para>A small value (kind=f4). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -252,7 +252,7 @@
         <qualifiedname>catchem_bridge_precision::tiny_dble</qualifiedname>
         <initializer>=  1.0e-31_f8</initializer>
         <briefdescription>
-<para>A small value (kind=f8) </para>
+<para>A small value (kind=f8). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -283,7 +283,7 @@
         <qualifiedname>catchem_bridge_precision::one</qualifiedname>
         <initializer>=  1.0_fp</initializer>
         <briefdescription>
-<para>One value (kind=fp) </para>
+<para>One value (kind=fp). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -299,7 +299,7 @@
         <qualifiedname>catchem_bridge_precision::one_real</qualifiedname>
         <initializer>=  1.0_f4</initializer>
         <briefdescription>
-<para>One value (kind=f4) </para>
+<para>One value (kind=f4). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -315,7 +315,7 @@
         <qualifiedname>catchem_bridge_precision::one_dble</qualifiedname>
         <initializer>=  1.0_f8</initializer>
         <briefdescription>
-<para>One value (kind=f8) </para>
+<para>One value (kind=f8). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -340,7 +340,7 @@
           <defname>b</defname>
         </param>
         <briefdescription>
-<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput>. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -363,7 +363,7 @@
           <defname>b</defname>
         </param>
         <briefdescription>
-<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput> </para>
+<para>Real approximately equal: <computeroutput>abs(a - b) &lt; tiny(a)</computeroutput>. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -386,7 +386,7 @@
           <defname>b</defname>
         </param>
         <briefdescription>
-<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -409,7 +409,7 @@
           <defname>b</defname>
         </param>
         <briefdescription>
-<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface) </para>
+<para>Exact equality (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1exact__equal" kindref="compound">exact_equal</ref></computeroutput> interface). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -428,7 +428,7 @@
           <defname>x</defname>
         </param>
         <briefdescription>
-<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -447,7 +447,7 @@
           <defname>x</defname>
         </param>
         <briefdescription>
-<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface) </para>
+<para>Exact zero test (see the <computeroutput><ref refid="interfacecatchem__bridge__precision_1_1is__exact__zero" kindref="compound">is_exact_zero</ref></computeroutput> interface). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>

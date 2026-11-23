@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="dir_57fb5aa14ddb2cd518a6d90b65ffd000" kind="dir">
     <compoundname>src/process/drydep</compoundname>
     <innerdir refid="dir_5a3c86e36f17958630366ebc2b7ca21b">src/process/drydep/schemes</innerdir>

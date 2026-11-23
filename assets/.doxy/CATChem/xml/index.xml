@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.15.0" xml:lang="en-US">
   <compound refid="structcarbchemcommon__mod_1_1carbchemconfig" kind="type"><name>carbchemcommon_mod::carbchemconfig</name>
     <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1a7717e844c24e4b51fa82150ee200fb2a" kind="variable"><name>scheme</name></member>
     <member refid="structcarbchemcommon__mod_1_1carbchemconfig_1ae4705966210565b2b475aaa98253d7b1" kind="variable"><name>is_active</name></member>

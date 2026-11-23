@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacewetdepscheme__gocart__mod" kind="namespace" language="Fortran">
     <compoundname>wetdepscheme_gocart_mod</compoundname>
     <sectiondef kind="var">
@@ -357,7 +357,7 @@
 <parametername>[OUT]</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>rc <blockquote><para><zwj/> </para>
+<para>rc <blockquote><para></para>
 </blockquote></para>
 </parameterdescription>
 </parameteritem>

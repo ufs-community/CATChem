@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="dir_fb8fc0df5ebe1b02f5e46b98d91cbc63" kind="dir">
     <compoundname>src/process/so4chem</compoundname>
     <innerdir refid="dir_429bccfa51a729cf5e11bef5cf73cbc7">src/process/so4chem/schemes</innerdir>

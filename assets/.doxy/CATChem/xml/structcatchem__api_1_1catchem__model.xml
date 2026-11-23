@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="structcatchem__api_1_1catchem__model" kind="type" language="Fortran" prot="public">
     <compoundname>catchem_api::catchem_model</compoundname>
     <sectiondef kind="public-attrib">
@@ -1143,19 +1143,6 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <collaborationgraph>
-      <node id="1">
-        <label>catchem_api::catchem_model</label>
-        <link refid="structcatchem__api_1_1catchem__model"/>
-        <childnode refid="2" relation="usage">
-          <edgelabel>cpp_core_ptr</edgelabel>
-          <edgelabel>state_mgr_ptr</edgelabel>
-        </childnode>
-      </node>
-      <node id="2">
-        <label>c_ptr</label>
-      </node>
-    </collaborationgraph>
     <location file="src/api/CATChem_API.F90" line="505" column="1" bodyfile="src/api/CATChem_API.F90" bodystart="505" bodyend="554"/>
     <listofallmembers>
       <member refid="structcatchem__api_1_1catchem__model_1a2094efcec5093a1a2f72f0a357f77230" prot="public" virt="non-virtual"><scope>catchem_api::catchem_model</scope><name>add_process</name></member>

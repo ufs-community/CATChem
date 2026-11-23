@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespaceso4chemcommon__mod" kind="namespace" language="Fortran">
     <compoundname>so4chemcommon_mod</compoundname>
     <innerclass refid="structso4chemcommon__mod_1_1so4chemconfig" prot="public">so4chemcommon_mod::so4chemconfig</innerclass>
+    <innerclass refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" prot="public">so4chemcommon_mod::so4chemschemegocartconfig</innerclass>
     <innerclass refid="structso4chemcommon__mod_1_1so4chemgocartpersistentstate" prot="public">so4chemcommon_mod::so4chemgocartpersistentstate</innerclass>
     <innerclass refid="structso4chemcommon__mod_1_1so4chemprocessconfig" prot="public">so4chemcommon_mod::so4chemprocessconfig</innerclass>
-    <innerclass refid="structso4chemcommon__mod_1_1so4chemschemegocartconfig" prot="public">so4chemcommon_mod::so4chemschemegocartconfig</innerclass>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

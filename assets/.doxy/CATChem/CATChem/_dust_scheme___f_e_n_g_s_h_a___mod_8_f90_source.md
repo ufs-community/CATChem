@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file DustScheme_FENGSHA_Mod.F90
+!! \brief Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS
+!!
+!! Pure science kernel for fengsha scheme in dust process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_fengsha (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2026-04-17T13:57:10.251187
+!! Author: Barry Baker & Wei Li
+!! Reference: Zhang et al. 2022
 module dustscheme_fengsha_mod
 
    use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
@@ -30,6 +51,42 @@ module dustscheme_fengsha_mod
 
 contains
 
+   !> Pure science computation for fengsha scheme
+   !!
+   !! This is a pure computational kernel implementing Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  g0    Required constant from Constants module
+   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  clayfrac    CLAYFRAC field [appropriate units]
+   !! @param[in]  frlake    FRLAKE field [appropriate units]
+   !! @param[in]  frsno    FRSNO field [appropriate units]
+   !! @param[in]  gvf    GVF field [appropriate units]
+   !! @param[in]  lai    LAI field [appropriate units]
+   !! @param[in]  lwi    LWI field [appropriate units]
+   !! @param[in]  rdrag    RDRAG field [appropriate units]
+   !! @param[in]  sandfrac    SANDFRAC field [appropriate units]
+   !! @param[in]  soilm    SOILM field [appropriate units]
+   !! @param[in]  ssm    SSM field [appropriate units]
+   !! @param[in]  tskin    TSKIN field [appropriate units]
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  ustar_threshold    USTAR_THRESHOLD field [appropriate units]
+   !! @param[in]  z0    Z0 field [appropriate units]
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_lower_radius    Species lower_radius property
+   !! @param[in]  species_upper_radius    Species upper_radius property
+   !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] dust_emission_total    Total dust emissions for all bins [kg/m2/s]
+   !! @param[inout] dust_emission_per_bin    Dust emission flux per bin [kg/m2/s] (num_species)
+   !! @param[inout] dust_horizontal_flux    Total horizontal flux - Q [kg/m2/s]
+   !! @param[inout] dust_moisture_correction    Moisture Correction - H [1.0]
+   !! @param[inout] dust_effective_threshold    Effective Dust threshold friction velocity: u_thres * H / R [m/s]
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_fengsha( &
       num_layers, &
       num_species, &
@@ -100,13 +157,13 @@ contains
       integer :: k, species_idx
       integer :: diag_idx  ! For diagnostic species indexing
       real(fp) :: fracland, total_emissions
-      real(fp) :: R
-      real(fp) :: H
-      real(fp) :: alpha_grav
-      real(fp) :: q
-      real(fp) :: FengshaScale
-      real(fp) :: h_to_v_ratio
-      real(fp) :: distribution(num_species)
+      real(fp) :: R                              !< Drag Partition [1]
+      real(fp) :: H                              !< Soil Moisture Attenuation Factor
+      real(fp) :: alpha_grav                     !< Alpha Parameter over Gravity
+      real(fp) :: q                              !< Horizontal Mass Flux
+      real(fp) :: FengshaScale                   !< Total Scaling Factor
+      real(fp) :: h_to_v_ratio                   !< Horizontal to Vertical Mass Flux Ratio
+      real(fp) :: distribution(num_species)      !< Distribution Weights
 
       ! `species_conc` is part of the shared scheme calling convention and
       ! intentionally unused by this scheme; reference it so the interface
@@ -283,6 +340,19 @@ contains
    ! Add your custom scientific algorithms here as pure functions/subroutines
    ! Examples: environmental response functions, species-specific calculations, etc.
 
+   !>
+   !!
+   !! Kok, J. F. (2011a), A scaling theory for the size distribution of emitted
+   !! dust aerosols suggests climate models underestimate the size of the global
+   !! dust cycle, Proc. Natl. Acad. Sci. U. S. A., 108(3), 1016–1021,
+   !! doi:10.1073/pnas.1014798108.
+   !!
+   !! \param radius Radius
+   !! \param rLow Lower radius
+   !! \param rUp Upper radius
+   !! \param dist Distribution
+   !!
+   !!!>
    subroutine kokdistribution(radius, rLow, rUp, dist)
       !use constants, only: pi
       IMPLICIT NONE
@@ -293,17 +363,17 @@ contains
       real(fp), dimension(:), intent(out) :: dist
 
       ! Local Variables
-      integer :: n
-      integer :: nbins
-      real(fp) :: diameter
-      real(fp) :: dlam
-      real(fp) :: dvol
+      integer :: n          !< looping variable
+      integer :: nbins      !< number of bins
+      real(fp) :: diameter  !< effective diameter of particle
+      real(fp) :: dlam      !< diameter / lambda
+      real(fp) :: dvol      !< volume of particle
 
       ! Constants
-      real(fp), parameter :: mmd = 3.4_fp                               
-      real(fp), parameter :: stddev = 3.0_fp                            
-      real(fp), parameter :: lambda = 12.0_fp                           
-      real(fp), parameter :: factor = 1.0_fp / ( sqrt(2.0_fp) * log(stddev)) 
+      real(fp), parameter :: mmd = 3.4_fp                               !< median mass diameter [microns]
+      real(fp), parameter :: stddev = 3.0_fp                            !< standard deviation [microns]
+      real(fp), parameter :: lambda = 12.0_fp                           !< crack propagation length [um]
+      real(fp), parameter :: factor = 1.0_fp / ( sqrt(2.0_fp) * log(stddev)) !< auxiliary constant for the distribution
 
       ! Initialize
       dvol = 0.0_fp
@@ -324,22 +394,35 @@ contains
 
    end subroutine kokdistribution
 
+   !>
+   !! Computes the soil moisture attenuation factor for dust emission
+   !!
+   !! Fecan, F., Marticorena, B., and Bergametti, G.: Parametrization of the increase of the aeolian
+   !! erosion threshold wind friction velocity due to soil moisture for arid and semi-arid areas,
+   !! Ann. Geophys., 17, 149–157, https://doi.org/10.1007/s00585-999-0149-7, 1999.
+   !!
+   !! \param clay Fractional clay content
+   !! \param sand Fractional sand content
+   !! \param volumetric_soil_moisture Volumetric soil moisture
+   !! \param H Soil moisture attenuation factor for dust emission
+   !!
+   !!!>
    subroutine fecan_soilmoisture( clay, sand, volumetric_soil_moisture, b, H)
       IMPLICIT NONE
       ! Parameters
       !-----------
-      real(fp), intent(in)  :: clay
-      real(fp), intent(in)  :: sand
-      real(fp), intent(in)  :: volumetric_soil_moisture
+      real(fp), intent(in)  :: clay                      !< Fractional Clay Content
+      real(fp), intent(in)  :: sand                      !< Fractional Sand Content
+      real(fp), intent(in)  :: volumetric_soil_moisture  !< volumetric soil moisture fraction [m3 / m3]
       real(fp), intent(in)  :: b                         ! drylimit factor from Zender 2003
-      real(fp), intent(out) :: H
+      real(fp), intent(out) :: H                         !< Soil Moisture attenuation factor for dust emission [1]
 
       ! Local Variables
       !----------------
-      real(fp) :: vsat
+      real(fp) :: vsat                      !< Saturated volumetric water content (sand-dependent) [m3 m-3]
 
-      real(fp) :: gravimetric_soil_moisture
-      real(fp) :: DryLimit
+      real(fp) :: gravimetric_soil_moisture !< Gravimetric soil moisture [kg/kg]
+      real(fp) :: DryLimit                  !< Dry limit of the soil moisture [kg/kg]
 
       !CONSTANTS:
       real(fp), parameter :: waterDensity = 1000.0_fp    ! density of water [kg m-3]
@@ -371,11 +454,23 @@ contains
 
    end subroutine fecan_soilmoisture
 
+   !>
+   !! \brief Computes the soil moisture attenuation factor for dust emission
+   !!
+   !! Zhao, T. L., S. L. Gong, X. Y. Zhang, A. Abdel-Mawgoud, and Y. P. Shao (2006),
+   !! An assessment of dust emission schemes in modeling east Asian dust storms,
+   !! J. Geophys. Res., 111, D05S90, doi:10.1029/2004JD005746.
+   !!
+   !! \param volumetric_soil_moisture Volumetric soil moisture
+   !! \param H Soil moisture attenuation factor for dust emission
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    subroutine zhao_soilmoisture( volumetric_soil_moisture, H)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: volumetric_soil_moisture
-      real(fp), intent(out) :: H
+      real(fp), intent(in)  :: volumetric_soil_moisture  !< Volumetric soil moisture [m3 m-3]
+      real(fp), intent(out) :: H                         !< Soil Moisture attenuation factor for dust emission [1]
 
       ! Initialize
       h = 0.0_fp
@@ -404,6 +499,11 @@ contains
       feff = r1 * r2
    end function calc_drag_partition
 
+   !>
+   !! Calculates the double drag partition  from Darmenova et al. 2009
+   !! DESCRIPTION: Computes the drag partition according to
+   !!              Darmenova, K. et al. 2009 Dust emission parameterization scheme
+   !!              regions in Central and East Asia, JGR Atmospheres, 114, D14201
    !
    ! !REVISION HISTORY:
    ! 27Jun2024 B.Baker/NOAA    - Original implementation
@@ -478,6 +578,15 @@ contains
 
    end subroutine darmenovadragpartition
 
+   !>
+   !! Calculates drag partition for mixed surfaces
+   !!
+   !! DESCRIPTION: Computes the drag partition coefficient for surfaces with both
+   !!              vegetative and bare components based on Leung's formulation
+   !!
+   !! REVISION HISTORY:
+   !! 15Aug2024 B.Baker/NOAA    - Original implementation
+   !!
    subroutine leungdragpartition(Lc, lai, gvf, thresh, dragpartition)
 
       ! !USES:
@@ -557,14 +666,26 @@ contains
 
    end subroutine leungdragpartition
 
+   !>
+   !! \brief Computes the Drag Partition from MB95
+   !!
+   !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
+   !! 1. Design of a soil-derived dust emission scheme,
+   !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995
+   !!
+   !! \param z0 roughness length
+   !! \param R Drag partition
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    subroutine mb95_dragpartition(z0, R)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: z0
-      real(fp), intent(out) :: R
+      real(fp), intent(in)  :: z0   !< roughness length [m]
+      real(fp), intent(out) :: R    !< Drag partition (0-1)
 
       ! Local Variables
-      real(fp), parameter :: z0s = 0.0008467_fp 
+      real(fp), parameter :: z0s = 0.0008467_fp !< ideal roughness length of soil
 
       ! Initialize
       r = 0.0_fp
@@ -577,18 +698,35 @@ contains
 
    end subroutine mb95_dragpartition
 
+   !>
+   !! \brief Computes Draxler Hoirizontal Flux
+   !!
+   !! Draxler, R.R, D.A. Gillette, J.S. Kirkpatrick, and J. Heller (2001),
+   !! Estimating PM10 air concentrations from dust storms in Iraq, Kuwait,
+   !! and Saudi Arabia, Atm. Environ, 35: 4315-4330.
+   !! https://doi.org/10.1016/S1352-2310(01)00159-5
+   !!
+   !! \param ustar friction velocity
+   !! \param ustar_threshold dry threshold friction velocity
+   !! \param R Drag partition
+   !! \param H Soil Moisture Attenuation Factor
+   !! \param HorizFlux Horizontal Mass Flux
+   !!
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    subroutine draxler_horizflux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: ustar
-      real(fp), intent(in)  :: ustar_threshold
-      real(fp), intent(in)  :: R
-      real(fp), intent(in)  :: H
-      real(fp), intent(inout) :: HorizFlux
+      real(fp), intent(in)  :: ustar            !< friction velocity [m/s]
+      real(fp), intent(in)  :: ustar_threshold  !< dry threshold friction velocity [m/s]
+      real(fp), intent(in)  :: R                !< Drag partition (0-1)
+      real(fp), intent(in)  :: H                !< Soil Moisture Attenuation Factor
+      real(fp), intent(inout) :: HorizFlux      !< Horizontal Mass Flux [kg/m2/s]
 
       ! Local Variables
       !----------------
-      real(fp) :: u_ts
+      real(fp) :: u_ts    !< Modified threshold friction velocity
 
       ! Initialize
       !-----------
@@ -605,17 +743,34 @@ contains
 
    end subroutine draxler_horizflux
 
+   !>
+   !! \brief Computes Kawamura Hoirizontal Flux
+   !!
+   !! Kawamura, R., 1951. Study on sand movement by wind. Report, 5(3), pp.95-112.
+   !!
+   !! Webb, N., Chappell, A., LeGrand, S., Ziegler, N., Edwards, B. 2020.
+   !! A note on the use of drag partition in aeolian transport models.
+   !! Aeolian Research. 42:100560. https://doi.org/10.1016/j.aeolia.2019.100560.
+   !!
+   !! \param ustar friction velocity
+   !! \param ustar_threshold dry threshold friction velocity
+   !! \param R Drag partition
+   !! \param H Soil Moisture Attenuation Factor
+   !! \param HorizFlux Horizontal Mass Flux
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    subroutine kawamura_horizflux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: ustar
-      real(fp), intent(in)  :: ustar_threshold
-      real(fp), intent(in)  :: R
-      real(fp), intent(in)  :: H
-      real(fp), intent(inout) :: HorizFlux
+      real(fp), intent(in)  :: ustar           !< friction velocity [m/s]
+      real(fp), intent(in)  :: ustar_threshold !< dry threshold friction velocity [m/s]
+      real(fp), intent(in)  :: R               !< Drag partition (0-1)
+      real(fp), intent(in)  :: H               !< Soil Moisture Attenuation Factor
+      real(fp), intent(inout) :: HorizFlux     !<
 
       ! Local Variables
-      real(fp) :: u_ts
+      real(fp) :: u_ts !< Modified threshold friction velocity
 
       ! Initialize
       horizflux = 0.0_fp
@@ -629,19 +784,33 @@ contains
 
    end subroutine kawamura_horizflux
 
+   !>
+   !! \brief Computes White Horizontal Flux (used in GOCART2G)
+   !!
+   !! White, B. R. (1979). Soil transport by winds on Mars and Earth.
+   !! JGR: Solid Earth, 84(B8), 4643–4651. https://doi.org/10.1029/JB084iB08p04643
+   !!
+   !! \param ustar friction velocity
+   !! \param ustar_threshold dry threshold friction velocity
+   !! \param R Drag partition
+   !! \param H Soil Moisture Attenuation Factor
+   !! \param HorizFlux Horizontal Mass Flux
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    subroutine white_horizflux(ustar, ustar_threshold, R, H, HorizFlux)
       IMPLICIT NONE
       ! Parameters
-      real(fp), intent(in)  :: ustar
-      real(fp), intent(in)  :: ustar_threshold
-      real(fp), intent(in)  :: R
-      real(fp), intent(in)  :: H
-      real(fp), intent(inout) :: HorizFlux
+      real(fp), intent(in)  :: ustar           !< friction velocity [m/s]
+      real(fp), intent(in)  :: ustar_threshold !< dry threshold friction velocity [m/s]
+      real(fp), intent(in)  :: R               !< Drag partition (0-1)
+      real(fp), intent(in)  :: H               !< Soil Moisture Attenuation Factor
+      real(fp), intent(inout) :: HorizFlux     !<
 
       ! Local Variables
-      real(fp) :: rustar
-      real(fp) :: u_thresh
-      real(fp) :: u_sum
+      real(fp) :: rustar !< Modified friction velocity
+      real(fp) :: u_thresh !< Modified threshold friction velocity
+      real(fp) :: u_sum !< Sum of modified friction and threshold velocities
 
       ! Initialize
       horizflux = 0.0_fp

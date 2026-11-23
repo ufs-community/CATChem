@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="interfacecatchem__api_1_1catchem__core__get__required__host__field__count__checked" kind="interface" language="Fortran" prot="private">
     <compoundname>catchem_api::catchem_core_get_required_host_field_count_checked</compoundname>
     <sectiondef kind="public-func">

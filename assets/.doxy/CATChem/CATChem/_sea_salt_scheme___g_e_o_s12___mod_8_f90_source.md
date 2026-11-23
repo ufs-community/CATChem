@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file SeaSaltScheme_GEOS12_Mod.F90
+!! \brief GEOS-Chem 2012 sea salt emission scheme with observational constraints
+!!
+!! Pure science kernel for geos12 scheme in seasalt process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_geos12 (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2026-05-28T17:20:09.399215
+!! Author: Barry Baker
+!! Reference: Jaeglé et al. [2011]
 module seasaltscheme_geos12_mod
 
    use catchem_bridge_precision, only: fp, zero, rae
@@ -22,6 +43,35 @@ module seasaltscheme_geos12_mod
 
 contains
 
+   !> Pure science computation for geos12 scheme
+   !!
+   !! This is a pure computational kernel implementing GEOS-Chem 2012 sea salt emission scheme with observational constraints.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  PI    Required constant from Constants module
+   !! @param[in]  frocean    FROCEAN field [appropriate units]
+   !! @param[in]  frseaice    FRSEAICE field [appropriate units]
+   !! @param[in]  lat    LAT field [appropriate units]
+   !! @param[in]  lon    LON field [appropriate units]
+   !! @param[in]  sst    SST field [appropriate units]
+   !! @param[in]  u10m    U10M field [appropriate units]
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_lower_radius    Species lower_radius property
+   !! @param[in]  species_upper_radius    Species upper_radius property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] seasalt_mass_emission_total    Total mass emission diagnostic [ug/m2/s]
+   !! @param[inout] seasalt_number_emission_total  Total number emission diagnostic [#/m2/s]
+   !! @param[inout] seasalt_mass_emission_per_bin   Mass emission per bin diagnostic [kg/m2/s] (num_species)
+   !! @param[inout] seasalt_number_emission_per_bin Number emission per bin diagnostic [#/m2/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_geos12( &
       num_layers, &
       num_species, &
@@ -76,16 +126,16 @@ contains
       ! Local variables
       integer :: k, RC
       integer :: diag_idx  ! For diagnostic species indexing
-      logical :: do_seasalt
-      integer :: n, ir
-      real(fp) :: w10m
-      integer, parameter :: nr = 10
-      real(fp), parameter    :: r80fac = 1.65_fp       
-      real(fp) :: DryRadius
-      real(fp) :: DeltaDryRadius
-      real(fp) :: rwet, drwet
-      real(fp) :: NumberEmissions
-      real(fp) :: MassEmissions
+      logical :: do_seasalt                            !< Enable Dust Calculation Flag
+      integer :: n, ir                                 !< Loop counter
+      real(fp) :: w10m                                 !< 10m wind speed [m/s]
+      integer, parameter :: nr = 10                    !< Number of (linear) sub-size bins
+      real(fp), parameter    :: r80fac = 1.65_fp       !< ratio of radius(RH=0.8)/radius(RH=0.) [Gerber]
+      real(fp) :: DryRadius                            !< sub-bin radius         (dry, um)
+      real(fp) :: DeltaDryRadius                       !< sub-bin radius spacing (dry, um)
+      real(fp) :: rwet, drwet                          !< sub-bin radius spacing (rh=80%, um)
+      real(fp) :: NumberEmissions                      !< sub-bin number emission rate [#/m2/s]
+      real(fp) :: MassEmissions                        !< sub-bin number emission rate [kg/m2/s]
       real(fp) :: mass_emission_flux(num_layers, num_species)
       real(fp) :: numb_emission_flux(num_layers, num_species)
       real(fp) :: aFac
@@ -264,6 +314,16 @@ contains
 
    end subroutine compute_geos12
 
+   !>
+   !! \brief Jeagle et al. 2012 SST correction
+   !!
+   !! Jaeglé, L., Quinn, P. K., Bates, T. S., Alexander, B., and Lin, J.-T.:
+   !! Global distribution of sea salt aerosols: new constraints from in situ and remote
+   !! sensing observations, Atmos. Chem. Phys., 11, 3137–3157,
+   !! https://doi.org/10.5194/acp-11-3137-2011, 2011.
+   !!
+   !! \ingroup catchem_seasalt_process
+   !!!>
    pure subroutine jeaglesstcorrection(fsstemis, sst, sstFlag, rc)
 
       ! !USES:
@@ -304,12 +364,21 @@ contains
       rc = 0
    end subroutine jeaglesstcorrection
 
+   !>
+   !! \brief Function to compute sea salt emissions following the Gong style parameterization.
+   !!
+   !! Functional form is from Gong 2003:
+   !!   \f$dN/dr = scalefac * 1.373 * (w^wpow) * (r^-aFac) * (1+0.057*r^rpow) * 10^(exppow*exp(-bFac^2))\f$
+   !! where r is the particle radius at 80% RH, dr is the size bin width at 80% RH, and w is the wind speed
+   !!
+   !! \ingroup catchem_seasalt_process
+   !!!>
    pure function seasaltemissiongong ( r, dr, w, scalefac, aFac, bFac, rpow, exppow, wpow )
 
-      real(fp), intent(in) :: r
-      real(fp), intent(in) :: dr
-      real(fp), intent(in) :: w
-      real(fp), intent(in) :: scalefac
+      real(fp), intent(in) :: r         !< Wet particle radius [um]
+      real(fp), intent(in) :: dr        !< Wet particle bin width [um]
+      real(fp), intent(in) :: w         !< Grid box mean wind speed [m s-1] (10-m or ustar wind)
+      real(fp), intent(in) :: scalefac  !< scale factor
       real(fp), intent(in) :: aFac
       real(fp), intent(in) :: bFac
       real(fp), intent(in) :: rpow
@@ -328,6 +397,22 @@ contains
 
    end function seasaltemissiongong
 
+   !>
+   !! \brief Calculate the weibull distribution for 10m wind speed (u10, v10)
+   !!
+   !! The Weibull distribution correction ends up being a multiplicative constant
+   !! (g) times our present source function (see Eq. 12 in Fan & Toon, 2011 and notes for
+   !! (9/22/11). This constant is derived from the incomplete and complete forms of the gamma
+   !! function, hence the utilities pasted below.  The Weibull function and shape
+   !! parameters (k, c) assumed are from Justus 1978.
+   !!
+   !! \param[inout] gweibull Multiplicative constant
+   !! \param[in]    weibullFlag  Flag for weibull correction
+   !! \param[in]    wm 10m wind speed
+   !! \param[out]   RC Return Code
+   !!
+   !! \ingroup catchem_seasalt_process
+   !!!>
    subroutine weibulldistribution(gweibull, weibullFlag, wm, RC)
 
       implicit none
@@ -371,6 +456,18 @@ contains
 
    end subroutine weibulldistribution
 
+   !>
+   !! \brief Calculate the incomplete Gamma function
+   !!
+   !! The incomplete Gamma function is defined as
+   !! \int_x^\infty t^{A-1}\exp(-t) dt
+   !!
+   !! \param[in]    A
+   !! \param[in]    X
+   !! \param[out]   RC
+   !!
+   !! \ingroup catchem_seasalt_process
+   !!!>
    real(fp) function igamma(A, X, RC)
 
       IMPLICIT NONE

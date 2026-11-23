@@ -8,7 +8,14 @@
 
 
 ```Fortran
-
+!> \file CATChem_API.F90
+!! \brief Modernized high-level BIND(C) API for host model integration
+!!
+!! This module provides the standard, backward-compatible CATChem_Model
+!! derived type used by Earth System drivers (like NUOPC and UFS).
+!! It delegates all memory management, synchronization, and process scheduling
+!! directly to the modernized top-down C++ Core via standard BIND(C) bridges.
+!!
 module catchem_api
    use iso_c_binding
    use catchem_bridge_precision, only: fp
@@ -1178,6 +1185,11 @@ contains
       enabled = (catchem_config_get_diag_enabled(this%cpp_core_ptr) /= 0_c_int)
    end function model_is_diag_enabled
 
+   !> \brief True when diagnostics.output/process_diagnostics is enabled in the
+   !! runtime YAML.  DEPRECATED: the NUOPC driver no longer consults this key
+   !! -- per-process diagnostics are written whenever they are registered and
+   !! runtime diagnostics are enabled (parity with the legacy Fortran core).
+   !! The accessor is retained only so existing configs keep parsing.
    function model_is_process_diag_enabled(this) result(enabled)
       class(CATChem_Model), intent(in) :: this
       logical :: enabled

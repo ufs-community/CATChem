@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacedustscheme__fengsha__mod" kind="namespace" language="Fortran">
     <compoundname>dustscheme_fengsha_mod</compoundname>
     <sectiondef kind="var">
@@ -518,7 +518,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
@@ -589,7 +589,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">clay</parametername>
@@ -665,7 +665,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">volumetric_soil_moisture</parametername>
@@ -827,7 +827,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">z0</parametername>
@@ -923,7 +923,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">ustar</parametername>
@@ -1044,7 +1044,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">ustar</parametername>
@@ -1111,7 +1111,7 @@
           <defname>horizflux</defname>
         </param>
         <briefdescription>
-<para>Computes White Horizontal Flux (used in GOCART2G) </para>
+<para>Computes White Horizontal Flux (used in GOCART2G). </para>
         </briefdescription>
         <detaileddescription>
 <para>White, B. R. (1979). Soil transport by winds on Mars and Earth. JGR: Solid Earth, 84(B8), 4643–4651. <ulink url="https://doi.org/10.1029/JB084iB08p04643">https://doi.org/10.1029/JB084iB08p04643</ulink></para>
@@ -1156,7 +1156,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote><parameterlist kind="param"><parameteritem>
 <parameternamelist>
 <parametername direction="in">ustar</parametername>

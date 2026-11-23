@@ -1,56 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacecatchem__api" kind="namespace" language="Fortran">
     <compoundname>catchem_api</compoundname>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__compress__level" prot="private">catchem_api::catchem_config_get_compress_level</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__config__file__path" prot="private">catchem_api::catchem_config_get_config_file_path</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__enabled" prot="private">catchem_api::catchem_config_get_diag_enabled</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__species__at" prot="private">catchem_api::catchem_config_get_diag_species_at</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__species__count" prot="private">catchem_api::catchem_config_get_diag_species_count</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__latlon__output" prot="private">catchem_api::catchem_config_get_latlon_output</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__count" prot="private">catchem_api::catchem_config_get_output_attribute_count</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__key__at" prot="private">catchem_api::catchem_config_get_output_attribute_key_at</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__value__at" prot="private">catchem_api::catchem_config_get_output_attribute_value_at</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__directory" prot="private">catchem_api::catchem_config_get_output_directory</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__frequency" prot="private">catchem_api::catchem_config_get_output_frequency</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__prefix" prot="private">catchem_api::catchem_config_get_output_prefix</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__process__active" prot="private">catchem_api::catchem_config_get_process_active</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__process__diagnostics__enabled" prot="private">catchem_api::catchem_config_get_process_diagnostics_enabled</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__config__has__emission__mapping" prot="private">catchem_api::catchem_config_has_emission_mapping</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__add__process__by__name" prot="private">catchem_api::catchem_core_add_process_by_name</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid__checked" prot="private">catchem_api::catchem_core_create_from_config_with_grid_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__destroy__checked" prot="private">catchem_api::catchem_core_destroy_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__state__manager__checked" prot="private">catchem_api::catchem_core_get_state_manager_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__get__last__error" prot="private">catchem_api::catchem_get_last_error</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__core__create__from__config" prot="private">catchem_api::catchem_core_create_from_config</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid" prot="private">catchem_api::catchem_core_create_from_config_with_grid</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid__checked" prot="private">catchem_api::catchem_core_create_from_config_with_grid_checked</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__core__destroy" prot="private">catchem_api::catchem_core_destroy</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__destroy__checked" prot="private">catchem_api::catchem_core_destroy_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__num__processes" prot="private">catchem_api::catchem_core_get_num_processes</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__num__processes__checked" prot="private">catchem_api::catchem_core_get_num_processes_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__required__host__field__count__checked" prot="private">catchem_api::catchem_core_get_required_host_field_count_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__required__host__field__name__checked" prot="private">catchem_api::catchem_core_get_required_host_field_name_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__state__manager" prot="private">catchem_api::catchem_core_get_state_manager</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__state__manager__checked" prot="private">catchem_api::catchem_core_get_state_manager_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__core__run__timestep" prot="private">catchem_api::catchem_core_run_timestep</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__contract" prot="public">catchem_api::catchem_diag_get_contract</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__count" prot="private">catchem_api::catchem_diag_get_count</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__count__checked" prot="private">catchem_api::catchem_diag_get_count_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__dims" prot="private">catchem_api::catchem_diag_get_dims</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__dims__checked" prot="private">catchem_api::catchem_diag_get_dims_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__name__at" prot="private">catchem_api::catchem_diag_get_name_at</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__name__at__checked" prot="private">catchem_api::catchem_diag_get_name_at_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__pointer" prot="private">catchem_api::catchem_diag_get_pointer</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__pointer__checked" prot="private">catchem_api::catchem_diag_get_pointer_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__rank" prot="private">catchem_api::catchem_diag_get_rank</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__rank__checked" prot="private">catchem_api::catchem_diag_get_rank_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register" prot="private">catchem_api::catchem_diag_register</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register__checked" prot="private">catchem_api::catchem_diag_register_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register__contract__checked" prot="public">catchem_api::catchem_diag_register_contract_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__diag__sync__to__host" prot="private">catchem_api::catchem_diag_sync_to_host</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__get__build__commit" prot="private">catchem_api::catchem_get_build_commit</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__get__build__version" prot="private">catchem_api::catchem_get_build_version</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__get__config__timestep" prot="private">catchem_api::catchem_get_config_timestep</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__get__grid__dimensions" prot="private">catchem_api::catchem_get_grid_dimensions</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__get__last__error" prot="private">catchem_api::catchem_get_last_error</innerclass>
-    <innerclass refid="structcatchem__api_1_1catchem__model" prot="public">catchem_api::catchem_model</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__register__carbchem__cpp" prot="private">catchem_api::catchem_register_carbchem_cpp</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__register__drydep__cpp" prot="private">catchem_api::catchem_register_drydep_cpp</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__register__dust__cpp" prot="private">catchem_api::catchem_register_dust_cpp</innerclass>
@@ -58,23 +16,65 @@
     <innerclass refid="interfacecatchem__api_1_1catchem__register__settling__cpp" prot="private">catchem_api::catchem_register_settling_cpp</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__register__so4chem__cpp" prot="private">catchem_api::catchem_register_so4chem_cpp</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__register__wetdep__cpp" prot="private">catchem_api::catchem_register_wetdep_cpp</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__state__manager" prot="private">catchem_api::catchem_core_get_state_manager</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__add__process__by__name" prot="private">catchem_api::catchem_core_add_process_by_name</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__num__processes" prot="private">catchem_api::catchem_core_get_num_processes</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__num__processes__checked" prot="private">catchem_api::catchem_core_get_num_processes_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__required__host__field__count__checked" prot="private">catchem_api::catchem_core_get_required_host_field_count_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__get__required__host__field__name__checked" prot="private">catchem_api::catchem_core_get_required_host_field_name_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__core__run__timestep" prot="private">catchem_api::catchem_core_run_timestep</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d" prot="private">catchem_api::catchem_state_bind_met_3d</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d__checked" prot="private">catchem_api::catchem_state_bind_met_3d_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d__axis__checked" prot="private">catchem_api::catchem_state_bind_met_3d_axis_checked</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__2d" prot="private">catchem_api::catchem_state_bind_met_2d</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__2d__checked" prot="private">catchem_api::catchem_state_bind_met_2d_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d" prot="private">catchem_api::catchem_state_bind_met_3d</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d__axis__checked" prot="private">catchem_api::catchem_state_bind_met_3d_axis_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__met__3d__checked" prot="private">catchem_api::catchem_state_bind_met_3d_checked</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__unified__chemistry" prot="private">catchem_api::catchem_state_bind_unified_chemistry</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__bind__unified__chemistry__checked" prot="private">catchem_api::catchem_state_bind_unified_chemistry_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__physical__validation__report__checked" prot="private">catchem_api::catchem_state_get_physical_validation_report_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer" prot="private">catchem_api::catchem_state_get_species_conc_pointer</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer__checked" prot="private">catchem_api::catchem_state_get_species_conc_pointer_checked</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__count" prot="private">catchem_api::catchem_state_get_species_count</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__mw" prot="private">catchem_api::catchem_state_get_species_mw</innerclass>
-    <innerclass refid="interfacecatchem__api_1_1catchem__state__set__physical__validation__policy__checked" prot="private">catchem_api::catchem_state_set_physical_validation_policy_checked</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__sync__to__device" prot="private">catchem_api::catchem_state_sync_to_device</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__sync__to__device__checked" prot="private">catchem_api::catchem_state_sync_to_device_checked</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__sync__to__host" prot="private">catchem_api::catchem_state_sync_to_host</innerclass>
     <innerclass refid="interfacecatchem__api_1_1catchem__state__sync__to__host__checked" prot="private">catchem_api::catchem_state_sync_to_host_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer" prot="private">catchem_api::catchem_state_get_species_conc_pointer</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__conc__pointer__checked" prot="private">catchem_api::catchem_state_get_species_conc_pointer_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__get__grid__dimensions" prot="private">catchem_api::catchem_get_grid_dimensions</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__get__config__timestep" prot="private">catchem_api::catchem_get_config_timestep</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__frequency" prot="private">catchem_api::catchem_config_get_output_frequency</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__compress__level" prot="private">catchem_api::catchem_config_get_compress_level</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__directory" prot="private">catchem_api::catchem_config_get_output_directory</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__prefix" prot="private">catchem_api::catchem_config_get_output_prefix</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__latlon__output" prot="private">catchem_api::catchem_config_get_latlon_output</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__enabled" prot="private">catchem_api::catchem_config_get_diag_enabled</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__process__diagnostics__enabled" prot="private">catchem_api::catchem_config_get_process_diagnostics_enabled</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__species__count" prot="private">catchem_api::catchem_config_get_diag_species_count</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__diag__species__at" prot="private">catchem_api::catchem_config_get_diag_species_at</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__count" prot="private">catchem_api::catchem_config_get_output_attribute_count</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__key__at" prot="private">catchem_api::catchem_config_get_output_attribute_key_at</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__output__attribute__value__at" prot="private">catchem_api::catchem_config_get_output_attribute_value_at</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__config__file__path" prot="private">catchem_api::catchem_config_get_config_file_path</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__get__build__version" prot="private">catchem_api::catchem_get_build_version</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__get__build__commit" prot="private">catchem_api::catchem_get_build_commit</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__get__process__active" prot="private">catchem_api::catchem_config_get_process_active</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__config__has__emission__mapping" prot="private">catchem_api::catchem_config_has_emission_mapping</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__pointer" prot="private">catchem_api::catchem_diag_get_pointer</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__pointer__checked" prot="private">catchem_api::catchem_diag_get_pointer_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__rank" prot="private">catchem_api::catchem_diag_get_rank</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__rank__checked" prot="private">catchem_api::catchem_diag_get_rank_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__dims" prot="private">catchem_api::catchem_diag_get_dims</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__dims__checked" prot="private">catchem_api::catchem_diag_get_dims_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register" prot="private">catchem_api::catchem_diag_register</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register__checked" prot="private">catchem_api::catchem_diag_register_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__register__contract__checked" prot="public">catchem_api::catchem_diag_register_contract_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__contract" prot="public">catchem_api::catchem_diag_get_contract</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__sync__to__host" prot="private">catchem_api::catchem_diag_sync_to_host</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__count" prot="private">catchem_api::catchem_diag_get_count</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__count__checked" prot="private">catchem_api::catchem_diag_get_count_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__name__at" prot="private">catchem_api::catchem_diag_get_name_at</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__diag__get__name__at__checked" prot="private">catchem_api::catchem_diag_get_name_at_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__count" prot="private">catchem_api::catchem_state_get_species_count</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__set__physical__validation__policy__checked" prot="private">catchem_api::catchem_state_set_physical_validation_policy_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__physical__validation__report__checked" prot="private">catchem_api::catchem_state_get_physical_validation_report_checked</innerclass>
+    <innerclass refid="interfacecatchem__api_1_1catchem__state__get__species__mw" prot="private">catchem_api::catchem_state_get_species_mw</innerclass>
+    <innerclass refid="structcatchem__api_1_1catchem__model" prot="public">catchem_api::catchem_model</innerclass>
     <sectiondef kind="func">
       <memberdef kind="function" id="namespacecatchem__api_1a56f63785475da72da8bac690edf59bee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>subroutine</type>

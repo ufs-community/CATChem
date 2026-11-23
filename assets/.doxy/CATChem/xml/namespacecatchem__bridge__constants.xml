@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacecatchem__bridge__constants" kind="namespace" language="Fortran">
     <compoundname>catchem_bridge_constants</compoundname>
     <sectiondef kind="var">
@@ -299,7 +299,7 @@
         <qualifiedname>catchem_bridge_constants::von_karman</qualifiedname>
         <initializer>= 0.41_fp</initializer>
         <briefdescription>
-<para>Von Karman&apos;s constant (dimensionless) </para>
+<para>Von Karman&apos;s constant (dimensionless). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -347,7 +347,7 @@
         <qualifiedname>catchem_bridge_constants::pi</qualifiedname>
         <initializer>= 3.14159265358979323_fp</initializer>
         <briefdescription>
-<para>Pi (dimensionless) </para>
+<para>Pi (dimensionless). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -379,7 +379,7 @@
         <qualifiedname>catchem_bridge_constants::e</qualifiedname>
         <initializer>= 2.718281828459045235360287471352_fp</initializer>
         <briefdescription>
-<para>Euler&apos;s number (dimensionless) </para>
+<para>Euler&apos;s number (dimensionless). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -411,7 +411,7 @@
         <qualifiedname>catchem_bridge_constants::rgaslatm</qualifiedname>
         <initializer>= 8.2057<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-2_fp</initializer>
         <briefdescription>
-<para>Gas constant in L⋅atm/(K⋅mol) </para>
+<para>Gas constant in L⋅atm/(K⋅mol). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
@@ -443,7 +443,7 @@
         <qualifiedname>catchem_bridge_constants::max_len_name</qualifiedname>
         <initializer>= 256</initializer>
         <briefdescription>
-<para>Maximum length for names (fields, config keys, etc.) </para>
+<para>Maximum length for names (fields, config keys, etc.). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>

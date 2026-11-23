@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_wet_dep_science_bridge_8_f90" kind="file" language="Fortran">
     <compoundname>WetDepScienceBridge.F90</compoundname>
     <innernamespace refid="namespacewetdepsciencebridge__mod">wetdepsciencebridge_mod</innernamespace>
@@ -231,7 +231,15 @@
 <codeline lineno="221"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>end<sp/>do</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="222"><highlight class="normal"></highlight></codeline>
 <codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacewetdepsciencebridge__mod_1a0bdd4fe30c5f5dd75930afcc676d0e74" kindref="member">run_wetdep_science_bridge</ref></highlight></codeline>
-<codeline lineno="224"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="225"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>GOCART2G<sp/>wet-removal<sp/>entry<sp/>point<sp/>(scheme<sp/>&apos;gocart&apos;).</highlight></codeline>
+<codeline lineno="226"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="227"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Separate<sp/>bind(C)<sp/>entry<sp/>from<sp/>the<sp/>Jacob<sp/>bridge<sp/>so<sp/>the<sp/>protected<sp/>Jacob<sp/>surface</highlight></codeline>
+<codeline lineno="228"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>(run_wetdep_science_bridge)<sp/>stays<sp/>byte-identical.<sp/><sp/>Shares<sp/>this<sp/>module&apos;s</highlight></codeline>
+<codeline lineno="229"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>species-array<sp/>marshalling<sp/>idiom;<sp/>differs<sp/>in<sp/>the<sp/>scheme<sp/>configuration<sp/>record</highlight></codeline>
+<codeline lineno="230"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>(WetDepSchemeGOCARTConfig)<sp/>and<sp/>the<sp/>two<sp/>additional<sp/>surface<sp/>precipitation</highlight></codeline>
+<codeline lineno="231"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>inputs<sp/>PRECCON/PRECLSC<sp/>required<sp/>by<sp/>the<sp/>GOCART<sp/>kernel<sp/>(instantaneous</highlight></codeline>
+<codeline lineno="232"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>rain<sp/>amounts<sp/>[m],<sp/>divided<sp/>by<sp/>tstep<sp/>inside<sp/>the<sp/>kernel<sp/>to<sp/>rates<sp/>[m/s]).</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacewetdepsciencebridge__mod_1a7a6a260ce5cc84f2d58e5a36cc897966" kindref="member">run_wetdep_gocart_science_bridge</ref>(<sp/>&amp;</highlight></codeline>
 <codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>n_cols,<sp/>n_levels,<sp/>n_species,<sp/>dt,<sp/>&amp;</highlight></codeline>
 <codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>diagnostics,<sp/>&amp;</highlight></codeline>

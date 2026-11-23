@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_carb_chem_science_bridge_8_f90" kind="file" language="Fortran">
     <compoundname>CarbChemScienceBridge.F90</compoundname>
     <innernamespace refid="namespacecarbchemsciencebridge__mod">carbchemsciencebridge_mod</innernamespace>

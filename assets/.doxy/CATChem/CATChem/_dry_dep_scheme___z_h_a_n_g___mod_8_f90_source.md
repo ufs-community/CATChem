@@ -8,7 +8,38 @@
 
 
 ```Fortran
-
+!> \file DryDepScheme_ZHANG_Mod.F90
+!! \brief Zhang et al. [2001] scheme with Emerson et al. [2020] updates.
+!! The Ra and Rb are still from Wesely (1989) for now.
+!!
+!! Pure science kernel for zhang scheme in drydep process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!! Reference:
+!! (1) Wesely, M. L. (1989). Parameterization of surface resistances to gaseous dry
+!!     deposition in regional-scale numerical models. Atmospheric Environment.
+!! (2) Zhang, L., Gong, S., Padro, J., & Barrie, L. (2001). A size-segregated particle
+!!     dry deposition scheme for an atmospheric aerosol module. Atmospheric environment.
+!! (3) Emerson, E. W., et al. (2020). Revisiting particle dry deposition and its role
+!!     in radiative effect estimates. PNAS, 117(42), 26076-26082.
+!! (4) Most of the codes are adopted from GEOS-Chem drydep_mod.F90 module.
+!!     https://github.com/geoschem/geos-chem
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_zhang (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2025-11-13T17:12:59.281598
+!! Author: Wei Li
+!! Reference: Zhang et al., 2001; Emerson et al., 2020
 module drydepscheme_zhang_mod
 
    use catchem_bridge_precision, only: fp, rae, f8
@@ -56,7 +87,7 @@ module drydepscheme_zhang_mod
       3, 6,   6,  4,  4,  2,  6,  2,  4,  9,  4,  4,  4,  5, 5,   5,  2,  5, 9,  5,   5,  2,  8,  8,  5, &
       5, 7,   2,  4,  2,  2,  2,  5,  2,  2,  3,  5,  5,  9, 9,   9,  9,  8, 8,  8,   9,  11/
    real(fp), parameter :: TWO_THIRDS  = 2.0_fp / 3.0_fp
-   real(fp), parameter :: SMALL = 1.0e-10_fp 
+   real(fp), parameter :: SMALL = 1.0e-10_fp !< Small number
 
    !=======================================================================
    !   LUC       1,    2,    3,    4,    5,    6,    7,    8,
@@ -130,6 +161,47 @@ module drydepscheme_zhang_mod
 
 contains
 
+   !> Pure science computation for zhang scheme
+   !!
+   !! This is a pure computational kernel implementing Zhang et al. [2001] scheme with Emerson et al. [2020] updates.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  bxheight    BXHEIGHT field [appropriate units]
+   !! @param[in]  frlanduse    FRLANDUSE field [appropriate units]
+   !! @param[in]  iland    ILAND field [appropriate units]
+   !! @param[in]  isice    IsIce field [appropriate units]
+   !! @param[in]  issnow    IsSnow field [appropriate units]
+   !! @param[in]  lucname    LUCNAME field [appropriate units]
+   !! @param[in]  obk    OBK field [appropriate units]
+   !! @param[in]  ps    PS field [appropriate units]
+   !! @param[in]  rh    RH field [appropriate units]
+   !! @param[in]  ts    TS field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  u10m    U10M field [appropriate units]
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  z0    Z0 field [appropriate units]
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_dd_hstar    Species dd_hstar property
+   !! @param[in]  species_dd_DvzAerSnow    Species dd_DvzAerSnow property
+   !! @param[in]  species_dd_DvzMinVal_snow    Species dd_DvzMinVal_snow property
+   !! @param[in]  species_dd_DvzMinVal_land    Species dd_DvzMinVal_land property
+   !! @param[in]  species_lower_radius    Species lower_radius property
+   !! @param[in]  species_upper_radius    Species upper_radius property
+   !! @param[in]  species_is_dust    Species is_dust property
+   !! @param[in]  species_is_seasalt    Species is_seasalt property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)
+   !! @param[inout] drydep_velocity_per_species    Dry deposition velocity [m/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_zhang( &
       num_layers, &
       num_species, &
@@ -214,8 +286,8 @@ contains
       real(fp) :: DDFreq   ! Dry deposition frequency
       real(fp) :: C1X, RA, RB, RSURFC, VTSoutput, VK, DVZ
       real(fp) :: HSTAR, XMW, W10
-      integer  :: II
-      integer  :: ILDT
+      integer  :: II     !< Index of the drydep land type
+      integer  :: ILDT   !< index of the land types in the grid box
       integer  :: LDT    !loop index of land types
       integer  :: LUCINDEX !mapping above II to Zhang's 15 land types for aerosols
       !logical
@@ -431,6 +503,18 @@ contains
    ! Add your custom scientific algorithms here as pure functions/subroutines
    ! Examples: environmental response functions, species-specific calculations, etc.
 
+   !> Extract and sort seasalt bin boundaries from species properties
+   !!
+   !! This subroutine identifies seasalt species and extracts their lower and upper
+   !! radius boundaries, then sorts them in ascending order using the same approach
+   !! as Find_SeaSalt_Bin in ChemState_Mod.
+   !!
+   !! @param[in]  num_species       Number of chemical species
+   !! @param[in]  is_seasalt        Logical array indicating which species are seasalt
+   !! @param[in]  lower_radius      Lower radius bounds for each species [μm]
+   !! @param[in]  upper_radius      Upper radius bounds for each species [μm]
+   !! @param[out] lower_bin         Sorted lower bin boundaries [μm]
+   !! @param[out] upper_bin         Sorted upper bin boundaries [μm]
    subroutine get_seasalt_bin_boundaries(num_species, is_seasalt, lower_radius, upper_radius, &
       lower_bin, upper_bin)
       implicit none
@@ -519,6 +603,38 @@ contains
 
    end subroutine get_seasalt_bin_boundaries
 
+   !>
+   !! \brief computes the aerodynamic resistance of aerosols.
+   !!
+   !!References:
+   !! Zhang, L., Gong, S., Padro, J., & Barrie, L. (2001). A size-segregated particle
+   !! dry deposition scheme for an atmospheric aerosol module.
+   !! Atmospheric environment., https://doi.org/10.1016/S1352-2310(00)00326-5
+   !!
+   !! Emerson, E. W., et al. (2020). Revisiting particle dry deposition and its role
+   !! in radiative effect estimates. PNAS, 117(42), 26076-26082.
+   !! https://doi.org/10.1073/pnas.2014761117
+   !!
+   !! \param SPC        Species name
+   !! \param II         Surface type index
+   !! \param IS_DUST    Is dust species?
+   !! \param IS_SEASALT Is seasalt species?
+   !! \param LUCINDEX   mapping above II to the 15 drydep land use categories
+   !! \param A_RADI     Aerosol radius [m]
+   !! \param A_DEN      Aerosol density [kg/m3]
+   !! \param PRESS      Pressure [KPa]
+   !! \param TEMP       Temperature [K]
+   !! \param USTAR      Fictional Velocity [m/s]
+   !! \param RHB        Relative humidity [fraction]
+   !! \param W10        10m wind speed [m/s]
+   !! \param LOWERBIN   lower bound of sea-salt bins
+   !! \param UPPERBIN   upper bound of sea-salt bins
+   !! \param VTSout     output of setttling velocity [m/s]
+   !! \param RC         success flag
+   !! \param RS         return value of surface resistance [s/m]
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
 
    FUNCTION aero_sfcrsii(  SPC, IS_DUST, IS_SEASALT, LUCINDEX, A_RADI, A_DEN, &
       PRESS, TEMP, USTAR, RHB, W10, LOWERBIN, UPPERBIN, VTSout, RC) RESULT( RS )
@@ -871,6 +987,24 @@ contains
 
    END FUNCTION aero_sfcrsii
 
+   !>
+   !! \brief updates the diameter and density of non-dust aerosols
+   !!
+   !!References:
+   !! Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90)
+   !! ADUST_SFCRSII and AERO_SFCRSII functions
+   !!
+   !! \param SPC        Species name
+   !! \param IS_SEASALT Is seasalt species?
+   !! \param RHBL       Relative humidity [unitless]
+   !! \param RDRY       Dry radius of particle [m]
+   !! \param RWET       Wet radius of particle [m]
+   !! \param DIAM       diameter of wet particle [m]
+   !! \param DEN        density of particle [kg/m3]
+   !! \param RC         return code
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    SUBROUTINE new_diam_den( SPC, IS_SEASALT, RHBL, RDRY, RWET, DIAM, DEN, RC)
 
       IMPLICIT NONE
@@ -1046,6 +1180,23 @@ contains
 
    END SUBROUTINE new_diam_den
 
+   !>
+   !! \brief calculates the volume size distribution of sea-salt.
+   !! This only has to be done once. We assume that sea-salt is the
+   !! combination of a coarse mode and accumulation model log-normal
+   !! distribution functions. The resulting arrays are: DMID = diameter
+   !! of bin and SALT_V = dV/dln(D) [in um3].
+   !!
+   !!References:
+   !! Adapted from GEOS-Chem source code (GeosCore/drydep_mod.F90)
+   !! INIT_WEIGHTSS function
+   !!
+   !!
+   !! \param SALT_RLOW_um  lowest edge of sea salt radius [um]
+   !! \param SALT_RUP_um   uppest edge of sea sakt radius [um]
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
 
    SUBROUTINE init_weightss( SALT_RLOW_um, SALT_RUP_um, RC )
 
@@ -1138,6 +1289,18 @@ contains
 
    END SUBROUTINE init_weightss
 
+   !>
+   !! \brief calculates the molecular diffusivity [m2/s] in air for a gas X
+   !!  of molecular weight XM [kg] at temperature TK [K] and pressure PRESS [Pa].
+   !!
+   !!References:
+   !!
+   !! \param TK      Temperatue [K]
+   !! \param PRESS   Pressure [Pa]
+   !! \param XM      Molecular weight of gas [kg]
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
 
    FUNCTION diffg( TK, PRESS, XM ) RESULT( DIFF_G )
 
@@ -1190,22 +1353,44 @@ contains
 
    END FUNCTION diffg
 
+   !>
+   !! \brief calculates the Ra and Rb term in the Wesely scheme
+   !!
+   !!References:
+   !! Wesely, M. L. "Parameterization of surface resistances to gaseous dry deposition in
+   !! regional-scale numerical models." Atmospheric environment 41 (2007): 52-63.
+   !! https://doi.org/10.1016/0004-6981(89)90153-4
+   !!
+   !! \param TEMPK       Temperatue [K]
+   !! \param PRESSU      Pressure [Pa]
+   !! \param XMW         Molecular weight [kg/mol]
+   !! \param USTAR       Fictional Velocity [m/s]
+   !! \param OBK         Monin-Obhukov length [m]
+   !! \param ZO          Roughness length [m]
+   !! \param THIK        height of first model layer [m]
+   !! \param IS_GAS      flag for gas
+   !! \param Ra          output of aerodynamic resistance [s/m]
+   !! \param Rb          output of quasi-laminar boundary layer resistance [s/m]
+   !! \param RC          Success or failure?
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    subroutine wesely_ra_rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, IS_GAS, Ra, Rb, RC)
       IMPLICIT NONE
       ! Parameters
       !-----------
-      real(fp), intent(in)  :: TEMP
-      real(fp), intent(in)  :: PRESSU
-      real(fp), intent(in)  :: XMW
-      real(fp), intent(in)  :: USTAR
-      real(fp), intent(in)  :: OBK
-      real(fp), intent(in)  :: ZO
-      real(fp), intent(in)  :: THIK
-      logical, intent(in)   :: IS_GAS
+      real(fp), intent(in)  :: TEMP        !< Temperature [K]
+      real(fp), intent(in)  :: PRESSU      !< Pressure [Pa]
+      real(fp), intent(in)  :: XMW         !< Molecular weight [kg/mol]
+      real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
+      real(fp), intent(in)  :: OBK         !< Monin-Obhukov length [m]
+      real(fp), intent(in)  :: ZO          !< Roughness length [m]
+      real(fp), intent(in)  :: THIK        !< height of first model layer [m]
+      logical, intent(in)   :: IS_GAS      !< flag for gas
       !output
-      real(fp), intent(out) :: Ra
-      real(fp), intent(out) :: Rb
-      integer, intent(out)  :: RC
+      real(fp), intent(out) :: Ra          !< aerodynamic resistance [s/m]
+      real(fp), intent(out) :: Rb          !< quasi-laminar boundary layer resistance [s/m]
+      integer, intent(out)  :: RC          !< Success or failure?
 
       ! Local Variables
       !----------------

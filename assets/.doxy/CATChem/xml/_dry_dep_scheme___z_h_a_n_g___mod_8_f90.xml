@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_dry_dep_scheme___z_h_a_n_g___mod_8_f90" kind="file" language="Fortran">
     <compoundname>DryDepScheme_ZHANG_Mod.F90</compoundname>
     <innernamespace refid="namespacedrydepscheme__zhang__mod">drydepscheme_zhang_mod</innernamespace>
@@ -26,8 +26,39 @@
 <para>Generated on: 2025-11-13T17:12:59.281598 Author: Wei Li Reference: Zhang et al., 2001; Emerson et al., 2020 </para>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"></codeline>
-<codeline lineno="33" refid="namespacedrydepscheme__zhang__mod" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacedrydepscheme__zhang__mod" kindref="compound">drydepscheme_zhang_mod</ref></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">!&gt;<sp/>\file<sp/>DryDepScheme_ZHANG_Mod.F90</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">!!<sp/>\brief<sp/>Zhang<sp/>et<sp/>al.<sp/>[2001]<sp/>scheme<sp/>with<sp/>Emerson<sp/>et<sp/>al.<sp/>[2020]<sp/>updates.</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">!!<sp/>The<sp/>Ra<sp/>and<sp/>Rb<sp/>are<sp/>still<sp/>from<sp/>Wesely<sp/>(1989)<sp/>for<sp/>now.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">!!<sp/>Pure<sp/>science<sp/>kernel<sp/>for<sp/>zhang<sp/>scheme<sp/>in<sp/>drydep<sp/>process.</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">!!<sp/>This<sp/>module<sp/>contains<sp/>ONLY<sp/>the<sp/>computational<sp/>algorithm<sp/>with<sp/>NO<sp/>infrastructure<sp/>dependencies.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">!!<sp/>Uses<sp/>only<sp/>basic<sp/>Fortran<sp/>types<sp/>for<sp/>maximum<sp/>portability<sp/>and<sp/>reusability.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">!!<sp/>Reference:</highlight></codeline>
+<codeline lineno="9"><highlight class="comment">!!<sp/>(1)<sp/>Wesely,<sp/>M.<sp/>L.<sp/>(1989).<sp/>Parameterization<sp/>of<sp/>surface<sp/>resistances<sp/>to<sp/>gaseous<sp/>dry</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/>deposition<sp/>in<sp/>regional-scale<sp/>numerical<sp/>models.<sp/>Atmospheric<sp/>Environment.</highlight></codeline>
+<codeline lineno="11"><highlight class="comment">!!<sp/>(2)<sp/>Zhang,<sp/>L.,<sp/>Gong,<sp/>S.,<sp/>Padro,<sp/>J.,<sp/>&amp;<sp/>Barrie,<sp/>L.<sp/>(2001).<sp/>A<sp/>size-segregated<sp/>particle</highlight></codeline>
+<codeline lineno="12"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/>dry<sp/>deposition<sp/>scheme<sp/>for<sp/>an<sp/>atmospheric<sp/>aerosol<sp/>module.<sp/>Atmospheric<sp/>environment.</highlight></codeline>
+<codeline lineno="13"><highlight class="comment">!!<sp/>(3)<sp/>Emerson,<sp/>E.<sp/>W.,<sp/>et<sp/>al.<sp/>(2020).<sp/>Revisiting<sp/>particle<sp/>dry<sp/>deposition<sp/>and<sp/>its<sp/>role</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/>in<sp/>radiative<sp/>effect<sp/>estimates.<sp/>PNAS,<sp/>117(42),<sp/>26076-26082.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment">!!<sp/>(4)<sp/>Most<sp/>of<sp/>the<sp/>codes<sp/>are<sp/>adopted<sp/>from<sp/>GEOS-Chem<sp/>drydep_mod.F90<sp/>module.</highlight></codeline>
+<codeline lineno="16"><highlight class="comment">!!<sp/><sp/><sp/><sp/><sp/>https://github.com/geoschem/geos-chem</highlight></codeline>
+<codeline lineno="17"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="18"><highlight class="comment">!!<sp/>SCIENCE<sp/>CUSTOMIZATION<sp/>GUIDE:</highlight></codeline>
+<codeline lineno="19"><highlight class="comment">!!<sp/>1.<sp/>Modify<sp/>the<sp/>algorithm<sp/>in<sp/>compute_zhang<sp/>(search<sp/>for<sp/>&quot;TODO&quot;)</highlight></codeline>
+<codeline lineno="20"><highlight class="comment">!!<sp/>2.<sp/>Add<sp/>scheme-specific<sp/>helper<sp/>subroutines<sp/>as<sp/>needed</highlight></codeline>
+<codeline lineno="21"><highlight class="comment">!!<sp/>3.<sp/>Update<sp/>physical<sp/>constants<sp/>for<sp/>your<sp/>scheme</highlight></codeline>
+<codeline lineno="22"><highlight class="comment">!!<sp/>4.<sp/>Customize<sp/>the<sp/>environmental<sp/>response<sp/>functions</highlight></codeline>
+<codeline lineno="23"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="24"><highlight class="comment">!!<sp/>INFRASTRUCTURE<sp/>RESPONSIBILITIES<sp/>(handled<sp/>by<sp/>host<sp/>model):</highlight></codeline>
+<codeline lineno="25"><highlight class="comment">!!<sp/>-<sp/>Parameter<sp/>initialization<sp/>and<sp/>validation</highlight></codeline>
+<codeline lineno="26"><highlight class="comment">!!<sp/>-<sp/>Input<sp/>array<sp/>validation<sp/>and<sp/>error<sp/>handling</highlight></codeline>
+<codeline lineno="27"><highlight class="comment">!!<sp/>-<sp/>Memory<sp/>management<sp/>and<sp/>array<sp/>allocation</highlight></codeline>
+<codeline lineno="28"><highlight class="comment">!!<sp/>-<sp/>Integration<sp/>with<sp/>host<sp/>model<sp/>time<sp/>stepping</highlight></codeline>
+<codeline lineno="29"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="30"><highlight class="comment">!!<sp/>Generated<sp/>on:<sp/>2025-11-13T17:12:59.281598</highlight></codeline>
+<codeline lineno="31"><highlight class="comment">!!<sp/>Author:<sp/>Wei<sp/>Li</highlight></codeline>
+<codeline lineno="32"><highlight class="comment">!!<sp/>Reference:<sp/>Zhang<sp/>et<sp/>al.,<sp/>2001;<sp/>Emerson<sp/>et<sp/>al.,<sp/>2020</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33" refid="namespacedrydepscheme__zhang__mod" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacedrydepscheme__zhang__mod" kindref="compound">drydepscheme_zhang_mod</ref></highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight></codeline>
 <codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__precision" kindref="compound">catchem_bridge_precision</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref>,<sp/><ref refid="interfacecatchem__bridge__precision_1_1rae" kindref="compound">rae</ref>,<sp/><ref refid="namespacecatchem__bridge__precision_1aba7f4e798842ff5416998463691c51d1" kindref="member">f8</ref></highlight></codeline>
 <codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__error" kindref="compound">catchem_bridge_error</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__error_1a1f49777e914bacf8dac0ba054995b9a0" kindref="member">cc_success</ref>,<sp/><ref refid="namespacecatchem__bridge__error_1a588d981ef2596b56d73d766e05ac8065" kindref="member">cc_error</ref></highlight></codeline>
@@ -74,7 +105,7 @@
 <codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>3,<sp/>6,<sp/><sp/><sp/>6,<sp/><sp/>4,<sp/><sp/>4,<sp/><sp/>2,<sp/><sp/>6,<sp/><sp/>2,<sp/><sp/>4,<sp/><sp/>9,<sp/><sp/>4,<sp/><sp/>4,<sp/><sp/>4,<sp/><sp/>5,<sp/>5,<sp/><sp/><sp/>5,<sp/><sp/>2,<sp/><sp/>5,<sp/>9,<sp/><sp/>5,<sp/><sp/><sp/>5,<sp/><sp/>2,<sp/><sp/>8,<sp/><sp/>8,<sp/><sp/>5,<sp/>&amp;</highlight></codeline>
 <codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>5,<sp/>7,<sp/><sp/><sp/>2,<sp/><sp/>4,<sp/><sp/>2,<sp/><sp/>2,<sp/><sp/>2,<sp/><sp/>5,<sp/><sp/>2,<sp/><sp/>2,<sp/><sp/>3,<sp/><sp/>5,<sp/><sp/>5,<sp/><sp/>9,<sp/>9,<sp/><sp/><sp/>9,<sp/><sp/>9,<sp/><sp/>8,<sp/>8,<sp/><sp/>8,<sp/><sp/><sp/>9,<sp/><sp/>11/</highlight></codeline>
 <codeline lineno="79"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>TWO_THIRDS<sp/><sp/>=<sp/>2.0_fp<sp/>/<sp/>3.0_fp</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>SMALL<sp/>=<sp/>1.0<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-10_fp<sp/></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">parameter</highlight><highlight class="normal"><sp/>::<sp/>SMALL<sp/>=<sp/>1.0<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>-10_fp<sp/></highlight><highlight class="comment">!&lt;<sp/>Small<sp/>number</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="81"><highlight class="normal"></highlight></codeline>
 <codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!=======================================================================</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/><sp/><sp/>LUC<sp/><sp/><sp/><sp/><sp/><sp/><sp/>1,<sp/><sp/><sp/><sp/>2,<sp/><sp/><sp/><sp/>3,<sp/><sp/><sp/><sp/>4,<sp/><sp/><sp/><sp/>5,<sp/><sp/><sp/><sp/>6,<sp/><sp/><sp/><sp/>7,<sp/><sp/><sp/><sp/>8,</highlight><highlight class="normal"></highlight></codeline>
@@ -147,7 +178,48 @@
 <codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!real(fp),<sp/>parameter<sp/>::<sp/>SALC_REDGE_um(2)=(/0.5_fp,<sp/>8.0_fp/)<sp/>!&lt;<sp/>coarse<sp/>mode<sp/>Sea<sp/>salt<sp/>radius<sp/>bin<sp/>[um]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="151"><highlight class="normal"></highlight></codeline>
 <codeline lineno="152"><highlight class="normal"></highlight><highlight class="keyword">contains</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="154"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Pure<sp/>science<sp/>computation<sp/>for<sp/>zhang<sp/>scheme</highlight></codeline>
+<codeline lineno="155"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="156"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>This<sp/>is<sp/>a<sp/>pure<sp/>computational<sp/>kernel<sp/>implementing<sp/>Zhang<sp/>et<sp/>al.<sp/>[2001]<sp/>scheme<sp/>with<sp/>Emerson<sp/>et<sp/>al.<sp/>[2020]<sp/>updates.</highlight></codeline>
+<codeline lineno="157"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>NO<sp/>error<sp/>checking,<sp/>validation,<sp/>or<sp/>infrastructure<sp/>concerns.</highlight></codeline>
+<codeline lineno="158"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Host<sp/>model<sp/>must<sp/>ensure<sp/>all<sp/>inputs<sp/>are<sp/>valid<sp/>before<sp/>calling.</highlight></codeline>
+<codeline lineno="159"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="160"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_layers<sp/><sp/><sp/><sp/><sp/>Number<sp/>of<sp/>vertical<sp/>layers</highlight></codeline>
+<codeline lineno="161"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_species<sp/><sp/><sp/><sp/>Number<sp/>of<sp/>chemical<sp/>species</highlight></codeline>
+<codeline lineno="162"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>params<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Scheme<sp/>parameters<sp/>(pre-validated<sp/>by<sp/>host)</highlight></codeline>
+<codeline lineno="163"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>bxheight<sp/><sp/><sp/><sp/>BXHEIGHT<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="164"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>frlanduse<sp/><sp/><sp/><sp/>FRLANDUSE<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="165"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>iland<sp/><sp/><sp/><sp/>ILAND<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="166"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>isice<sp/><sp/><sp/><sp/>IsIce<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="167"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>issnow<sp/><sp/><sp/><sp/>IsSnow<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="168"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>lucname<sp/><sp/><sp/><sp/>LUCNAME<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="169"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>obk<sp/><sp/><sp/><sp/>OBK<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="170"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>ps<sp/><sp/><sp/><sp/>PS<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="171"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>rh<sp/><sp/><sp/><sp/>RH<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="172"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>ts<sp/><sp/><sp/><sp/>TS<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="173"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>tstep<sp/><sp/><sp/><sp/>Time<sp/>step<sp/>[s]<sp/>-<sp/>retrieved<sp/>from<sp/>process<sp/>interface</highlight></codeline>
+<codeline lineno="174"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>u10m<sp/><sp/><sp/><sp/>U10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="175"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>ustar<sp/><sp/><sp/><sp/>USTAR<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="176"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>v10m<sp/><sp/><sp/><sp/>V10M<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="177"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>z0<sp/><sp/><sp/><sp/>Z0<sp/>field<sp/>[appropriate<sp/>units]</highlight></codeline>
+<codeline lineno="178"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_mw_g<sp/><sp/><sp/><sp/>Species<sp/>mw_g<sp/>property</highlight></codeline>
+<codeline lineno="179"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_radius<sp/><sp/><sp/><sp/>Species<sp/>radius<sp/>property</highlight></codeline>
+<codeline lineno="180"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_density<sp/><sp/><sp/><sp/>Species<sp/>density<sp/>property</highlight></codeline>
+<codeline lineno="181"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_short_name<sp/><sp/><sp/><sp/>Species<sp/>short_name<sp/>property</highlight></codeline>
+<codeline lineno="182"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_dd_hstar<sp/><sp/><sp/><sp/>Species<sp/>dd_hstar<sp/>property</highlight></codeline>
+<codeline lineno="183"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_dd_DvzAerSnow<sp/><sp/><sp/><sp/>Species<sp/>dd_DvzAerSnow<sp/>property</highlight></codeline>
+<codeline lineno="184"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_dd_DvzMinVal_snow<sp/><sp/><sp/><sp/>Species<sp/>dd_DvzMinVal_snow<sp/>property</highlight></codeline>
+<codeline lineno="185"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_dd_DvzMinVal_land<sp/><sp/><sp/><sp/>Species<sp/>dd_DvzMinVal_land<sp/>property</highlight></codeline>
+<codeline lineno="186"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_lower_radius<sp/><sp/><sp/><sp/>Species<sp/>lower_radius<sp/>property</highlight></codeline>
+<codeline lineno="187"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_upper_radius<sp/><sp/><sp/><sp/>Species<sp/>upper_radius<sp/>property</highlight></codeline>
+<codeline lineno="188"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_is_dust<sp/><sp/><sp/><sp/>Species<sp/>is_dust<sp/>property</highlight></codeline>
+<codeline lineno="189"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_is_seasalt<sp/><sp/><sp/><sp/>Species<sp/>is_seasalt<sp/>property</highlight></codeline>
+<codeline lineno="190"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>species_conc<sp/><sp/><sp/>Species<sp/>concentrations<sp/>[mol/mol]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="191"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>species_tendencies<sp/><sp/>Species<sp/>tendency<sp/>terms<sp/>[mol/mol/s]<sp/>(num_layers,<sp/>num_species)</highlight></codeline>
+<codeline lineno="192"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>drydep_con_per_species<sp/><sp/><sp/><sp/>Dry<sp/>deposition<sp/>concentration<sp/>per<sp/>species<sp/>[ug/kg<sp/>or<sp/>ppm]<sp/>(num_species)</highlight></codeline>
+<codeline lineno="193"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[inout]<sp/>drydep_velocity_per_species<sp/><sp/><sp/><sp/>Dry<sp/>deposition<sp/>velocity<sp/>[m/s]<sp/>(num_species)</highlight></codeline>
+<codeline lineno="194"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/>diagnostic_species_id<sp/>Indices<sp/>mapping<sp/>diagnostic<sp/>species<sp/>to<sp/>species<sp/>array<sp/>(optional,<sp/>for<sp/>per-species<sp/>diagnostics)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal"><ref refid="namespacedrydepscheme__zhang__mod_1a64be0aa29e1e02713cb97710f8f3ddee" kindref="member">compute_zhang</ref>(<sp/>&amp;</highlight></codeline>
 <codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_layers,<sp/>&amp;</highlight></codeline>
 <codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>num_species,<sp/>&amp;</highlight></codeline>
@@ -232,8 +304,8 @@
 <codeline lineno="276"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>DDFreq<sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Dry<sp/>deposition<sp/>frequency</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="277"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>C1X,<sp/>RA,<sp/>RB,<sp/>RSURFC,<sp/>VTSoutput,<sp/>VK,<sp/>DVZ</highlight></codeline>
 <codeline lineno="278"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp)<sp/>::<sp/>HSTAR,<sp/>XMW,<sp/>W10</highlight></codeline>
-<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>II</highlight></codeline>
-<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>ILDT</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>II</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Index<sp/>of<sp/>the<sp/>drydep<sp/>land<sp/>type</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>ILDT</highlight><highlight class="comment"><sp/><sp/><sp/>!&lt;<sp/>index<sp/>of<sp/>the<sp/>land<sp/>types<sp/>in<sp/>the<sp/>grid<sp/>box</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>LDT<sp/><sp/><sp/><sp/></highlight><highlight class="comment">!loop<sp/>index<sp/>of<sp/>land<sp/>types</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal"><sp/><sp/>::<sp/>LUCINDEX<sp/></highlight><highlight class="comment">!mapping<sp/>above<sp/>II<sp/>to<sp/>Zhang&apos;s<sp/>15<sp/>land<sp/>types<sp/>for<sp/>aerosols</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!logical</highlight><highlight class="normal"></highlight></codeline>
@@ -448,7 +520,19 @@
 <codeline lineno="492"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>=======================================================================</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="493"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Add<sp/>your<sp/>custom<sp/>scientific<sp/>algorithms<sp/>here<sp/>as<sp/>pure<sp/>functions/subroutines</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="494"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Examples:<sp/>environmental<sp/>response<sp/>functions,<sp/>species-specific<sp/>calculations,<sp/>etc.</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="495"><highlight class="normal"></highlight></codeline>
+<codeline lineno="495"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="496"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Extract<sp/>and<sp/>sort<sp/>seasalt<sp/>bin<sp/>boundaries<sp/>from<sp/>species<sp/>properties</highlight></codeline>
+<codeline lineno="497"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="498"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>This<sp/>subroutine<sp/>identifies<sp/>seasalt<sp/>species<sp/>and<sp/>extracts<sp/>their<sp/>lower<sp/>and<sp/>upper</highlight></codeline>
+<codeline lineno="499"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>radius<sp/>boundaries,<sp/>then<sp/>sorts<sp/>them<sp/>in<sp/>ascending<sp/>order<sp/>using<sp/>the<sp/>same<sp/>approach</highlight></codeline>
+<codeline lineno="500"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>as<sp/>Find_SeaSalt_Bin<sp/>in<sp/>ChemState_Mod.</highlight></codeline>
+<codeline lineno="501"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="502"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>num_species<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Number<sp/>of<sp/>chemical<sp/>species</highlight></codeline>
+<codeline lineno="503"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>is_seasalt<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Logical<sp/>array<sp/>indicating<sp/>which<sp/>species<sp/>are<sp/>seasalt</highlight></codeline>
+<codeline lineno="504"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>lower_radius<sp/><sp/><sp/><sp/><sp/><sp/>Lower<sp/>radius<sp/>bounds<sp/>for<sp/>each<sp/>species<sp/>[μm]</highlight></codeline>
+<codeline lineno="505"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[in]<sp/><sp/>upper_radius<sp/><sp/><sp/><sp/><sp/><sp/>Upper<sp/>radius<sp/>bounds<sp/>for<sp/>each<sp/>species<sp/>[μm]</highlight></codeline>
+<codeline lineno="506"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[out]<sp/>lower_bin<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Sorted<sp/>lower<sp/>bin<sp/>boundaries<sp/>[μm]</highlight></codeline>
+<codeline lineno="507"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>@param[out]<sp/>upper_bin<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Sorted<sp/>upper<sp/>bin<sp/>boundaries<sp/>[μm]</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="508"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">get_seasalt_bin_boundaries(num_species,<sp/>is_seasalt,<sp/>lower_radius,<sp/>upper_radius,<sp/>&amp;</highlight></codeline>
 <codeline lineno="509"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>lower_bin,<sp/>upper_bin)</highlight></codeline>
 <codeline lineno="510"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">implicit<sp/>none</highlight><highlight class="normal"></highlight></codeline>
@@ -536,7 +620,39 @@
 <codeline lineno="592"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">deallocate</highlight><highlight class="normal">(temp_lower,<sp/>temp_upper,<sp/>temp_lower1,<sp/>temp_upper1,mask)</highlight></codeline>
 <codeline lineno="593"><highlight class="normal"></highlight></codeline>
 <codeline lineno="594"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>subroutine<sp/></highlight><highlight class="normal">get_seasalt_bin_boundaries</highlight></codeline>
-<codeline lineno="595"><highlight class="normal"></highlight></codeline>
+<codeline lineno="595"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="596"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="597"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>computes<sp/>the<sp/>aerodynamic<sp/>resistance<sp/>of<sp/>aerosols.</highlight></codeline>
+<codeline lineno="598"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="599"><highlight class="comment"><sp/><sp/><sp/>!!References:</highlight></codeline>
+<codeline lineno="600"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Zhang,<sp/>L.,<sp/>Gong,<sp/>S.,<sp/>Padro,<sp/>J.,<sp/>&amp;<sp/>Barrie,<sp/>L.<sp/>(2001).<sp/>A<sp/>size-segregated<sp/>particle</highlight></codeline>
+<codeline lineno="601"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>dry<sp/>deposition<sp/>scheme<sp/>for<sp/>an<sp/>atmospheric<sp/>aerosol<sp/>module.</highlight></codeline>
+<codeline lineno="602"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Atmospheric<sp/>environment.,<sp/>https://doi.org/10.1016/S1352-2310(00)00326-5</highlight></codeline>
+<codeline lineno="603"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="604"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Emerson,<sp/>E.<sp/>W.,<sp/>et<sp/>al.<sp/>(2020).<sp/>Revisiting<sp/>particle<sp/>dry<sp/>deposition<sp/>and<sp/>its<sp/>role</highlight></codeline>
+<codeline lineno="605"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>in<sp/>radiative<sp/>effect<sp/>estimates.<sp/>PNAS,<sp/>117(42),<sp/>26076-26082.</highlight></codeline>
+<codeline lineno="606"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>https://doi.org/10.1073/pnas.2014761117</highlight></codeline>
+<codeline lineno="607"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="608"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>SPC<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>name</highlight></codeline>
+<codeline lineno="609"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>II<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Surface<sp/>type<sp/>index</highlight></codeline>
+<codeline lineno="610"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>IS_DUST<sp/><sp/><sp/><sp/>Is<sp/>dust<sp/>species?</highlight></codeline>
+<codeline lineno="611"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>IS_SEASALT<sp/>Is<sp/>seasalt<sp/>species?</highlight></codeline>
+<codeline lineno="612"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>LUCINDEX<sp/><sp/><sp/>mapping<sp/>above<sp/>II<sp/>to<sp/>the<sp/>15<sp/>drydep<sp/>land<sp/>use<sp/>categories</highlight></codeline>
+<codeline lineno="613"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>A_RADI<sp/><sp/><sp/><sp/><sp/>Aerosol<sp/>radius<sp/>[m]</highlight></codeline>
+<codeline lineno="614"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>A_DEN<sp/><sp/><sp/><sp/><sp/><sp/>Aerosol<sp/>density<sp/>[kg/m3]</highlight></codeline>
+<codeline lineno="615"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>PRESS<sp/><sp/><sp/><sp/><sp/><sp/>Pressure<sp/>[KPa]</highlight></codeline>
+<codeline lineno="616"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>TEMP<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Temperature<sp/>[K]</highlight></codeline>
+<codeline lineno="617"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>USTAR<sp/><sp/><sp/><sp/><sp/><sp/>Fictional<sp/>Velocity<sp/>[m/s]</highlight></codeline>
+<codeline lineno="618"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RHB<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Relative<sp/>humidity<sp/>[fraction]</highlight></codeline>
+<codeline lineno="619"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>W10<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>10m<sp/>wind<sp/>speed<sp/>[m/s]</highlight></codeline>
+<codeline lineno="620"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>LOWERBIN<sp/><sp/><sp/>lower<sp/>bound<sp/>of<sp/>sea-salt<sp/>bins</highlight></codeline>
+<codeline lineno="621"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>UPPERBIN<sp/><sp/><sp/>upper<sp/>bound<sp/>of<sp/>sea-salt<sp/>bins</highlight></codeline>
+<codeline lineno="622"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>VTSout<sp/><sp/><sp/><sp/><sp/>output<sp/>of<sp/>setttling<sp/>velocity<sp/>[m/s]</highlight></codeline>
+<codeline lineno="623"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RC<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>success<sp/>flag</highlight></codeline>
+<codeline lineno="624"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RS<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>value<sp/>of<sp/>surface<sp/>resistance<sp/>[s/m]</highlight></codeline>
+<codeline lineno="625"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="626"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_drydep_process</highlight></codeline>
+<codeline lineno="627"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="628"><highlight class="normal"></highlight></codeline>
 <codeline lineno="629"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">FUNCTION<sp/></highlight><highlight class="normal">aero_sfcrsii(<sp/><sp/>SPC,<sp/>IS_DUST,<sp/>IS_SEASALT,<sp/>LUCINDEX,<sp/>A_RADI,<sp/>A_DEN,<sp/>&amp;</highlight></codeline>
 <codeline lineno="630"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>PRESS,<sp/>TEMP,<sp/>USTAR,<sp/>RHB,<sp/>W10,<sp/>LOWERBIN,<sp/>UPPERBIN,<sp/>VTSout,<sp/>RC)<sp/></highlight><highlight class="keyword">RESULT</highlight><highlight class="normal">(<sp/>RS<sp/>)</highlight></codeline>
@@ -888,7 +1004,25 @@
 <codeline lineno="976"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>ENDIF</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="977"><highlight class="normal"></highlight></codeline>
 <codeline lineno="978"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">END<sp/>FUNCTION<sp/></highlight><highlight class="normal">aero_sfcrsii</highlight></codeline>
-<codeline lineno="979"><highlight class="normal"></highlight></codeline>
+<codeline lineno="979"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="980"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="981"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>updates<sp/>the<sp/>diameter<sp/>and<sp/>density<sp/>of<sp/>non-dust<sp/>aerosols</highlight></codeline>
+<codeline lineno="982"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="983"><highlight class="comment"><sp/><sp/><sp/>!!References:</highlight></codeline>
+<codeline lineno="984"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Adapted<sp/>from<sp/>GEOS-Chem<sp/>source<sp/>code<sp/>(GeosCore/drydep_mod.F90)</highlight></codeline>
+<codeline lineno="985"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>ADUST_SFCRSII<sp/>and<sp/>AERO_SFCRSII<sp/>functions</highlight></codeline>
+<codeline lineno="986"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="987"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>SPC<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Species<sp/>name</highlight></codeline>
+<codeline lineno="988"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>IS_SEASALT<sp/>Is<sp/>seasalt<sp/>species?</highlight></codeline>
+<codeline lineno="989"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RHBL<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Relative<sp/>humidity<sp/>[unitless]</highlight></codeline>
+<codeline lineno="990"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RDRY<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Dry<sp/>radius<sp/>of<sp/>particle<sp/>[m]</highlight></codeline>
+<codeline lineno="991"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RWET<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Wet<sp/>radius<sp/>of<sp/>particle<sp/>[m]</highlight></codeline>
+<codeline lineno="992"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>DIAM<sp/><sp/><sp/><sp/><sp/><sp/><sp/>diameter<sp/>of<sp/>wet<sp/>particle<sp/>[m]</highlight></codeline>
+<codeline lineno="993"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>DEN<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>density<sp/>of<sp/>particle<sp/>[kg/m3]</highlight></codeline>
+<codeline lineno="994"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RC<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>code</highlight></codeline>
+<codeline lineno="995"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="996"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_drydep_process</highlight></codeline>
+<codeline lineno="997"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="998"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">SUBROUTINE<sp/></highlight><highlight class="normal">new_diam_den(<sp/>SPC,<sp/>IS_SEASALT,<sp/>RHBL,<sp/>RDRY,<sp/>RWET,<sp/>DIAM,<sp/>DEN,<sp/>RC)</highlight></codeline>
 <codeline lineno="999"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1000"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">IMPLICIT<sp/>NONE</highlight><highlight class="normal"></highlight></codeline>
@@ -1063,7 +1197,24 @@
 <codeline lineno="1169"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>ENDIF</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1170"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1171"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">END<sp/>SUBROUTINE<sp/></highlight><highlight class="normal">new_diam_den</highlight></codeline>
-<codeline lineno="1172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="1172"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="1173"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="1174"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>calculates<sp/>the<sp/>volume<sp/>size<sp/>distribution<sp/>of<sp/>sea-salt.</highlight></codeline>
+<codeline lineno="1175"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>This<sp/>only<sp/>has<sp/>to<sp/>be<sp/>done<sp/>once.<sp/>We<sp/>assume<sp/>that<sp/>sea-salt<sp/>is<sp/>the</highlight></codeline>
+<codeline lineno="1176"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>combination<sp/>of<sp/>a<sp/>coarse<sp/>mode<sp/>and<sp/>accumulation<sp/>model<sp/>log-normal</highlight></codeline>
+<codeline lineno="1177"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>distribution<sp/>functions.<sp/>The<sp/>resulting<sp/>arrays<sp/>are:<sp/>DMID<sp/>=<sp/>diameter</highlight></codeline>
+<codeline lineno="1178"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>of<sp/>bin<sp/>and<sp/>SALT_V<sp/>=<sp/>dV/dln(D)<sp/>[in<sp/>um3].</highlight></codeline>
+<codeline lineno="1179"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1180"><highlight class="comment"><sp/><sp/><sp/>!!References:</highlight></codeline>
+<codeline lineno="1181"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Adapted<sp/>from<sp/>GEOS-Chem<sp/>source<sp/>code<sp/>(GeosCore/drydep_mod.F90)</highlight></codeline>
+<codeline lineno="1182"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>INIT_WEIGHTSS<sp/>function</highlight></codeline>
+<codeline lineno="1183"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1184"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1185"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>SALT_RLOW_um<sp/><sp/>lowest<sp/>edge<sp/>of<sp/>sea<sp/>salt<sp/>radius<sp/>[um]</highlight></codeline>
+<codeline lineno="1186"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>SALT_RUP_um<sp/><sp/><sp/>uppest<sp/>edge<sp/>of<sp/>sea<sp/>sakt<sp/>radius<sp/>[um]</highlight></codeline>
+<codeline lineno="1187"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1188"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_drydep_process</highlight></codeline>
+<codeline lineno="1189"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1190"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1191"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">SUBROUTINE<sp/></highlight><highlight class="normal">init_weightss(<sp/>SALT_RLOW_um,<sp/>SALT_RUP_um,<sp/>RC<sp/>)</highlight></codeline>
 <codeline lineno="1192"><highlight class="normal"></highlight></codeline>
@@ -1155,7 +1306,19 @@
 <codeline lineno="1278"><highlight class="normal"></highlight><highlight class="keywordflow"><sp/><sp/><sp/><sp/><sp/><sp/>ENDDO</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1279"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1280"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">END<sp/>SUBROUTINE<sp/></highlight><highlight class="normal">init_weightss</highlight></codeline>
-<codeline lineno="1281"><highlight class="normal"></highlight></codeline>
+<codeline lineno="1281"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="1282"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="1283"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>calculates<sp/>the<sp/>molecular<sp/>diffusivity<sp/>[m2/s]<sp/>in<sp/>air<sp/>for<sp/>a<sp/>gas<sp/>X</highlight></codeline>
+<codeline lineno="1284"><highlight class="comment"><sp/><sp/><sp/>!!<sp/><sp/>of<sp/>molecular<sp/>weight<sp/>XM<sp/>[kg]<sp/>at<sp/>temperature<sp/>TK<sp/>[K]<sp/>and<sp/>pressure<sp/>PRESS<sp/>[Pa].</highlight></codeline>
+<codeline lineno="1285"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1286"><highlight class="comment"><sp/><sp/><sp/>!!References:</highlight></codeline>
+<codeline lineno="1287"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1288"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>TK<sp/><sp/><sp/><sp/><sp/><sp/>Temperatue<sp/>[K]</highlight></codeline>
+<codeline lineno="1289"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>PRESS<sp/><sp/><sp/>Pressure<sp/>[Pa]</highlight></codeline>
+<codeline lineno="1290"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>XM<sp/><sp/><sp/><sp/><sp/><sp/>Molecular<sp/>weight<sp/>of<sp/>gas<sp/>[kg]</highlight></codeline>
+<codeline lineno="1291"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1292"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_drydep_process</highlight></codeline>
+<codeline lineno="1293"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1294"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1295"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">FUNCTION<sp/></highlight><highlight class="normal">diffg(<sp/>TK,<sp/>PRESS,<sp/>XM<sp/>)<sp/></highlight><highlight class="keyword">RESULT</highlight><highlight class="normal">(<sp/>DIFF_G<sp/>)</highlight></codeline>
 <codeline lineno="1296"><highlight class="normal"></highlight></codeline>
@@ -1207,23 +1370,45 @@
 <codeline lineno="1342"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>diff_g<sp/>=<sp/>(<sp/>3<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+0_fp<sp/>*<sp/><ref refid="namespacecatchem__bridge__constants_1a5f51f3238ef97f1e4024e2820f218bb3" kindref="member">pi</ref><sp/>/<sp/>32<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+0_fp<sp/>)<sp/>*<sp/>(<sp/>1<ref refid="namespacecatchem__bridge__constants_1a4719a9ee11c7fdc47e2fb954101f1ee9" kindref="member">e</ref>+0_fp<sp/>+<sp/>z<sp/>)<sp/>*<sp/>frpath<sp/>*<sp/>speed</highlight></codeline>
 <codeline lineno="1343"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1344"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">END<sp/>FUNCTION<sp/></highlight><highlight class="normal">diffg</highlight></codeline>
-<codeline lineno="1345"><highlight class="normal"></highlight></codeline>
+<codeline lineno="1345"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="1346"><highlight class="comment"><sp/><sp/><sp/>!&gt;</highlight></codeline>
+<codeline lineno="1347"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\brief<sp/>calculates<sp/>the<sp/>Ra<sp/>and<sp/>Rb<sp/>term<sp/>in<sp/>the<sp/>Wesely<sp/>scheme</highlight></codeline>
+<codeline lineno="1348"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1349"><highlight class="comment"><sp/><sp/><sp/>!!References:</highlight></codeline>
+<codeline lineno="1350"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Wesely,<sp/>M.<sp/>L.<sp/>&quot;Parameterization<sp/>of<sp/>surface<sp/>resistances<sp/>to<sp/>gaseous<sp/>dry<sp/>deposition<sp/>in</highlight></codeline>
+<codeline lineno="1351"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>regional-scale<sp/>numerical<sp/>models.&quot;<sp/>Atmospheric<sp/>environment<sp/>41<sp/>(2007):<sp/>52-63.</highlight></codeline>
+<codeline lineno="1352"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>https://doi.org/10.1016/0004-6981(89)90153-4</highlight></codeline>
+<codeline lineno="1353"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1354"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>TEMPK<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Temperatue<sp/>[K]</highlight></codeline>
+<codeline lineno="1355"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>PRESSU<sp/><sp/><sp/><sp/><sp/><sp/>Pressure<sp/>[Pa]</highlight></codeline>
+<codeline lineno="1356"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>XMW<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Molecular<sp/>weight<sp/>[kg/mol]</highlight></codeline>
+<codeline lineno="1357"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>USTAR<sp/><sp/><sp/><sp/><sp/><sp/><sp/>Fictional<sp/>Velocity<sp/>[m/s]</highlight></codeline>
+<codeline lineno="1358"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>OBK<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Monin-Obhukov<sp/>length<sp/>[m]</highlight></codeline>
+<codeline lineno="1359"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>ZO<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Roughness<sp/>length<sp/>[m]</highlight></codeline>
+<codeline lineno="1360"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>THIK<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>height<sp/>of<sp/>first<sp/>model<sp/>layer<sp/>[m]</highlight></codeline>
+<codeline lineno="1361"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>IS_GAS<sp/><sp/><sp/><sp/><sp/><sp/>flag<sp/>for<sp/>gas</highlight></codeline>
+<codeline lineno="1362"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>Ra<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>output<sp/>of<sp/>aerodynamic<sp/>resistance<sp/>[s/m]</highlight></codeline>
+<codeline lineno="1363"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>Rb<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>output<sp/>of<sp/>quasi-laminar<sp/>boundary<sp/>layer<sp/>resistance<sp/>[s/m]</highlight></codeline>
+<codeline lineno="1364"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\param<sp/>RC<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Success<sp/>or<sp/>failure?</highlight></codeline>
+<codeline lineno="1365"><highlight class="comment"><sp/><sp/><sp/>!!</highlight></codeline>
+<codeline lineno="1366"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>\ingroup<sp/>catchem_drydep_process</highlight></codeline>
+<codeline lineno="1367"><highlight class="comment"><sp/><sp/><sp/>!!!&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1368"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">subroutine<sp/></highlight><highlight class="normal">wesely_ra_rb(TEMP,<sp/>PRESSU,<sp/>XMW,<sp/>USTAR,<sp/>OBK,<sp/>ZO,<sp/>THIK,<sp/>IS_GAS,<sp/>Ra,<sp/>Rb,<sp/>RC)</highlight></codeline>
 <codeline lineno="1369"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">IMPLICIT<sp/>NONE</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1370"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Parameters</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1371"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!-----------</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="1372"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>TEMP</highlight></codeline>
-<codeline lineno="1373"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>PRESSU</highlight></codeline>
-<codeline lineno="1374"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>XMW</highlight></codeline>
-<codeline lineno="1375"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>USTAR</highlight></codeline>
-<codeline lineno="1376"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>OBK</highlight></codeline>
-<codeline lineno="1377"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>ZO</highlight></codeline>
-<codeline lineno="1378"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>THIK</highlight></codeline>
-<codeline lineno="1379"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/><sp/>::<sp/>IS_GAS</highlight></codeline>
+<codeline lineno="1372"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>TEMP</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Temperature<sp/>[K]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1373"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>PRESSU</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Pressure<sp/>[Pa]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1374"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>XMW</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Molecular<sp/>weight<sp/>[kg/mol]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1375"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>USTAR</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Friction<sp/>velocity<sp/>[m/s]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1376"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>OBK</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Monin-Obhukov<sp/>length<sp/>[m]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1377"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>ZO</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Roughness<sp/>length<sp/>[m]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1378"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/>::<sp/>THIK</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>height<sp/>of<sp/>first<sp/>model<sp/>layer<sp/>[m]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1379"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/><sp/><sp/>::<sp/>IS_GAS</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>flag<sp/>for<sp/>gas</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1380"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!output</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="1381"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>Ra</highlight></codeline>
-<codeline lineno="1382"><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>Rb</highlight></codeline>
-<codeline lineno="1383"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/><sp/>::<sp/>RC</highlight></codeline>
+<codeline lineno="1381"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>Ra</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>aerodynamic<sp/>resistance<sp/>[s/m]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1382"><highlight class="normal"></highlight><highlight class="keywordtype"><sp/><sp/><sp/><sp/><sp/><sp/>real</highlight><highlight class="normal">(fp),<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/>::<sp/>Rb</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>quasi-laminar<sp/>boundary<sp/>layer<sp/>resistance<sp/>[s/m]</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="1383"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">integer</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">intent(out)</highlight><highlight class="normal"><sp/><sp/>::<sp/>RC</highlight><highlight class="comment"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>!&lt;<sp/>Success<sp/>or<sp/>failure?</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1384"><highlight class="normal"></highlight></codeline>
 <codeline lineno="1385"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Local<sp/>Variables</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1386"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!----------------</highlight><highlight class="normal"></highlight></codeline>

@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespaceseasaltcommon__mod" kind="namespace" language="Fortran">
     <compoundname>seasaltcommon_mod</compoundname>
     <innerclass refid="structseasaltcommon__mod_1_1seasaltconfig" prot="public">seasaltcommon_mod::seasaltconfig</innerclass>
-    <innerclass refid="structseasaltcommon__mod_1_1seasaltprocessconfig" prot="public">seasaltcommon_mod::seasaltprocessconfig</innerclass>
-    <innerclass refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" prot="public">seasaltcommon_mod::seasaltschemegeos12config</innerclass>
-    <innerclass refid="structseasaltcommon__mod_1_1seasaltschemegong03config" prot="public">seasaltcommon_mod::seasaltschemegong03config</innerclass>
     <innerclass refid="structseasaltcommon__mod_1_1seasaltschemegong97config" prot="public">seasaltcommon_mod::seasaltschemegong97config</innerclass>
+    <innerclass refid="structseasaltcommon__mod_1_1seasaltschemegong03config" prot="public">seasaltcommon_mod::seasaltschemegong03config</innerclass>
+    <innerclass refid="structseasaltcommon__mod_1_1seasaltschemegeos12config" prot="public">seasaltcommon_mod::seasaltschemegeos12config</innerclass>
+    <innerclass refid="structseasaltcommon__mod_1_1seasaltprocessconfig" prot="public">seasaltcommon_mod::seasaltprocessconfig</innerclass>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

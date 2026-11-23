@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file DryDepScheme_WESELY_Mod.F90
+!! \brief Wesely 1989 gas dry deposition scheme
+!!
+!! Pure science kernel for wesely scheme in drydep process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_wesely (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2025-11-13T14:35:43.237148
+!! Author: Wei Li
+!! Reference: Wesely, M. L. [1989] Parameterization of surface resistances to gaseous dry deposition...
 module drydepscheme_wesely_mod
 
    use catchem_bridge_precision, only: fp, rae
@@ -23,18 +44,18 @@ module drydepscheme_wesely_mod
    public :: compute_wesely
 
    ! module variables (mainly some constants dependent on land use in the scheme)
-   integer,  parameter :: NDRYDTYPE   = 11
+   integer,  parameter :: NDRYDTYPE   = 11    !< # of drydep land types following GEOS-Chem
    real(fp), parameter :: TWO_THIRDS  = 2.0_fp / 3.0_fp
    !real(fp), parameter :: H2OMW = 18.0_fp !declared in constant module
-   real(fp), parameter :: SMALL = 1.0e-10_fp 
-   integer,  parameter :: IWATER = 1
+   real(fp), parameter :: SMALL = 1.0e-10_fp !< Small number
+   integer,  parameter :: IWATER = 1      !< Index for water in Olson land use
    ! Arrays that hold information for each of the 11 drydep land types
    integer :: IDRYDTYPE(NDRYDTYPE)
    real(fp) :: IRAC(NDRYDTYPE),  IRCLO(NDRYDTYPE), IRCLS(NDRYDTYPE)
    real(fp) :: IRGSS(NDRYDTYPE), IRGSO(NDRYDTYPE), IRLU(NDRYDTYPE)
    real(fp) :: IRI(NDRYDTYPE),   IVSMAX(NDRYDTYPE)
    !some Olson land use (74 types) related parameters
-   real(fp):: DRYCOEFF(20)
+   real(fp):: DRYCOEFF(20) !< DRYCOEFF : Baldocchi polynomial coeffs
    integer :: IOLSON (74), IDEP_IOLSON(74)
    integer :: IDEP_NOAH(20), IDEP_IGBP(17)
    !integer :: IZO(74) !< Roughness height for each Olson land types
@@ -92,6 +113,48 @@ module drydepscheme_wesely_mod
 
 contains
 
+   !> Pure science computation for wesely scheme
+   !!
+   !! This is a pure computational kernel implementing Wesely 1989 gas dry deposition scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  bxheight    BXHEIGHT field [appropriate units]
+   !! @param[in]  cldfrc    CLDFRC field [appropriate units]
+   !! @param[in]  frlai    FRLAI field [appropriate units]
+   !! @param[in]  frlanduse    FRLANDUSE field [appropriate units]
+   !! @param[in]  iland    ILAND field [appropriate units]
+   !! @param[in]  isice    IsIce field [appropriate units]
+   !! @param[in]  island    IsLand field [appropriate units]
+   !! @param[in]  issnow    IsSnow field [appropriate units]
+   !! @param[in]  lat    LAT field [appropriate units]
+   !! @param[in]  lon    LON field [appropriate units]
+   !! @param[in]  lucname    LUCNAME field [appropriate units]
+   !! @param[in]  obk    OBK field [appropriate units]
+   !! @param[in]  ps    PS field [appropriate units]
+   !! @param[in]  salinity    SALINITY field [appropriate units]
+   !! @param[in]  suncosmid    SUNCOSmid field [appropriate units]
+   !! @param[in]  swgdn    SWGDN field [appropriate units]
+   !! @param[in]  ts    TS field [appropriate units]
+   !! @param[in]  tskin    TSKIN field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  ustar    USTAR field [appropriate units]
+   !! @param[in]  z0    Z0 field [appropriate units]
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_dd_f0    Species dd_f0 property
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_dd_hstar    Species dd_hstar property
+   !! @param[in]  species_dd_DvzAerSnow    Species dd_DvzAerSnow property
+   !! @param[in]  species_dd_DvzMinVal_snow    Species dd_DvzMinVal_snow property
+   !! @param[in]  species_dd_DvzMinVal_land    Species dd_DvzMinVal_land property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)
+   !! @param[inout] drydep_velocity_per_species    Dry deposition velocity [m/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_wesely( &
       num_layers, &
       num_species, &
@@ -178,8 +241,8 @@ contains
       real(fp) :: DDFreq   ! Dry deposition frequency
       real(fp) :: XLAI_IN, C1X, RA, RB, RSURFC, VK, DVZ
       real(fp) :: HSTAR, XMW, IODIDE, F0
-      integer  :: II
-      integer  :: ILDT
+      integer  :: II     !< Index of the drydep land type
+      integer  :: ILDT   !< index of the land types in the grid box
       integer  :: LDT    !loop index of land types
       character(255) :: SPC  !current species name
       character(len=255)       :: thisLoc
@@ -450,37 +513,70 @@ contains
    ! =======================================================================
    ! Add your custom scientific algorithms here as pure functions/subroutines
 
+   !>
+   !! \brief Computes the bulk surface resistance (Rc) for the gas species
+   !!
+   !!References:
+   !! Wesely, M. L. "Parameterization of surface resistances to gaseous dry deposition in
+   !! regional-scale numerical models." Atmospheric environment 41 (2007): 52-63.
+   !! https://doi.org/10.1016/0004-6981(89)90153-4
+   !!
+   !! \param RADIAT      Solar radiation [W/m2]
+   !! \param TEMP        Temperature [K]
+   !! \param SUNCOS      Cosine of solar zenith angle
+   !! \param F0          React. factor for oxidation depends on species
+   !! \param HSTAR       Henry's law constant depends on species
+   !! \param XMW         Molecular weight [kg/mol]
+   !! \param USTAR       Friction velocity [m/s]
+   !! \param CFRAC       Surface cloud fraction
+   !! \param PRESSU      Surface pressure [Pa]
+   !! \param XLAI        Leaf area index
+   !! \param II          Index of the drydep land type
+   !! \param SPC         Species name
+   !! \param SALINITY    Salinity of the ocean
+   !! \param TSKIN       Skin temperature
+   !! \param IODIDE      Iodide concentration
+   !! \param XLON        Longitude
+   !! \param YLAT        Latitude
+   !! \param CO2_EFFECT  CO2 effect on RS
+   !! \param CO2_LEVEL   CO2 level
+   !! \param CO2_REF     CO2 reference level
+   !! \param RSURFC      Bulk Surface resistance [s/m]
+   !! \param RC          Success or failure?
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    subroutine wesely_rc_gas(  RADIAT, TEMP, SUNCOS, F0, HSTAR, XMW, USTAR, CFRAC, PRESSU,     &
       XLAI,   II,   SPC, SALINITY, TSKIN, IODIDE, XLON, YLAT,         &
       CO2_EFFECT, CO2_LEVEL, CO2_REF, RSURFC,   RC)
       IMPLICIT NONE
       ! Parameters
       !-----------
-      real(fp), intent(in)  :: RADIAT
-      real(fp), intent(in)  :: TEMP
-      real(fp), intent(in)  :: SUNCOS
-      real(fp), intent(inout)  :: F0
-      real(fp), intent(in)  :: HSTAR
-      real(fp), intent(in)  :: XMW
-      real(fp), intent(in)  :: USTAR
-      real(fp), intent(in)  :: CFRAC
-      real(fp), intent(in)  :: PRESSU
-      real(fp), intent(in)  :: XLAI
-      integer,  intent(in)  :: II
+      real(fp), intent(in)  :: RADIAT      !< Solar radiation [W/m2]
+      real(fp), intent(in)  :: TEMP        !< Temperature [K]
+      real(fp), intent(in)  :: SUNCOS      !< Cosine of solar zenith angle
+      real(fp), intent(inout)  :: F0       !< React. factor for oxidation depends on species (inout because it is changed in the function)
+      real(fp), intent(in)  :: HSTAR       !< Henry's law constant depends on species
+      real(fp), intent(in)  :: XMW         !< Molecular weight [kg/mol]
+      real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
+      real(fp), intent(in)  :: CFRAC       !< Surface cloud fraction
+      real(fp), intent(in)  :: PRESSU      !< Surface pressure [Pa]
+      real(fp), intent(in)  :: XLAI        !< Leaf area index
+      integer,  intent(in)  :: II          !< Index of the drydep land type
       !integer,  intent(in)  :: N_SPC      !< Species ID (TODO: may be changed to species name)
-      character(len=20), intent(in) :: SPC
+      character(len=20), intent(in) :: SPC !< Species name
       !some inputs are for O3 over water and Hg over Amazon forest (not sure if we should include them for now)
-      real(fp), intent(in)  :: SALINITY
-      real(fp), intent(in)  :: TSKIN
-      real(fp), intent(in)  :: IODIDE
-      real(fp), intent(in)  :: XLON
-      real(fp), intent(in)  :: YLAT
-      logical,  intent(in)  :: CO2_EFFECT
-      real(fp), intent(in)  :: CO2_LEVEL
-      real(fp), intent(in)  :: CO2_REF
+      real(fp), intent(in)  :: SALINITY    !< Salinity of the ocean
+      real(fp), intent(in)  :: TSKIN       !< Skin temperature
+      real(fp), intent(in)  :: IODIDE      !< Iodide concentration
+      real(fp), intent(in)  :: XLON        !< Longitude
+      real(fp), intent(in)  :: YLAT        !< Latitude
+      logical,  intent(in)  :: CO2_EFFECT  !< CO2 effect on RS
+      real(fp), intent(in)  :: CO2_LEVEL   !< CO2 level
+      real(fp), intent(in)  :: CO2_REF     !< CO2 reference level
       !output
-      real(fp), intent(out) :: RSURFC
-      integer, intent(out)  :: RC
+      real(fp), intent(out) :: RSURFC      !< Bulk Surface resistance [s/m]
+      integer, intent(out)  :: RC          !< Success or failure?
 
       ! Local Variables
       !----------------
@@ -718,6 +814,21 @@ contains
    end subroutine wesely_rc_gas
 
 
+   !>
+   !! \brief calculates the dry deposition velocity of O3 to ocean
+   !!
+   !!References:
+   !! Pound, R. J., Sherwen, T., Helmig, D., Carpenter, L. J., and Evans, M. J.:
+   !! Influence of oceanic ozone deposition on tropospheric photochemistry,
+   !! Atmos. Chem. Phys., https://doi.org/10.5194/acp-20-4227-2020, 2020.
+   !!
+   !! \param TEMPK      Temperatue [K]
+   !! \param USTAR      Fictional Velocity [m/s]
+   !! \param IODIDE_IN  Surface iodide concentration [nM]
+   !! \param DEPV       output of the new deposition vel [cm/s]
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    SUBROUTINE oceano3( TEMPK, USTAR, IODIDE_IN, DEPV )
 
       IMPLICIT NONE
@@ -758,6 +869,21 @@ contains
 
    END SUBROUTINE oceano3
 
+   !>
+   !! \brief estimate the modified Bessel functions of the second order zero (K0) and one (K1).
+   !!
+   !!References:
+   !! Approach initially described in Numerical Recipes in Fortran 90 second edition
+   !! (1996). This implementation is designed to be specific to the use
+   !! case required for calculating oceanic deposition velocity. Uses a
+   !! polynomial fit of each type of modified bessel function to
+   !! estimate the value of the function for each input.
+   !!
+   !! \param input_arg    !the value we want the soln for
+   !! \param K0, K1       output of the modified bessel functions
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    SUBROUTINE k0k1_aprox( input_arg, K0, K1 )
 
       IMPLICIT NONE
@@ -804,6 +930,18 @@ contains
 
    END SUBROUTINE k0k1_aprox
 
+   !>
+   !! \brief calculate the value of a polynomial fit used in
+   !! the K0K1_APPROX function in estimating the values of a
+   !! modified bessel function.
+   !!
+   !!References:
+   !!
+   !! \param input
+   !! \param coeffs
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    FUNCTION poly_fit ( input, coeffs )
 
       !INPUT PARAMETERS:
@@ -821,6 +959,18 @@ contains
 
    END FUNCTION poly_fit
 
+   !>
+   !! \brief calculates the molecular diffusivity [m2/s] in air for a gas X
+   !!  of molecular weight XM [kg] at temperature TK [K] and pressure PRESS [Pa].
+   !!
+   !!References:
+   !!
+   !! \param TK      Temperatue [K]
+   !! \param PRESS   Pressure [Pa]
+   !! \param XM      Molecular weight of gas [kg]
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
 
    FUNCTION diffg( TK, PRESS, XM ) RESULT( DIFF_G )
 
@@ -873,6 +1023,23 @@ contains
 
    END FUNCTION diffg
 
+   !>
+   !! \brief computes the light correction used in the dry deposition and canopy NOx modules.
+   !! It was part of the old Harvard-GISS CTM and was ported into GEOS-Chem
+   !!
+   !!References:
+   !! Wang, Y., D.J. Jacob, and J.A. Logan, "Global simulation of tropospheric
+   !! O3-NOx-hydrocarbon chemistry, 1. Model formulation", J. Geophys. Res.,
+   !! 103/D9, 10,713-10,726, 1998.
+   !!
+   !! \param COEFF1     Baldocchi drydep coefficients
+   !! \param XLAI1      Leaf area index [cm2/cm2]
+   !! \param SUNCOS1    Cosine( Solar Zenith Angle )
+   !! \param CFRAC1     Cloud fraction [unitless]
+   !! \param NPOLY      # of drydep coefficients
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    FUNCTION biofit( COEFF1, XLAI1, SUNCOS1, CFRAC1, NPOLY ) RESULT( BIO_FIT )
 
       !INPUT PARAMETERS:
@@ -935,22 +1102,44 @@ contains
 
    END FUNCTION biofit
 
+   !>
+   !! \brief calculates the Ra and Rb term in the Wesely scheme
+   !!
+   !!References:
+   !! Wesely, M. L. "Parameterization of surface resistances to gaseous dry deposition in
+   !! regional-scale numerical models." Atmospheric environment 41 (2007): 52-63.
+   !! https://doi.org/10.1016/0004-6981(89)90153-4
+   !!
+   !! \param TEMPK       Temperatue [K]
+   !! \param PRESSU      Pressure [Pa]
+   !! \param XMW         Molecular weight [kg/mol]
+   !! \param USTAR       Fictional Velocity [m/s]
+   !! \param OBK         Monin-Obhukov length [m]
+   !! \param ZO          Roughness length [m]
+   !! \param THIK        height of first model layer [m]
+   !! \param IS_GAS      flag for gas
+   !! \param Ra          output of aerodynamic resistance [s/m]
+   !! \param Rb          output of quasi-laminar boundary layer resistance [s/m]
+   !! \param RC          Success or failure?
+   !!
+   !! \ingroup catchem_drydep_process
+   !!!>
    subroutine wesely_ra_rb(TEMP, PRESSU, XMW, USTAR, OBK, ZO, THIK, IS_GAS, Ra, Rb, RC)
       IMPLICIT NONE
       ! Parameters
       !-----------
-      real(fp), intent(in)  :: TEMP
-      real(fp), intent(in)  :: PRESSU
-      real(fp), intent(in)  :: XMW
-      real(fp), intent(in)  :: USTAR
-      real(fp), intent(in)  :: OBK
-      real(fp), intent(in)  :: ZO
-      real(fp), intent(in)  :: THIK
-      logical, intent(in)   :: IS_GAS
+      real(fp), intent(in)  :: TEMP        !< Temperature [K]
+      real(fp), intent(in)  :: PRESSU      !< Pressure [Pa]
+      real(fp), intent(in)  :: XMW         !< Molecular weight [kg/mol]
+      real(fp), intent(in)  :: USTAR       !< Friction velocity [m/s]
+      real(fp), intent(in)  :: OBK         !< Monin-Obhukov length [m]
+      real(fp), intent(in)  :: ZO          !< Roughness length [m]
+      real(fp), intent(in)  :: THIK        !< height of first model layer [m]
+      logical, intent(in)   :: IS_GAS      !< flag for gas
       !output
-      real(fp), intent(out) :: Ra
-      real(fp), intent(out) :: Rb
-      integer, intent(out)  :: RC
+      real(fp), intent(out) :: Ra          !< aerodynamic resistance [s/m]
+      real(fp), intent(out) :: Rb          !< quasi-laminar boundary layer resistance [s/m]
+      integer, intent(out)  :: RC          !< Success or failure?
 
       ! Local Variables
       !----------------

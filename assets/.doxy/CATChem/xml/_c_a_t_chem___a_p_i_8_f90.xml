@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_c_a_t_chem___a_p_i_8_f90" kind="file" language="Fortran">
     <compoundname>CATChem_API.F90</compoundname>
     <innerclass refid="interfacecatchem__api_1_1catchem__core__create__from__config__with__grid__checked" prot="private">catchem_api::catchem_core_create_from_config_with_grid_checked</innerclass>
@@ -84,8 +84,15 @@
 <para>This module provides the standard, backward-compatible CATChem_Model derived type used by Earth System drivers (like NUOPC and UFS). It delegates all memory management, synchronization, and process scheduling directly to the modernized top-down C++ Core via standard BIND(C) bridges. </para>
     </detaileddescription>
     <programlisting>
-<codeline lineno="1"></codeline>
-<codeline lineno="9" refid="namespacecatchem__api" refkind="compound"><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacecatchem__api" kindref="compound">catchem_api</ref></highlight></codeline>
+<codeline lineno="1"><highlight class="comment">!&gt;<sp/>\file<sp/>CATChem_API.F90</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">!!<sp/>\brief<sp/>Modernized<sp/>high-level<sp/>BIND(C)<sp/>API<sp/>for<sp/>host<sp/>model<sp/>integration</highlight></codeline>
+<codeline lineno="3"><highlight class="comment">!!</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">!!<sp/>This<sp/>module<sp/>provides<sp/>the<sp/>standard,<sp/>backward-compatible<sp/>CATChem_Model</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">!!<sp/>derived<sp/>type<sp/>used<sp/>by<sp/>Earth<sp/>System<sp/>drivers<sp/>(like<sp/>NUOPC<sp/>and<sp/>UFS).</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">!!<sp/>It<sp/>delegates<sp/>all<sp/>memory<sp/>management,<sp/>synchronization,<sp/>and<sp/>process<sp/>scheduling</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">!!<sp/>directly<sp/>to<sp/>the<sp/>modernized<sp/>top-down<sp/>C++<sp/>Core<sp/>via<sp/>standard<sp/>BIND(C)<sp/>bridges.</highlight></codeline>
+<codeline lineno="8"><highlight class="comment">!!</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="namespacecatchem__api" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">module</highlight><highlight class="normal"><sp/><ref refid="namespacecatchem__api" kindref="compound">catchem_api</ref></highlight></codeline>
 <codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal">iso_c_binding</highlight></codeline>
 <codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__precision" kindref="compound">catchem_bridge_precision</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__precision_1a7f19177d7cfe1f2d724cb69ee8aa44d9" kindref="member">fp</ref></highlight></codeline>
 <codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keywordtype">use<sp/></highlight><highlight class="normal"><ref refid="namespacecatchem__bridge__error" kindref="compound">catchem_bridge_error</ref>,<sp/></highlight><highlight class="keywordtype">only</highlight><highlight class="normal">:<sp/><ref refid="namespacecatchem__bridge__error_1a1f49777e914bacf8dac0ba054995b9a0" kindref="member">cc_success</ref>,<sp/><ref refid="namespacecatchem__bridge__error_1a78dca64b3f8ee6d950d57d778aa21e05" kindref="member">cc_failure</ref></highlight></codeline>
@@ -1253,7 +1260,12 @@
 <codeline lineno="1174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>enabled</highlight></codeline>
 <codeline lineno="1175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>enabled<sp/>=<sp/>(catchem_config_get_diag_enabled(this%cpp_core_ptr)<sp/>/=<sp/>0_c_int)</highlight></codeline>
 <codeline lineno="1176"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>function<sp/></highlight><highlight class="normal">model_is_diag_enabled</highlight></codeline>
-<codeline lineno="1177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="1177"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="1178"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>\brief<sp/>True<sp/>when<sp/>diagnostics.output/process_diagnostics<sp/>is<sp/>enabled<sp/>in<sp/>the</highlight></codeline>
+<codeline lineno="1179"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>runtime<sp/>YAML.<sp/><sp/>DEPRECATED:<sp/>the<sp/>NUOPC<sp/>driver<sp/>no<sp/>longer<sp/>consults<sp/>this<sp/>key</highlight></codeline>
+<codeline lineno="1180"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>--<sp/>per-process<sp/>diagnostics<sp/>are<sp/>written<sp/>whenever<sp/>they<sp/>are<sp/>registered<sp/>and</highlight></codeline>
+<codeline lineno="1181"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>runtime<sp/>diagnostics<sp/>are<sp/>enabled<sp/>(parity<sp/>with<sp/>the<sp/>legacy<sp/>Fortran<sp/>core).</highlight></codeline>
+<codeline lineno="1182"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>The<sp/>accessor<sp/>is<sp/>retained<sp/>only<sp/>so<sp/>existing<sp/>configs<sp/>keep<sp/>parsing.</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="1183"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">function<sp/></highlight><highlight class="normal">model_is_process_diag_enabled(this)<sp/></highlight><highlight class="keyword">result</highlight><highlight class="normal">(enabled)</highlight></codeline>
 <codeline lineno="1184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">class</highlight><highlight class="normal">(CATChem_Model),<sp/></highlight><highlight class="keywordtype">intent(in)</highlight><highlight class="normal"><sp/>::<sp/>this</highlight></codeline>
 <codeline lineno="1185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">logical</highlight><highlight class="normal"><sp/>::<sp/>enabled</highlight></codeline>

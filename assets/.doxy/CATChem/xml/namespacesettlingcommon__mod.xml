@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacesettlingcommon__mod" kind="namespace" language="Fortran">
     <compoundname>settlingcommon_mod</compoundname>
     <innerclass refid="structsettlingcommon__mod_1_1settlingconfig" prot="public">settlingcommon_mod::settlingconfig</innerclass>
-    <innerclass refid="structsettlingcommon__mod_1_1settlingprocessconfig" prot="public">settlingcommon_mod::settlingprocessconfig</innerclass>
     <innerclass refid="structsettlingcommon__mod_1_1settlingschemegocartconfig" prot="public">settlingcommon_mod::settlingschemegocartconfig</innerclass>
+    <innerclass refid="structsettlingcommon__mod_1_1settlingprocessconfig" prot="public">settlingcommon_mod::settlingprocessconfig</innerclass>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

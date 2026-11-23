@@ -8,7 +8,28 @@
 
 
 ```Fortran
-
+!> \file DustScheme_GINOUX_Mod.F90
+!! \brief Ginoux dust emission scheme
+!!
+!! Pure science kernel for ginoux scheme in dust process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_ginoux (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2026-04-17T13:57:10.254102
+!! Author: Barry Baker & Wei Li
+!! Reference: Ginoux et al. [2001]
 module dustscheme_ginoux_mod
 
    use catchem_bridge_precision, only: fp
@@ -25,6 +46,33 @@ module dustscheme_ginoux_mod
 
 contains
 
+   !> Pure science computation for ginoux scheme
+   !!
+   !! This is a pure computational kernel implementing Ginoux dust emission scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  g0    Required constant from Constants module
+   !! @param[in]  airden    AIRDEN field [appropriate units]
+   !! @param[in]  frlake    FRLAKE field [appropriate units]
+   !! @param[in]  frsno    FRSNO field [appropriate units]
+   !! @param[in]  gwettop    GWETTOP field [appropriate units]
+   !! @param[in]  lwi    LWI field [appropriate units]
+   !! @param[in]  ssm    SSM field [appropriate units]
+   !! @param[in]  tskin    TSKIN field [appropriate units]
+   !! @param[in]  u10m    U10M field [appropriate units]
+   !! @param[in]  v10m    V10M field [appropriate units]
+   !! @param[in]  species_density    Species density property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_conc   Species concentrations [ppm or ug/kg] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] dust_emission_total    Total dust emissions for all bins [kg/m2/s]
+   !! @param[inout] dust_emission_per_bin    Dust emission flux per bin [kg/m2/s] (num_species)
+   !! @param[inout] utar_threshold    Threshold friction velocity to have dust emission [m/s]
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    pure subroutine compute_ginoux( &
       num_layers, &
       num_species, &
@@ -76,11 +124,11 @@ contains
       integer :: k, species_idx
       integer :: diag_idx  ! For diagnostic species indexing
       logical :: skip  ! Flag to determine if we should skip computation
-      real(fp) :: ginoux_scaling
-      real(fp) :: u_thresh0
-      real(fp) :: u_thresh
-      real(fp) :: w10m
-      real(fp) :: emission_temp
+      real(fp) :: ginoux_scaling                       !< Ginoux scaling
+      real(fp) :: u_thresh0                            !< Dry threshold wind speed [m/s]
+      real(fp) :: u_thresh                             !< Moisture Corrected threshold wind speed [m/s]
+      real(fp) :: w10m                                 !< 10m wind speed [m/s]
+      real(fp) :: emission_temp                        !< Temporary variable for emission calculation
 
       ! `species_conc` is part of the shared scheme calling convention and
       ! intentionally unused by this scheme; reference it so the interface
@@ -195,31 +243,45 @@ contains
    ! Add your custom scientific algorithms here as pure functions/subroutines
    ! Examples: environmental response functions, species-specific calculations, etc.
 
+   !>
+   !! \brief Computes the Threshold Friction Velocity from MB97
+   !!
+   !! Marticorena, B. and Bergametti, G.: Modeling the atmospheric dust cycle:
+   !! 1. Design of a soil-derived dust emission scheme,
+   !! J. Geophys. Res.-Atmos., 100, 16415–16430, https://doi.org/10.1029/95JD00690, 1995 | TODO fix with correct reference
+   !!
+   !! \param soil_density soil density
+   !! \param air_density air density
+   !! \param radius particle radius
+   !! \param ustar_threshold threshold friction velocity
+   !!
+   !! \ingroup catchem_dust_process
+   !!!>
    pure subroutine mb97_threshold_velocity(soil_density, air_density, radius, g0, ustar_threshold)
       ! USES
       IMPLICIT NONE
 
       ! Input Parameters
       !-----------------
-      real(fp), intent(in) :: radius
-      real(fp), intent(in) :: soil_density
-      real(fp), intent(in) :: air_density
-      real(fp), intent(in) :: g0
+      real(fp), intent(in) :: radius       !< particle radius
+      real(fp), intent(in) :: soil_density !< soil density
+      real(fp), intent(in) :: air_density  !< air density
+      real(fp), intent(in) :: g0           !< gravitational acceleration
 
       ! Output Parameters
       !------------------
-      real(fp), intent(out) :: ustar_threshold
+      real(fp), intent(out) :: ustar_threshold !< threshold friction velocity
 
       ! Local Variables
       !-----------------
-      real(fp) :: diameter
+      real(fp) :: diameter !< diameter of particle [m]
 
       if (radius <= 0.0_fp .or. soil_density <= 0.0_fp .or. air_density <= 0.0_fp) then
          ustar_threshold = 0.0_fp
          return
       end if
 
-      diameter = 2.0_fp * radius * 1.0e-6_fp 
+      diameter = 2.0_fp * radius * 1.0e-6_fp !< convert radius to meters
       ustar_threshold = 0.13_fp * sqrt(soil_density*g0*diameter/air_density) &
          * sqrt(1.0_fp + 6.e-7_fp/(soil_density*g0*diameter**2.5_fp)) &
          / sqrt(1.928_fp*(1331.0_fp*(100._fp*diameter)**1.56_fp+0.38_fp)**0.092_fp - 1.0_fp)

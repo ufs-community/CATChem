@@ -8,7 +8,34 @@
 
 
 ```Fortran
-
+!> \file WetDepScheme_JACOB_Mod.F90
+!! \brief Jacob et al. [2000] wet deposition scheme
+!!
+!! Pure science kernel for jacob scheme in wetdep process.
+!! This module contains ONLY the computational algorithm with NO infrastructure dependencies.
+!! Uses only basic Fortran types for maximum portability and reusability.
+!!
+!! SCIENCE CUSTOMIZATION GUIDE:
+!! 1. Modify the algorithm in compute_jacob (search for "TODO")
+!! 2. Add scheme-specific helper subroutines as needed
+!! 3. Update physical constants for your scheme
+!! 4. Customize the environmental response functions
+!!
+!! INFRASTRUCTURE RESPONSIBILITIES (handled by host model):
+!! - Parameter initialization and validation
+!! - Input array validation and error handling
+!! - Memory management and array allocation
+!! - Integration with host model time stepping
+!!
+!! Generated on: 2025-11-25T14:47:14.566559
+!! Author: Wei Li
+!! (1) Jacob, D. J., Liu, H., Mari, C., and Yantosca, B. M., Harvard wet deposition scheme for GMI,
+!!     available at: http://acmg.seas.harvard.edu/geos/wiki_docs/deposition/wetdep.jacob_etal_2000.pdf
+!! (2) GEOS-Chem's source codes in the module file of wetscav_mod.F90 and reference therein.
+!!     (https://github.com/geoschem/geos-chem/blob/main/GeosCore/wetscav_mod.F90)
+!! (3) The above scheme was also adopted in GOCART2G_process.F90 for aerosols, which is shorter and cleaner.
+!!     https://github.com/GEOS-ESM/GOCART/blob/develop/Process_Library/GOCART2G_Process.F90#L3525-L4115
+!!
 module wetdepscheme_jacob_mod
 
    use catchem_bridge_precision, only: fp, zero, one, rae, tiny_
@@ -36,6 +63,42 @@ module wetdepscheme_jacob_mod
 
 contains
 
+   !> Pure science computation for jacob scheme
+   !!
+   !! This is a pure computational kernel implementing Jacob et al. [2000] wet deposition scheme.
+   !! NO error checking, validation, or infrastructure concerns.
+   !! Host model must ensure all inputs are valid before calling.
+   !!
+   !! @param[in]  num_layers     Number of vertical layers
+   !! @param[in]  num_species    Number of chemical species
+   !! @param[in]  params         Scheme parameters (pre-validated by host)
+   !! @param[in]  airden_dry    AIRDEN_DRY field [appropriate units]
+   !! @param[in]  mairden    MAIRDEN field [appropriate units]
+   !! @param[in]  pedge    PEDGE field [appropriate units]
+   !! @param[in]  pfilsan    PFILSAN field [appropriate units]
+   !! @param[in]  pfllsan    PFLLSAN field [appropriate units]
+   !! @param[in]  reevapls    REEVAPLS field [appropriate units]
+   !! @param[in]  t    T field [appropriate units]
+   !! @param[in]  tstep    Time step [s] - retrieved from process interface
+   !! @param[in]  species_is_aerosol    Species is_aerosol property
+   !! @param[in]  species_is_wetdep     Species is_wetdep participation flag
+   !! @param[in]  species_short_name    Species short_name property
+   !! @param[in]  species_henry_cr    Species henry_cr property
+   !! @param[in]  species_henry_k0    Species henry_k0 property
+   !! @param[in]  species_henry_pKa    Species henry_pKa property
+   !! @param[in]  species_wd_retfactor    Species wd_retfactor property
+   !! @param[in]  species_wd_LiqAndGas    Species wd_LiqAndGas property
+   !! @param[in]  species_wd_convfacI2G    Species wd_convfacI2G property
+   !! @param[in]  species_wd_rainouteff    Species wd_rainouteff property
+   !! @param[in]  species_radius    Species radius property
+   !! @param[in]  species_mw_g    Species mw_g property
+   !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
+   !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
+   !! @param[inout] wetdep_mass_per_species_per_level    Wet deposition mass loss per species per level [kg/m2] (num_species)
+   !! @param[inout] wetdep_flux_per_species_per_level    Wet deposition flux per species per level [kg/m2/s] (num_species)
+   !! @param[inout] wetdep_mass_per_species_per_level    Wet deposition mass loss per species per level [kg/m2] (num_species)
+   !! @param[inout] wetdep_flux_per_species_per_level    Wet deposition flux per species per level [kg/m2/s] (num_species)
+   !! @param[in] diagnostic_species_id Indices mapping diagnostic species to species array (optional, for per-species diagnostics)
    subroutine compute_jacob( &
       num_layers, &
       num_species, &
@@ -476,6 +539,7 @@ contains
    ! Add your custom scientific algorithms here as pure functions/subroutines
    ! Examples: environmental response functions, species-specific calculations, etc.
 
+   !> \brief Find species index by name
    function find_species_ind(SpeciesNames, species_name) result(species_index)
       implicit none
       character(len=*), intent(in) :: SpeciesNames(:)
@@ -497,29 +561,54 @@ contains
 
    end function find_species_ind
 
+   !>
+   !! \brief Computes RAINFRAC, the fraction of soluble species lost to rainout events in precipitation.
+   !!
+   !! \param is_aero    aerosol rainout flag
+   !! \param efficiency  temperature-dependent scale factor for rainout fraction
+   !! \param wd_LidAndGas  ice-to-gas ratio is computed by co-condensation?
+   !! \param k0        Henry's solubility constant [M/atm]
+   !! \param cr        Henry's volatility constant [K]
+   !! \param pKa       Henry's pH correction factor [1]
+   !! \param cnvI2G    Conversion factor from ice to gas ratio if wd_LidAndGas is true
+   !! \param retfac    Retention factor of species
+   !! \param f         Fraction of grid box that is precipiting [unitless]
+   !! \param k         Rainout rate constant [1/s]
+   !! \param dt        time step [s]
+   !! \param tk        temperature [K]
+   !! \param c_h2o     Mix ratio of H2O [cm3 H2O/cm3 air]
+   !! \param cldice    Precipitable cloud ice mixing ratio [cm3 ice/cm3 air]
+   !! \param cldliq    Precipitable cloud liquid mixing ratio [cm3 H2O/cm3 air]
+   !! \param spc       Species name
+   !! \param lossfrac   Fraction of species lost to rainout [unitless]
+   !! \param SO2       SO2 concentration [kg/kg]
+   !! \param H2O2      H2O2 concentration [kg/kg]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    subroutine rainout( is_aero, efficiency, wd_LidAndGas, k0, cr, pKa, cnvI2G, retfac, f, k, dt, tk, c_h2o, cldice, cldliq, spc, lossfrac, SO2, H2O2 )
       IMPLICIT NONE
       ! Parameters
       !-----------
-      logical,    intent(in)  :: is_aero
-      real(fp),   intent(in)  :: efficiency(3)
-      logical,    intent(in)  :: wd_LidAndGas
-      real(fp),   intent(in)  :: k0
-      real(fp),   intent(in)  :: cr
-      real(fp),   intent(in)  :: pKa
-      real(fp),   intent(in)  :: cnvI2G
-      real(fp),   intent(in)  :: retfac
-      real(fp),   intent(in)  :: f
-      real(fp),   intent(in)  :: k
-      real(fp),   intent(in)  :: dt
-      real(fp),   intent(in)  :: tk
-      real(fp),   intent(in)  :: c_h2o
-      real(fp),   intent(in)  :: cldice
-      real(fp),   intent(in)  :: cldliq
-      character(len = 20),  intent(in)  :: spc
-      real(fp),   intent(out) :: lossfrac
-      real(fp),   intent(in) :: SO2
-      real(fp),   intent(inout) :: H2O2
+      logical,    intent(in)  :: is_aero              !< aerosol rainout flag
+      real(fp),   intent(in)  :: efficiency(3)        !< temperature-dependent scale factor for rainout fraction
+      logical,    intent(in)  :: wd_LidAndGas         !< ice-to-gas ratio is computed by co-condensation?
+      real(fp),   intent(in)  :: k0                   !< Henry's solubility constant [M/atm]
+      real(fp),   intent(in)  :: cr                   !< Henry's volatility constant [K]
+      real(fp),   intent(in)  :: pKa                  !< Henry's pH correction factor [1]
+      real(fp),   intent(in)  :: cnvI2G               !< Conversion factor from ice to gas ratio if wd_LidAndGas is true
+      real(fp),   intent(in)  :: retfac               !< Retention factor of species
+      real(fp),   intent(in)  :: f                    !< Fraction of grid box that is precipiting [unitless]
+      real(fp),   intent(in)  :: k                    !< Rainout rate constant [1/s]
+      real(fp),   intent(in)  :: dt                   !< time step [s]
+      real(fp),   intent(in)  :: tk                   !< temperature [K]
+      real(fp),   intent(in)  :: c_h2o                !< Mix ratio of H2O [cm3 H2O/cm3 air]
+      real(fp),   intent(in)  :: cldice               !< Precipitable cloud ice mixing ratio [cm3 ice/cm3 air]
+      real(fp),   intent(in)  :: cldliq               !< Precipitable cloud liquid mixing ratio [cm3 H2O/cm3 air]
+      character(len = 20),  intent(in)  :: spc        !< Species name
+      real(fp),   intent(out) :: lossfrac             !< Fraction of species lost to rainout [unitless]
+      real(fp),   intent(in) :: SO2                   !< SO2 concentration [kg/kg]; depleted in rainout_loss, not here
+      real(fp),   intent(inout) :: H2O2               !< H2O2 concentration [kg/kg]; depleted by SO2 oxidation (written back)
 
       ! Local Variables
       !----------------
@@ -626,28 +715,51 @@ contains
 
    end subroutine rainout
 
+   !>
+   !! \brief Computes WASHFRAC, the fraction of soluble species lost to washout events in precipitation.
+   !!
+   !! \param radius         Particle radius (um)
+   !! \param f              Fraction of grid box that is precipitating [unitless]
+   !! \param tk             Temperature in grid box (K)
+   !! \param qdwn           Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+   !! \param dz             Height of grid box [cm]
+   !! \param dt             Timestep (s)
+   !! \param spc            Species name
+   !! \param is_aero        aerosol washout flag
+   !! \param k0             Henry's solubility constant [M/atm]
+   !! \param cr             Henry's volatility constant [K]
+   !! \param pKa            Henry's pH correction factor [1]
+   !! \param wtune          Washout tuning factor; newly added in GOCART version
+   !! \param radius_thr     Fine/coarse particle radius threshold (um); using 1.0 um for now
+   !! \param washfrac       Fraction of species lost to washout [unitless]
+   !! \param kin            Kinetic process flag [kinetic or equilibrium]
+   !! \param SO2            SO2 concentration [kg/kg]
+   !! \param H2O2           H2O2 concentration [kg/kg]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
 
    subroutine washout( radius, f, tk, qdwn, dz, dt, spc, is_aero, k0, cr, pKa, wtune, radius_thr, washfrac, kin, SO2, H2O2)
 
       implicit none
 
-      real(fp),  intent(in)  :: radius
-      real(fp),  intent(in)  :: f
-      real(fp),  intent(in)  :: tk
-      real(fp),  intent(in)  :: qdwn
-      real(fp),  intent(in)  :: dz
-      real(fp),  intent(in)  :: dt
-      character(len = 20),  intent(in) :: spc
-      logical,   intent(in)  :: is_aero
-      real(fp),  intent(in) :: k0
-      real(fp),  intent(in) :: cr
-      real(fp),  intent(in) :: pKa
-      real(fp),  intent(in)  :: wtune
-      real(fp),  intent(in)  :: radius_thr
-      real(fp),  intent(out) :: washfrac
-      logical,   intent(out)  :: kin
-      real(fp),  intent(inout) :: H2O2
-      real(fp),  intent(in) :: SO2
+      real(fp),  intent(in)  :: radius         !< Particle radius (um)
+      real(fp),  intent(in)  :: f              !< Fraction of grid box that is precipitating [unitless]
+      real(fp),  intent(in)  :: tk             !< Temperature in grid box (K)
+      real(fp),  intent(in)  :: qdwn           !< Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+      real(fp),  intent(in)  :: dz             !< Height of grid box [cm]
+      real(fp),  intent(in)  :: dt             !< Timestep (s)
+      character(len = 20),  intent(in) :: spc  !< Species name
+      logical,   intent(in)  :: is_aero        !< aerosol washout flag
+      real(fp),  intent(in) :: k0              !< Henry's solubility constant [M/atm]
+      real(fp),  intent(in) :: cr              !< Henry's volatility constant [K]
+      real(fp),  intent(in) :: pKa             !< Henry's pH correction factor [1]
+      real(fp),  intent(in)  :: wtune          !< Washout tuning factor; newly added in GOCART version
+      real(fp),  intent(in)  :: radius_thr     !< Fine/coarse particle radius threshold (um); using 1.0 um for now
+      real(fp),  intent(out) :: washfrac       !< Fraction of species lost to washout [unitless]
+      logical,   intent(out)  :: kin           !< Kinetic process flag [kinetic or equilibrium]
+      real(fp),  intent(inout) :: H2O2         !< H2O2 conc [kg/kg]; afterchem value, depleted by SO2 oxidation (written back)
+      real(fp),  intent(in) :: SO2              !< SO2 conc [kg/kg]; depleted in washout_loss, not here
       ! -- local variables
       real(fp)               :: SO2LOSS
       real(fp)               :: SO2s, H2O2s !unit conversion to mol/mol
@@ -741,25 +853,46 @@ contains
 
    end subroutine washout
 
+   !>
+   !! \brief Computes the fraction of species lost to rainout.
+   !!
+   !! \param f          Fraction of grid box that is precipiting [unitless]
+   !! \param k          Rainout rate constant [1/s]
+   !! \param dt         time step [s]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    real(fp) function rainfrac( f, k, dt )
 
       implicit none
       ! INPUT Parameters
-      real(fp), intent(in) :: f
-      real(fp), intent(in) :: k
-      real(fp), intent(in) :: dt
+      real(fp), intent(in) :: f          !< Fraction of grid box that is precipiting [unitless]
+      real(fp), intent(in) :: k          !< Rainout rate constant [1/s]
+      real(fp), intent(in) :: dt         !< time step [s]
 
       rainfrac = f * ( one - exp( -k * dt ) )
 
    end function rainfrac
 
+   !>
+   !! \brief Computes the ratio L2G = Cliq / Cgas, which is the mixing ratio
+   !!  of species in the liquid phase, divided by the mixing ratio of species in the gas phase.
+   !!
+   !! \param k0         Henry's solubility constant [M/atm]
+   !! \param cr         Henry's volatility constant [K]
+   !! \param pKa        Henry's pH correction factor [1]
+   !! \param tk         Temperature [K]
+   !! \param qliq       Liquid water content [cm3 H2O/cm3 air]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    real(fp) function liq_to_gas_ratio( k0, cr, pKa, tk, qliq )
 
-      real(fp), intent(in) :: k0
-      real(fp), intent(in) :: cr
-      real(fp), intent(in) :: pKa
-      real(fp), intent(in) :: tk
-      real(fp), intent(in) :: qliq
+      real(fp), intent(in) :: k0      !< Henry's solubility constant [M/atm]
+      real(fp), intent(in) :: cr      !< Henry's volatility constant [K]
+      real(fp), intent(in) :: pKa     !< Henry's pH correction factor [1]
+      real(fp), intent(in) :: tk      !< Temperature [K]
+      real(fp), intent(in) :: qliq    !< Liquid water content [cm3 H2O/cm3 air]
 
       ! -- local variables
       real(fp) :: h !, t
@@ -780,17 +913,30 @@ contains
 
    end function liq_to_gas_ratio
 
+   !>
+   !! \brief Computes the fraction of soluble aerosol species lost to washout.
+   !!
+   !! \param radius       Particle radius (um)
+   !! \param f            Washout fraction [unitless]
+   !! \param tk           Temperature in grid box (K)
+   !! \param pdwn         Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+   !! \param dt           Timestep (s)
+   !! \param tuning       Washout tuning factor; newly added in GOCART version
+   !! \param radius_fine  Fine particle radius threshold (um); using 1.0 um for now
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    real(fp) function washfrac_aerosol( radius, f, tk, pdwn, dt, tuning, radius_fine )
 
       implicit none
 
-      real(fp), intent(in) :: radius
-      real(fp), intent(in) :: f
-      real(fp), intent(in) :: tk
-      real(fp), intent(in) :: pdwn
-      real(fp), intent(in) :: dt
-      real(fp), intent(in) :: tuning
-      real(fp), intent(in) :: radius_fine
+      real(fp), intent(in) :: radius         !< particle radius (um)
+      real(fp), intent(in) :: f              !< washout fraction [unitless]
+      real(fp), intent(in) :: tk             !< Temperature in grid box (K)
+      real(fp), intent(in) :: pdwn           !< Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+      real(fp), intent(in) :: dt             !< Timestep (s)
+      real(fp), intent(in) :: tuning         !< Washout tuning factor; newly added in GOCART version
+      real(fp), intent(in) :: radius_fine    !< fine particle radius threshold (um); using 1.0 um for now
 
       ! -- local variables
       real(fp)          :: dth, pph
@@ -825,14 +971,24 @@ contains
 
    end function washfrac_aerosol
 
+   !>
+   !! \brief Computes the fraction of HNO3 species lost to washout.
+   !!
+   !! \param f          Fraction of grid box that is precipitating [unitless]
+   !! \param tk         Temperature in grid box (K)
+   !! \param pdwn       Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+   !! \param dt         Timestep (s)
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    real(fp) function washfrac_hno3( f, tk, pdwn, dt )
 
       implicit none
 
-      real(fp), intent(in) :: f
-      real(fp), intent(in) :: tk
-      real(fp), intent(in) :: pdwn
-      real(fp), intent(in) :: dt
+      real(fp), intent(in) :: f      !< Fraction of grid box that is precipitating [unitless]
+      real(fp), intent(in) :: tk     !< Temperature in grid box [K]
+      real(fp), intent(in) :: pdwn   !< Precip rate thru bottom of grid box (cm3 (H2O) / cm2 (air) / s)
+      real(fp), intent(in) :: dt     !< Timestep of washout event (s)
 
       ! -- local parameters
       real(fp), parameter :: k_wash = 1.0_fp    ! First order washout rate (cm-1)
@@ -846,20 +1002,36 @@ contains
 
    end function washfrac_hno3
 
+   !>
+   !! \brief Computes the fraction of soluble liquid/gas phase species lost to washout.
+   !!
+   !! \param f          Fraction of grid box that is precipitating [unitless]
+   !! \param tk         Temperature in grid box (K)
+   !! \param pdwn       Instant precip rate in grid box (cm3 (H2O) / cm2 (air) / s)
+   !! \param dz         Height of grid box [cm]
+   !! \param dt         Timestep of washout event (s)
+   !! \param k0         Henry's solubility constant [M/atm]
+   !! \param cr         Henry's volatility constant [K]
+   !! \param pKa        Henry's pH correction factor [1]
+   !! \param washfrac   Fraction of species lost to washout [unitless]
+   !! \param kin        Kinetic process flag [kinetic or equilibrium]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    subroutine washfrac_liq_gas( f, tk, pdwn, dz, dt, k0, cr, pKa, washfrac, kin)
 
       implicit none
 
-      real(fp),  intent(in) :: f
-      real(fp),  intent(in) :: tk
-      real(fp),  intent(in) :: pdwn
-      real(fp),  intent(in) :: dz
-      real(fp),  intent(in) :: dt
-      real(fp),  intent(in) :: k0
-      real(fp),  intent(in) :: cr
-      real(fp),  intent(in) :: pKa
-      real(fp),  intent(out) :: washfrac
-      logical,   intent(out) :: kin
+      real(fp),  intent(in) :: f            !< Fraction of grid box that is precipitating [unitless]
+      real(fp),  intent(in) :: tk           !< Temperature in grid box [K]
+      real(fp),  intent(in) :: pdwn         !< Precip rate thru bottom of grid box (cm3 (H2O) / cm2 (air) / s)
+      real(fp),  intent(in) :: dz           !< Height of grid box [cm]
+      real(fp),  intent(in) :: dt           !< Timestep of washout event (s)
+      real(fp),  intent(in) :: k0           !< Henry's solubility constant [M/atm]
+      real(fp),  intent(in) :: cr           !< Henry's volatility constant [K]
+      real(fp),  intent(in) :: pKa          !< Henry's pH correction factor [1]
+      real(fp),  intent(out) :: washfrac    !< Fraction of species lost to washout [unitless]
+      logical,   intent(out) :: kin         !< Kinetic process flag [kinetic or equilibrium]
 
       ! -- local variables
       real(fp) :: qliq, l2g, washfrac_kin
@@ -900,18 +1072,28 @@ contains
 
    end subroutine washfrac_liq_gas
 
+   !>
+   !! \brief Computes the concentrations of species lost to rainout.
+   !!
+   !! \param k          Layer index
+   !! \param lossfrac   Fraction of species lost to washout [unitless]
+   !! \param conc       Concentration [kg/m2]
+   !! \param dconc      Concentration loss [kg/m2]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    subroutine rainout_loss( k, lossfrac, conc, dconc )
 
       implicit none
 
       ! -- input/output parameters
-      integer,   intent(in)    :: k
-      real(fp),  intent(in)    :: lossfrac
-      real(fp),  dimension(:), intent(inout) :: conc
-      real(fp),  dimension(:), intent(inout) :: dconc
+      integer,   intent(in)    :: k                     !< layer index
+      real(fp),  intent(in)    :: lossfrac              !< fraction of species lost to rainout [unitless]
+      real(fp),  dimension(:), intent(inout) :: conc    !< concentration [kg/m2]
+      real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
 
       ! -- local variables
-      real(fp)   :: wetloss
+      real(fp)   :: wetloss  !< wet loss concentration
 
       ! -- apply loss (simplified from the DO_WASHOUT_ONLY subroutine)
       wetloss = lossfrac * conc(k)
@@ -933,35 +1115,53 @@ contains
 
    end subroutine rainout_loss
 
+   !>
+   !! \brief Computes the concentrations of species lost to washout.
+   !!
+   !! \param k            layer index
+   !! \param lossfrac     fraction of species lost to washout [unitless]
+   !! \param kin          kinetic process flag [kinetic or equilibrium]
+   !! \param f_washout    washout fraction [unitless]
+   !! \param f_rainout    rainout fraction [unitless]
+   !! \param pdwn         downward flux of precipitation
+   !! \param reevap       Precip forming or evaporating [cm3 (h2o)/cm3 (air)]
+   !! \param delz_cm      vertical grid spacing [cm]
+   !! \param conc         concentration [kg/m2]
+   !! \param dconc        concentration loss kg/m2
+   !! \param SO4          SO4 concentration [kg/m2]
+   !! \param spc          Species name
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    subroutine washout_loss( k, lossfrac, kin, f_washout, f_rainout, pdwn, reevap, delz_cm, dprecip, conc, dconc, spc, SO4, reevap_resusp_frac, so4_gocart_resusp )
 
       implicit none
 
       ! -- input/output parameters
-      integer,   intent(in)    :: k
-      real(fp),  intent(inout) :: lossfrac
-      logical,   intent(in)    :: kin
-      real(fp),  intent(in)    :: f_washout
-      real(fp),  intent(in)    :: f_rainout
-      real(fp),  dimension(:), intent(in)    :: pdwn
+      integer,   intent(in)    :: k                     !< layer index
+      real(fp),  intent(inout) :: lossfrac              !< fraction of species lost to rainout [unitless]
+      logical,   intent(in)    :: kin                   !< kinetic process flag [kinetic or equilibrium]
+      real(fp),  intent(in)    :: f_washout             !< washout fraction [unitless]
+      real(fp),  intent(in)    :: f_rainout             !< rainout fraction [unitless]
+      real(fp),  dimension(:), intent(in)    :: pdwn    !< downward flux of precipitation
       !real(fp), dimension(:), intent(in)    :: qq      !< precipatitng water rate [cm3 (h2o) / cm2 (air) / s]
-      real(fp)                 :: reevap
-      real(fp),  dimension(:), intent(in)    :: delz_cm
-      real(fp),  dimension(:), intent(in)    :: dprecip
-      real(fp),  dimension(:), intent(inout) :: conc
-      real(fp),  dimension(:), intent(inout) :: dconc
-      real(fp),  dimension(:), intent(inout) :: SO4
-      character(len = 20),  intent(in) :: spc
-      real(fp),  intent(in)    :: reevap_resusp_frac
-      logical,   intent(in)    :: so4_gocart_resusp
+      real(fp)                 :: reevap                !< Precip forming or evaporating [cm3 (h2o)/cm3 (air)]
+      real(fp),  dimension(:), intent(in)    :: delz_cm !< vertical grid spacing [cm]
+      real(fp),  dimension(:), intent(in)    :: dprecip !< precip-formation flux per layer [kg/m2/s] (>0 forming, <0 evaporating); sulfate resuspension
+      real(fp),  dimension(:), intent(inout) :: conc    !< concentration [kg/m2]
+      real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
+      real(fp),  dimension(:), intent(inout) :: SO4     !< SO4 concentration [kg/m2]
+      character(len = 20),  intent(in) :: spc           !< Species name
+      real(fp),  intent(in)    :: reevap_resusp_frac    !< fraction of re-evaporated mass resuspended (0.5 GEOS-Chem/Luo default; 1.0 GOCART)
+      logical,   intent(in)    :: so4_gocart_resusp     !< if .true., sulfate (SO4/SO2) uses GOCART SU_Wet_Removal resuspension alpha
 
       ! -- local variables
-      integer    :: km1
-      real(fp)   :: f
-      real(fp)   :: wetloss
-      real(fp)   :: alpha
-      real(fp)   :: gain
-      real(fp)   :: washed
+      integer    :: km1      !< upper one layer index
+      real(fp)   :: f        !< washout + rainout fraction [unitless]
+      real(fp)   :: wetloss  !< wet loss concentration
+      real(fp)   :: alpha    !< re-evaporate fraction [1]
+      real(fp)   :: gain     !< washout gain [kg/m2]
+      real(fp)   :: washed   !< washout concentration [kg/m2]
 
       !begins here (simplified from the DO_WASHOUT_ONLY and DO_WASHOUT_AT_SFC subroutines)
       f = f_washout + f_rainout
@@ -1049,20 +1249,31 @@ contains
 
    end subroutine washout_loss
 
+   !>
+   !! \brief Computes the re-evaporation all of the soluble species back into the atmosphere.
+   !!
+   !! \param k       layer index
+   !! \param conc    concentration [kg/m2]
+   !! \param dconc   concentration loss [kg/m2]
+   !! \param spc     Species name
+   !! \param SO4    SO4 concentration [kg/m2]
+   !!
+   !! \ingroup catchem_wetdep_process
+   !!!>
    subroutine complete_reevap( k, conc, dconc, spc, SO4 )
 
       implicit none
 
       ! -- input/output parameters
-      integer,   intent(in)    :: k
-      real(fp),  dimension(:), intent(inout) :: conc
-      real(fp),  dimension(:), intent(inout) :: dconc
-      character(len = 20),  intent(in) :: spc
-      real(fp),  dimension(:), intent(inout)    :: SO4
+      integer,   intent(in)    :: k                     !< layer index
+      real(fp),  dimension(:), intent(inout) :: conc    !< concentration [kg/m2]
+      real(fp),  dimension(:), intent(inout) :: dconc   !< concentration loss kg/m2
+      character(len = 20),  intent(in) :: spc           !< Species name
+      real(fp),  dimension(:), intent(inout)    :: SO4  !< SO4 concentration [kg/m2]
 
       ! -- local variables
-      integer    :: km1
-      real(fp)   :: wetloss
+      integer    :: km1      !< upper one layer index
+      real(fp)   :: wetloss !< wet loss
 
       ! -- begin
       km1 = k + 1

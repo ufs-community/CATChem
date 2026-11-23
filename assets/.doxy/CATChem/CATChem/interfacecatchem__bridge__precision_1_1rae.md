@@ -51,8 +51,8 @@
 
 | Type | Name |
 | ---: | :--- |
-|  logical function | [**rae\_f4**](#function-rae_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` __ |
-|  logical function | [**rae\_f8**](#function-rae_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` __ |
+|  logical function | [**rae\_f4**](#function-rae_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) a, real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` _._ |
+|  logical function | [**rae\_f8**](#function-rae_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) a, real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) b) <br>_Real approximately equal:_ `abs(a - b) < tiny(a)` _._ |
 
 
 
@@ -88,7 +88,7 @@
 
 ### function rae\_f4 
 
-_Real approximately equal:_ `abs(a - b) < tiny(a)` __
+_Real approximately equal:_ `abs(a - b) < tiny(a)` _._
 ```Fortran
 logical function catchem_bridge_precision::rae::rae_f4 (
     real( f4 ), intent(in) a,
@@ -105,7 +105,7 @@ logical function catchem_bridge_precision::rae::rae_f4 (
 
 ### function rae\_f8 
 
-_Real approximately equal:_ `abs(a - b) < tiny(a)` __
+_Real approximately equal:_ `abs(a - b) < tiny(a)` _._
 ```Fortran
 logical function catchem_bridge_precision::rae::rae_f8 (
     real( f8 ), intent(in) a,

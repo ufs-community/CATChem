@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacedrydepcommon__mod" kind="namespace" language="Fortran">
     <compoundname>drydepcommon_mod</compoundname>
     <innerclass refid="structdrydepcommon__mod_1_1drydepconfig" prot="public">drydepcommon_mod::drydepconfig</innerclass>
-    <innerclass refid="structdrydepcommon__mod_1_1drydepprocessconfig" prot="public">drydepcommon_mod::drydepprocessconfig</innerclass>
-    <innerclass refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" prot="public">drydepcommon_mod::drydepschemegocartconfig</innerclass>
     <innerclass refid="structdrydepcommon__mod_1_1drydepschemeweselyconfig" prot="public">drydepcommon_mod::drydepschemeweselyconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepschemegocartconfig" prot="public">drydepcommon_mod::drydepschemegocartconfig</innerclass>
     <innerclass refid="structdrydepcommon__mod_1_1drydepschemezhangconfig" prot="public">drydepcommon_mod::drydepschemezhangconfig</innerclass>
+    <innerclass refid="structdrydepcommon__mod_1_1drydepprocessconfig" prot="public">drydepcommon_mod::drydepprocessconfig</innerclass>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

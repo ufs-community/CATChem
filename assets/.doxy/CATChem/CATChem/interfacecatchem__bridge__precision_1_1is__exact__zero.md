@@ -51,8 +51,8 @@ _Exact test for zero: exact\_equal(x, 0)._ [More...](#detailed-description)
 
 | Type | Name |
 | ---: | :--- |
-|  elemental logical function | [**is\_exact\_zero\_f4**](#function-is_exact_zero_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)_ |
-|  elemental logical function | [**is\_exact\_zero\_f8**](#function-is_exact_zero_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)_ |
+|  elemental logical function | [**is\_exact\_zero\_f4**](#function-is_exact_zero_f4) (real([**f4**](namespacecatchem__bridge__precision.md#variable-f4)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)._ |
+|  elemental logical function | [**is\_exact\_zero\_f8**](#function-is_exact_zero_f8) (real([**f8**](namespacecatchem__bridge__precision.md#variable-f8)), intent(in) x) <br>_Exact zero test (see the_ `is_exact_zero` _interface)._ |
 
 
 
@@ -95,7 +95,7 @@ True for +0 and -0 only.
 
 ### function is\_exact\_zero\_f4 
 
-_Exact zero test (see the_ `is_exact_zero` _interface)_
+_Exact zero test (see the_ `is_exact_zero` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::is_exact_zero::is_exact_zero_f4 (
     real( f4 ), intent(in) x
@@ -111,7 +111,7 @@ elemental logical function catchem_bridge_precision::is_exact_zero::is_exact_zer
 
 ### function is\_exact\_zero\_f8 
 
-_Exact zero test (see the_ `is_exact_zero` _interface)_
+_Exact zero test (see the_ `is_exact_zero` _interface)._
 ```Fortran
 elemental logical function catchem_bridge_precision::is_exact_zero::is_exact_zero_f8 (
     real( f8 ), intent(in) x

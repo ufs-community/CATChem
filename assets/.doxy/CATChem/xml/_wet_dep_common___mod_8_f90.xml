@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="_wet_dep_common___mod_8_f90" kind="file" language="Fortran">
     <compoundname>WetDepCommon_Mod.F90</compoundname>
     <innerclass refid="structwetdepcommon__mod_1_1wetdepconfig" prot="public">wetdepcommon_mod::wetdepconfig</innerclass>
@@ -83,7 +83,14 @@
 <codeline lineno="69"><highlight class="normal"></highlight></codeline>
 <codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">end<sp/>type</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="71"><highlight class="normal"></highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="73"><highlight class="comment"><sp/><sp/><sp/>!&gt;<sp/>Configuration<sp/>type<sp/>for<sp/>the<sp/>gocart<sp/>(GOCART2G<sp/>wet<sp/>removal)<sp/>scheme.</highlight></codeline>
+<codeline lineno="74"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>Tuning<sp/>defaults<sp/>follow<sp/>GEOS-ESM/GOCART<sp/>GOCART2G_Process:<sp/>overall<sp/>washout</highlight></codeline>
+<codeline lineno="75"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>scale<sp/>1.0,<sp/>WetRemovalUFS<sp/>below-cloud<sp/>tuning<sp/>1.0,<sp/>radius<sp/>threshold<sp/>0.05<sp/>um.</highlight></codeline>
+<codeline lineno="76"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>The<sp/>C++<sp/>process<sp/>layer<sp/>parses<sp/>the<sp/>processes/wetdep/gocart<sp/>options<sp/>from<sp/>the</highlight></codeline>
+<codeline lineno="77"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>runtime<sp/>YAML<sp/>and<sp/>stages<sp/>these<sp/>values<sp/>onto<sp/>the<sp/>type<sp/>before<sp/>each<sp/>bridge</highlight></codeline>
+<codeline lineno="78"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>call.<sp/><sp/>(Note:<sp/>this<sp/>file<sp/>is<sp/>cpp-preprocessed,<sp/>so<sp/>comment<sp/>text<sp/>must<sp/>never</highlight></codeline>
+<codeline lineno="79"><highlight class="comment"><sp/><sp/><sp/>!!<sp/>contain<sp/>a<sp/>C-style<sp/>block-comment<sp/>opener.)</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="80" refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig" refkind="compound"><highlight class="normal"><sp/><sp/><sp/></highlight><highlight class="keyword">type</highlight><highlight class="normal"><sp/>::<sp/><ref refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig" kindref="compound">wetdepschemegocartconfig</ref></highlight></codeline>
 <codeline lineno="81"><highlight class="normal"></highlight></codeline>
 <codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">!<sp/>Scheme<sp/>metadata</highlight><highlight class="normal"></highlight></codeline>

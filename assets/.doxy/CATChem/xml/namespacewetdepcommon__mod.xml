@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacewetdepcommon__mod" kind="namespace" language="Fortran">
     <compoundname>wetdepcommon_mod</compoundname>
     <innerclass refid="structwetdepcommon__mod_1_1wetdepconfig" prot="public">wetdepcommon_mod::wetdepconfig</innerclass>
-    <innerclass refid="structwetdepcommon__mod_1_1wetdepprocessconfig" prot="public">wetdepcommon_mod::wetdepprocessconfig</innerclass>
-    <innerclass refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig" prot="public">wetdepcommon_mod::wetdepschemegocartconfig</innerclass>
     <innerclass refid="structwetdepcommon__mod_1_1wetdepschemejacobconfig" prot="public">wetdepcommon_mod::wetdepschemejacobconfig</innerclass>
+    <innerclass refid="structwetdepcommon__mod_1_1wetdepschemegocartconfig" prot="public">wetdepcommon_mod::wetdepschemegocartconfig</innerclass>
+    <innerclass refid="structwetdepcommon__mod_1_1wetdepprocessconfig" prot="public">wetdepcommon_mod::wetdepprocessconfig</innerclass>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

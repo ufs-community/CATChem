@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.15.0" xml:lang="en-US">
   <compounddef id="namespacecatchem__bridge__error" kind="namespace" language="Fortran">
     <compoundname>catchem_bridge_error</compoundname>
-    <innerclass refid="structcatchem__bridge__error_1_1errorcontexttype" prot="public">catchem_bridge_error::errorcontexttype</innerclass>
     <innerclass refid="structcatchem__bridge__error_1_1errorinfotype" prot="public">catchem_bridge_error::errorinfotype</innerclass>
+    <innerclass refid="structcatchem__bridge__error_1_1errorcontexttype" prot="public">catchem_bridge_error::errorcontexttype</innerclass>
     <innerclass refid="structcatchem__bridge__error_1_1errormanagertype" prot="public">catchem_bridge_error::errormanagertype</innerclass>
     <sectiondef kind="var">
       <memberdef kind="variable" id="namespacecatchem__bridge__error_1a1f49777e914bacf8dac0ba054995b9a0" prot="public" static="no" mutable="no">
@@ -611,7 +611,7 @@
 <parametername>Instr</parametername>
 </parameternamelist>
 <parameterdescription>
-<para>Other instructions <blockquote><para><zwj/> </para>
+<para>Other instructions <blockquote><para></para>
 </blockquote></para>
 </parameterdescription>
 </parameteritem>
@@ -670,7 +670,7 @@
 </parameterdescription>
 </parameteritem>
 </parameterlist>
-<blockquote><para><zwj/> </para>
+<blockquote><para></para>
 </blockquote></para>
         </detaileddescription>
         <inbodydescription>
