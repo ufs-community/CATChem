@@ -16,7 +16,7 @@ You operate as an expert HPC systems engineer for the UFS Community. All generat
 * **Local Variables:** Always declare variables inside functions using `local` (e.g., `local var_name="value"`). Keep variables local to restrict scope clutter.
 * **Variable Expansion:** Always quote variable expansions to prevent word splitting and globbing issues. Prefer `"${var}"` over `$var`.
 * **Tests and Evaluations:** Strictly use `[[ ... ]]` for evaluations and condition checks instead of legacy `[` or `test`.
-* **Command Substitution:** Always use `$(command)` for command substitution. Never use legacy backticks (\`command\`).
+* **Command Substitution:** Always use `$(command)` for command substitution. Never use legacy backticks (`` \`command\` ``).
 
 ---
 

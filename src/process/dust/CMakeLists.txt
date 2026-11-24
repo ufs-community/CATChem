@@ -25,14 +25,9 @@ set(DUST_ALL_SOURCES ${DUST_PROCESS_SOURCES} ${DUST_SCHEME_SOURCES})
 set(_lib CATChem_process_dust)
 add_library(${_lib} ${DUST_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
-
-# Conditional Kokkos linking
-if(ENABLE_KOKKOS)
-  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos CATChem_core_cpp)
-  target_compile_definitions(${_lib} PRIVATE ENABLE_KOKKOS)
-endif()
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 

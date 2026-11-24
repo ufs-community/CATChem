@@ -1,4 +1,4 @@
-# Always build external dependencies first (yaml-cpp and yaml_interface are required for core)
+# Always build external dependencies first (yaml-cpp is required for core)
 add_subdirectory(external)
 
 add_subdirectory(core)

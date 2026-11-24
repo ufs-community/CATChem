@@ -10,15 +10,15 @@ env:
 
 jobs:
   build-and-test:
-    name: Build and test (${{ matrix.gcc-version }})
+    name: Build and test (GCC ${{ matrix.gcc-version }})
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
-        gcc-version: ["14"]
+        gcc-version: ["12", "14"]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
 
@@ -28,7 +28,7 @@ jobs:
 
       - name: Cache Kokkos
         id: cache-kokkos
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ github.workspace }}/kokkos-install
           key: kokkos-${{ env.KOKKOS_VERSION }}-ubuntu-24.04-gcc-${{ matrix.gcc-version }}
@@ -50,7 +50,7 @@ jobs:
           CXX: g++-${{ matrix.gcc-version }}
 
       - name: Configure
-        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF -DENABLE_KOKKOS=ON
+        run: cmake -B $BUILD_DIR -DCATCHEM_BUILD_NUOPC=OFF -DCATCHEM_ENABLE_KOKKOS=ON -DCATCHEM_BUILD_MUSICA=ON
           -DCMAKE_PREFIX_PATH="${{ github.workspace }}/kokkos-install"
         env:
           FC: gfortran-${{ matrix.gcc-version }}
@@ -58,7 +58,7 @@ jobs:
           CXX: g++-${{ matrix.gcc-version }}
 
       - name: Build
-        run: cmake --build $BUILD_DIR -j2
+        run: cmake --build $BUILD_DIR -j$(nproc)
 
       - name: Test
         run: ctest --test-dir ${BUILD_DIR}/tests --output-on-failure

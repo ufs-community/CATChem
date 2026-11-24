@@ -1,0 +1,24 @@
+simulation:
+  name: platform-integrity-valid
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 2
+grid:
+  number_of_levels: 3
+  number_of_soil_layers: 2
+diagnostics:
+  output:
+    enabled: true
+    directory: output
+    prefix: integrity
+    frequency: 60
+    format: netcdf
+    compress_lev: 1
+  collection:
+    enabled: true
+    buffer_size: 4
+run_phases: {}
+processes: {}

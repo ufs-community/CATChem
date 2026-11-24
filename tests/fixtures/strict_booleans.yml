@@ -1,0 +1,29 @@
+# Scalar-parsing contract: booleans are `true`/`false` only (any case);
+# `yes`, `on`, `1`, and `0` are not booleans and reading them is an error, as
+# is reading `1.0` as an int or `abc` as a number; `~` is null and means the
+# default.  Used by test_config_validation.
+simulation:
+  name: strict-booleans
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 2
+  strict_true: TRUE
+  strict_false: False
+  legacy_yes: yes
+  legacy_one: 1
+  float_as_int: 1.0
+  not_a_number: abc
+  null_value: ~
+grid:
+  number_of_levels: 3
+  number_of_soil_layers: 2
+run_phases: {}
+processes:
+  dust:
+    activate: true
+    legacy_on: on
+    strict_false: false
+    legacy_zero: 0

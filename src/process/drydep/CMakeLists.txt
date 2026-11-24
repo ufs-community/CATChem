@@ -21,22 +21,13 @@ set(
 # Combine all sources
 set(DRYDEP_ALL_SOURCES ${DRYDEP_PROCESS_SOURCES} ${DRYDEP_SCHEME_SOURCES})
 
-if(ENABLE_KOKKOS)
-  list(APPEND DRYDEP_ALL_SOURCES catchem_process_drydep.cpp)
-endif()
-
 # Create the drydep process library
 set(_lib CATChem_process_drydep)
 add_library(${_lib} ${DRYDEP_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
-
-# Conditional Kokkos linking
-if(ENABLE_KOKKOS)
-  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos)
-  target_compile_definitions(${_lib} PRIVATE ENABLE_KOKKOS)
-endif()
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 

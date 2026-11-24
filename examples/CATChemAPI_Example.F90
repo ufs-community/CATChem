@@ -7,7 +7,7 @@
 !!
 program CATChemAPI_Example
    use CATChemAPI_Mod
-   use precision_mod
+   use catchem_bridge_precision
 
    implicit none
 

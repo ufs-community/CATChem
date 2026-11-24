@@ -2,7 +2,30 @@ name: Semantic Release
 
 on:
   workflow_call:
+    inputs:
+      dry_run:
+        description: 'Perform a preview dry run without tagging or committing'
+        required: false
+        type: boolean
+        default: false
+      target_branch:
+        description: 'The target branch to evaluate against'
+        required: false
+        type: string
+        default: ''
+      pr_title:
+        description: 'PR title for synthetic squash-merge commit evaluation'
+        required: false
+        type: string
+        default: ${{ github.event.pull_request.title || '' }}
+      docker_org:
+        description: 'Docker Hub organization for published images'
+        required: true
+        type: string
     outputs:
+      current_version:
+        description: "The current version before release evaluation"
+        value: ${{ jobs.release.outputs.current_version }}
       new_release_version:
         description: "The version of the new release"
         value: ${{ jobs.release.outputs.new_release_version }}
@@ -12,6 +35,9 @@ on:
       is_prerelease:
         description: "Whether this is a pre-release"
         value: ${{ jobs.release.outputs.is_prerelease }}
+      tag:
+        description: "The git tag produced by PSR"
+        value: ${{ jobs.release.outputs.tag }}
 
 jobs:
   release:
@@ -20,27 +46,115 @@ jobs:
       id-token: write
       contents: write
     outputs:
-      new_release_version: ${{ steps.release.outputs.version }}
-      new_release_published: ${{ steps.release.outputs.released }}
-      is_prerelease: ${{ steps.release.outputs.is_prerelease }}
+      current_version: ${{ steps.eval.outputs.current_version }}
+      new_release_version: ${{ steps.eval.outputs.new_release_version }}
+      new_release_published: ${{ steps.eval.outputs.new_release_published }}
+      is_prerelease: ${{ steps.eval.outputs.is_prerelease }}
+      tag: ${{ steps.eval.outputs.tag }}
+    env:
+      SEMVER_APP_ID: ${{ secrets.SEMVER_APP_ID }}
+      SEMVER_APP_PRIVATE_KEY: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
 
     steps:
-      - name: Generate GitHub App Token
+      - name: Require GitHub App credentials for production release
+        if: ${{ !(inputs.dry_run || github.event_name == 'pull_request') && (env.SEMVER_APP_ID == '' || env.SEMVER_APP_PRIVATE_KEY == '') }}
+        run: |
+          echo "::error::SEMVER_APP_ID and SEMVER_APP_PRIVATE_KEY are required for production releases; refusing to fall back to GITHUB_TOKEN."
+          exit 1
+
+      - name: Generate GitHub App Token (skipped for previews without secrets)
         id: app-token
+        if: env.SEMVER_APP_ID != '' && env.SEMVER_APP_PRIVATE_KEY != ''
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ secrets.SEMVER_APP_ID }}
-          private-key: ${{ secrets.SEMVER_APP_PRIVATE_KEY }}
+          client-id: ${{ env.SEMVER_APP_ID }}
+          private-key: ${{ env.SEMVER_APP_PRIVATE_KEY }}
 
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
           persist-credentials: true
 
-      - name: Python Semantic Release
+      - name: Prepare branch for merge preview
+        if: inputs.dry_run || github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ inputs.pr_title }}
+          TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
+        run: |
+          python3 .github/workflows/scripts/prepare_release_preview.py --strategy merge
+
+      - name: Python Semantic Release (Merge Preview)
+        if: inputs.dry_run || github.event_name == 'pull_request'
         uses: python-semantic-release/python-semantic-release@v10
-        id: release
+        id: release-merge
         with:
-          github_token: ${{ steps.app-token.outputs.token }}
+          github_token: ${{ steps.app-token.outputs.token || github.token }}
+          commit: false
+          tag: false
+          push: false
+          vcs_release: false
+
+      - name: Capture merge preview diff
+        if: inputs.dry_run || github.event_name == 'pull_request'
+        run: |
+          git diff HEAD > /tmp/merge_preview.diff || true
+
+      - name: Prepare branch for squash preview
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        env:
+          PR_TITLE: ${{ inputs.pr_title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
+        run: |
+          python3 .github/workflows/scripts/prepare_release_preview.py --strategy squash
+
+      - name: Python Semantic Release (Squash Preview)
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        uses: python-semantic-release/python-semantic-release@v10
+        id: release-squash
+        with:
+          github_token: ${{ steps.app-token.outputs.token || github.token }}
+          commit: false
+          tag: false
+          push: false
+          vcs_release: false
+
+      - name: Capture squash preview diff
+        if: (inputs.dry_run || github.event_name == 'pull_request') && inputs.pr_title != ''
+        run: |
+          git diff HEAD > /tmp/squash_preview.diff || true
+
+      - name: Python Semantic Release (Production)
+        if: ${{ !(inputs.dry_run || github.event_name == 'pull_request') }}
+        uses: python-semantic-release/python-semantic-release@v10
+        id: release-prod
+        with:
+          github_token: ${{ steps.app-token.outputs.token || github.token }}
+          commit: true
+          tag: true
+          push: true
+          vcs_release: true
+
+      - name: Evaluate and Report Release
+        id: eval
+        if: always()
+        env:
+          TARGET: ${{ inputs.target_branch || github.base_ref || github.ref_name }}
+          DRY_RUN: ${{ inputs.dry_run || github.event_name == 'pull_request' }}
+          DOCKER_ORG: ${{ inputs.docker_org }}
+          IMAGE_NAME: catchem-ubuntu-gcc-13
+          VERSION: ${{ steps.release-prod.outputs.version }}
+          TAG: ${{ steps.release-prod.outputs.tag }}
+          RELEASED: ${{ steps.release-prod.outputs.released }}
+          VERSION_MERGE: ${{ steps.release-merge.outputs.version }}
+          TAG_MERGE: ${{ steps.release-merge.outputs.tag }}
+          RELEASED_MERGE: ${{ steps.release-merge.outputs.released }}
+          VERSION_SQUASH: ${{ steps.release-squash.outputs.version }}
+          TAG_SQUASH: ${{ steps.release-squash.outputs.tag }}
+          RELEASED_SQUASH: ${{ steps.release-squash.outputs.released }}
+          DIFF_MERGE_FILE: /tmp/merge_preview.diff
+          DIFF_SQUASH_FILE: /tmp/squash_preview.diff
+        run: |
+          python3 .github/workflows/scripts/report_release.py

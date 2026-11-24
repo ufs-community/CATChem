@@ -31,12 +31,16 @@ timesteps:
 #============================================================================
 process:
   seasalt:
-    activate: true
+    activate: false
+    scheme: geos12
+    diagnostics: true
     scheme_opt: 3
     scale_factor: 1.0
     weibull: true
   dust:
-    activate: true
+    activate: false
+    scheme: fengsha
+    diagnostics: true
     scheme_opt: 1
     dust_drag_opt: 1
     dust_moist_opt: 1
@@ -44,6 +48,16 @@ process:
     dust_alpha: 1.0
     dust_beta: 1.0
   drydep:
-    activate: true
+    activate: false
     scheme_opt: 1
+    gas_scheme: wesely
+    aero_scheme: gocart
+    diagnostics: true
     resuspension: false
+  settling:
+    activate: false
+    scheme: gocart
+  so4chem:
+    activate: false
+    scheme: gocart
+    diagnostics: true

@@ -1,21 +1,7 @@
 #pragma once
+#include "catchem_kokkos_compat.hpp"
 #include <algorithm>
 #include <cmath>
-
-#ifdef ENABLE_KOKKOS
-#include <Kokkos_Core.hpp>
-#else
-#ifndef KOKKOS_INLINE_FUNCTION
-#define KOKKOS_INLINE_FUNCTION inline
-#endif
-#ifndef KOKKOS_FUNCTION
-#define KOKKOS_FUNCTION inline
-#endif
-#endif
-
-#ifndef KOKKOS_FUNCTION
-#define KOKKOS_FUNCTION KOKKOS_INLINE_FUNCTION
-#endif
 
 #include "catchem_constants.hpp"
 #include "catchem_precision.hpp"

@@ -4,7 +4,8 @@
 !!!>
 program test_Constants
    use testing_mod, only: assert, assert_close
-   use Constants, only: PI, PI_180, AVO, BOLTZ, RSTARG, AIRMW, H2OMW, ATM
+   use catchem_bridge_precision, only: fp
+   use catchem_bridge_constants, only: PI, PI_180, AVO, BOLTZ, RSTARG, AIRMW, H2OMW, ATM, Rd
 
    implicit none
 
@@ -41,6 +42,18 @@ program test_Constants
    call assert(ATM > 101324.0 .and. ATM < 101326.0, "ATM should be approximately 101325")
 
    write(*,*) 'Test 4 passed!'
+   write(*,*) ''
+
+   ! Test 5: Exact upstream parity values (spec 011 US4).  These must match
+   ! upstream/develop src/core/constants.F90 bitwise so every derived
+   ! quantity (AIRDEN, AIRDEN_DRY, ...) is reproducible against the legacy
+   ! oracle.
+   write(*,*) 'Test 5: Exact upstream constant parity'
+   call assert(RSTARG == 8.3144598_fp, 'RSTARG must equal 8.3144598 exactly')
+   call assert(H2OMW == 18.016_fp, 'H2OMW must equal 18.016 exactly')
+   call assert(Rd == 287.0_fp, 'Rd must equal 287.0 exactly')
+
+   write(*,*) 'Test 5 passed!'
    write(*,*) ''
 
    write(*,*) 'All Constants tests passed!'

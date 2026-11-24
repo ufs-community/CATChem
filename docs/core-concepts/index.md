@@ -8,6 +8,8 @@ CATChem is built upon several interconnected core concepts that ensure its flexi
 
 -   **[State Management](state-management.md)**: Learn how CATChem efficiently manages all model data, including chemical species, meteorological fields, and diagnostic variables, through a unified and thread-safe `StateContainer`.
 
+-   **[External Emission Data](external-emission-data.md)**: See how externally-provided emission inputs (anthropogenic, biogenic, fires, point sources) are read by the driver and stored in the core `ExtEmisData_Mod` container for use by processes and diagnostics.
+
 -   **[Column Virtualization](column-virtualization.md)**: Discover how CATChem optimizes atmospheric processing by treating the 3D grid as a collection of independent 1D vertical columns, enhancing performance and scalability.
 
 -   **[Diagnostic System](diagnostics.md)**: Explore the dynamic diagnostic system that allows processes to register, manage, and output their own diagnostic variables at runtime with flexible control over data types and output frequencies.
@@ -15,5 +17,7 @@ CATChem is built upon several interconnected core concepts that ensure its flexi
 -   **[Error Handling](error-handling.md)**: Understand CATChem's comprehensive error handling mechanism, featuring standardized error codes, severity levels, context tracking, and recovery mechanisms for robust model execution.
 
 -   **[Configuration System](configuration.md)**: Delve into the flexible YAML-based configuration system that provides hierarchical structure, type safety, environment variable support, and robust validation for all model settings.
+
+-   **[Core Runtime Contracts](core-runtime-contracts.md)**: Mechanism discovery, YAML process activation, process field contracts, lifecycle ownership, physical validation, and migration guidance.
 
 These core concepts work together to provide a powerful and adaptable framework for atmospheric chemistry modeling.

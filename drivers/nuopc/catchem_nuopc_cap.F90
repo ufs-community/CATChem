@@ -38,12 +38,15 @@
 module cc_nuopc
 
    use ESMF
+   use catchem_nuopc_lengths
+   use catchem_nuopc_strings, only: real_to_string
    use NUOPC
    use NUOPC_Model, only: &
       NUOPC_ModelGet, &
       SetVM, &
       modelSS        => SetServices, &
       model_label_Advertise       => label_Advertise,      &
+      model_label_SetClock        => label_SetClock,       &
       model_label_DataInitialize  => label_DataInitialize, &
       model_label_Advance => label_Advance, &
       model_label_CheckImport => label_CheckImport, &
@@ -58,15 +61,44 @@ module cc_nuopc
 
    public :: SetServices
    public :: SetVM !for GCAFS only
+   public :: cc_nuopc_set_config_file       !< Set CATChem science config (YAML) path
+   public :: cc_nuopc_set_field_mapping_file !< Set NUOPC field-mapping (YAML) path
 
    !> \brief Component configuration parameters
    !! \{
-   character(len=256), save :: config_file = 'CATChem_new_config.yml' !< Configuration file path
-   character(len=256), save :: field_mapping_file = 'CATChem_field_mapping.yml' !< Field mapping file path
+   character(len=NUOPC_PATH_LEN), save :: config_file = 'CATChem_new_config.yml' !< Configuration file path
+   character(len=NUOPC_PATH_LEN), save :: field_mapping_file = 'CATChem_field_mapping.yml' !< Field mapping file path
    !logical, save :: do_chemistry = .true.                         !< Enable chemistry calculations
    !! \}
 
+   !> ESMF_Info key under which the standalone driver stores the number of
+   !! vertical levels on the grid. MUST match CATCHEM_GRID_NLEV_KEY in
+   !! catchem_standalone_grid_mod; it is duplicated here on purpose to avoid a
+   !! cap -> standalone module dependency (the standalone layer links this cap).
+   character(len=*), parameter :: CATCHEM_GRID_NLEV_KEY = "/catchem/num_levels"
+
 contains
+
+   !> \brief Set the CATChem science configuration (YAML) file path
+   !!
+   !! Allows an external driver/application to override the default
+   !! configuration file used by the cap before initialization. This mirrors
+   !! the pattern used by other standalone NUOPC apps where the main
+   !! application owns the config file selection.
+   !!
+   !! @param filename Path to the CATChem configuration YAML file
+   subroutine cc_nuopc_set_config_file(filename)
+      character(len=*), intent(in) :: filename
+      config_file = filename
+   end subroutine cc_nuopc_set_config_file
+
+   !> \brief Set the NUOPC field-mapping (YAML) file path
+   !!
+   !! @param filename Path to the field-mapping YAML file
+   subroutine cc_nuopc_set_field_mapping_file(filename)
+      character(len=*), intent(in) :: filename
+      field_mapping_file = filename
+   end subroutine cc_nuopc_set_field_mapping_file
 
    !> Set services for the CATChem NUOPC cap
    !!
@@ -91,7 +123,12 @@ contains
       type(ESMF_GridComp)  :: model
       integer, intent(out) :: rc
 
+      integer :: localrc
       rc = ESMF_SUCCESS
+
+      call ESMF_LogWrite('CATChem: Enter SetServices', ESMF_LOGMSG_INFO, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
 
       ! Set the model services
       call NUOPC_CompDerive(model, modelSS, rc=rc)
@@ -113,6 +150,11 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
+      call NUOPC_CompSpecialize(model, specLabel=model_label_SetClock, &
+         specRoutine=SetClock, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
       call NUOPC_CompSpecialize(model, specLabel=model_label_DataInitialize, &
          specRoutine=InitializeP2, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
@@ -127,6 +169,10 @@ contains
          specRoutine=ModelFinalize, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+
+      call ESMF_LogWrite('CATChem: Completed SetServices', ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
    end subroutine SetServices
 
@@ -161,18 +207,60 @@ contains
       type(ESMF_State) :: importState, exportState
       !type(ESMF_Field), pointer :: fieldList(:)
       character(len=*), parameter :: routine = 'InitializeP1'
-      integer :: i
-      character(len=218) :: errmsg
+      integer :: i, localPet, advertised_imports, advertised_exports
+      character(len=NUOPC_MSG_LEN) :: errmsg
+      character(len=NUOPC_PATH_LEN) :: contract_msg
+      logical :: have_mapping, has_entry
 
+      integer :: localrc
       rc = ESMF_SUCCESS
+      advertised_imports = 0
+      advertised_exports = 0
+
+      ! P1 runs while NUOPC constructs coupling lists.  Keep these markers
+      ! unconditional and low-volume: a driver-side stall otherwise produces
+      ! no CATChem evidence distinguishing an unentered cap from a stalled
+      ! state/configuration/advertisement call.
+      call ESMF_LogWrite('CATChem: Enter InitializeP1', ESMF_LOGMSG_INFO, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      call ESMF_GridCompGet(model, localPet=localPet, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
 
       ! Get import and export states
       call NUOPC_ModelGet(model, importState=importState, exportState=exportState, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
-      ! Load field configuration
-      call load_field_config(field_mapping_file, rc, errmsg)
+      call ESMF_LogWrite('CATChem: InitializeP1 states acquired', ESMF_LOGMSG_INFO, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      ! Load field configuration.
+      ! Coupled runs (e.g. UFS) supply a field-mapping YAML listing the fields
+      ! exchanged with other components. A single standalone CATChem component
+      ! exchanges no NUOPC fields, so it has no mapping file: in that case we
+      ! advertise zero import/export fields instead of failing to open the file.
+      inquire(file=trim(field_mapping_file), exist=have_mapping)
+      if (have_mapping) then
+         call load_field_config(field_mapping_file, rc, errmsg)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+      else
+         call ESMF_LogWrite(trim(routine)//': field-mapping file "'// &
+            trim(field_mapping_file)//'" not found; running standalone with no '// &
+            'advertised import/export fields.', ESMF_LOGMSG_INFO, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+         if (.not. allocated(field_config%import_fields)) allocate(field_config%import_fields(0))
+         if (.not. allocated(field_config%export_fields)) allocate(field_config%export_fields(0))
+         field_config%n_import_fields = 0
+         field_config%n_export_fields = 0
+      end if
+
+      call ESMF_LogWrite('CATChem: InitializeP1 field mapping loaded', ESMF_LOGMSG_INFO, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
@@ -188,53 +276,124 @@ contains
       ! Advertise import fields only when it has nothing
       !if (size(fieldList) == 0) then
       ! Advertise import fields using MPI-safe accessor functions
-      do i = 1, size(field_config%import_fields)
-         !   block
-         !     character(len=128) :: standard_name
-         !     logical :: optional
-         !     if (get_import_field_info(i, standard_name, optional)) then
-         call NUOPC_Advertise(importState, &
-            StandardName=trim(field_config%import_fields(i)%standard_name), &
-            TransferOfferGeomObject="cannot provide", &
-            SharePolicyField="share", rc=rc)
-         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         !     end if
-         !   end block
-      end do
-      !end if
+      if (allocated(field_config%import_fields)) then
+         do i = 1, size(field_config%import_fields)
+            ! Optional fields normally remain unadvertised so a host that does
+            ! not produce them (for example humidity diagnostics) is valid.
+            ! Some hosts require a complete field contract even for data that is
+            ! optional to CATChem physics; YAML marks those entries advertise:
+            ! true.  This keeps host-specific contracts declarative rather than
+            ! hardcoding field names in the cap.
+            if (field_config%import_fields(i)%optional .and. &
+               .not. field_config%import_fields(i)%advertise) then
+               call ESMF_LogWrite('CATChem: optional import not advertised: ' // &
+                  trim(field_config%import_fields(i)%standard_name), ESMF_LOGMSG_INFO, rc=rc)
+               if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__)) return
+               cycle
+            end if
+            write(contract_msg, '(A,A)') 'CATChem: InitializeP1 advertising import ', &
+               trim(field_config%import_fields(i)%standard_name)
+            call ESMF_LogWrite(trim(contract_msg), ESMF_LOGMSG_INFO, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            has_entry = NUOPC_FieldDictionaryHasEntry(trim(field_config%import_fields(i)%standard_name), rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            if (.not. has_entry) then
+               block
+                  character(len=NUOPC_NAME_LEN) :: units_to_use
+                  units_to_use = trim(field_config%import_fields(i)%units)
+                  if (len_trim(units_to_use) == 0) units_to_use = '1'
+                  call NUOPC_FieldDictionaryAddEntry( &
+                     StandardName=trim(field_config%import_fields(i)%standard_name), &
+                     CanonicalUnits=trim(units_to_use), rc=rc)
+                  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) return
+               end block
+            end if
 
-      ! retrieve member list from export state, if any
-      !nullify(fieldList)
-      !call NUOPC_GetStateMemberLists(exportState, fieldList=fieldList, nestedFlag=.true., rc=rc)
-      !if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-      !  line=__LINE__,  file=__FILE__)) return
+            call NUOPC_Advertise(importState, &
+               StandardName=trim(field_config%import_fields(i)%standard_name), &
+               TransferOfferGeomObject="cannot provide", &
+               SharePolicyField="share", rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            advertised_imports = advertised_imports + 1
+         end do
+      end if
 
-      !call ESMF_LogWrite("Export fields number: "//real_to_string(real(size(fieldList),ESMF_KIND_R8)), ESMF_LOGMSG_INFO, rc=rc)
-
-      ! Advertise export fields only when it has nothing
-      !if (size(fieldList) == 0) then
       ! Advertise export fields using MPI-safe accessor functions
-      do i = 1, size(field_config%export_fields)
-         !   block
-         !     character(len=128) :: standard_name
-         !     logical :: optional
-         !     if (get_export_field_info(i, standard_name, optional)) then
-         call NUOPC_Advertise(exportState, &
-            StandardName=trim(field_config%export_fields(i)%standard_name), &
-            TransferOfferGeomObject="cannot provide", &
-            SharePolicyField="share", rc=rc)
-         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) return
-         !     end if
-         !   end block
-      end do
-      !end if
+      if (allocated(field_config%export_fields)) then
+         do i = 1, size(field_config%export_fields)
+            write(contract_msg, '(A,A)') 'CATChem: InitializeP1 advertising export ', &
+               trim(field_config%export_fields(i)%standard_name)
+            call ESMF_LogWrite(trim(contract_msg), ESMF_LOGMSG_INFO, rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            has_entry = NUOPC_FieldDictionaryHasEntry(trim(field_config%export_fields(i)%standard_name), rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            if (.not. has_entry) then
+               block
+                  character(len=NUOPC_NAME_LEN) :: units_to_use
+                  units_to_use = trim(field_config%export_fields(i)%units)
+                  if (len_trim(units_to_use) == 0) units_to_use = '1'
+                  call NUOPC_FieldDictionaryAddEntry( &
+                     StandardName=trim(field_config%export_fields(i)%standard_name), &
+                     CanonicalUnits=trim(units_to_use), rc=rc)
+                  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+                     line=__LINE__, file=__FILE__)) return
+               end block
+            end if
+
+            call NUOPC_Advertise(exportState, &
+               StandardName=trim(field_config%export_fields(i)%standard_name), &
+               TransferOfferGeomObject="cannot provide", &
+               SharePolicyField="share", rc=rc)
+            if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+               line=__LINE__, file=__FILE__)) return
+            advertised_exports = advertised_exports + 1
+         end do
+      end if
 
       ! Log successful completion
-      call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=rc)
+      write(contract_msg, '(A,I0,A,I0,A,I0)') 'CATChem: advertisement complete on PET ', localPet, &
+         '; imports=', advertised_imports, '; exports=', advertised_exports
+      call ESMF_LogWrite(trim(contract_msg), ESMF_LOGMSG_INFO, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+      call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
    end subroutine InitializeP1
+
+   !> \brief SetClock specialization - Remove unconnected fields before connection verification
+   !!
+   !! \param[inout] model NUOPC model component
+   !! \param[out] rc ESMF return code
+   subroutine SetClock(model, rc)
+      type(ESMF_GridComp)  :: model
+      integer, intent(out) :: rc
+
+      type(ESMF_State) :: importState, exportState
+
+      integer :: localrc
+      rc = ESMF_SUCCESS
+
+      call ESMF_LogWrite("CATChem: Enter SetClock", ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+
+      call NUOPC_ModelGet(model, importState=importState, exportState=exportState, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      call ESMF_LogWrite("CATChem: Completed SetClock", ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+   end subroutine SetClock
 
    !> \brief Initialize Phase 2 - Realize fields and initialize CATChem model
    !!
@@ -281,21 +440,32 @@ contains
       real(ESMF_KIND_R8), dimension(:,:), allocatable :: lat
       type(ESMF_CoordSys_Flag)   :: coordSys
       real(ESMF_KIND_R8), parameter :: rad_to_deg = 180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
-      real(ESMF_KIND_R8) :: convet_unit
+      real(ESMF_KIND_R8) :: convert_unit
       integer :: localPet, petCount
-      integer :: item, coord_item, rank, localDeCount, numLevels, localDe, localrc, stat
+      integer :: item, coord_item, rank, localDeCount, numLevels, localDe, localrc
       integer, dimension(2) :: lb, ub
       logical :: has_tracer_array
+      logical :: has_import_fields
 
       rc = ESMF_SUCCESS
       has_tracer_array = .false.
+      has_import_fields = .false.
 
-      call ESMF_LogWrite("CATChem: Enter InitializeP2", ESMF_LOGMSG_INFO, rc=rc)
+      call ESMF_LogWrite("CATChem: Enter InitializeP2", ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
       ! Get component information
       call ESMF_GridCompGet(model, localPet=localPet, petCount=petCount, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
+
+#ifdef CATCHEM_TRACE_NUOPC
+      call ESMF_LogWrite('[CAP DEBUG] InitializeP2 localPet=' // int_to_string(localPet) // ' petCount=' // &
+         int_to_string(petCount), ESMF_LOGMSG_DEBUG, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
+#endif
 
       ! Get import and export states
       call NUOPC_ModelGet(model, importState=importState, exportState=exportState, modelClock=clock, rc=rc)
@@ -315,6 +485,7 @@ contains
 
       ! retrieve number of vertical levels from imported fields
       if (associated(fieldList)) then
+         has_import_fields = size(fieldList) > 0
          do item = 1, size(fieldList)
 
             call ESMF_FieldGet(fieldList(item), rank=rank, localDeCount=localDeCount, rc=rc)
@@ -335,8 +506,8 @@ contains
                ! -- populate remaining output arguments
                numLevels = ub(1) - lb(1) + 1
                call ESMF_InfoGetFromHost(array, tracerInfo, rc=localrc)
-               if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-                  line=__LINE__, file=__FILE__)) return  ! bail out
+               if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+                  line=__LINE__, file=__FILE__, rcToReturn=rc)) return  ! bail out
 
                do localDe = 0, localDeCount-1
                   ! -- get local coordinate arrays
@@ -352,10 +523,10 @@ contains
 
                      if (coordSys == ESMF_COORDSYS_SPH_DEG) then
                         !coordinates are in degrees already
-                        convet_unit = 1._ESMF_KIND_R8
+                        convert_unit = 1._ESMF_KIND_R8
                      else if (coordSys == ESMF_COORDSYS_SPH_RAD) then
                         !convert radians to degrees
-                        convet_unit = rad_to_deg
+                        convert_unit = rad_to_deg
                      else
                         call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
                            msg="Unsupported coordinate system - Failed to set coordinates for air quality model", &
@@ -363,36 +534,72 @@ contains
                         return  ! bail out
                      end if
 
-                     select case (coord_item)
-                      case(1)
-                        lon = coord * convet_unit
-                      case(2)
-                        lat = coord * convet_unit
-                      case default
-                        !do nothing
-                     end select
+                     if (associated(coord)) then
+                        select case (coord_item)
+                         case(1)
+                           lon = coord * convert_unit
+                         case(2)
+                           lat = coord * convert_unit
+                         case default
+                           !do nothing
+                        end select
+                     else
+                        call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+                           msg="Grid coordinate arrays are not fully allocated/associated before CATChem init", &
+                           line=__LINE__, file=__FILE__, rcToReturn=rc)
+                        return  ! bail out
+                     end if
                   end do ! loop over coordinate dimensions
                end do ! loop over local DEs
 
             end if !rank = 4
          end do
-         if (.not. has_tracer_array) then
-            call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, msg="tracer array is needed!", &
-               line=__LINE__, file=__FILE__, rcToReturn=rc)
-         end if
 
-         deallocate(fieldList, stat=stat)
-         if (ESMF_LogFoundDeallocError(statusToCheck=stat, msg="Unable to deallocate internal memory", &
-            line=__LINE__, file=__FILE__, rcToReturn=rc)) return  ! bail out
+         ! Release the temporary member-list returned by NUOPC, matching the
+         ! convention used by the UFS ATM cap after iterating its list.
+         deallocate(fieldList)
          nullify(fieldList)
 
       end if
 
       ! Initialize CATChem using the interface (TODO: not provide nsoil, nsoiltype and nsurftype)
-      call catchem_nuopc_init(model, config_file, lat, lon, numLevels, tracerInfo, grid, &
-         startTime=startTime, stopTime=stopTime, timeStep=timeStep, clock=clock, rc=rc)
-      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-         line=__LINE__, file=__FILE__)) return  ! bail out
+      if (has_tracer_array) then
+         ! -- Coupled path (unchanged): grid, levels, coordinates and tracer
+         !    metadata were all derived from the rank-4 tracer array supplied
+         !    by a parent component.
+         call catchem_nuopc_init(model, config_file, lat, lon, numLevels, tracerInfo, grid, &
+            startTime=startTime, stopTime=stopTime, timeStep=timeStep, clock=clock, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return  ! bail out
+      else if (has_import_fields) then
+         ! -- Coupled but misconfigured: import fields exist yet none carried the
+         !    rank-4 tracer array we rely on. Preserve the original hard error.
+         call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, msg="tracer array is needed!", &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return  ! bail out
+      else
+         ! -- Standalone path: no coupling partner advertised any import fields.
+         !    Use the grid the driver attached to this component, read the
+         !    vertical level count it stamped on as metadata, and pull the
+         !    horizontal coordinates straight off that grid. No tracer map is
+         !    built (a single CATChem model owns its species via its config).
+         call ESMF_GridCompGet(model, grid=grid, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return  ! bail out
+
+         call get_standalone_num_levels(grid, numLevels, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return  ! bail out
+
+         call get_standalone_grid_lonlat(grid, lon, lat, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return  ! bail out
+
+         call catchem_nuopc_init(model, config_file, lat, lon, numLevels, input_grid=grid, &
+            startTime=startTime, stopTime=stopTime, timeStep=timeStep, clock=clock, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return  ! bail out
+      end if
 
       ! -- indicate that data initialization is complete (breaking out of init-loop)
       call NUOPC_CompAttributeSet(model, &
@@ -439,14 +646,15 @@ contains
 
       type(ESMF_State) :: importState, exportState
       type(ESMF_Clock) :: clock
-      type(ESMF_Time) :: currTime
+      type(ESMF_Time) :: currTime, nextTime
       type(ESMF_TimeInterval) :: timeStep
       type(CATChem_InternalState) :: is
       character(len=*), parameter :: routine = 'ModelAdvance'
-      character(len=512) :: errmsg
+      character(len=NUOPC_MSG_LEN) :: errmsg
       integer :: localPet
       real(ESMF_KIND_R8) :: dt_seconds
 
+      integer :: localrc
       rc = ESMF_SUCCESS
 
       ! Get component information
@@ -469,13 +677,18 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 
+      nextTime = currTime + timeStep
+
       if (localPet == 0) then
          call ESMF_LogWrite("CATChem: Running CATChem for dt = " // &
             trim(adjustl(real_to_string(dt_seconds))) // " seconds", &
-            ESMF_LOGMSG_INFO, rc=rc)
+            ESMF_LOGMSG_INFO, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
       ! -- get component's internal state
+      nullify(is%wrap)
       call ESMF_GridCompGetInternalState(model, is, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__,  file=__FILE__))  return  ! bail out
@@ -504,7 +717,9 @@ contains
       call catchem_nuopc_run(is%wrap, dt_seconds, currTime, errmsg, rc)
       if (rc /= ESMF_SUCCESS) then
          call ESMF_LogWrite("CATChem: Failed to run CATChem - " // trim(errmsg), &
-            ESMF_LOGMSG_ERROR, rc=rc)
+            ESMF_LOGMSG_ERROR, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
          rc = ESMF_FAILURE
          return
       end if
@@ -520,7 +735,15 @@ contains
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #endif
-      call transform_catchem_to_nuopc(is%wrap, exportState, rc)
+      call transform_catchem_to_nuopc(is%wrap, exportState, rc, nextTime)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      ! The producer owns the validity time of its completed exports.  Stamp
+      ! the whole state after every transform so downstream NUOPC components
+      ! see the end-of-interval timestamp of the CATChem advance that
+      ! produced these fields.
+      call NUOPC_SetTimestamp(exportState, nextTime, rc=rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__, file=__FILE__)) return
 #ifdef CATCHEM_TRACE_NUOPC
@@ -531,7 +754,9 @@ contains
 
       ! Log successful completion
       if (localPet == 0) then
-         call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=rc)
+         call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
    end subroutine ModelAdvance
@@ -565,9 +790,10 @@ contains
 
       type(CATChem_InternalState) :: is
       character(len=*), parameter :: routine = 'ModelFinalize'
-      character(len=512) :: errmsg
+      character(len=NUOPC_MSG_LEN) :: errmsg
       integer :: localPet
 
+      integer :: localrc
       rc = ESMF_SUCCESS
 
       ! Get component information
@@ -576,6 +802,7 @@ contains
          line=__LINE__, file=__FILE__)) return
 
       ! -- get component's internal state
+      nullify(is%wrap)
       call ESMF_GridCompGetInternalState(model, is, rc)
       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
          line=__LINE__,  file=__FILE__))  return  ! bail out
@@ -584,7 +811,9 @@ contains
       call catchem_nuopc_finalize(is%wrap, rc, errmsg)
       if (rc /= ESMF_SUCCESS) then
          call ESMF_LogWrite("CATChem: Warning - " // trim(errmsg), &
-            ESMF_LOGMSG_WARNING, rc=rc)
+            ESMF_LOGMSG_WARNING, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
       ! Deallocate internal state wrapper
@@ -595,33 +824,108 @@ contains
 
       ! Log successful completion
       if (localPet == 0) then
-         call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=rc)
+         call ESMF_LogWrite("CATChem: Completed "//routine, ESMF_LOGMSG_INFO, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       end if
 
       rc = ESMF_SUCCESS
 
    end subroutine ModelFinalize
 
-   !> \brief Convert real number to string for logging purposes
+   !> \brief Read the vertical level count stamped on a standalone grid
    !!
-   !! This utility function converts a real number to a formatted string
-   !! representation suitable for logging and diagnostic messages.
+   !! The standalone driver stores the number of vertical levels as ESMF_Info
+   !! metadata on the grid (the vertical itself is an ungridded field dimension,
+   !! not part of the horizontal grid geometry). This reads it back for the
+   !! standalone initialization path.
    !!
-   !! \param[in] val Real value to convert
-   !! \return str String representation of the value
-   !!
-   !! \details
-   !! The function formats the real number with appropriate precision
-   !! and removes leading/trailing whitespace for clean output in log
-   !! messages and diagnostic information.
-   !!
-   !! \ingroup catchem_nuopc_group
-   function real_to_string(val) result(str)
-      real(ESMF_KIND_R8), intent(in) :: val
-      character(len=32) :: str
+   !! \param[in]  grid Grid attached by the standalone driver
+   !! \param[out] nz   Number of vertical levels (0 if the key is absent)
+   !! \param[out] rc   ESMF return code (ESMF_SUCCESS on success)
+   subroutine get_standalone_num_levels(grid, nz, rc)
+      type(ESMF_Grid), intent(in)  :: grid
+      integer,         intent(out) :: nz
+      integer,         intent(out) :: rc
 
-      write(str, '(f0.2)') val
-      str = adjustl(str)
-   end function real_to_string
+      type(ESMF_Info) :: info
+      logical :: isPresent
+
+      rc = ESMF_SUCCESS
+      nz = 0
+
+      call ESMF_InfoGetFromHost(grid, info, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      isPresent = ESMF_InfoIsPresent(info, key=CATCHEM_GRID_NLEV_KEY, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      if (isPresent) then
+         call ESMF_InfoGet(info, key=CATCHEM_GRID_NLEV_KEY, value=nz, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+      end if
+
+   end subroutine get_standalone_num_levels
+
+   !> \brief Read horizontal lon/lat (degrees) from a standalone grid
+   !!
+   !! Mirrors the coordinate extraction performed on the coupled path, but
+   !! sources the coordinates directly from the driver-attached grid rather than
+   !! from an imported tracer field's grid. Longitudes/latitudes are returned in
+   !! degrees regardless of the grid's native coordinate system.
+   !!
+   !! \param[in]  grid Grid attached by the standalone driver
+   !! \param[out] lon  Longitudes [deg], allocated to the local grid extent
+   !! \param[out] lat  Latitudes  [deg], allocated to the local grid extent
+   !! \param[out] rc   ESMF return code (ESMF_SUCCESS on success)
+   subroutine get_standalone_grid_lonlat(grid, lon, lat, rc)
+      type(ESMF_Grid),                 intent(in)  :: grid
+      real(ESMF_KIND_R8), allocatable, intent(out) :: lon(:,:)
+      real(ESMF_KIND_R8), allocatable, intent(out) :: lat(:,:)
+      integer,                         intent(out) :: rc
+
+      real(ESMF_KIND_R8), dimension(:,:), pointer :: coord
+      type(ESMF_CoordSys_Flag) :: coordSys
+      real(ESMF_KIND_R8), parameter :: rad_to_deg = &
+         180._ESMF_KIND_R8 / 3.14159265358979323846_ESMF_KIND_R8
+      real(ESMF_KIND_R8) :: convert_unit
+      integer :: coord_item
+
+      rc = ESMF_SUCCESS
+      nullify(coord)
+
+      call ESMF_GridGet(grid, coordSys=coordSys, rc=rc)
+      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__)) return
+
+      if (coordSys == ESMF_COORDSYS_SPH_DEG) then
+         convert_unit = 1._ESMF_KIND_R8
+      else if (coordSys == ESMF_COORDSYS_SPH_RAD) then
+         convert_unit = rad_to_deg
+      else
+         call ESMF_LogSetError(ESMF_RC_INTNRL_BAD, &
+            msg="Unsupported coordinate system - cannot read standalone grid coordinates", &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)
+         return
+      end if
+
+      do coord_item = 1, 2
+         call ESMF_GridGetCoord(grid, coordDim=coord_item, &
+            staggerloc=ESMF_STAGGERLOC_CENTER, localDE=0, farrayPtr=coord, rc=rc)
+         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__)) return
+
+         select case (coord_item)
+          case (1)
+            lon = coord * convert_unit
+          case (2)
+            lat = coord * convert_unit
+         end select
+      end do
+
+   end subroutine get_standalone_grid_lonlat
 
 end module cc_nuopc

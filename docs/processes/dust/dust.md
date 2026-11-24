@@ -16,7 +16,7 @@ The Dust process implements Process for computing windblown dust emissions. This
 **Name:** `fengsha`
 **Description:** Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS
 **Author:** Barry Baker & Wei Li
-**Reference:** Zhang et al. 2022
+**Reference:** Zhang, L., et al. [2022], Geosci. Model Dev., 15, 5337–5369, <https://doi.org/10.5194/gmd-15-5337-2022>
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -33,21 +33,21 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 #### Required Meteorological Fields
 
-- `USTAR` - Meteorological field required for scheme computation
-- `TSKIN` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `SOILM` - Meteorological field required for scheme computation
-- `Z0` - Meteorological field required for scheme computation
-- `GVF` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `LAI` - Meteorological field required for scheme computation
-- `FRLAKE` - Meteorological field required for scheme computation
-- `FRSNO` - Meteorological field required for scheme computation
-- `CLAYFRAC` - Meteorological field required for scheme computation
-- `SANDFRAC` - Meteorological field required for scheme computation
-- `RDRAG` - Meteorological field required for scheme computation
-- `SSM` - Meteorological field required for scheme computation
-- `USTAR_THRESHOLD` - Meteorological field required for scheme computation
+- `USTAR` - Friction velocity [m/s]
+- `TSKIN` - Surface skin temperature [K]
+- `AIRDEN` - Wet air density [kg/m3]
+- `SOILM` - Volumetric Soil moisture [m3/m3] (nx,ny,nsoil)
+- `Z0` - Surface roughness height [m]
+- `GVF` - Green Vegetative Fraction
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `LAI` - Leaf area index [m2/m2] (online) Dominant
+- `FRLAKE` - Fraction of lake [1]
+- `FRSNO` - Sfc snow fraction
+- `CLAYFRAC` - Fraction of clay [1]
+- `SANDFRAC` - Fraction of sand [1]
+- `RDRAG` - Drag Partition [1]
+- `SSM` - Sediment Supply Map [1]
+- `USTAR_THRESHOLD` - Threshold friction velocity [m/s]
 
 
 ### GINOUX Scheme
@@ -55,7 +55,7 @@ The Dust process implements Process for computing windblown dust emissions. This
 **Name:** `ginoux`
 **Description:** Ginoux dust emission scheme
 **Author:** Barry Baker & Wei Li
-**Reference:** Ginoux et al. [2001]
+**Reference:** Ginoux et al. [2001], J. Geophys. Res., 106(D17), 20255–20273, <https://doi.org/10.1029/2000JD000053>
 #### Parameters
 
 | Parameter | Default | Range | Description |
@@ -64,15 +64,15 @@ The Dust process implements Process for computing windblown dust emissions. This
 
 #### Required Meteorological Fields
 
-- `FRLAKE` - Meteorological field required for scheme computation
-- `FRSNO` - Meteorological field required for scheme computation
-- `TSKIN` - Meteorological field required for scheme computation
-- `AIRDEN` - Meteorological field required for scheme computation
-- `LWI` - Meteorological field required for scheme computation
-- `GWETTOP` - Meteorological field required for scheme computation
-- `U10M` - Meteorological field required for scheme computation
-- `V10M` - Meteorological field required for scheme computation
-- `SSM` - Meteorological field required for scheme computation
+- `FRLAKE` - Fraction of lake [1]
+- `FRSNO` - Sfc snow fraction
+- `TSKIN` - Surface skin temperature [K]
+- `AIRDEN` - Wet air density [kg/m3]
+- `LWI` - Land water ice mask (0-sea, 1-land, 2-ice)
+- `GWETTOP` - Top soil moisture [1]
+- `U10M` - E/W wind speed @ 10m ht [m/s]
+- `V10M` - N/S wind speed @ 10m ht [m/s]
+- `SSM` - Sediment Supply Map [1]
 
 
 
@@ -86,7 +86,7 @@ The dust process operates on the following chemical species:
 ### Required Inputs
 
 #### Meteorological Fields
-- `DELP` - Required meteorological input
+- `DELP` - Delta-P (wet) across box [Pa]
 
 
 ### Process Diagnostics
@@ -100,29 +100,25 @@ The dust process operates on the following chemical species:
 
 ### Basic Integration
 
-```fortran
-use DustProcessCreator_Mod
-use DustCommon_Mod
+The process is a C++ class, `catchem::DustProcess` (`src/process/dust/catchem_process_dust.cpp`), registered with the `ProcessRegistry` at start-up; a host model does not instantiate it directly. It is enabled and configured in the runtime YAML and runs when the core advances the configured `run_phases`:
 
-! Create process instance
-type(DustProcess_t) :: process
-call create_dust_process(process, config_data)
-
-! Use process in model time step
-call process%run(state, dt)
+```yaml
+processes:
+  dust:
+    activate: true
+    scheme: 'fengsha'
 ```
+
+Hosts drive the core through the Fortran proxy `CATChem_Model` (`src/api/CATChem_API.F90`) or `catchem::Core` in C++; see the [Process Interface API](../../api/process-interface.md). The science kernel itself stays in Fortran and is called through `DustScienceBridge.F90`.
 
 ### Scheme Selection
 
-The process supports multiple schemes. Select your desired scheme:
+Available schemes: `fengsha`, `ginoux`. Select one in the YAML configuration; scheme-specific parameters live under a key with the scheme's name (see the parameter tables above):
 
-```fortran
-! Use FENGSHA scheme
-process%scheme_name = "fengsha"
-```
-```fortran
-! Use GINOUX scheme
-process%scheme_name = "ginoux"
+```yaml
+processes:
+  dust:
+    scheme: 'fengsha'
 ```
 
 ## Implementation Details
@@ -189,18 +185,18 @@ processes:
 - **Size Bin Support:** No
 - **Vectorization:** Supported
 
-## Files Generated
+## Files
 
 ### Source Code
-- `src/process/dust/ProcessDustInterface_Mod.F90` - Main process interface
-- `src/process/dust/DustCommon_Mod.F90` - Common types and parameters
-- `src/process/dust/DustProcessCreator_Mod.F90` - Process factory
+- `src/process/dust/DustCommon_Mod.F90` - Scheme options, constants, and shared types used by the schemes
+- `src/process/dust/DustScienceBridge.F90` - `bind(C)` bridge that unpacks the C++ state and calls the Fortran scheme
+- `src/process/dust/catchem_process_dust.cpp` - C++ process class `catchem::DustProcess`: configuration, species resolution, diagnostics registration, and the per-step call into the bridge
+- `src/process/dust/catchem_process_dust.hpp` - C++ process class `catchem::DustProcess` (declaration)
 - `src/process/dust/schemes/DustScheme_FENGSHA_Mod.F90` - Fengsha Dust emission scheme developed at NOAA ARL for use at NOAA NWS
 - `src/process/dust/schemes/DustScheme_GINOUX_Mod.F90` - Ginoux dust emission scheme
 
 ### Tests
-- `tests/process/dust/unit/` - Unit tests
-- `tests/process/dust/integration/` - Integration tests
+- `tests/test_catchem_dust.cpp`
 
 ### Documentation
 - `docs/processes/dust/dust.md` - This documentation
@@ -217,8 +213,8 @@ When modifying or extending this process:
 
 ## References
 
-- FENGSHA: Zhang et al. 2022
-- GINOUX: Ginoux et al. [2001]
+- FENGSHA: Zhang, L., et al. [2022] Development and evaluation of the Aerosol Forecast Member in NCEP's Global Ensemble Forecast System (GEFS-Aerosols v1), Geosci. Model Dev., 15, 5337–5369, <https://doi.org/10.5194/gmd-15-5337-2022>
+- GINOUX: Ginoux, P., et al. [2001] Sources and distributions of dust aerosols simulated with the GOCART model, J. Geophys. Res., 106(D17), 20255–20273, <https://doi.org/10.1029/2000JD000053>
 
 ---
 *This documentation was automatically generated by the CATChem Process Generator on 2026-04-17T13:57:10.461600*

@@ -18,6 +18,7 @@
 module catchem_latlon_output_mod
 
    use ESMF
+   use catchem_nuopc_lengths
    use netcdf
    use, intrinsic :: ieee_exceptions, only: ieee_set_halting_mode, &
       ieee_get_halting_mode, ieee_invalid, ieee_divide_by_zero, &
@@ -41,7 +42,7 @@ module catchem_latlon_output_mod
    logical,                save :: ll_initialized = .false.
    integer,                save :: ll_nlon = 0     !< Output longitude count
    integer,                save :: ll_nlat = 0     !< Output latitude count
-   character(len=512),     save :: ll_current_file = '' !< Track current output file
+   character(len=NUOPC_MSG_LEN),     save :: ll_current_file = '' !< Track current output file
    integer(ESMF_KIND_I4),  save :: ll_time_val = 0 !< Current time value (epoch seconds)
    integer,                save :: ll_localPet = -1 !< Cached local PET ID
 
@@ -70,7 +71,7 @@ contains
       integer :: minIndex(2), maxIndex(2)
       real(ESMF_KIND_R8) :: minCoord(2), maxCoord(2)
       integer :: maxIdx(2)
-      character(len=128) :: logmsg
+      character(len=NUOPC_LONG_NAME_LEN) :: logmsg
       type(ESMF_VM) :: vm
       logical :: halting_inv, halting_dzero, halting_ovf
 
@@ -86,6 +87,8 @@ contains
       if (tileCount <= 1) then
          call ESMF_LogWrite('latlon_diag_init: single tile, skipping lat/lon output', &
             ESMF_LOGMSG_INFO, rc=localrc)
+         if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+            line=__LINE__, file=__FILE__, rcToReturn=rc)) return
          return
       end if
 
@@ -105,6 +108,8 @@ contains
       write(logmsg, '(A,I0,A,I0,A,I0)') &
          'latlon_diag_init: C', ntile, ' -> ', ll_nlon, 'x', ll_nlat
       call ESMF_LogWrite(trim(logmsg), ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
       ! --- Create global regular lat/lon grid (periodic in longitude) ---
       maxIdx(1) = ll_nlon
@@ -170,6 +175,8 @@ contains
 
       call ESMF_LogWrite("latlon_diag_init: Lat/lon diagnostic output ready", &
          ESMF_LOGMSG_INFO, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
 
    end subroutine latlon_diag_init
 
@@ -197,7 +204,7 @@ contains
       integer :: localrc, localrc2
       real(ESMF_KIND_R4), pointer :: dataPtr(:,:), srcPtr(:,:), dstPtr(:,:)
       real(ESMF_KIND_R4), allocatable :: globalData(:,:)
-      character(len=256) :: units, description
+      character(len=NUOPC_PATH_LEN) :: units, description
       type(ESMF_Info) :: info
 
       rc = ESMF_SUCCESS
@@ -283,7 +290,7 @@ contains
       integer :: localrc, localrc2, k, nlev
       real(ESMF_KIND_R4), pointer :: dataPtr3d(:,:,:), srcPtr(:,:), dstPtr(:,:)
       real(ESMF_KIND_R4), allocatable :: globalData3d(:,:,:), gathered2d(:,:)
-      character(len=256) :: units, description
+      character(len=NUOPC_PATH_LEN) :: units, description
       type(ESMF_Info) :: info
 
       rc = ESMF_SUCCESS
@@ -367,9 +374,17 @@ contains
       if (.not. ll_initialized) return
 
       call ESMF_RouteHandleDestroy(ll_rh, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       call ESMF_FieldDestroy(ll_src_2d, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       call ESMF_FieldDestroy(ll_dst_2d, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       call ESMF_GridDestroy(ll_grid, rc=localrc)
+      if (ESMF_LogFoundError(rcToCheck=localrc, msg=ESMF_LOGERR_PASSTHRU, &
+         line=__LINE__, file=__FILE__, rcToReturn=rc)) return
       ll_initialized = .false.
       ll_current_file = ''
 

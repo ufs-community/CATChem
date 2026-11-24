@@ -52,6 +52,7 @@ Every line of code suggested must follow these core cross-language engineering p
 
 * **Clarity Over Cleverness:** Code inside this repository is co-authored and maintained by a broad community of professional software engineers, domain atmospheric scientists, students, and volunteer contributors. Avoid obscure syntax tricks, heavily obfuscated macro loops, or deeply nested pointer structures. Write self-documenting code with explicit variable and function naming conventions.
 * **Defensive Programming:** Assume inputs (such as file reads, sensor inputs, or grid metrics) can be corrupted, malformed, or missing. Validate bounds, verify shapes, and test file descriptors explicitly before allowing execution to proceed into tight compute loops.
+* **Factor Out Shared Logic:** When the same sequence of statements appears in more than one function (the same guard, conversion, lookup, or formatting), move it into a helper function or module procedure and call it from each site. Duplicated blocks drift apart; a helper keeps one behavior to test and one place to fix. This applies in every language in this repository.
 * **Zero Dead Code:** Commented-out execution statements or unused legacy fallback branches are strictly prohibited. Rely explicitly on Git version control for history tracking. Keep source modules clean and production-ready.
 * **Semantic Versioning & Upstream Safety:** Ensure modifications or additions do not break backwards compatibility with external shared core modules or linked library drivers. Maintain invariant API signatures across interfaces.
 * **Fail Fast, Fail Loudly:** If a script or compiled unit detects a structural environmental failure (e.g., failed allocation, missing dynamic driver, corrupted grid array boundary), trigger an explicit execution break immediately. Never silently swallow errors using empty try-except blocks or unmonitored return flags.
@@ -78,9 +79,9 @@ As a widely used open-source community codebase, security is paramount. Copilot 
 ### 7. Version Control, Code Review & CI/CD Pipelines
 When assisting with Git workflows, code review, Pull Requests, or CI/CD configuration files (GitHub Actions, Jenkins), apply these rules:
 
-* **Conventional Commits:** When generating commit messages, use the Conventional Commits specification (e.g., feat:, fix:, refactor:, perf:).
+* **Conventional Commits:** When generating commit messages, use the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) specification (e.g., feat:, fix:, refactor:, perf:); the full type list is in section 7.5.
 * **Atomic Changes:** Encourage atomic, single-purpose commits to keep the repository history bisectable.
-* **Test Generation First:** When writing new CI/CD workflow files, always ensure that testing and linting jobs are executed before any compilation or deployment steps. Assume a strict gateway where failing tests block community merges.
+* **Fast Gates First:** When writing new CI/CD workflow files, order the jobs from cheapest to most expensive: linting and static analysis before any compilation, a single build with the fast test suite before the full compiler and configuration matrix, and deployment only after everything else. Assume a strict gateway where a failing job blocks community merges.
 
 ### 7.1 Operational Readiness Workflow (Required)
 For any generated workflow (CI/CD or operational job chain), enforce the following gate order to keep the codebase R2O-ready and aligned with NCO EE2 expectations:

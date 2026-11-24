@@ -1,2 +1,9 @@
 build/
 cmake-build-debug/
+.git/
+Dockerfile*
+.dockerignore
+node_modules/
+*.log*
+.env*
+coverage/

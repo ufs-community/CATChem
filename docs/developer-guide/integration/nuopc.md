@@ -315,6 +315,82 @@ program NUOPC_CATChem_App
 end program NUOPC_CATChem_App
 ```
 
+## Process diagnostic output
+
+When `diagnostics.output.enabled` is true,
+the NUOPC run-phase export writes every diagnostic field the C++ process layer registered
+in the `DiagnosticManager` — there is no per-process allowlist. The writer dispatches on
+each field's **semantic axes** (see
+[Diagnostic System](../../core-concepts/diagnostics.md#registering-with-the-axes--labels-contract)),
+never on its name or storage rank:
+
+| Registered axes | NetCDF variable |
+|---|---|
+| `{Column, Singleton}` | one 2-D `(x, y)` variable |
+| `{Column, Level}` | one 3-D `(x, y, lev)` variable, vertical extent intact |
+| `{Column, Species}` / `{Column, Category}` | one 2-D variable **per slot**, named `<field>_<label>` |
+| `{Column, Level, Species}` / `{Column, Level, Category}` | one 3-D `(x, y, lev)` variable **per slot**, named `<field>_<label>` |
+
+### Output variable inventory
+
+| Process | Variables (per slot = unpacked, one per bin/species label) |
+|---|---|
+| dust | `dust_emission_total`, `dust_horizontal_flux`, `dust_moisture_correction`, `dust_effective_threshold` (2-D); `dust_emission_bin_<bin>`, `dust_utar_threshold_<bin>` (2-D per bin) |
+| seasalt | `seasalt_mass_emission_total`, `seasalt_number_emission_total` (2-D); `seasalt_mass_emission_bins_<bin>`, `seasalt_number_emission_bins_<bin>` (2-D per bin) |
+| settling | `settling_flux_per_species_<sp>` (2-D); `settling_velocity_per_species_per_level_<sp>` (3-D) |
+| carbchem | `carbchem_prod_mass_<sp>`, `carbchem_phobic_mass_<sp>` (3-D); `carbchem_loss_flux_<sp>`, `carbchem_phobic_flux_<sp>` (2-D) |
+| drydep | `drydep_con_per_species_<sp>`, `drydep_velocity_per_species_<sp>` (2-D) |
+| so4chem | `PSO4_from_gaseous_SO2_per_level`, `PSO4_from_aqueous_SO2_per_level`, `Production_rate_<sp>` (3-D); `DMS_emission_flux` (2-D) |
+| wetdep | `wetdep_mass_<sp>`, `wetdep_flux_<sp>` (3-D) |
+
+Slot labels are the species `short_name` / canonical bin names from the same resolved
+list that orders the physics slots, so `<field>_<label>` always addresses the matching
+data column.
+
+### Breaking change: compact parents replaced by unpacked variables
+
+The packed dust/sea-salt variables that briefly existed on the `feature/add_simple_scheme`
+branch — `dust_emission_bin`, `dust_utar_threshold`, `seasalt_mass_emission_bins`,
+`seasalt_number_emission_bins` written with a trailing unnamed bin axis — are **replaced,
+not duplicated**, by the per-label variables above. No configuration switch is provided.
+Downstream consumers that parsed `<parent>` with a trailing bin dimension must switch to
+`<parent>_<label>` (e.g. `dust_emission_bin` + bin index → `dust_emission_bin_dust1`).
+Equivalently: `ncdiff` of an old compact slice against the new named variable is zero.
+
+### Volume control: `diag_list`
+
+`diagnostics.output.diag_list` narrows what reaches the file:
+
+```yaml
+diagnostics:
+  output:
+    diag_list: ["dust_emission_total", "settling_flux_per_species"]
+```
+
+An entry matches an output variable when it equals the name or the name starts with
+`entry_` — so a parent selector (`settling_flux_per_species`) covers every unpacked
+child, while a full child name (`dust_emission_bin_dust1`) selects just that child.
+An empty or absent list writes everything. Selectors that match nothing are reported
+as a single aggregated warning on the first output; the run is never interrupted.
+
+### Provenance global attributes
+
+Every diagnostic file carries run-level global attributes:
+
+- `catchem_core_version`, `catchem_core_commit`, `config_file` — core provenance,
+  captured at build/configure time and from the loaded YAML path;
+- `institution`, `source`, `references`, `Conventions` — CF-convention defaults;
+- anything under `diagnostics.output.attributes` — added after the core keys, so a
+  user entry **overrides** a core key of the same name:
+
+```yaml
+diagnostics:
+  output:
+    attributes:
+      institution: "Example Lab"
+      references: "https://github.com/ufs-community/CATChem"
+```
+
 ## Advanced Features
 
 ### Regridding and Interpolation
@@ -440,6 +516,83 @@ program test_nuopc_compliance
 
 end program test_nuopc_compliance
 ```
+
+## Standalone Driver
+
+The same NUOPC cap (`cc_nuopc`) that couples into a host model can also be run
+**standalone** — as a self-contained ESMF/NUOPC application with no parent
+component. This is the recommended way to exercise CATChem end-to-end for
+development and testing. For build flags, the driver configure file, and run
+instructions, see the user-facing [Standalone Driver](../../user-guide/standalone-driver.md)
+page; this section covers the component architecture.
+
+### Component hierarchy
+
+```text
+catchem_app (main program)          drivers/standalone/catchem_app.F90
+     │
+catchem_driver (NUOPC_Driver)       drivers/standalone/catchem_driver.F90
+     │
+cc_nuopc (CATChem NUOPC cap)        drivers/nuopc/  (same cap used when coupled)
+```
+
+`catchem_app` is a thin main program: it initializes ESMF, resolves the driver
+configure file (command-line argument or the `catchem_standalone.configure`
+default), creates the driver component, and runs Initialize → Run → Finalize.
+
+### Driver specialization (`catchem_driver`)
+
+`catchem_driver` derives from `NUOPC_Driver` and specializes two labels:
+
+- **`SetModelServices`** — reads the ESMF configure file, hands the cap its
+  configuration file paths (`cc_nuopc_set_config_file`,
+  `cc_nuopc_set_field_mapping_file`), builds the standalone grid, adds
+  `cc_nuopc` as a child component (`NUOPC_DriverAddComp`), attaches the grid to
+  the child (`ESMF_GridCompSet(child, grid=...)`), and creates the top-level
+  clock from `start_time`/`stop_time`/`timestep_seconds`.
+- **`SetRunSequence`** — ingests a free-format `runSeq::` block from the
+  configure file if one is present; otherwise NUOPC builds a trivial
+  single-component run sequence automatically.
+
+### Standalone grid (`catchem_standalone_grid_mod`)
+
+Because there is no parent to supply a grid, the driver builds one itself via
+`create_standalone_grid`, which dispatches on `grid_mode`:
+
+- **`column`** — a single 1×1 grid for fast process testing.
+- **`gridded`** — a regular lat-lon grid (`grid_nx` × `grid_ny`), periodic in
+  longitude.
+
+The vertical is an *ungridded* field dimension, not part of the horizontal grid
+geometry, so the level count (`grid_nz`) is stamped onto the grid as ESMF_Info
+metadata under the key `/catchem/num_levels` (`set_grid_num_levels`) and read
+back by the cap (`get_grid_num_levels`).
+
+!!! note "Column corners"
+    Column corner coordinates — and therefore conservative regridding and
+    `AREA_M2` — are only produced when both `column_dlon` and `column_dlat` are
+    `> 0`. See the user-guide warning for the implications on emission
+    regridding.
+
+### Cap standalone initialization path
+
+The cap detects the standalone case (no rank-4 tracer array and no import
+fields), retrieves the driver-attached grid via
+`ESMF_GridCompGet(model, grid=grid, ...)`, reads the level count and
+coordinates from it, and initializes CATChem without a coupling tracer list.
+Meteorology that a host would normally import is instead read from offline files
+through the emission reader (mapping targets prefixed `MET_`/`met_`), with the
+remaining pressure-derived fields derived automatically. The coupled code path
+is left byte-for-byte unchanged.
+
+### Extending with more components
+
+The structure is deliberately extensible. To add another component (e.g. a
+data/forcing component or a mediator):
+
+1. `use` the new component's `SetServices`.
+2. Add a `NUOPC_DriverAddComp` call in `SetModelServices`.
+3. Extend the `runSeq::` block in the driver configure file.
 
 ## Best Practices
 

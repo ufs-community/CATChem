@@ -7,10 +7,10 @@
 !! Generated on: {{ timestamp }}
 
 program test_{{ config.name }}_integration
-   use precision_mod, only: fp, rae
+   use catchem_bridge_precision, only: fp, rae
    use iso_fortran_env, only: output_unit, error_unit
    use, intrinsic :: ieee_arithmetic, only: ieee_is_nan
-   use error_mod, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType, ERROR_UNSUPPORTED_OPERATION
+   use catchem_bridge_error, only: CC_SUCCESS, CC_FAILURE, ErrorManagerType, ERROR_UNSUPPORTED_OPERATION
    use CATChemCore_Mod, only: CATChemCoreType, CATChemBuilderType
    use StateManager_Mod, only: StateManagerType
    use ProcessManager_Mod, only: ProcessManagerType

@@ -1,7 +1,7 @@
 module SO4chemScienceBridge_Mod
-   use iso_c_binding, only: c_ptr, c_f_pointer, c_double, c_char, c_associated, c_bool, c_int
-   use Precision_Mod, only: fp
-   use Constants, only: g0, Cpd, AVO, VON_KARMAN, AIRMW, PI
+   use iso_c_binding, only: c_ptr, c_f_pointer, c_double, c_char, c_associated, c_int
+   use catchem_bridge_precision, only: fp
+   use catchem_bridge_constants, only: g0, Cpd, AVO, VON_KARMAN, AIRMW, PI
    use SO4chemCommon_Mod, only: SO4chemSchemeGOCARTConfig
    use SO4chemScheme_GOCART_Mod, only: compute_gocart
    implicit none
@@ -10,6 +10,8 @@ contains
    subroutine run_so4chem_science_bridge( &
       n_cols, n_levels, n_species, dt, &
       diagnostics, &
+      gocart_update_so2, &
+      gocart_do_drydep, &
    ! Date & Time
       year, month, day, hour, minute, second, &
    ! 3D Met Pointers
@@ -22,13 +24,20 @@ contains
       c_conc, c_tendency, &
    ! Persistent states
       c_firsttime, c_nymd_last, c_nhms_last_recycle, c_xh2o2_init, &
-      c_pso4_so2, c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux, &
+      c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux, &
+      c_diag_prod_rate, &
       diagnostic_species_id, n_diag_species &
       ) bind(C, name="run_so4chem_science_bridge")
 
       integer(c_int), value :: n_cols, n_levels, n_species
       real(c_double), value :: dt
       integer(c_int), value :: diagnostics
+
+      ! Scheme tuning options staged by SO4chemProcess::init from the runtime
+      ! YAML.  The C++ layer owns parsing and validation; the bridge only
+      ! applies them onto the GOCART configuration type.
+      integer(c_int), value :: gocart_update_so2
+      integer(c_int), value :: gocart_do_drydep
 
       integer(c_int), value :: year, month, day, hour, minute, second
 
@@ -37,30 +46,37 @@ contains
       type(c_ptr), value :: c_hflux, c_lat, c_lon, c_lwi, c_pblh, c_u10m, c_ustar, c_v10m, c_z0h
       type(c_ptr), value :: c_conc, c_tendency
       type(c_ptr), value :: c_firsttime, c_nymd_last, c_nhms_last_recycle, c_xh2o2_init
-      type(c_ptr), value :: c_pso4_so2, c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux
+      type(c_ptr), value :: c_pso4_g_so2, c_pso4_aq_so2, c_pso2_dms, c_dms_flux
+      ! Packed per-species production-rate diagnostic field [n_cols, n_levels,
+      ! n_diag_species] (C++ scratch, scattered into one registered
+      ! Production_rate_<sp> field per slot by the process layer).  Null, and
+      ! n_diag_species 0, when diagnostics are off or no species are selected.
+      ! Replaces the former diagnostic-only pso4_so2 single-slot buffer.
+      type(c_ptr), value :: c_diag_prod_rate
 
       ! Metadata
       real(c_double), intent(in) :: species_mw_g(n_species)
       character(kind=c_char), intent(in) :: species_names(32, n_species)
 
       integer(c_int), value :: n_diag_species
-      integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
+      integer(c_int), intent(in) :: diagnostic_species_id(max(n_diag_species,1))
 
       ! Slicing array pointers pointing directly to double precision (c_double) C++ views
       real(c_double), pointer :: airden(:,:), cldf(:,:), delp(:,:), pmid(:,:), t_air(:,:), z_edges(:,:)
       real(c_double), pointer :: hflux(:), lat(:), lon(:), pblh(:), u10m(:), ustar(:), v10m(:), z0h(:)
-      integer, pointer :: lwi(:)
+      integer(c_int), pointer :: lwi(:)
       real(c_double), pointer :: conc(:,:,:), tendency(:,:,:)
 
       ! Persistent pointers pointing to double precision C++ views
-      logical(c_bool), pointer :: firsttime(:)
-      integer, pointer :: nymd_last(:), nhms_last_recycle(:)
-      real(c_double), pointer :: xh2o2_init(:,:), pso4_so2(:,:), pso4_g_so2(:,:), pso4_aq_so2(:,:), pso2_dms(:,:), dms_flux(:)
+      integer(c_int), pointer :: firsttime(:)
+      integer(c_int), pointer :: nymd_last(:), nhms_last_recycle(:)
+      real(c_double), pointer :: xh2o2_init(:,:), pso4_g_so2(:,:), pso4_aq_so2(:,:), pso2_dms(:,:), dms_flux(:)
+      real(c_double), pointer :: diag_prod_rate(:,:,:)
 
       ! Loop variables
       integer :: icol, i, j, ispec
       character(len=32) :: dummy_sp_names(n_species)
-      logical :: f_firsttime, is_aero
+      logical :: f_firsttime
 
       ! Local arrays in native solver precision (fp) to avoid double-float mismatches
       real(fp) :: f_airden(n_levels)
@@ -78,16 +94,27 @@ contains
       ! Sliced concentration and tendencies in solver precision
       real(fp) :: f_conc(n_levels, n_species)
       real(fp) :: col_tendencies(n_levels, n_species)
-      real(fp) :: col_conc_new(n_levels)
-
+      real(fp) :: col_updated(n_levels, n_species)
       ! Local arrays to resolve Fortran BIND(C) allocatable constraints & rank matches
       real(fp), allocatable :: local_xh2o2_init(:)
-      real(fp) :: col_prod_rate(n_levels, n_species)
+      ! The scheme fills Production_rate_per_species_per_level(:, diag_idx) for
+      ! diag_idx = 1..n_diag_species only (MSA/SO2/SO4 by name), so the buffer
+      ! is n_diag_species wide, not full-catalog.
+      real(fp) :: col_prod_rate(n_levels, max(n_diag_species,1))
       real(fp) :: col_pso4_g(n_levels)
       real(fp) :: col_pso4_aq(n_levels)
       real(fp) :: col_dms_flux
 
       type(SO4chemSchemeGOCARTConfig) :: gocart_config
+
+      ! so4chem emits per-process diagnostics only when the C++ layer registers
+      ! them; the packed diag_prod_rate field is bound below (guarded by the
+      ! same diagnostics flag), so `diagnostics` is genuinely used here.
+
+      ! Apply the YAML tuning options staged by the C++ process layer so the
+      ! scheme no longer runs on compiled defaults alone.
+      gocart_config%update_so2 = (gocart_update_so2 /= 0)
+      gocart_config%do_drydep = (gocart_do_drydep /= 0)
 
       ! Associate pointers
       call c_f_pointer(c_airden,   airden,   [n_cols, n_levels])
@@ -115,11 +142,14 @@ contains
       call c_f_pointer(c_nymd_last,         nymd_last,         [n_cols])
       call c_f_pointer(c_nhms_last_recycle, nhms_last_recycle, [n_cols])
       call c_f_pointer(c_xh2o2_init,         xh2o2_init,         [n_cols, n_levels])
-      call c_f_pointer(c_pso4_so2,          pso4_so2,          [n_cols, n_levels])
       call c_f_pointer(c_pso4_g_so2,        pso4_g_so2,        [n_cols, n_levels])
       call c_f_pointer(c_pso4_aq_so2,       pso4_aq_so2,       [n_cols, n_levels])
       call c_f_pointer(c_pso2_dms,          pso2_dms,          [n_cols, n_levels])
       call c_f_pointer(c_dms_flux,          dms_flux,          [n_cols])
+
+      if (diagnostics /= 0 .and. n_diag_species > 0) then
+         call c_f_pointer(c_diag_prod_rate, diag_prod_rate, [n_cols, n_levels, n_diag_species])
+      end if
 
       ! Extract real species names from flat char array passed via BIND(C)
       do i = 1, n_species
@@ -151,7 +181,13 @@ contains
          f_v10m         = real(v10m(icol), fp)
          f_z0h          = real(z0h(icol), fp)
 
-         f_conc         = real(conc(icol, :, :), fp)
+         ! Convert input concentrations from kg/kg to expected process units (ug/kg for aerosols, ppmv for gases)
+         do ispec = 1, n_species
+            ! conc is already in ug/kg for aerosols and ppm for gases.
+            ! We just copy it into f_conc.
+            f_conc(:, ispec) = real(conc(icol, :, ispec), fp)
+         end do
+
          col_tendencies = 0.0_fp
          col_prod_rate  = 0.0_fp
          col_pso4_g     = 0.0_fp
@@ -163,7 +199,7 @@ contains
          local_xh2o2_init = real(xh2o2_init(icol, :), fp)
 
          ! Copy logical value
-         f_firsttime = firsttime(icol)
+         f_firsttime = (firsttime(icol) /= 0_c_int)
 
          ! Execute GOCART sulfur chemistry solver
          call compute_gocart( &
@@ -180,37 +216,42 @@ contains
             col_prod_rate, col_pso4_g, col_pso4_aq, col_dms_flux, &
             diagnostic_species_id=diagnostic_species_id)
 
-         ! Convert updated GOCART concentrations (ppm or ug/kg) to actual tendencies in kg/kg/s
+         ! The legacy ProcessSO4chemInterface wrote the scheme's updated
+         ! concentrations directly back to the virtual column.  Retain that
+         ! replacement semantics here; CATChem's temporary tendency is only
+         ! retained for the process API.
+         col_updated = col_tendencies
          do ispec = 1, n_species
-            is_aero = .false.
-            if ( dummy_sp_names(ispec) == 'SO4' .or. dummy_sp_names(ispec) == 'so4' .or. &
-               dummy_sp_names(ispec) == 'MSA' .or. dummy_sp_names(ispec) == 'msa' .or. &
-               dummy_sp_names(ispec) == 'ASO4J' .or. dummy_sp_names(ispec) == 'aso4j' ) then
-               is_aero = .true.
-            end if
-
-            if ( is_aero ) then
-               col_conc_new(:) = col_tendencies(:, ispec) * 1.0e-9_fp
-            else
-               col_conc_new(:) = col_tendencies(:, ispec) * 1.0e-6_fp * (f_mw_g(ispec) / AIRMW)
-            end if
-
-            col_tendencies(:, ispec) = (col_conc_new(:) - real(conc(icol, :, ispec), fp)) / dt
+            ! col_tendencies contains the complete NEW state in the same
+            ! native unit as conc (ppm for gases, ug/kg for aerosols).
+            ! Do not use a nonzero sentinel: zero is a valid depleted state.
+            col_tendencies(:, ispec) = (col_updated(:, ispec) - real(conc(icol, :, ispec), fp)) / dt
          end do
 
-         ! Write tendencies and updated concentrations back in-place (casting to c_double)
+         ! Preserve the legacy direct replacement while retaining the C++
+         ! tendency API for consumers that need rates.
          tendency(icol, :, :) = real(col_tendencies, c_double)
-         conc(icol, :, :) = conc(icol, :, :) + real(dt * col_tendencies, c_double)
+         conc(icol, :, :) = real(col_updated, c_double)
 
          ! Copy persistent changes and diagnostics back to C++ buffers (casting to c_double)
-         firsttime(icol)     = f_firsttime
+         firsttime(icol)     = merge(1_c_int, 0_c_int, f_firsttime)
          xh2o2_init(icol, :) = real(local_xh2o2_init, c_double)
          deallocate(local_xh2o2_init)
 
-         pso4_so2(icol, :)    = real(col_prod_rate(:, 1), c_double) ! Maps Production_rate for first diagnostic species (e.g. SO2)
          pso4_g_so2(icol, :)  = real(col_pso4_g, c_double)
          pso4_aq_so2(icol, :) = real(col_pso4_aq, c_double)
          dms_flux(icol)       = real(col_dms_flux, c_double)
+
+         ! Per-slot production-rate diagnostics: the scheme already scattered
+         ! each named species (MSA/SO2/SO4) into its diag_idx slot, so copy
+         ! slot-for-slot into the packed [n_cols, n_levels, n_diag_species]
+         ! buffer.  The former pso4_so2 single-slot write (which collapsed every
+         ! species onto slot 1) is removed.
+         if (diagnostics /= 0 .and. n_diag_species > 0) then
+            do ispec = 1, n_diag_species
+               diag_prod_rate(icol, :, ispec) = real(col_prod_rate(:, ispec), c_double)
+            end do
+         end if
       end do
 
    end subroutine run_so4chem_science_bridge

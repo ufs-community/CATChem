@@ -1644,13 +1644,38 @@ class ProcessGenerator:
         with open(test_cmake_file, 'w') as f:
             f.write(test_cmake_content)
 
+    def _metfield_descriptions(self) -> Dict[str, str]:
+        """MetState field name -> '<description> [units]' from the type's `!<` comments.
+
+        Falls back gracefully when a field is not part of MetStateType (e.g. TSTEP,
+        the model time step).
+        """
+        cached = getattr(self, '_metfield_desc_cache', None)
+        if cached is not None:
+            return cached
+        desc: Dict[str, str] = {}
+        if self.metstate_file and Path(self.metstate_file).exists():
+            pattern = re.compile(r'::\s*([A-Za-z_]\w*)\s*(?:\([^)]*\))?\s*!<\s*(.+?)\s*$')
+            try:
+                with open(self.metstate_file) as f:
+                    for line in f:
+                        m = pattern.search(line)
+                        if m:
+                            desc[m.group(1)] = m.group(2).strip()
+            except OSError as exc:
+                logger.warning(f"Could not parse MetState descriptions: {exc}")
+        desc.setdefault('TSTEP', 'Model time step [s]')
+        self._metfield_desc_cache = desc
+        return desc
+
     def _generate_documentation(self, docs_dir: Path, config: ProcessConfig) -> None:
         """Generate consolidated documentation in docs/processes/<process_name> directory."""
         logger.info(f"Generating documentation in: {docs_dir}")
 
         # Single comprehensive documentation file
         doc_template = self.env.get_template('process_documentation.md.j2')
-        doc_content = doc_template.render(config=config, timestamp=datetime.now().isoformat())
+        doc_content = doc_template.render(config=config, timestamp=datetime.now().isoformat(),
+                                          metfield_desc=self._metfield_descriptions())
 
         doc_file = docs_dir / f"{config.name}.md"
         with open(doc_file, 'w') as f:

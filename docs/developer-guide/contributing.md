@@ -71,13 +71,15 @@ feat(chemistry): add support for aqueous-phase reactions
 Closes #123
 ```
 
+**How releases are computed.** Pull requests into `develop` are squash-merged using the **pull request title only** (repository setting), so the pre-release version is determined by your PR title. Promotions from `develop` to `main` use a merge commit; the release on `main` is computed from the squash commits brought over, and the merge commit itself is ignored. Signal a breaking change with `!` in the title, for example `feat!: drop the legacy driver`; a `BREAKING CHANGE:` footer in a body has no effect. Adding `[ci skip]` to a commit message skips CI for that push to your PR only and has no effect on the merge or the release.
+
 ### 4. Create a Pull Request
 
 When you are ready to submit your contribution, push your branch to your fork and open a pull request to the `develop` branch of the main CATChem repository.
 
 - **Fill out the template**: Your pull request should include a clear description of the changes you have made and why. Please fill out the pull request template completely.
 - **Pass the checks**: Your pull request will be automatically tested by our continuous integration (CI) system. All checks must pass before your pull request can be merged.
-- **Respond to feedback**: The maintainers will review your pull request and may request changes. Please be responsive to their feedback.
+- **Respond to feedback**: Reviewers and approval requirements are defined in [`.github/CODEOWNERS`](https://github.com/ufs-community/CATChem/blob/develop/.github/CODEOWNERS); the header of that file explains the policy. Reviewers may request changes. Please be responsive to their feedback.
 
 ## Getting Help
 

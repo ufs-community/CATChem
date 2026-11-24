@@ -1,10 +1,5 @@
 #pragma once
-
-#ifdef ENABLE_KOKKOS
-#include <Kokkos_Core.hpp>
-#else
-#define KOKKOS_INLINE_FUNCTION inline
-#endif
+#include "catchem_kokkos_compat.hpp"
 
 #include "catchem_constants.hpp"
 #include "catchem_precision.hpp"

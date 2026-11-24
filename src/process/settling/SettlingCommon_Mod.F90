@@ -1,6 +1,6 @@
 module SettlingCommon_Mod
 
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    implicit none
    public
 
@@ -30,6 +30,7 @@ module SettlingCommon_Mod
       real(fp), allocatable :: species_density(:)      ! density for each species
       real(fp), allocatable :: species_mie_map(:)      ! mie_map for each species
       real(fp), allocatable :: species_radius(:)      ! radius for each species
+      logical, allocatable :: species_is_dust(:)      ! is_dust flag for each species
 
       ! Diagnostic configuration
       logical :: output_diagnostics = .true.
@@ -52,8 +53,9 @@ module SettlingCommon_Mod
       ! Scheme parameters
       real(fp) :: scale_factor = 1.0  ! settling velocity factor
       logical :: simple_scheme = .false.  ! read in mie data for wet particles if true; otherwise calculate particles wet swelling internally
-      integer :: swelling_method = 1  ! method for calculating particle swelling: 1 Fitzgerald 1975; 2 for Gerber 1985
+      integer :: swelling_method = 1  ! 1 Fitzgerald 1975; 2 Gerber 1985
       logical :: correction_maring = .false.  ! correct the settling velocity following Maring et al, 2003
+      logical :: maring_dust_only = .true.  ! apply Maring (2003) correction to dust only (GOCART does not apply it to sea salt)
 
       ! Required meteorological fields
       integer :: n_required_met_fields = 7

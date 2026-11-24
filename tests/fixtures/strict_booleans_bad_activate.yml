@@ -1,0 +1,16 @@
+# A process activate switch spelled with a legacy boolean: loading must fail.
+simulation:
+  name: strict-booleans-bad-activate
+  species_filename: platform_integrity_species.yml
+  nx: 2
+  ny: 1
+  nz: 3
+  timestep: 60
+  nsteps: 2
+grid:
+  number_of_levels: 3
+  number_of_soil_layers: 2
+run_phases: {}
+processes:
+  dust:
+    activate: yes

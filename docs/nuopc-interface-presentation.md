@@ -568,10 +568,10 @@ ctest -R nuopc_performance
 
 ## 📞 Contact and Support
 
-**Development Team**: [CATChem GitHub](https://github.com/NOAA-GSL/CATChem)
+**Development Team**: [CATChem GitHub](https://github.com/ufs-community/CATChem)
 **Technical Support**: [gsl.help@noaa.gov](mailto:gsl.help@noaa.gov)
 **Documentation**: [CATChem Documentation](https://catchem.readthedocs.io)
-**Community**: [GitHub Discussions](https://github.com/NOAA-GSL/CATChem/discussions)
+**Community**: [GitHub Discussions](https://github.com/ufs-community/CATChem/discussions)
 
 ---
 

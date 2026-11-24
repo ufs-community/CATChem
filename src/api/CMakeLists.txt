@@ -1,6 +1,26 @@
 set(_srcs CATChem_API.F90)
 add_library(CATChem ${_srcs})
-target_link_libraries(CATChem PUBLIC CATChem_core)
+target_link_libraries(
+  CATChem
+  PUBLIC
+    CATChem_core
+    catchem_validation_options
+    CATChem_core_cpp
+    CATChem_process_seasalt
+    CATChem_process_dust
+    CATChem_process_drydep
+    CATChem_process_wetdep
+    CATChem_process_settling
+    CATChem_process_so4chem
+    CATChem_process_carbchem
+)
+if(CATCHEM_BUILD_MUSICA)
+  target_link_libraries(
+    CATChem
+    PUBLIC catchem_process_photolysis catchem_process_gaschem
+  )
+  target_compile_definitions(CATChem PRIVATE CATCHEM_BUILD_MUSICA)
+endif()
 set_target_properties(
   CATChem
   PROPERTIES

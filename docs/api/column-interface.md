@@ -1,266 +1,116 @@
 # Column Interface API
 
-This section covers the column virtualization APIs that enable efficient 1D atmospheric processing in CATChem.
+This section covers the modernized column virtualization and grid layout APIs that enable high-performance 1D atmospheric column processing in CATChem.
 
 ## Overview
 
-The Column Interface system provides:
+Under the C++20 and Kokkos architecture, the Column Interface system has been fully redesigned to achieve zero-overhead, copy-free execution on modern hardware:
 
-- **ColumnType**: 1D atmospheric column data structure
-- **ColumnInterface_Mod**: Column access and manipulation
-- **Grid virtualization**: Efficient processing across grid columns
-- **Memory optimization**: Cache-friendly data access patterns
+- **catchem::GridManager**: Manages grid layout dimensions ($N_{\text{cols}}$, $N_{\text{levels}}$).
+- **Kokkos Subviews**: Slices 1D columns from 3D multi-dimensional arrays instantly with zero allocation or data copying.
+- **Kokkos Parallel For**: Executes column calculations in parallel across heterogeneous computing nodes (CPUs and GPUs).
+
+---
 
 ## Core Concepts
 
-### Column Virtualization
+### Column Virtualization via Subviews
 
-CATChem processes atmospheric data as independent 1D columns rather than full 3D grids:
+Rather than copying full 3D fields to local 1D data structures, CATChem slices 1D column vectors using standard **Kokkos subviews**. Slices point directly to the underlying contiguous multidimensional memory:
 
-```fortran
-use ColumnInterface_Mod
-type(ColumnType) :: column
+```cpp
+#include <Kokkos_Core.hpp>
 
-! Get column from 3D grid
-call container%get_column(i, j, column, rc)
+void MyProcess::run(std::shared_ptr<StateManager> state) {
+    auto n_cols = state->n_cols;
 
-! Process column data efficiently
-do k = 1, column%nz
-    ! Atmospheric level k processing
-    call process_atmospheric_level(column, k)
-end do
+    // Parallelize column executions
+    Kokkos::parallel_for("ProcessColumns", Kokkos::RangePolicy<Kokkos::HostSpace>(0, n_cols),
+        [=](const int icol) {
+            // Slice the 3D temperature view for column 'icol' with zero-copy
+            // Coordinates: (column_index, level_index, species_or_attribute_index)
+            auto col_temp = Kokkos::subview(state->met.temp, icol, Kokkos::ALL(), 0);
 
-! Update grid with processed column
-call container%update_column(i, j, column, rc)
+            // Access and modify elements directly in-place
+            for (int k = 0; k < state->n_levels; ++k) {
+                double t_k = col_temp(k);
+                col_temp(k) = calculate_new_temp(t_k);
+            }
+        });
+}
 ```
 
-**Benefits:**
+**Benefits**:
+*   **Zero Duplication**: No heap allocations or data copies are made during slicing.
+*   **Locality Optimization**: Leverages row-major or column-major Kokkos views matching underlying system architectures (e.g. `LayoutLeft` for CUDA/HIP GPUs, `LayoutRight` for OpenMP CPUs).
 
-- **Scalability**: Linear scaling with grid resolution
-- **Cache efficiency**: Better data locality
+---
 
-**Auto-Generated Documentation:** [Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)
+## Grid Layout & GridManager
 
-## Column Data Structure
+### GridManager
 
-### ColumnType
+The C++ class managing physical grid dimensions:
 
-The basic column data structure:
+```cpp
+#pragma once
 
-```fortran
-type :: ColumnType
-    integer :: nz                           ! Number of vertical levels
-    real(fp), allocatable :: pressure(:)    ! Pressure levels [Pa]
-    real(fp), allocatable :: temperature(:) ! Temperature profile [K]
-    real(fp), allocatable :: height(:)      ! Height levels [m]
-    real(fp), allocatable :: chem_data(:,:) ! Chemical concentrations
-    ! ... additional fields
-end type
+namespace catchem {
+
+    class GridManager {
+    public:
+        const int n_cols;                       ///< Total number of contiguous horizontal columns.
+        const int n_levels;                     ///< Total number of vertical levels.
+
+        GridManager(int nc, int nl) : n_cols(nc), n_levels(nl) {}
+    };
+
+} // namespace catchem
 ```
 
-### Column Access
-
-```fortran
-! Direct column access
-call container%get_column(i, j, column, rc)
-
-! Safe column access (thread-safe)
-call container%get_column_safe(i, j, column, rc)
-
-! Batch column access
-call container%get_columns_batch(i_start, i_end, j_start, j_end, &
-                                columns, rc)
-```
+---
 
 ## Processing Patterns
 
-### Sequential Processing
+### 1. Parallel Column Processing (CPU/GPU)
+Kokkos automatically maps parallel column loops to available hardware threads (e.g., OpenMP threads on multi-core CPUs, or threads/blocks on GPUs):
 
-```fortran
-! Process all columns sequentially
-do j = 1, ny
-    do i = 1, nx
-        call container%get_column(i, j, column, rc)
-        call my_process_column(column, rc)
-        call container%update_column(i, j, column, rc)
-    end do
-end do
+```cpp
+Kokkos::parallel_for("ColumnAerosols", Kokkos::RangePolicy<Kokkos::HostSpace>(0, state->n_cols),
+    [=](const int icol) {
+        // Run aerosol settling scheme on independent 1D column
+        run_aerosol_column_kernel(state, icol);
+    });
 ```
 
-### Parallel Processing
+### 2. Contiguous 3D Processing (MDRangePolicy)
+For operations that are completely independent of vertical column contexts, use Kokkos multi-dimensional range policies to loop over all grid cells concurrently:
 
-```fortran
-! OpenMP parallel column processing
-!$OMP PARALLEL DO PRIVATE(column, rc)
-do j = 1, ny
-    do i = 1, nx
-        call container%get_column_safe(i, j, column, rc)
-        call my_process_column(column, rc)
-        call container%update_column_safe(i, j, column, rc)
-    end do
-end do
-!$OMP END PARALLEL DO
+```cpp
+Kokkos::parallel_for("ScaleMetPres", Kokkos::MDRangePolicy<Kokkos::Rank<2>>({0, 0}, {state->n_cols, state->n_levels}),
+    KOKKOS_LAMBDA(const int icol, const int k) {
+        state->met.pressure(icol, k, 0) *= 1.01;
+    });
 ```
 
-### Process Integration
-
-```fortran
-! Column-capable process
-type, extends(ColumnProcessInterface_t) :: MyProcessType
-contains
-    procedure :: run_column => my_column_process
-end type
-
-subroutine my_column_process(this, column, rc)
-    class(MyProcessType), intent(inout) :: this
-    type(ColumnType), intent(inout) :: column
-    integer, intent(out) :: rc
-
-    ! Column-based atmospheric calculations
-    call this%calculate_column_physics(column, rc)
-end subroutine
-```
-
-## Memory Management
-
-### Efficient Memory Usage
-
-```fortran
-! Column data uses minimal memory allocation
-type(ColumnType) :: column
-
-! Automatic memory management
-call container%get_column(i, j, column, rc)  ! Allocates column data
-call container%update_column(i, j, column, rc)  ! Automatically cleans up
-```
-
-### Memory Optimization
-
-```fortran
-! Pre-allocate column workspace for performance
-call container%allocate_column_workspace(nz, n_species, rc)
-
-! Use workspace for repeated operations
-do j = 1, ny
-    do i = 1, nx
-        call container%get_column_workspace(i, j, column, rc)
-        call process_column(column, rc)
-        call container%return_column_workspace(i, j, column, rc)
-    end do
-end do
-```
-
-## Performance Considerations
-
-### Cache Optimization
-
-Column processing optimizes CPU cache usage:
-
-- **Spatial locality**: Processing contiguous vertical levels
-- **Temporal locality**: Reusing column data for multiple operations
-- **Reduced cache misses**: 1D access patterns vs. 3D strided access
-
-### Vectorization
-
-Modern compilers can vectorize column operations:
-
-```fortran
-! Vectorizable column operation
-do k = 1, column%nz
-    column%temperature(k) = column%temperature(k) + heating_rate(k) * dt
-end do
-```
-
-### Parallel Scaling
-
-Column processing enables natural parallelization:
-
-- **Grid-level parallelism**: Process multiple columns simultaneously
-- **Process-level parallelism**: Multiple processes per column
-- **Thread safety**: Independent column operations
-
-## Advanced Features
-
-### Column Interpolation
-
-```fortran
-! Interpolate between pressure levels
-call column%interpolate_to_pressure(target_pressure, interpolated_data, rc)
-
-! Interpolate between height levels
-call column%interpolate_to_height(target_height, interpolated_data, rc)
-```
-
-### Column Diagnostics
-
-```fortran
-! Calculate column-integrated quantities
-call column%integrate_column('CO', total_co, rc)
-call column%calculate_column_burden('aerosol', burden, rc)
-```
-
-**Auto-Generated Documentation:** [Diagnostic Manager Reference](../CATChem/namespacediagnosticmanager__mod.md)
-
-**Auto-Generated Documentation:** [Diagnostic Interface Reference](../CATChem/namespacediagnosticinterface__mod.md)
-
-### Boundary Conditions
-
-```fortran
-! Apply surface boundary conditions
-call column%set_surface_value(species_idx, surface_concentration, rc)
-
-! Apply top boundary conditions
-call column%set_top_value(species_idx, top_concentration, rc)
-```
-
-## Error Handling
-
-```fortran
-use Error_Mod
-
-! Column operation with error handling
-call container%get_column(i, j, column, rc)
-if (rc /= CC_SUCCESS) then
-    call error_mgr%report_error(ERROR_COLUMN_ACCESS, &
-                               'Failed to get column data', rc, &
-                               additional_info='Grid coordinates: ' // &
-                               trim(str(i)) // ', ' // trim(str(j)))
-    return
-endif
-```
-
-**Auto-Generated Documentation:** [Error Handling Reference](../CATChem/namespaceerror__mod.md)
+---
 
 ## Best Practices
 
 ### Performance
+1.  **Prefer Kokkos Subviews**: Never use manual copying or temporary `std::vector` allocations to represent columns. Subviews are instant and run on both CPU and GPU memory spaces in-place.
+2.  **Align Memory Layouts**: Match Kokkos View layouts with execution backends. Use `LayoutLeft` for GPU acceleration to achieve coalesced global memory access, or `LayoutRight` for sequential CPU cache locality.
 
-1. **Use column processing** for all atmospheric calculations
-2. **Minimize column copies** - work with pointers when possible
-3. **Batch operations** when processing multiple columns
-4. **Preallocate workspaces** for repeated operations
-
-### Code Quality
-
-1. **Check return codes** for all column operations
-2. **Handle edge cases** (surface, top boundary)
-3. **Validate column data** before processing
-4. **Use appropriate precision** for calculations
-
-### Threading
-
-1. **Use thread-safe methods** in parallel regions
-2. **Avoid shared column data** between threads
-3. **Use private column variables** in OpenMP regions
-4. **Consider NUMA effects** for large grids
-
-## See Also
-
-- [State Management API](state-management.md) - Data container interfaces
-- [Process Interface API](process-interface.md) - Column-capable process development
-- [Performance Guide](../user-guide/advanced_topics/performance.md) - Optimization strategies
-- [Column Virtualization Guide](../user-guide/advanced_topics/column-virtualization.md) - Architecture details
+### Safety
+1.  **Prevent Out-of-Bounds**: Always use grid boundaries from `state->n_cols` and `state->n_levels` to guard level-iteration loops.
+2.  **Coordinate Thread Space**: Avoid calling host-only or BIND(C) routines inside parallel Kokkos device lambda loops. Keep parallel lambda bodies purely mathematical and scientific.
 
 ---
 
-**Auto-Generated Documentation:** [Complete Column Interface Reference](../CATChem/namespacecolumninterface__mod.md)
+## See Also
+
+- [State Management API](state-management.md) - Multidimensional Kokkos Views
+- [Process Interface API](process-interface.md) - Scheduling and Process Registry
+- [GasChem Process Documentation](../processes/gaschem/index.md) - 3D Grid flattening to 1D MICM arrays
+
+---

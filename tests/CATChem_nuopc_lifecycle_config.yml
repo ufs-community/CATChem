@@ -1,0 +1,42 @@
+# Deliberately process-free CATChem configuration for the local NUOPC
+# lifecycle harness.  The harness verifies a complete coupled DataATM ->
+# CATChem -> DataATM initialize/run/finalize cycle without external emission,
+# optics, or diagnostic files.  Production process activation remains wholly
+# controlled by the configuration selected by the embedding application.
+simulation:
+  name: nuopc_lifecycle_harness
+  start_date: 20210322 0600
+  end_date: 20210322 0620
+  species_filename: CATChem_species.yml
+  emission_filename: CATChem_emission.yml
+  # Set true in an embedding configuration to emit per-PET run-phase markers.
+  verbose:
+    activate: false
+
+grid:
+  number_of_levels: 5
+
+timesteps:
+  transport_timestep_in_s: 600
+  chemistry_timestep_in_s: 600
+
+diagnostics:
+  output:
+    enabled: false
+  collection:
+    enabled: false
+
+run_phases:
+  lifecycle:
+    description: Exercise the CATChem cap with a self-contained sea-salt step.
+    processes: [seasalt]
+
+processes:
+  seasalt:
+    activate: true
+    diagnostics: false
+    scheme: geos12
+  # The NUOPC emissions adapter has an explicit independent switch.  Keep it
+  # off here so this lifecycle test has no external data dependency.
+  extemis:
+    activate: false

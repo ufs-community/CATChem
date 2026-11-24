@@ -2,7 +2,7 @@
 
 This section covers integrating CATChem with external modeling systems.
 
-!!! note "We are actively integrating CATChem into the UFS. Please check back frequently for updates to this Integration Guide. Further updates on this section will be coming soon!"
+!!! note "CATChem is integrated into the **[UFS Weather Model](https://github.com/ufs-community/ufs-weather-model)** as a **[NUOPC](https://earthsystemmodeling.org/nuopc/)** component. See **[UFS-Chem](../../ufschem/index.md)** for details."
 
 
 ## Overview
@@ -18,30 +18,27 @@ CATChem is designed to integrate seamlessly with various atmospheric modeling fr
 ### Host Model Interface
 
 ```fortran
-! Standard integration pattern
-use CATChemAPI_Mod
+! Standard integration pattern (Fortran proxy over the C++ core)
+use CATChem_API, only: CATChem_Model
 
-type(CATChemType) :: catchem
-integer :: rc
+type(CATChem_Model) :: model
+integer :: rc, step
 
-! Initialize
-call catchem%init(config_file='catchem.yml', rc=rc)
+! Initialize from the runtime YAML with the host grid dimensions
+call model%initialize('CATChem_new_config.yml', nx, ny, nlev, rc=rc)
 
-! Main time loop
-do time_step = 1, num_steps
-  ! Update meteorological fields
-  call catchem%update_met_fields(met_data, rc)
-
-  ! Run chemistry and transport
-  call catchem%run(dt=time_step_size, rc=rc)
-
-  ! Extract chemical fields
-  call catchem%get_chem_fields(chem_data, rc)
+! Main time loop: bind host meteorology and tracers to the core's state
+! (zero-copy, see the NUOPC guide), then advance the configured processes
+do step = 1, num_steps
+  call model%run_timestep(step, dt, rc)
 end do
 
 ! Clean up
-call catchem%finalize(rc)
+call model%finalize(rc)
 ```
+
+`CATChem_Model` (`src/api/CATChem_API.F90`) is a thin `bind(C)` proxy; the same
+sequence is available natively through `catchem::Core` in C++.
 
 ## Supported Frameworks
 
@@ -149,18 +146,12 @@ logging:
 
 ### Unit Tests
 
-```fortran
-! Test host model interface
-program test_integration
-  use CATChemAPI_Mod
-  use TestFramework_Mod
+Host-interface tests are C++ CTest executables under `tests/`; for example
+`test_catchem_interop` (field binding and column layout), `test_runtime_lifecycle`
+(initialize, step, finalize), and `test_c_api_negative` (error paths of the C API):
 
-  call test_initialization()
-  call test_field_exchange()
-  call test_time_stepping()
-  call test_finalization()
-
-end program
+```bash
+ctest --test-dir build -R 'interop|lifecycle|c_api'
 ```
 
 ### System Tests
@@ -198,5 +189,5 @@ diagnostics:
 ## See Also
 
 - [Process Development](../processes/index.md)
-- [Core Systems](../core/index.md)
-- [Configuration Guide](../core/configuration.md)
+- [Core Concepts](../../core-concepts/index.md)
+- [Configuration Guide](../../core-concepts/configuration.md)

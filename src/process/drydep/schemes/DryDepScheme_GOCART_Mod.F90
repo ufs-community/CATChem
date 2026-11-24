@@ -26,10 +26,10 @@
 !! https://doi.org/10.5194/gmd-17-1443-2024
 module DryDepScheme_GOCART_Mod
 
-   use precision_mod, only: fp
+   use catchem_bridge_precision, only: fp
    use DryDepCommon_Mod, only: DryDepSchemeGOCARTConfig
-   use error_mod, only: CC_SUCCESS, CC_Error
-   use Constants, only: Cp, g0, VON_KARMAN  !load the constants needed for this scheme
+   use catchem_bridge_error, only: CC_SUCCESS, CC_Error
+   use catchem_bridge_constants, only: Cp, g0, VON_KARMAN  !load the constants needed for this scheme
 
    implicit none
    private
@@ -67,6 +67,7 @@ contains
    !! @param[in]  species_density    Species density property
    !! @param[in]  species_radius    Species radius property
    !! @param[in]  species_is_seasalt    Species is_seasalt property
+   !! @param[in]  species_short_name    Species short_name property
    !! @param[in]  species_conc   Species concentrations [mol/mol] (num_layers, num_species)
    !! @param[inout] species_tendencies  Species tendency terms [mol/mol/s] (num_layers, num_species)
    !! @param[inout] drydep_con_per_species    Dry deposition concentration per species [ug/kg or ppm] (num_species)
@@ -94,6 +95,7 @@ contains
       species_radius, &
       species_is_dust, &
       species_is_seasalt, &
+      species_short_name, &
       species_conc, &
       species_tendencies, &
       is_gas, &
@@ -125,6 +127,7 @@ contains
       real(fp), intent(in) :: species_radius(num_species)  ! Species radius property
       logical, intent(in) :: species_is_dust(num_species)  ! Species is dust property
       logical, intent(in) :: species_is_seasalt(num_species)  ! Species is seasalt property
+      character(len=32), intent(in) :: species_short_name(num_species)  ! Species short_name property
       real(fp), intent(in) :: species_conc(num_layers, num_species)
       real(fp), intent(inout) :: species_tendencies(num_layers, num_species)
       logical, intent(in) :: is_gas(num_species)  ! Species type flags (true=gas, false=aerosol)
@@ -200,6 +203,13 @@ contains
          do species_idx = 1, num_species
             ! Skip species that don't match scheme type (gas vs aerosol)
             if (is_gas(species_idx)) cycle
+            ! Optionally skip SO4/MSA so their dry deposition is handled by
+            ! so4chem (GOCART SulfateChemDriver) instead.  The core marshals
+            ! species labels upper-cased; the lowercase branches keep the gate
+            ! correct for direct Fortran callers that pass catalog names.
+            if (params%skip_sulfate_aero .and. (trim(species_short_name(species_idx)) == 'SO4' .or. &
+               trim(species_short_name(species_idx)) == 'so4' .or. trim(species_short_name(species_idx)) == 'MSA' .or. &
+               trim(species_short_name(species_idx)) == 'msa')) cycle
 
             ! Apply resuspension based on config flags:
             ! - dust_resuspension_only=true (default): resuspension only for dust (matches GOCART)

@@ -1,7 +1,7 @@
 #pragma once
+#include "catchem_kokkos_compat.hpp"
 
-#ifdef ENABLE_KOKKOS
-#include <Kokkos_Core.hpp>
+#ifdef CATCHEM_ENABLE_KOKKOS
 namespace catchem {
     namespace math {
         using Kokkos::acos;
@@ -16,9 +16,6 @@ namespace catchem {
     } // namespace math
 } // namespace catchem
 #else
-#ifndef KOKKOS_INLINE_FUNCTION
-#define KOKKOS_INLINE_FUNCTION inline
-#endif
 #include <algorithm>
 #include <cmath>
 namespace catchem {
@@ -64,12 +61,80 @@ namespace catchem {
             return 243.5 / (17.67 / math::log(ed / 611.2) - 1.0) + 273.15;
         }
 
+        // GOCART-aligned relative humidity in the Alduchov-Eskridge Magnus form:
+        //   es [Pa] = 610.94 * exp(17.625 * tc / (tc + 243.04)),  tc = T - 273.15
+        //   e  [Pa] = p * qv / (0.622 + qv)
+        //   RH      = clip(e / es, 0.005, 0.99)
+        // This replaces the former Bolton form and the [0, 1] clamp. The change
+        // is O(1 %) in the mid-troposphere and is applied unconditionally (not
+        // config-gated). Negative qv or non-positive p are validation errors at
+        // import, not clamped here; the floor keeps qv = 0 finite at 0.005.
         KOKKOS_INLINE_FUNCTION
         fp relative_humidity(fp T, fp qv, fp p) {
-            fp e = qv * p / (0.622 + 0.378 * qv);
-            fp es = saturation_vapor_pressure(T);
-            fp rh = e / es;
-            return math::max(static_cast<fp>(0.0), math::min(static_cast<fp>(1.0), rh));
+            const fp tc = T - 273.15;
+            const fp es = 610.94 * math::exp(17.625 * tc / (tc + 243.04));
+            const fp e = qv * p / (0.622 + qv);
+            const fp rh = e / es;
+            return math::max(static_cast<fp>(0.005), math::min(static_cast<fp>(0.99), rh));
+        }
+
+        // Pointwise derived-meteorology kernels. StateManager owns field
+        // lifetime and invokes these only after validating host inputs.
+        KOKKOS_INLINE_FUNCTION
+        fp hydrostatic_layer_thickness(fp pressure_bottom, fp pressure_top, fp temperature, fp qv) {
+            if (!(pressure_bottom > pressure_top && pressure_top > 0.0 && temperature > 0.0))
+                return 0.0;
+            const fp bounded_qv = math::max(static_cast<fp>(0.0), math::min(static_cast<fp>(0.9999), qv));
+            return (constants::RD / constants::G0) * virtual_temperature(temperature, bounded_qv) *
+                   math::log(pressure_bottom / pressure_top);
+        }
+
+        KOKKOS_INLINE_FUNCTION
+        fp pressure_thickness(fp pressure_bottom, fp pressure_top) {
+            return pressure_bottom > pressure_top ? pressure_bottom - pressure_top : 0.0;
+        }
+
+        KOKKOS_INLINE_FUNCTION
+        fp dry_air_density(fp pressure, fp temperature, fp qv) {
+            if (!(pressure > 0.0 && temperature > 0.0))
+                return 0.0;
+            const fp bounded_qv = math::max(static_cast<fp>(0.0), math::min(static_cast<fp>(0.9999), qv));
+            const fp mixing =
+                (constants::AIR_MW / constants::H2O_MW) * bounded_qv / (static_cast<fp>(1.0) - bounded_qv);
+            const fp water_mole_fraction = mixing / (static_cast<fp>(1.0) + mixing);
+            return pressure * (static_cast<fp>(1.0) - water_mole_fraction) / (constants::RD * temperature);
+        }
+
+        // Legacy metstate_mod large-scale/anvil precipitation re-evaporation
+        // tendency [kg kg-1 s-1]. This is a diagnostic, never a fallback.
+        KOKKOS_INLINE_FUNCTION
+        fp large_scale_reevaporation(fp temperature, fp qv, fp pressure_mid, fp pressure_bottom, fp pressure_top,
+                                     fp ice_flux, fp liquid_flux) {
+            constexpr fp rh_threshold = 0.9;
+            constexpr fp liquid_coefficient = 2.0e-5;
+            constexpr fp ice_coefficient = 0.5e-5;
+            constexpr fp liquid_temperature = 273.15;
+            constexpr fp ice_temperature = 258.15;
+            const fp liquid = math::max(static_cast<fp>(0.0), liquid_flux);
+            const fp ice = math::max(static_cast<fp>(0.0), ice_flux);
+            const fp air_mass = (pressure_bottom - pressure_top) / constants::G0;
+            const fp rh = relative_humidity(temperature, qv, pressure_mid);
+            if (!(air_mass > 0.0) || !(rh < rh_threshold) || !(liquid + ice > 0.0))
+                return 0.0;
+            const fp coefficient =
+                temperature > liquid_temperature ? liquid_coefficient
+                : temperature > ice_temperature
+                    ? ((temperature - ice_temperature) / (liquid_temperature - ice_temperature)) * liquid_coefficient +
+                          ((liquid_temperature - temperature) / (liquid_temperature - ice_temperature)) *
+                              ice_coefficient
+                    : ice_coefficient;
+            const fp rh_term = math::max(static_cast<fp>(0.0), static_cast<fp>(1.0) - rh / rh_threshold);
+            const fp liquid_loss =
+                liquid > 0.0 ? math::min(coefficient * rh_term * math::sqrt(liquid), liquid / air_mass) : 0.0;
+            const fp ice_loss = temperature > ice_temperature
+                                    ? math::min(coefficient * rh_term * math::sqrt(ice), ice / air_mass)
+                                    : 0.0;
+            return math::max(static_cast<fp>(0.0), math::min(liquid_loss + ice_loss, (liquid + ice) / air_mass));
         }
 
         KOKKOS_INLINE_FUNCTION

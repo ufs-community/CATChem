@@ -86,6 +86,9 @@ schemes:
       co2_reference:
         default: 380.0
         description: "Reference CO2 level for stomatal conductance adjustment"
+      skip_so2:
+        default: false
+        description: "Skip SO2 so its dry deposition is handled by so4chem (GOCART SulfateChemDriver)"
 
     diagnostics: []
 
@@ -121,6 +124,7 @@ schemes:
       - radius
       - is_seasalt
       - is_dust
+      - short_name
 
     parameters:
       scale_factor:
@@ -132,6 +136,9 @@ schemes:
       dust_resuspension_only:
         default: true
         description: "If true, resuspension only applies to dust species"
+      skip_sulfate_aero:
+        default: false
+        description: "Skip SO4/MSA so their dry deposition is handled by so4chem (GOCART SulfateChemDriver)"
     diagnostics: []
 
   zhang:

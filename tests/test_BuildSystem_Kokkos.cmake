@@ -1,24 +1,23 @@
 # test_BuildSystem_Kokkos.cmake
-# Build system verification tests for ENABLE_KOKKOS option.
+# Build system verification tests for the CATCHEM_ENABLE_KOKKOS option.
 #
-# **Validates: Requirements 8.5, 8.6, 8.7**
+# Architecture under test: the C++ core and all process C++ sources compile
+# in BOTH build flavors. Kokkos is an acceleration option — with
+# CATCHEM_ENABLE_KOKKOS=OFF the standalone kokkos/mdspan library provides
+# the Kokkos::mdspan data layer and kernels run serially on the host.
 #
-# Test 1: ENABLE_KOKKOS=OFF produces no Kokkos dependency
-#   - The build should succeed without Kokkos installed
-#   - No CATChem_kokkos target should be created
-#   - No Kokkos headers or libraries should be required
-#
-# Test 2: ENABLE_KOKKOS=ON finds and links Kokkos
-#   - When Kokkos is installed, find_package(Kokkos REQUIRED) succeeds
-#   - CATChem_kokkos library target is created
-#   - Process libraries link to CATChem_kokkos
-#   - Supports Serial/OpenMP/CUDA backends as configured in Kokkos
+# Test 1: CATCHEM_ENABLE_KOKKOS option exists, defaults to OFF, and the
+#         deprecated ENABLE_KOKKOS spelling is honored via a shim
+# Test 2: ON configures C++20 and locates/fetches Kokkos
+# Test 3: OFF fetches the standalone mdspan library
+# Test 4: The C++ core is built unconditionally; only the Kokkos link and
+#         compile definition are conditional
+# Test 5: Process C++ sources are unconditional and carry no Kokkos guards
+# Test 6: The Kokkos compat header provides the host-only fallbacks
+# Test 7: The C++ test suite is not gated on Kokkos
 #
 # Usage:
 #   cmake -P tests/test_BuildSystem_Kokkos.cmake
-#
-# This script verifies the CMakeLists.txt files contain the expected
-# ENABLE_KOKKOS guards by parsing the CMake files directly.
 
 cmake_minimum_required(VERSION 3.10)
 
@@ -51,124 +50,175 @@ function(assert_file_not_contains filepath search_string description)
 endfunction()
 
 message(STATUS "")
-message(STATUS "=== Build System Tests: ENABLE_KOKKOS ===")
-message(STATUS "--- Validates: Requirements 8.5, 8.6, 8.7 ---")
+message(STATUS "=== Build System Tests: CATCHEM_ENABLE_KOKKOS ===")
 message(STATUS "")
 
 # Determine source root (this script is in tests/)
 get_filename_component(SRC_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 
-# --- Test 1: ENABLE_KOKKOS option exists and defaults to OFF ---
-message(STATUS "--- Test 1: ENABLE_KOKKOS option configuration ---")
+# --- Test 1: CATCHEM_ENABLE_KOKKOS option configuration ---
+message(STATUS "--- Test 1: CATCHEM_ENABLE_KOKKOS option configuration ---")
 
 assert_file_contains(
   "${SRC_ROOT}/CMakeLists.txt"
-  "option(ENABLE_KOKKOS"
-  "Top-level CMakeLists.txt defines ENABLE_KOKKOS option"
+  "option(CATCHEM_ENABLE_KOKKOS"
+  "Top-level CMakeLists.txt defines CATCHEM_ENABLE_KOKKOS option"
 )
 
 assert_file_contains(
   "${SRC_ROOT}/CMakeLists.txt"
-  "ENABLE_KOKKOS \"Enable Kokkos GPU/parallel support\" OFF"
-  "ENABLE_KOKKOS defaults to OFF"
+  "CATCHEM_ENABLE_KOKKOS \"Enable Kokkos GPU/parallel support\" OFF"
+  "CATCHEM_ENABLE_KOKKOS defaults to OFF"
 )
-
-# --- Test 2: ENABLE_KOKKOS=ON triggers find_package and C++17 ---
-message(STATUS "--- Test 2: ENABLE_KOKKOS=ON configuration ---")
 
 assert_file_contains(
   "${SRC_ROOT}/CMakeLists.txt"
-  "find_package(Kokkos REQUIRED)"
-  "ENABLE_KOKKOS=ON calls find_package(Kokkos REQUIRED)"
+  "ENABLE_KOKKOS is deprecated; use CATCHEM_ENABLE_KOKKOS"
+  "Deprecated ENABLE_KOKKOS spelling is mapped to CATCHEM_ENABLE_KOKKOS"
 )
+
+# --- Test 2: CATCHEM_ENABLE_KOKKOS=ON configuration ---
+message(STATUS "--- Test 2: CATCHEM_ENABLE_KOKKOS=ON configuration ---")
 
 assert_file_contains(
   "${SRC_ROOT}/CMakeLists.txt"
   "CMAKE_CXX_STANDARD 20"
-  "ENABLE_KOKKOS=ON sets C++20 standard"
-)
-
-# --- Test 3: src/kokkos/ is conditionally included ---
-message(STATUS "--- Test 3: Conditional src/kokkos/ inclusion ---")
-
-assert_file_contains(
-  "${SRC_ROOT}/src/CMakeLists.txt"
-  "add_subdirectory(kokkos)"
-  "src/CMakeLists.txt includes kokkos subdirectory"
+  "MUSICA builds use C++20"
 )
 
 assert_file_contains(
-  "${SRC_ROOT}/src/CMakeLists.txt"
-  "if(ENABLE_KOKKOS)"
-  "src/CMakeLists.txt guards kokkos with ENABLE_KOKKOS"
+  "${SRC_ROOT}/CMakeLists.txt"
+  "CMAKE_CXX_STANDARD 17"
+  "Non-MUSICA builds use C++17"
 )
 
-# --- Test 4: Process libraries conditionally link to CATChem_kokkos ---
-message(
-  STATUS
-  "--- Test 4: Conditional Kokkos linking in process libraries ---"
+assert_file_contains(
+  "${SRC_ROOT}/CMakeLists.txt"
+  "find_package(Kokkos"
+  "ON path looks for a system Kokkos"
 )
 
-foreach(process settling seasalt drydep wetdep)
-  assert_file_contains(
-    "${SRC_ROOT}/src/process/${process}/CMakeLists.txt"
-    "CATChem_kokkos"
-    "${process} CMakeLists.txt links to CATChem_kokkos"
-  )
-  assert_file_contains(
-    "${SRC_ROOT}/src/process/${process}/CMakeLists.txt"
-    "ENABLE_KOKKOS"
-    "${process} CMakeLists.txt guards Kokkos with ENABLE_KOKKOS"
-  )
-endforeach()
+assert_file_contains(
+  "${SRC_ROOT}/CMakeLists.txt"
+  "FetchContent_MakeAvailable(kokkos)"
+  "ON path falls back to fetching a pinned Kokkos"
+)
 
-# --- Test 5: Core library conditionally links to CATChem_kokkos ---
-message(STATUS "--- Test 5: Core library conditional Kokkos linking ---")
+# --- Test 3: OFF uses the vendored mdspan (no network at configure) ---
+message(STATUS "--- Test 3: CATCHEM_ENABLE_KOKKOS=OFF configuration ---")
+
+if(NOT EXISTS "${SRC_ROOT}/src/external/mdspan/include/mdspan/mdspan.hpp")
+  message(
+    FATAL_ERROR
+    "FAILED: vendored mdspan single header is missing\n  Expected: src/external/mdspan/include/mdspan/mdspan.hpp"
+  )
+else()
+  message(STATUS "PASSED: vendored mdspan single header is present")
+endif()
+
+assert_file_contains(
+  "${SRC_ROOT}/CMakeLists.txt"
+  "src/external/mdspan/include"
+  "OFF path points the mdspan target at the vendored header"
+)
+
+assert_file_not_contains(
+  "${SRC_ROOT}/CMakeLists.txt"
+  "FetchContent_MakeAvailable(mdspan)"
+  "OFF path performs no mdspan fetch (network-restricted UFS nodes)"
+)
+
+# --- Test 4: C++ core is unconditional; Kokkos link is conditional ---
+message(STATUS "--- Test 4: C++ core built in both flavors ---")
 
 assert_file_contains(
   "${SRC_ROOT}/src/core/CMakeLists.txt"
-  "CATChem_kokkos"
-  "Core CMakeLists.txt links to CATChem_kokkos"
-)
-
-# --- Test 6: src/kokkos/CMakeLists.txt links to Kokkos::kokkos ---
-message(STATUS "--- Test 6: Kokkos interop library configuration ---")
-
-assert_file_contains(
-  "${SRC_ROOT}/src/kokkos/CMakeLists.txt"
-  "Kokkos::kokkos"
-  "Kokkos interop library links to Kokkos::kokkos"
+  "add_library(CATChem_core_cpp STATIC"
+  "CATChem_core_cpp is declared unconditionally"
 )
 
 assert_file_contains(
-  "${SRC_ROOT}/src/kokkos/CMakeLists.txt"
-  "CATChem_kokkos"
-  "Kokkos interop library target is CATChem_kokkos"
-)
-
-# --- Test 7: ENABLE_KOKKOS=OFF means no Kokkos dependency ---
-message(
-  STATUS
-  "--- Test 7: ENABLE_KOKKOS=OFF produces no Kokkos dependency ---"
-)
-message(STATUS "  Verified by structure: all Kokkos references are inside")
-message(STATUS "  if(ENABLE_KOKKOS) guards. When OFF, src/kokkos/ is skipped")
-message(STATUS "  entirely and no process library links to CATChem_kokkos.")
-message(STATUS "PASSED: ENABLE_KOKKOS=OFF produces no Kokkos dependency")
-
-# --- Test 8: Kokkos tests are conditional ---
-message(STATUS "--- Test 8: Kokkos tests are conditional ---")
-
-assert_file_contains(
-  "${SRC_ROOT}/tests/process/settling/CMakeLists.txt"
-  "test_KokkosCpuDispatch"
-  "Kokkos CPU dispatch test is registered"
+  "${SRC_ROOT}/src/core/CMakeLists.txt"
+  "target_compile_definitions(CATChem_core_cpp PUBLIC CATCHEM_ENABLE_KOKKOS)"
+  "Kokkos compile definition is exported when ON"
 )
 
 assert_file_contains(
-  "${SRC_ROOT}/tests/process/settling/CMakeLists.txt"
-  "test_KokkosGpuTolerance"
-  "Kokkos GPU tolerance test is registered"
+  "${SRC_ROOT}/src/core/CMakeLists.txt"
+  "mdspan::mdspan"
+  "OFF path links the standalone mdspan target"
+)
+
+# --- Test 5: process C++ sources unconditional, no Kokkos guards ---
+message(STATUS "--- Test 5: Process C++ sources unconditional ---")
+
+foreach(
+  process
+  seasalt
+  dust
+  drydep
+  wetdep
+  settling
+  so4chem
+  carbchem
+)
+  set(_process_cml "${SRC_ROOT}/src/process/${process}/CMakeLists.txt")
+  assert_file_contains(
+    "${_process_cml}"
+    "catchem_process_${process}.cpp"
+    "${process} compiles its C++ source in both flavors"
+  )
+  assert_file_contains(
+    "${_process_cml}"
+    "CATChem_core_cpp"
+    "${process} links CATChem_core_cpp for transitive Kokkos/mdspan usage"
+  )
+  assert_file_not_contains(
+    "${_process_cml}"
+    "if(CATCHEM_ENABLE_KOKKOS)"
+    "${process} has no CMake-level Kokkos conditionality"
+  )
+  assert_file_not_contains(
+    "${_process_cml}"
+    "if(ENABLE_KOKKOS)"
+    "${process} does not use the deprecated ENABLE_KOKKOS guard"
+  )
+endforeach()
+
+# --- Test 6: compat header fallbacks ---
+message(STATUS "--- Test 6: Kokkos compat header ---")
+
+assert_file_contains(
+  "${SRC_ROOT}/src/core/catchem_kokkos_compat.hpp"
+  "#define KOKKOS_INLINE_FUNCTION inline"
+  "Compat header masks KOKKOS_INLINE_FUNCTION for host-only builds"
+)
+
+assert_file_contains(
+  "${SRC_ROOT}/src/core/catchem_kokkos_compat.hpp"
+  "#include <mdspan/mdspan.hpp>"
+  "Compat header provides mdspan for host-only builds"
+)
+
+assert_file_contains(
+  "${SRC_ROOT}/src/core/catchem_kokkos_compat.hpp"
+  "#define MDSPAN_IMPL_STANDARD_NAMESPACE Kokkos"
+  "Compat header pins the vendored mdspan namespace to Kokkos"
+)
+
+# --- Test 7: C++ tests not gated on Kokkos ---
+message(STATUS "--- Test 7: C++ test suite runs in both flavors ---")
+
+assert_file_contains(
+  "${SRC_ROOT}/tests/CMakeLists.txt"
+  "add_executable(test_catchem_interop"
+  "Interop test suite is registered"
+)
+
+assert_file_not_contains(
+  "${SRC_ROOT}/tests/CMakeLists.txt"
+  "if(CATCHEM_ENABLE_KOKKOS)"
+  "tests/CMakeLists.txt does not gate the C++ suite on Kokkos"
 )
 
 message(STATUS "")

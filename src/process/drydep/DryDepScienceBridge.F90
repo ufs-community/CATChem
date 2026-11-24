@@ -1,6 +1,6 @@
 module DryDepScienceBridge_Mod
    use iso_c_binding, only: c_ptr, c_f_pointer, c_double, c_char, c_associated, c_null_char, c_bool, c_int
-   use Precision_Mod, only: fp
+   use catchem_bridge_precision, only: fp
    use DryDepCommon_Mod, only: DryDepSchemeWESELYConfig, DryDepSchemeGOCARTConfig, DryDepSchemeZHANGConfig
    use DryDepScheme_WESELY_Mod, only: compute_wesely
    use DryDepScheme_GOCART_Mod, only: compute_gocart
@@ -11,6 +11,9 @@ contains
    subroutine run_drydep_science_bridge( &
       n_cols, n_levels, n_species, dt, &
       gas_scheme, aero_scheme, diagnostics, &
+      wesely_scale_factor, wesely_co2_effect, wesely_co2_level, wesely_co2_reference, &
+      gocart_scale_factor, gocart_resuspension, gocart_dust_resusp_only, zhang_scale_factor, &
+      wesely_skip_so2, gocart_skip_sulfate_aero, &
    ! 3D Met Pointers
       c_bxheight, c_airden, c_t_air, c_z_edges, c_rh, &
    ! 2D/1D Met Pointers
@@ -23,7 +26,7 @@ contains
       species_radius, species_is_seasalt, species_is_dust, species_lower_radius, &
       species_upper_radius, is_gas_arr, &
    ! Concentrations, Tendencies & Diagnostics
-      c_conc, c_tendency, c_diag_con, c_diag_vel, &
+      c_conc, c_tendency, species_names, c_diag_con, c_diag_vel, &
       diagnostic_species_id, n_diag_species &
       ) bind(C, name="run_drydep_science_bridge")
 
@@ -32,6 +35,15 @@ contains
       character(kind=c_char), intent(in) :: gas_scheme(*)
       character(kind=c_char), intent(in) :: aero_scheme(*)
       integer(c_int), value :: diagnostics
+
+      ! Scheme tuning options staged by DryDepProcess::init from the runtime
+      ! YAML.  The C++ layer owns parsing and validation; the bridge only
+      ! applies them onto the scheme configuration types.
+      real(c_double), value :: wesely_scale_factor, wesely_co2_level, wesely_co2_reference
+      integer(c_int), value :: wesely_co2_effect
+      real(c_double), value :: gocart_scale_factor, zhang_scale_factor
+      integer(c_int), value :: gocart_resuspension, gocart_dust_resusp_only
+      integer(c_int), value :: wesely_skip_so2, gocart_skip_sulfate_aero
 
       ! C pointers
       type(c_ptr), value :: c_bxheight, c_airden, c_t_air, c_z_edges, c_rh
@@ -54,6 +66,7 @@ contains
       real(c_double), intent(in) :: species_lower_radius(n_species)
       real(c_double), intent(in) :: species_upper_radius(n_species)
       logical(c_bool), intent(in) :: is_gas_arr(n_species)
+      character(kind=c_char), intent(in) :: species_names(32,n_species)
       integer(c_int), value :: n_diag_species
       integer(c_int), intent(in) :: diagnostic_species_id(n_diag_species)
 
@@ -70,10 +83,10 @@ contains
       real(c_double), pointer :: conc(:,:,:), tendency(:,:,:), diag_con(:,:), diag_vel(:,:)
 
       ! Loop variables
-      integer :: icol
+      integer :: icol, ispec
       character(len=64) :: local_gas, local_aero
       character(len=255) :: local_lucname = "NOAH"
-      character(len=30) :: dummy_sp_names(n_species)
+      character(len=32) :: dummy_sp_names(n_species)
 
       ! Local arrays in native solver precision (fp) to avoid double-float mismatches
       real(fp) :: f_bxheight(1), f_airden(1), f_t_air(1), f_z_edges(2), f_rh(1)
@@ -102,32 +115,57 @@ contains
       ! Sliced concentration and tendencies in solver precision
       real(fp) :: f_conc(1, n_species)
       real(fp) :: col_tendencies(1, n_species)
-      real(fp) :: col_diag_con(n_species)
-      real(fp) :: col_diag_vel(n_species)
+      ! Diagnostic slot buffers are sized by the (is_drydep) subset count: the
+      ! schemes index drydep_*_per_species(diag_idx) over
+      ! [1, size(diagnostic_species_id)] and never touch the catalog tail.
+      ! max(...,1) keeps the declaration valid when no species is drydep.
+      real(fp) :: col_diag_con(max(n_diag_species, 1_c_int))
+      real(fp) :: col_diag_vel(max(n_diag_species, 1_c_int))
 
       type(DryDepSchemeWESELYConfig) :: wesely_config
       type(DryDepSchemeGOCARTConfig) :: gocart_config
       type(DryDepSchemeZHANGConfig) :: zhang_config
 
       ! Convert C strings to Fortran strings
+      local_gas = ''
       icol = 1
-      do while (gas_scheme(icol) /= c_null_char .and. icol < 64)
+      do while (icol < 64)
+         if (gas_scheme(icol) == c_null_char) exit
          local_gas(icol:icol) = gas_scheme(icol)
          icol = icol + 1
       end do
       local_gas = trim(adjustl(local_gas))
 
+      local_aero = ''
       icol = 1
-      do while (aero_scheme(icol) /= c_null_char .and. icol < 64)
+      do while (icol < 64)
+         if (aero_scheme(icol) == c_null_char) exit
          local_aero(icol:icol) = aero_scheme(icol)
          icol = icol + 1
       end do
       local_aero = trim(adjustl(local_aero))
 
+      ! Apply the YAML tuning options staged by the C++ process layer onto
+      ! the scheme configuration types so the gas and aerosol schemes no
+      ! longer run on compiled defaults.
+      wesely_config%scale_factor = real(wesely_scale_factor, fp)
+      wesely_config%co2_effect = (wesely_co2_effect /= 0)
+      wesely_config%co2_level = real(wesely_co2_level, fp)
+      wesely_config%co2_reference = real(wesely_co2_reference, fp)
+      gocart_config%scale_factor = real(gocart_scale_factor, fp)
+      gocart_config%resuspension = (gocart_resuspension /= 0)
+      gocart_config%dust_resuspension_only = (gocart_dust_resusp_only /= 0)
+      wesely_config%skip_so2 = (wesely_skip_so2 /= 0)
+      gocart_config%skip_sulfate_aero = (gocart_skip_sulfate_aero /= 0)
+      zhang_config%scale_factor = real(zhang_scale_factor, fp)
+
       ! Associate pointers
       call c_f_pointer(c_bxheight, bxheight, [n_cols, n_levels])
       call c_f_pointer(c_airden,   airden,   [n_cols, n_levels])
       call c_f_pointer(c_t_air,    t_air,    [n_cols, n_levels])
+      ! c_z_edges carries the geometric-height interface levels [m], shape
+      ! (n_cols, n_levels+1) — the GOCART aero scheme's hghte slot.  It must
+      ! not be fed air pressure (PEDGE, Pa); that produced NaN velocities.
       call c_f_pointer(c_z_edges,  z_edges,  [n_cols, n_levels+1])
       call c_f_pointer(c_rh,       rh,       [n_cols, n_levels])
 
@@ -162,11 +200,27 @@ contains
       call c_f_pointer(c_tendency, tendency, [n_cols, n_levels, n_species])
 
       if (diagnostics /= 0) then
-         call c_f_pointer(c_diag_con, diag_con, [n_cols, n_species])
-         call c_f_pointer(c_diag_vel, diag_vel, [n_cols, n_species])
+         ! The C++ caller allocates the diagnostic buffer at the (is_drydep)
+         ! subset extent, n_diag_species columns, not the full catalog.  The
+         ! schemes scatter into slots [1, n_diag_species] of col_diag_*, so
+         ! pointing here at n_species would read the unwritten tail past the
+         ! buffer (feature 013).
+         call c_f_pointer(c_diag_con, diag_con, [n_cols, n_diag_species])
+         call c_f_pointer(c_diag_vel, diag_vel, [n_cols, n_diag_species])
       endif
 
-      dummy_sp_names = "UNKNOWN"
+      ! Keep the canonical chemistry catalog with the concentration and
+      ! metadata arrays.  The schemes declare len=32 dummies, so the marshalled
+      ! buffer must use the same element length: sequence association between
+      ! different character lengths silently corrupts every name past the
+      ! first.  Names longer than 32 characters are truncated safely.
+      do ispec = 1, n_species
+         do icol = 1, len(dummy_sp_names(ispec))
+            if (icol > size(species_names, 1)) exit
+            dummy_sp_names(ispec)(icol:icol) = species_names(icol, ispec)
+         end do
+         dummy_sp_names(ispec) = trim(adjustl(dummy_sp_names(ispec)))
+      end do
 
       ! Copy metadata once
       f_mw_g = real(species_mw_g, fp)
@@ -246,7 +300,7 @@ contains
                f_airden, f_frlake, f_gwettop, f_hflux, &
                f_lwi, f_pblh, f_t_air, real(dt, fp), &
                f_u10m, f_ustar, f_v10m, f_z_edges, f_z0h, &
-               f_density, f_radius, f_is_dust, f_is_seasalt, &
+               f_density, f_radius, f_is_dust, f_is_seasalt, dummy_sp_names, &
                f_conc, col_tendencies, f_is_gas_arr, col_diag_con, col_diag_vel, &
                diagnostic_species_id)
          else if (trim(local_aero) == "zhang") then
@@ -262,9 +316,17 @@ contains
                f_is_gas_arr, col_diag_con, col_diag_vel, diagnostic_species_id)
          endif
 
-         ! Write tendencies and concentrations back in-place (casting back to c_double)
-         tendency(icol, 1, :) = real(col_tendencies(1, :), c_double)
-         conc(icol, 1, :) = conc(icol, 1, :) + real(dt * col_tendencies(1, :), c_double)
+         ! Match the legacy process-interface finite-step update.  The
+         ! schemes return a dry-deposition frequency [1/s], which upstream
+         ! applies as an exponential loss over the chemistry timestep.
+         do ispec = 1, n_species
+            if (abs(col_tendencies(1, ispec)) > 1.0e-32_fp) then
+               f_conc(1, ispec) = f_conc(1, ispec) * &
+                  (1.0_fp - max(1.0_fp - exp(-col_tendencies(1, ispec) * real(dt, fp)), 0.0_fp))
+               tendency(icol, 1, ispec) = real((f_conc(1, ispec) - real(conc(icol, 1, ispec), fp) ) / real(dt, fp), c_double)
+               conc(icol, 1, ispec) = real(f_conc(1, ispec), c_double)
+            end if
+         end do
 
          if (diagnostics /= 0) then
             diag_con(icol, :) = real(col_diag_con, c_double)

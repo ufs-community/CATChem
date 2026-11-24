@@ -1,10 +1,25 @@
-ARG BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13-dev:latest
+# check=skip=InvalidDefaultArgInFrom
+# BASE_IMAGE is intentionally un-defaulted to enforce explicit external base image
+# selection at build time.
+# Maintained externally by https://github.com/ufs-community/ufs-chem-container
+# Example build-arg:
+#   --build-arg BASE_IMAGE=noaaepic/ufschem-spack-base-ubuntu-gcc-13:latest
+ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 SHELL ["/bin/bash", "-c"]
 
+# Kokkos support toggle; matches the CMake option of the same name.
+# MUSICA requires the Kokkos-backed C++ core, so it is disabled when OFF.
+ARG CATCHEM_ENABLE_KOKKOS=ON
+
 USER root
-RUN apt-get update --yes && apt-get install --yes libkokkos-dev libyaml-cpp-dev
+RUN apt-get update --yes && \
+    if [ "${CATCHEM_ENABLE_KOKKOS}" = "ON" ]; then \
+      apt-get install --yes libkokkos-dev libyaml-cpp-dev; \
+    else \
+      apt-get install --yes libyaml-cpp-dev; \
+    fi
 
 COPY . /opt/catchem/src
 
@@ -16,8 +31,8 @@ RUN source /opt/ufschem/spack-stack/setup.sh && \
     cmake .. \
       -DCATCHEM_BUILD_TESTING=ON \
       -DCATCHEM_BUILD_NUOPC=ON \
-      -DCATCHEM_BUILD_MUSICA=ON \
-      -DENABLE_KOKKOS=ON \
+      -DCATCHEM_BUILD_MUSICA=${CATCHEM_ENABLE_KOKKOS} \
+      -DCATCHEM_ENABLE_KOKKOS=${CATCHEM_ENABLE_KOKKOS} \
       -DCMAKE_INSTALL_PREFIX=/opt/catchem/install \
       -DCMAKE_BUILD_TYPE=Debug && \
     make -j$(nproc) && \

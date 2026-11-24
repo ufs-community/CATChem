@@ -12,31 +12,18 @@ set(
 )
 
 # Define so4chem scheme sources
-set(
-  SO4CHEM_SCHEME_SOURCES
-  schemes/SO4chemScheme_GOCART_Mod.F90
-  schemes/SO4chemPhysics_Mod.F90
-)
+set(SO4CHEM_SCHEME_SOURCES schemes/SO4chemScheme_GOCART_Mod.F90)
 
 # Combine all sources
 set(SO4CHEM_ALL_SOURCES ${SO4CHEM_PROCESS_SOURCES} ${SO4CHEM_SCHEME_SOURCES})
-
-if(ENABLE_KOKKOS)
-  list(APPEND SO4CHEM_ALL_SOURCES catchem_process_so4chem.cpp)
-endif()
 
 # Create the so4chem process library
 set(_lib CATChem_process_so4chem)
 add_library(${_lib} ${SO4CHEM_ALL_SOURCES})
 
-# Link with required libraries
-target_link_libraries(${_lib} PUBLIC CATChem_core)
-
-# Conditional Kokkos linking
-if(ENABLE_KOKKOS)
-  target_link_libraries(${_lib} PUBLIC Kokkos::kokkos)
-  target_compile_definitions(${_lib} PRIVATE ENABLE_KOKKOS)
-endif()
+# Link with required libraries (CATChem_core_cpp carries the Kokkos or
+# standalone-mdspan usage requirements for the C++ sources)
+target_link_libraries(${_lib} PUBLIC CATChem_core CATChem_core_cpp)
 
 # Additional dependencies
 # Chemistry processes may need additional math libraries

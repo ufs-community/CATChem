@@ -68,6 +68,9 @@ schemes:
       correction_maring:
         default: false
         description: "correct the settling velocity following Maring et al, 2003"
+      maring_dust_only:
+        default: true
+        description: "If true, maring correction only applies to dust species"
 
     diagnostics: []
 

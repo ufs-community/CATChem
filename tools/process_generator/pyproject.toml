@@ -20,8 +20,8 @@ keywords = [
     "fortran",
     "chemistry-processes",
     "catchem",
-    "earth-system-modeling"
-]t
+    "earth-system-modeling",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",

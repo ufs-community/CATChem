@@ -1,0 +1,28 @@
+name: PR title
+
+on:
+  pull_request:
+    types: [edited]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  lint:
+    if: github.event.changes.title
+    uses: ./.github/workflows/lint.yml
+
+  release-preview:
+    if: github.event.changes.title
+    uses: ./.github/workflows/semantic-release.yml
+    with:
+      dry_run: true
+      target_branch: ${{ github.base_ref }}
+      # Must match DOCKER_ORG in main.yml; workflow env cannot be passed via `with:`.
+      docker_org: noaaepic
+    secrets: inherit

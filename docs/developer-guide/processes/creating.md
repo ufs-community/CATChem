@@ -29,7 +29,7 @@ The process interface is the main entry point for the process. It extends `Colum
 `NewProcessInterface_Mod.F90`:
 ```fortran
 module NewProcessInterface_Mod
-  use precision_mod, only: fp
+  use catchem_bridge_precision, only: fp
   use ProcessInterface_Mod, only: ColumnProcessInterface
   use StateManager_Mod, only: StateManagerType
   use VirtualColumn_Mod, only: VirtualColumnType
@@ -119,7 +119,7 @@ The scheme contains the actual scientific algorithm.
 `schemes/NewProcessScheme_Mod.F90`:
 ```fortran
 module NewProcessScheme_Mod
-  use precision_mod, only: fp
+  use catchem_bridge_precision, only: fp
   implicit none
   private
   public :: compute_scheme
@@ -146,7 +146,7 @@ You'll need a way to configure and create your process.
 `NewProcessCommon_Mod.F90`:
 ```fortran
 module NewProcessCommon_Mod
-  use precision_mod, only: fp
+  use catchem_bridge_precision, only: fp
   implicit none
   private
   public :: NewProcessConfigType
@@ -221,3 +221,21 @@ And register it in `src/core/ProcessRegistry_Mod.F90`.
 Create a new test file in the `tests/` directory to test your process. You can use the `test_ProcessFactory.f90` as a starting point to see how to create and run a process.
 
 This guide provides a basic skeleton. For more advanced features like diagnostics and handling multiple species, refer to the `seasalt` process implementation in `src/process/seasalt`.
+## Runtime process extensions
+
+Implement `ProcessInterface`, including a complete `get_contract()`. Use canonical field identities and declare 2D
+surface fields as `{Column, Singleton}`, layer fields as `{Column, Level, Singleton}`, interface fields as
+`{Column, Interface, Singleton}`, and chemistry as `{Column, Level, Species}`. Mark optional fallbacks explicitly;
+do not omit a field merely because one scheme does not use it.
+
+Register the adapter with `ProcessRegistry::register_process`. A registry entry may provide three independent
+functions: the process creator, a contract factory for tooling, and a typed `ProcessConfig` validator. The validator
+owns scheme-specific settings rules so the generic Core never gains a process allowlist or scheme branch.
+
+Registration does not activate a process. Users activate it in YAML, and only that instance's selected processes are
+initialized and compiled into its schedule. Initialization may register declared diagnostics. Use StateManager's
+canonical read/write operations rather than direct field-map or alias-list searches; the execution plan then moves
+only storage required by the active contract.
+
+`finalize()` must tolerate partial initialization and should release adapter-owned resources. Core invokes it once in
+reverse initialization order and continues cleaning up other adapters if it fails.

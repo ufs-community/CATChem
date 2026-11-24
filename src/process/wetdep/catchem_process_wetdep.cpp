@@ -1,100 +1,232 @@
 #include "catchem_process_wetdep.hpp"
 #include "catchem_diagnostic_manager.hpp"
+#include "catchem_error.hpp"
+#include "catchem_logger.hpp"
 #include "catchem_process_registry.hpp"
 #include <iostream>
 
 extern "C" {
-void run_wetdep_science_bridge(int n_cols, int n_levels, int n_species, double dt, int diagnostics, double* airden_dry,
-                               double* mairden, double* pedge, double* pfilsan, double* pfllsan, double* reevapls,
-                               double* t_air, bool* is_aerosol, double* henry_cr, double* henry_k0, double* henry_pKa,
+void run_wetdep_science_bridge(int n_cols, int n_levels, int n_species, double dt, int diagnostics,
+                               double jacob_scale_factor, double jacob_radius_threshold, int jacob_so4_gocart_resusp,
+                               double jacob_so4_washout_eff, double* airden_dry, double* mairden, double* pedge,
+                               double* pfilsan, double* pfllsan, double* reevapls, double* t_air, bool* is_aerosol,
+                               bool* is_wetdep, double* henry_cr, double* henry_k0, double* henry_pKa,
                                double* wd_retfactor, bool* wd_LiqAndGas, double* wd_convfacI2G, double* wd_rainouteff,
                                double* wd_reevap_frac, double* radius, double* mw_g, const char* species_names,
                                double* conc, double* tendency, double* diag_mass, double* diag_flux,
                                const int* diagnostic_species_id, int n_diag_species);
+
+// GOCART2G wet-removal entry (scheme 'gocart').  Kept separate from the Jacob
+// bridge so the Jacob FFI surface stays byte-identical; PRECCON/PRECLSC are
+// per-column surface scalars (rank-2 state fields) required by the kernel.
+void run_wetdep_gocart_science_bridge(int n_cols, int n_levels, int n_species, double dt, int diagnostics,
+                                      double gocart_scale_factor, double gocart_washout_tuning,
+                                      double gocart_radius_threshold, double* mairden, double* pedge, double* pfilsan,
+                                      double* pfllsan, double* t_air, const double* preccon, const double* preclsc,
+                                      bool* is_aerosol, bool* is_wetdep, double* wd_rainouteff, double* radius,
+                                      double* mw_g, const char* species_names, double* conc, double* tendency,
+                                      double* diag_mass, double* diag_flux, const int* diagnostic_species_id,
+                                      int n_diag_species);
 }
 
 namespace catchem {
 
-    WetDepProcess::WetDepProcess() : active_scheme("jacob"), diagnostics_enabled(true) {}
+    ProcessContract WetDepProcess::get_contract() const {
+        // PRECCON/PRECLSC are instantaneous surface rain amounts consumed only
+        // by the GOCART2G wet-removal kernel.  They are declared Optional so a
+        // jacob-only configuration still validates; run() rejects the absence
+        // loudly when the active scheme needs them.
+        auto contract = make_contract(
+            get_name(), {host_field_3d("T", "K"), host_field_3d("PMID", "Pa"), host_field_interface("PEDGE", "Pa"),
+                         host_field_3d("AIRDEN", "kg/m3"), host_field_3d("AIRDEN_DRY", "kg/m3"),
+                         host_field_interface("PFILSAN", "kg/m2/s"), host_field_interface("PFLLSAN", "kg/m2/s"),
+                         host_field_3d("QV", "kg/kg"), host_field_3d("REEVAPLS", "kg/kg/s"),
+                         host_field_2d("PRECCON", "m", FieldRequirement::Optional),
+                         host_field_2d("PRECLSC", "m", FieldRequirement::Optional), host_concentration()});
+        return contract;
+    }
+
+    WetDepProcess::WetDepProcess() : active_scheme_("jacob"), diagnostics_enabled_(true) {}
+
+    void WetDepProcess::prepare_inputs(std::shared_ptr<StateManager> state) {
+        state->derive_reevapls();
+        state->derive_airden_dry();
+        state->derive_airden();
+    }
 
     void WetDepProcess::init(std::shared_ptr<StateManager> state) {
-        if (state->diag_mgr) {
-            std::vector<int> dims_2d = {state->n_cols, state->n_levels};
-            for (size_t i = 0; i < state->chem.species_list.size(); ++i) {
-                auto& meta = state->chem.species_list[i];
-                if (meta.is_wetdep) {
-                    std::string mass_name = "wetdep_mass_" + meta.short_name;
-                    std::string flux_name = "wetdep_flux_" + meta.short_name;
-                    state->diag_mgr->register_field(mass_name, "Wet Mass " + meta.short_name, "kg/m2",
-                                                    DiagType::FIELD_2D, dims_2d);
-                    state->diag_mgr->register_field(flux_name, "Wet Flux " + meta.short_name, "kg/m2/s",
-                                                    DiagType::FIELD_2D, dims_2d);
+        const auto config = state->config_manager();
+        if (!config)
+            throw std::invalid_argument("WetDep requires a runtime YAML configuration");
+        const auto configured = config->data.processes.find("wetdep");
+        if (configured == config->data.processes.end() || configured->second.scheme.empty())
+            throw std::invalid_argument("WetDep requires processes.wetdep.scheme in the runtime YAML");
+        active_scheme_ = configured->second.scheme;
+        diagnostics_enabled_ = configured->second.diagnostics;
+        if (active_scheme_ != "jacob" && active_scheme_ != "gocart")
+            throw std::invalid_argument("WetDep runtime YAML selected unsupported scheme: " + active_scheme_);
 
-                    // Track diagnostic species index (1-based)
-                    diagnostic_species_id.push_back(i + 1);
-                }
+        // Read Jacob scheme tuning options from the runtime YAML.  Defaults
+        // mirror WetDepCommon_Mod.F90; the registered validator rejects any
+        // option name the scheme does not declare.
+        const auto& settings = configured->second;
+        jacob_scale_factor_ = settings.get_double("jacob/scale_factor", jacob_scale_factor_);
+        jacob_radius_threshold_ = settings.get_double("jacob/radius_threshold", jacob_radius_threshold_);
+        jacob_so4_gocart_resusp_ = settings.get_bool("jacob/so4_gocart_resusp", jacob_so4_gocart_resusp_);
+        jacob_so4_washout_eff_ = settings.get_double("jacob/so4_washout_eff", jacob_so4_washout_eff_);
+
+        // Read GOCART2G scheme tuning options (processes/wetdep/gocart/*).
+        // Defaults follow GEOS-ESM/GOCART GOCART2G_Process (scale 1.0,
+        // wtune 1.0, radius threshold 0.05 um).  Values are validated here so
+        // a mis-specified tuning fails at init, not mid-column in the kernel.
+        gocart_scale_factor_ = settings.get_double("gocart/scale_factor", gocart_scale_factor_);
+        gocart_washout_tuning_ = settings.get_double("gocart/washout_tuning", gocart_washout_tuning_);
+        gocart_radius_threshold_ = settings.get_double("gocart/radius_threshold", gocart_radius_threshold_);
+        if (active_scheme_ == "gocart") {
+            if (!(gocart_scale_factor_ > 0.0))
+                throw std::invalid_argument("WetDep gocart/scale_factor must be > 0, got " +
+                                            std::to_string(gocart_scale_factor_));
+            if (!(gocart_washout_tuning_ >= 0.0))
+                throw std::invalid_argument("WetDep gocart/washout_tuning must be >= 0, got " +
+                                            std::to_string(gocart_washout_tuning_));
+            if (!(gocart_radius_threshold_ > 0.0))
+                throw std::invalid_argument("WetDep gocart/radius_threshold must be > 0, got " +
+                                            std::to_string(gocart_radius_threshold_));
+        }
+
+        // Surface the effective scheme options so the run log confirms what
+        // was parsed from the runtime YAML and will be passed to the bridge.
+        if (active_scheme_ == "gocart") {
+            Logger::debug(*state, "WetDep scheme options",
+                          {{"scheme", active_scheme_},
+                           {"gocart/scale_factor", std::to_string(gocart_scale_factor_)},
+                           {"gocart/washout_tuning", std::to_string(gocart_washout_tuning_)},
+                           {"gocart/radius_threshold", std::to_string(gocart_radius_threshold_)}});
+        } else {
+            Logger::debug(*state, "WetDep scheme options",
+                          {{"scheme", active_scheme_},
+                           {"jacob/scale_factor", std::to_string(jacob_scale_factor_)},
+                           {"jacob/radius_threshold", std::to_string(jacob_radius_threshold_)},
+                           {"jacob/so4_gocart_resusp", jacob_so4_gocart_resusp_ ? "true" : "false"},
+                           {"jacob/so4_washout_eff", std::to_string(jacob_so4_washout_eff_)}});
+        }
+
+        // Diagnostic species targeting: honor processes.wetdep.diag_species
+        // when provided, otherwise fall back to the is_wetdep metadata flag.
+        std::vector<size_t> selected;
+        if (!settings.diag_species.empty()) {
+            if (!state->chemistry().mechanism)
+                throw std::invalid_argument("WetDep diag_species requires a loaded species mechanism");
+            for (const auto& name : settings.diag_species) {
+                if (!state->chemistry().mechanism->contains(name))
+                    throw std::invalid_argument("WetDep diag_species names an unknown species: " + name);
+                selected.push_back(state->chemistry().mechanism->index_of(name));
+            }
+        } else {
+            for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
+                if (state->chemistry().species_list[i].is_wetdep)
+                    selected.push_back(i);
+            }
+        }
+        for (const auto i : selected) {
+            diagnostic_species_id_.push_back(static_cast<int>(i) + 1); // 1-based for Fortran bridge
+        }
+
+        if (!diagnostics_enabled_)
+            return;
+
+        if (state->diagnostic_manager()) {
+            std::vector<int> dims_2d = {state->column_count(), state->level_count()};
+            // Explicit axes: one field per species, vertical axis is Level
+            // (feature 013).  The writer never shape-guesses a single-level column.
+            const std::vector<SemanticAxis> axes_level = {SemanticAxis::Column, SemanticAxis::Level};
+            for (const auto i : selected) {
+                auto& meta = state->chemistry().species_list[i];
+                std::string mass_name = "wetdep_mass_" + meta.short_name;
+                std::string flux_name = "wetdep_flux_" + meta.short_name;
+                state->diagnostic_manager()->register_field_contract(mass_name, "Wet Mass " + meta.short_name, "kg/m2",
+                                                                     DiagType::FIELD_2D, dims_2d,
+                                                                     DiagnosticPolicy::Instantaneous, 0.0, axes_level);
+                state->diagnostic_manager()->register_field_contract(flux_name, "Wet Flux " + meta.short_name,
+                                                                     "kg/m2/s", DiagType::FIELD_2D, dims_2d,
+                                                                     DiagnosticPolicy::Instantaneous, 0.0, axes_level);
             }
         }
     }
 
     void WetDepProcess::run(std::shared_ptr<StateManager> state) {
-        state->sync_to_host();
 
         // 1. Fetch raw pointers to Met Views
-        double* airden_dry_ptr = state->met.AIRDEN_DRY ? state->met.AIRDEN_DRY->host_view.data() : nullptr;
-        double* mairden_ptr = state->met.AIRDEN ? state->met.AIRDEN->host_view.data() : nullptr;
-        double* pedge_ptr = state->met.PEDGE ? state->met.PEDGE->host_view.data() : nullptr;
-        double* t_ptr = state->met.T ? state->met.T->host_view.data() : nullptr;
+        double* airden_dry_ptr = state->write_field<3>("AIRDEN_DRY");
+        double* airden_ptr = state->write_field<3>("AIRDEN");
 
-        auto pfilsan_it = state->met.fields_3d.find("PFILSAN");
-        double* pfilsan_ptr =
-            (pfilsan_it != state->met.fields_3d.end()) ? pfilsan_it->second->host_view.data() : nullptr;
+        double* pedge_ptr = state->write_field<3>("PEDGE");
+        double* t_ptr = state->write_field<3>("T");
 
-        auto pfllsan_it = state->met.fields_3d.find("PFLLSAN");
-        double* pfllsan_ptr =
-            (pfllsan_it != state->met.fields_3d.end()) ? pfllsan_it->second->host_view.data() : nullptr;
+        double* pfilsan_ptr = state->write_field<3>("PFILSAN");
+        double* pfllsan_ptr = state->write_field<3>("PFLLSAN");
+        double* reevapls_ptr = state->write_field<3>("REEVAPLS");
 
-        auto reevapls_it = state->met.fields_3d.find("REEVAPLS");
-        double* reevapls_ptr =
-            (reevapls_it != state->met.fields_3d.end()) ? reevapls_it->second->host_view.data() : nullptr;
+        require_field_pointer("WetDep", "AIRDEN", airden_ptr);
+        require_field_pointer("WetDep", "PEDGE", pedge_ptr);
+        require_field_pointer("WetDep", "T", t_ptr);
+        require_field_pointer("WetDep", "PFILSAN", pfilsan_ptr);
+        require_field_pointer("WetDep", "PFLLSAN", pfllsan_ptr);
+        if (active_scheme_ == "jacob") {
+            // The Jacob kernel is the only consumer of the dry-density and
+            // re-evaporation fields; the GOCART kernel never reads them.
+            require_field_pointer("WetDep", "AIRDEN_DRY", airden_dry_ptr);
+            require_field_pointer("WetDep", "REEVAPLS", reevapls_ptr);
+        }
 
         // 2. Extract chemical arrays & C++ allocated diagnostics
-        double* conc_ptr = state->chem.conc ? state->chem.conc->host_view.data() : nullptr;
+        double* conc_ptr = state->chemistry().conc ? state->chemistry().conc->host_write() : nullptr;
+        require_field_pointer("WetDep", "CHEM_CONC", conc_ptr);
 
         // Allocate local tendencies buffer
-        std::vector<double> mock_tendency(state->n_cols * state->n_levels * state->n_species, 0.0);
+        std::vector<double> mock_tendency(state->column_count() * state->level_count() * state->species_count(), 0.0);
 
         // Allocate 3D diagnostic buffers for Fortran bridge
-        std::vector<double> diag_mass_bin(state->n_cols * state->n_levels * state->n_species, 0.0);
-        std::vector<double> diag_flux_bin(state->n_cols * state->n_levels * state->n_species, 0.0);
+        std::vector<double> diag_mass_bin(state->column_count() * state->level_count() * state->species_count(), 0.0);
+        std::vector<double> diag_flux_bin(state->column_count() * state->level_count() * state->species_count(), 0.0);
 
         // 3. Extract species configuration properties from ChemState
-        std::vector<char> is_aerosol(state->n_species, 0);
-        std::vector<double> henry_cr(state->n_species, 0.0);
-        std::vector<double> henry_k0(state->n_species, 0.0);
-        std::vector<double> henry_pKa(state->n_species, 0.0);
-        std::vector<double> wd_retfactor(state->n_species, 0.0);
-        std::vector<char> wd_LiqAndGas(state->n_species, 0);
-        std::vector<double> wd_convfacI2G(state->n_species, 0.0);
-        std::vector<double> wd_reevap_frac(state->n_species, 0.0);
-        std::vector<double> wd_rainouteff_storage(state->n_species * 3, 0.0);
-        std::vector<double> radius(state->n_species, 1e-6);
-        std::vector<double> mw_g(state->n_species, 29.0);
+        std::vector<char> is_aerosol(state->species_count(), 0);
+        std::vector<char> is_wetdep(state->species_count(), 0);
+        std::vector<double> henry_cr(state->species_count(), 0.0);
+        std::vector<double> henry_k0(state->species_count(), 0.0);
+        std::vector<double> henry_pKa(state->species_count(), 0.0);
+        std::vector<double> wd_retfactor(state->species_count(), 0.0);
+        std::vector<char> wd_LiqAndGas(state->species_count(), 0);
+        std::vector<double> wd_convfacI2G(state->species_count(), 0.0);
+        std::vector<double> wd_reevap_frac(state->species_count(), 0.0);
+        std::vector<double> wd_rainouteff_storage(state->species_count() * 3, 0.0);
+        std::vector<double> radius(state->species_count(), 0.0);
+        std::vector<double> mw_g(state->species_count(), 0.0);
 
         // Dynamic 2D view for rainouteff with species as dimension 0, and 3-element efficiency as dimension 1
         Kokkos::mdspan<double, Kokkos::extents<int, Kokkos::dynamic_extent, 3>, Kokkos::layout_left> wd_rainouteff(
-            wd_rainouteff_storage.data(), state->n_species);
+            wd_rainouteff_storage.data(), state->species_count());
 
-        for (size_t i = 0; i < state->chem.species_list.size(); ++i) {
-            auto& meta = state->chem.species_list[i];
+        for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
+            auto& meta = state->chemistry().species_list[i];
             is_aerosol[i] = meta.is_aerosol ? 1 : 0;
+            is_wetdep[i] = meta.is_wetdep ? 1 : 0;
             henry_k0[i] = meta.henry_k0;
             henry_cr[i] = meta.henry_cr;
             henry_pKa[i] = meta.henry_pKa;
             wd_retfactor[i] = meta.wd_retfactor;
             wd_LiqAndGas[i] = meta.wd_LiqAndGas ? 1 : 0;
             wd_convfacI2G[i] = meta.wd_convfacI2G;
-            wd_reevap_frac[i] = 1.0; // dummy default
+            wd_reevap_frac[i] = meta.wd_reevap_frac;
+            // Only wet-deposition participants need particle properties: the
+            // scheme leaves non-participants untouched (legacy WetdepIndex
+            // filter parity), so their radius is never consulted.
+            if (meta.is_wetdep && meta.is_aerosol && (!(meta.radius > 0.0) || !(meta.mw_g > 0.0)))
+                throw std::runtime_error("WetDep aerosol '" + meta.short_name +
+                                         "' requires explicit radius and molecular weight");
+            if (meta.is_wetdep && !meta.is_aerosol && !(meta.mw_g > 0.0))
+                throw std::runtime_error("WetDep gas '" + meta.short_name + "' requires an explicit molecular weight");
             radius[i] = meta.radius;
             mw_g[i] = meta.mw_g;
 
@@ -108,38 +240,67 @@ namespace catchem {
             }
         }
 
-        // 4. Invoke flat science bridge
-        run_wetdep_science_bridge(
-            state->n_cols, state->n_levels, state->n_species, state->time.timestep, diagnostics_enabled ? 1 : 0,
-            airden_dry_ptr, mairden_ptr, pedge_ptr, pfilsan_ptr, pfllsan_ptr, reevapls_ptr, t_ptr,
-            (bool*)is_aerosol.data(), henry_cr.data(), henry_k0.data(), henry_pKa.data(), wd_retfactor.data(),
-            (bool*)wd_LiqAndGas.data(), wd_convfacI2G.data(), wd_rainouteff.data_handle(), wd_reevap_frac.data(),
-            radius.data(), mw_g.data(), state->chem.species_names_c_arr.data(), conc_ptr, mock_tendency.data(),
-            diag_mass_bin.data(), diag_flux_bin.data(), diagnostic_species_id.data(), diagnostic_species_id.size());
+        // 4. Invoke flat science bridge.  The scheme selects the entry point:
+        //    jacob  -> run_wetdep_science_bridge (byte-identical legacy surface)
+        //    gocart -> run_wetdep_gocart_science_bridge (adds PRECCON/PRECLSC
+        //             surface fields; kernel divides them by tstep, so the
+        //             timestep must be positive).
+        if (active_scheme_ == "gocart") {
+            const double* preccon_ptr = state->read_field<2>("PRECCON");
+            const double* preclsc_ptr = state->read_field<2>("PRECLSC");
+            require_field_pointer("WetDep", "PRECCON", preccon_ptr);
+            require_field_pointer("WetDep", "PRECLSC", preclsc_ptr);
+            if (!(state->clock().timestep > 0.0))
+                throw std::runtime_error("WetDep gocart scheme requires a positive timestep, got " +
+                                         std::to_string(state->clock().timestep));
+            run_wetdep_gocart_science_bridge(
+                state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
+                diagnostics_enabled_ ? 1 : 0, gocart_scale_factor_, gocart_washout_tuning_, gocart_radius_threshold_,
+                airden_ptr, pedge_ptr, pfilsan_ptr, pfllsan_ptr, t_ptr, const_cast<double*>(preccon_ptr),
+                const_cast<double*>(preclsc_ptr), (bool*)is_aerosol.data(), (bool*)is_wetdep.data(),
+                wd_rainouteff.data_handle(), radius.data(), mw_g.data(), state->chemistry().species_names_c_arr.data(),
+                conc_ptr, mock_tendency.data(), diag_mass_bin.data(), diag_flux_bin.data(),
+                diagnostic_species_id_.data(), diagnostic_species_id_.size());
+        } else {
+            run_wetdep_science_bridge(
+                state->column_count(), state->level_count(), state->species_count(), state->clock().timestep,
+                diagnostics_enabled_ ? 1 : 0, jacob_scale_factor_, jacob_radius_threshold_,
+                jacob_so4_gocart_resusp_ ? 1 : 0, jacob_so4_washout_eff_, airden_dry_ptr, airden_ptr, pedge_ptr,
+                pfilsan_ptr, pfllsan_ptr, reevapls_ptr, t_ptr, (bool*)is_aerosol.data(), (bool*)is_wetdep.data(),
+                henry_cr.data(), henry_k0.data(), henry_pKa.data(), wd_retfactor.data(), (bool*)wd_LiqAndGas.data(),
+                wd_convfacI2G.data(), wd_rainouteff.data_handle(), wd_reevap_frac.data(), radius.data(), mw_g.data(),
+                state->chemistry().species_names_c_arr.data(), conc_ptr, mock_tendency.data(), diag_mass_bin.data(),
+                diag_flux_bin.data(), diagnostic_species_id_.data(), diagnostic_species_id_.size());
+        }
 
-        // 5. Map 3D bin diagnostics back to dynamically registered individual C++ diagnostics
-        if (state->diag_mgr && diagnostics_enabled) {
-            for (size_t i = 0; i < state->chem.species_list.size(); ++i) {
-                auto& meta = state->chem.species_list[i];
-                if (meta.is_wetdep) {
-                    std::string mass_name = "wetdep_mass_" + meta.short_name;
-                    std::string flux_name = "wetdep_flux_" + meta.short_name;
-                    double* mass_ptr = (double*)state->diag_mgr->get_host_pointer(mass_name);
-                    double* num_ptr = (double*)state->diag_mgr->get_host_pointer(flux_name);
-                    for (int col = 0; col < state->n_cols; ++col) {
-                        for (int lvl = 0; lvl < state->n_levels; ++lvl) {
-                            int idx = col + lvl * state->n_cols + i * state->n_cols * state->n_levels;
-                            if (mass_ptr)
-                                mass_ptr[col + lvl * state->n_cols] = diag_mass_bin[idx];
-                            if (num_ptr)
-                                num_ptr[col + lvl * state->n_cols] = diag_flux_bin[idx];
-                        }
+        // 5. Map 3D diagnostics back to the individually registered fields.
+        // The JACOB scheme stores each selected species at its position
+        // within diagnostic_species_id (1-based), so the read-back must walk
+        // positions rather than global species indices; the two only coincide
+        // when the selection is the identity.
+        if (state->diagnostic_manager() && diagnostics_enabled_) {
+            for (size_t position = 0; position < diagnostic_species_id_.size(); ++position) {
+                const size_t species = static_cast<size_t>(diagnostic_species_id_[position]) - 1; // 0-based
+                auto& meta = state->chemistry().species_list[species];
+                std::string mass_name = "wetdep_mass_" + meta.short_name;
+                std::string flux_name = "wetdep_flux_" + meta.short_name;
+                double* mass_ptr = (double*)state->diagnostic_manager()->get_host_pointer(mass_name);
+                double* num_ptr = (double*)state->diagnostic_manager()->get_host_pointer(flux_name);
+                for (int col = 0; col < state->column_count(); ++col) {
+                    for (int lvl = 0; lvl < state->level_count(); ++lvl) {
+                        const int idx =
+                            col + lvl * state->column_count() + position * state->column_count() * state->level_count();
+                        if (mass_ptr)
+                            mass_ptr[col + lvl * state->column_count()] = diag_mass_bin[idx];
+                        if (num_ptr)
+                            num_ptr[col + lvl * state->column_count()] = diag_flux_bin[idx];
                     }
                 }
             }
         }
 
-        state->sync_to_device();
+        if (state->chemistry().conc)
+            state->chemistry().conc->mark_host_modified();
     }
 
 } // namespace catchem
@@ -147,6 +308,10 @@ namespace catchem {
 extern "C" {
 void catchem_register_wetdep_cpp() {
     catchem::ProcessRegistry::get_instance().register_process(
-        "wetdep", []() { return std::make_shared<catchem::WetDepProcess>(); });
+        "wetdep", []() { return std::make_shared<catchem::WetDepProcess>(); }, {},
+        catchem::make_settings_validator("wetdep",
+                                         {"jacob/scale_factor", "jacob/radius_threshold", "jacob/so4_gocart_resusp",
+                                          "jacob/so4_washout_eff", "gocart/scale_factor", "gocart/washout_tuning",
+                                          "gocart/radius_threshold"}));
 }
 }
