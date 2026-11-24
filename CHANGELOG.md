@@ -2,6 +2,21 @@
 
 <!-- version list -->
 
+## v2.1.2-rc.1 (2026-11-24)
+
+### Bug Fixes
+
+- **gaschem**: Batch MICM state over local columns and hoist species/rate lookups
+  ([#220](https://github.com/ufs-community/CATChem/pull/220),
+  [`eadb8e8`](https://github.com/ufs-community/CATChem/commit/eadb8e80de3d3f7a906876463c16b154dd2e817e))
+
+### Chores
+
+- **modulefiles**: 🤖 sync from ufs-weather-model
+  ([#219](https://github.com/ufs-community/CATChem/pull/219),
+  [`bd3cb2e`](https://github.com/ufs-community/CATChem/commit/bd3cb2e50348861bd54ed1af4f06a7afe430f16d))
+
+
 ## v2.1.1 (2026-11-05)
 
 ### Bug Fixes
