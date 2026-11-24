@@ -261,8 +261,22 @@ namespace catchem {
 
         // 4. Retrieve species properties from ChemState
         std::vector<double> mw_g(state->species_count(), 0.0);
+
+	// Define the core chemical species required by the GOCART scheme contract
+        const std::vector<std::string> active_species = {"h2o2", "oh", "no3", "dms", "so2", "so4", "msa", "dms_in"};
+
         for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
-            if (!(state->chemistry().species_list[i].mw_g > 0.0))
+	    // Check if this specific species name matches one of the core GOCART species
+            bool is_required = (std::find(active_species.begin(), active_species.end(), state->chemistry().species_list[i].short_name) != active_species.end());
+
+            // Also check if it's explicitly tracked in the diagnostics list
+            if (!is_required && diagnostics_enabled_) {
+                int global_id = static_cast<int>(i) + 1;
+                is_required = (std::find(diagnostic_species_id_.begin(), diagnostic_species_id_.end(), global_id) != diagnostic_species_id_.end());
+            }
+
+            // Enforce molecular weight validation ONLY for the required or active diagnostic species
+            if (is_required && !(state->chemistry().species_list[i].mw_g > 0.0))
                 throw std::runtime_error("SO4Chem species '" + state->chemistry().species_list[i].short_name +
                                          "' requires an explicit molecular weight");
             mw_g[i] = state->chemistry().species_list[i].mw_g;

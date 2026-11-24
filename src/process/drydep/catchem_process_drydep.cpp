@@ -290,11 +290,18 @@ namespace catchem {
         std::vector<char> is_dust(state->species_count(), 0);
         std::vector<double> lower_radius(state->species_count(), 0.0);
         std::vector<double> upper_radius(state->species_count(), 0.0);
-        std::vector<char> is_gas(state->species_count(), 1);
+        std::vector<char> is_gas(state->species_count(), 0); // Default to false/0 for inactive species
 
         for (size_t i = 0; i < state->chemistry().species_list.size(); ++i) {
             auto& meta = state->chemistry().species_list[i];
-            if (!(meta.mw_g > 0.0))
+            
+	    // Skip validation and properties parsing if the species doesn't deposit
+            if (!meta.is_drydep) {
+                Logger::debug(*state, "Skipping dry deposition properties parsing and validation for non-depositing species: " + meta.short_name);
+                continue;
+            }
+	    
+	    if (!(meta.mw_g > 0.0))
                 throw std::runtime_error("DryDep species '" + meta.short_name +
                                          "' requires an explicit molecular weight");
             mw_g[i] = meta.mw_g;
