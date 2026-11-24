@@ -40,23 +40,27 @@ bool file_exists(const std::string& name) {
 // directory relying on config.yaml auto-detection). The species fixture must
 // list every MICM variable of that mechanism.
 static void run_coupled_case(const std::string& label, const std::string& config_key, const std::string& config_value,
-                             const std::string& species_fixture = "chapman.yml", int n_species = 4) {
+                             const std::string& ozone_rate_label, const std::string& species_fixture = "chapman.yml",
+                             int n_species = 4) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "CASE: gaschem mechanism via " << config_key << " (" << label << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
 
     // 2. Set up core and states
-    int n_cols = 1;
-    int n_levels = 3;
+    constexpr int daylight = 0;
+    constexpr int darkness = 1;
+    constexpr int high_ozone = 2;
+    constexpr int n_cols = 3;
+    constexpr int n_levels = 3;
 
     auto core = std::make_shared<catchem::Core>(n_cols, n_levels, n_species);
     auto state = core->get_state_manager();
 
-    // Time setup (Noon, summer)
+    // Local midday for the daylight columns and local midnight for the dark column.
     state->clock().year = 2026;
     state->clock().month = 7;
     state->clock().day = 13;
-    state->clock().hour = 12;
+    state->clock().hour = 19;
     state->clock().minute = 0;
     state->clock().second = 0;
     state->clock().calculate_derived_fields();
@@ -64,18 +68,21 @@ static void run_coupled_case(const std::string& label, const std::string& config
     // Meteorological arrays
     std::vector<double> lat(n_cols, 40.0);
     std::vector<double> lon(n_cols, -105.0);
+    lon[darkness] = 75.0;
     std::vector<double> temperature(n_cols * n_levels, 280.0);
     std::vector<double> airden(n_cols * n_levels, 1.2);
+    std::vector<double> pmid(n_cols * n_levels);
     std::vector<double> pedge(n_cols * (n_levels + 1), 101300.0);
-    std::vector<double> bxheight(n_cols * n_levels, 100.0);
+    std::vector<double> bxheight(n_cols * n_levels, 1000.0);
 
-    for (int i = 0; i < n_levels; ++i) {
-        temperature[i] = 280.0 - 0.5 * i;
-        airden[i] = 1.2 * std::exp(-i / 10.0);
-        bxheight[i] = 1000.0;
-        pedge[i] = 101300.0 * std::exp(-i / 10.0);
+    for (int level = 0; level <= n_levels; ++level) {
+        for (int column = 0; column < n_cols; ++column) {
+            pedge[level * n_cols + column] = 101300.0 * std::exp(-level / 10.0);
+        }
     }
-    pedge[n_levels] = 101300.0 * std::exp(-n_levels / 10.0);
+    for (int cell = 0; cell < n_cols * n_levels; ++cell) {
+        pmid[cell] = 0.5 * (pedge[cell] + pedge[cell + n_cols]);
+    }
 
     state->bind_met_field_2d("LAT", lat.data());
     state->bind_met_field_2d("LON", lon.data());
@@ -83,7 +90,7 @@ static void run_coupled_case(const std::string& label, const std::string& config
     state->bind_met_field_3d("AIRDEN", airden.data());
     state->bind_met_field_3d("AIRDEN_DRY", airden.data());
     state->bind_met_field_3d("PEDGE", pedge.data());
-    state->bind_met_field_3d("PMID", pedge.data()); // PMID maps to PMID in tests
+    state->bind_met_field_3d("PMID", pmid.data());
     state->bind_met_field_3d("BXHEIGHT", bxheight.data());
 
     // Load a species list that covers the mechanism under test and carries the
@@ -91,11 +98,21 @@ static void run_coupled_case(const std::string& label, const std::string& config
     std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/" + species_fixture;
     assert(file_exists(species_config) && "ERROR: Could not find the chapman mechanism fixture!");
     state->load_species_config(species_config);
+    const auto ozone_index = state->chemistry().mechanism->index_for_role("photolysis.ozone");
     std::vector<double> conc_data(n_cols * n_levels * n_species, 1.0); // 1.0 ppmv initially
+    // Start without atomic oxygen so thermal reactions do not exhaust ozone
+    // before the effect of the photolysis channel can be measured.
+    const auto& species_indices = state->chemistry().species_name_to_index;
+    for (const auto* name : {"O", "O1D"}) {
+        std::fill_n(conc_data.begin() + species_indices.at(name) * n_cols * n_levels, n_cols * n_levels, 0.0);
+    }
+    for (int level = 0; level < n_levels; ++level) {
+        conc_data[(ozone_index * n_levels + level) * n_cols + high_ozone] = 100.0;
+    }
     // Molecular nitrogen, where the mechanism solves for it, starts at its
     // atmospheric mixing ratio rather than 1 ppmv.
-    const auto n2 = state->chemistry().species_name_to_index.find("N2");
-    if (n2 != state->chemistry().species_name_to_index.end()) {
+    const auto n2 = species_indices.find("N2");
+    if (n2 != species_indices.end()) {
         std::fill_n(conc_data.begin() + n2->second * n_cols * n_levels, n_cols * n_levels, 7.8084e5);
     }
     state->bind_unified_chemistry(conc_data.data());
@@ -104,6 +121,24 @@ static void run_coupled_case(const std::string& label, const std::string& config
     std::string photolysis_config =
         std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/tuvx/from_host/config.json";
     assert(file_exists(photolysis_config) && "ERROR: Could not find photolysis config explicitly!");
+    // Couple the synthetic TUV-x reaction to the mechanism's ozone channel and
+    // reuse its cross section as an absorber to exercise the host ozone profile.
+    auto tuvx_config = YAML::LoadFile(photolysis_config);
+    auto reaction = tuvx_config["photolysis"]["reactions"][0];
+    assert(reaction["name"].as<std::string>() == "jfoo");
+    reaction["name"] = ozone_rate_label;
+    auto absorber = YAML::Clone(reaction["cross section"]);
+    absorber["name"] = "O3";
+    tuvx_config["radiative transfer"]["cross sections"].push_back(absorber);
+    auto radiators = tuvx_config["radiative transfer"]["radiators"];
+    auto ozone_radiator = YAML::Clone(radiators[1]);
+    ozone_radiator["name"] = "O3";
+    ozone_radiator["cross section"] = "O3";
+    ozone_radiator["vertical profile"] = "O3";
+    // Replace the fixture's synthetic O2 absorber so it cannot mask the ozone signal.
+    radiators[1] = ozone_radiator;
+    const auto coupled_tuvx_config = std::filesystem::absolute("test_coupled_from_host.yml");
+    std::ofstream(coupled_tuvx_config) << tuvx_config;
 
     // The gaschem mechanism under test is supplied by the caller: either a v0
     // CAMP directory (config_dir) or a v1 single-file mechanism (config_file).
@@ -112,7 +147,7 @@ static void run_coupled_case(const std::string& label, const std::string& config
     main_conf_writer << "process:\n";
     main_conf_writer << "  photolysis:\n";
     main_conf_writer << "    activate: true\n";
-    main_conf_writer << "    config_file: \"" << photolysis_config << "\"\n";
+    main_conf_writer << "    config_file: " << coupled_tuvx_config << "\n";
     main_conf_writer << "  gaschem:\n";
     main_conf_writer << "    activate: true\n";
     main_conf_writer << "    " << config_key << ": \"" << config_value << "\"\n";
@@ -138,15 +173,21 @@ static void run_coupled_case(const std::string& label, const std::string& config
 
     // 6. Verify photolysis rate diagnostics calculation
     auto diag_mgr = core->get_diagnostic_manager();
-    assert(diag_mgr->has_field("photolysis_rate_jfoo") && "TUV-x jfoo diagnostic must exist!");
-
-    double* jfoo_rates = static_cast<double*>(diag_mgr->get_host_pointer("photolysis_rate_jfoo"));
-    assert(jfoo_rates != nullptr);
-    assert(jfoo_rates[0] > 0.0 && "Photolysis rates must be non-zero at noon!");
+    const auto diagnostic = "photolysis_rate_" + ozone_rate_label;
+    assert(diag_mgr->has_field(diagnostic));
+    const auto* rates = static_cast<const double*>(diag_mgr->get_host_pointer(diagnostic));
+    assert(rates != nullptr);
+    assert(rates[daylight] > 0.0 && rates[darkness] == 0.0);
+    assert(rates[high_ozone] < 0.99 * rates[daylight] && "Higher ozone must attenuate surface photolysis");
+    state->sync_to_host();
+    const auto concentrations = state->chemistry().conc->host_view;
+    assert(std::abs(concentrations(daylight, 0, ozone_index) - concentrations(darkness, 0, ozone_index)) > 1.0e-6 &&
+           "MICM must respond to the TUV-x rate when the mechanism requests its label");
 
     std::cout << "SUCCESS: Dynamic J-rates calculated and coupled successfully!" << std::endl;
 
     std::remove(temp_main_coupled_config.c_str());
+    std::filesystem::remove(coupled_tuvx_config);
     std::cout << "CASE PASSED: " << label << std::endl;
 }
 
@@ -1067,19 +1108,19 @@ int main(int argc, char* argv[]) {
         std::string v0_dir = std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v0/chapman/";
         assert((file_exists(v0_dir + "config.json") || file_exists(v0_dir + "config.yaml")) &&
                "ERROR: Could not find gaschem v0 config dir explicitly!");
-        run_coupled_case("v0 CAMP directory", "config_dir", v0_dir);
+        run_coupled_case("v0 CAMP directory", "config_dir", v0_dir, "jO3->O");
 
         // Case B: MUSICA v1 single-file mechanism passed via the new config_file key. The v1
         // mechanism solves for N2 as well, so cases B and C use a species list that includes it.
         std::string v1_file =
             std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/config.yaml";
         assert(file_exists(v1_file) && "ERROR: Could not find gaschem v1 config file explicitly!");
-        run_coupled_case("v1 single file (config_file)", "config_file", v1_file, "chapman_v1.yml", 5);
+        run_coupled_case("v1 single file (config_file)", "config_file", v1_file, "jo3_a", "chapman_v1.yml", 5);
 
         // Case C: v1 mechanism directory exercising config.yaml auto-detection.
         std::string v1_dir = std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/";
         assert(file_exists(v1_dir + "config.yaml") && "ERROR: Could not find gaschem v1 config dir explicitly!");
-        run_coupled_case("v1 directory (config.yaml auto-detect)", "config_dir", v1_dir, "chapman_v1.yml", 5);
+        run_coupled_case("v1 directory (config.yaml auto-detect)", "config_dir", v1_dir, "jo3_a", "chapman_v1.yml", 5);
 
         // Case D: Multi-column batching suite across batch sizes (1, 2, 4, 6) and invalid batch rejection.
         run_multi_column_batch_suite(v0_dir);

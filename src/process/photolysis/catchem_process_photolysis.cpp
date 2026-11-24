@@ -254,6 +254,19 @@ namespace catchem {
         std::vector<double> o2_profile(state->level_count(), 0.0);
         std::vector<double> o3_profile(state->level_count(), 0.0);
         std::vector<double> temp_profile(state->level_count(), 0.0);
+        std::vector<double> layer_density(state->level_count());
+
+        const auto update_density_profile = [&](musica::Profile* profile, std::vector<double>& midpoint_density) {
+            if (!profile)
+                return;
+            // TUV-x uses the integrated column in each layer for optical depth.
+            for (std::size_t level = 0; level < midpoint_density.size(); ++level) {
+                const double thickness_cm = (height_edges[level + 1] - height_edges[level]) * 1.0e5;
+                layer_density[level] = midpoint_density[level] * thickness_cm;
+            }
+            musica::SetProfileMidpointValues(profile, midpoint_density.data(), midpoint_density.size(), &err);
+            musica::SetProfileLayerDensities(profile, layer_density.data(), layer_density.size(), &err);
+        };
 
         // Derived fields remain allocated between imports, so require the
         // current generation rather than using pointer existence as the
@@ -322,7 +335,9 @@ namespace catchem {
                 temp_profile[i_lvl] = state->meteorology().T->host_view(i_col, i_lvl, 0);
 
                 if (i_o3 >= 0 && state->chemistry().conc) {
-                    o3_profile[i_lvl] = state->chemistry().conc->host_view(i_col, i_lvl, i_o3);
+                    // CATChem stores dry-air mixing ratios in ppmv.
+                    const double ozone_ppmv = state->chemistry().conc->host_view(i_col, i_lvl, i_o3);
+                    o3_profile[i_lvl] = ozone_ppmv * 1.0e-6 * air_profile[i_lvl];
                 } else {
                     o3_profile[i_lvl] = air_profile[i_lvl] * 3e-7;
                 }
@@ -330,21 +345,9 @@ namespace catchem {
 
             if (dbg_column)
                 Logger::debug(*state, "Updating profiles in TUVX for column", {{"col", col_str}});
-            if (profile_air) {
-                if (dbg_column)
-                    Logger::debug(*state, "SetProfileMidpointValues for air in column", {{"col", col_str}});
-                musica::SetProfileMidpointValues(profile_air, air_profile.data(), state->level_count(), &err);
-            }
-            if (profile_o2) {
-                if (dbg_column)
-                    Logger::debug(*state, "SetProfileMidpointValues for O2 in column", {{"col", col_str}});
-                musica::SetProfileMidpointValues(profile_o2, o2_profile.data(), state->level_count(), &err);
-            }
-            if (profile_o3) {
-                if (dbg_column)
-                    Logger::debug(*state, "SetProfileMidpointValues for O3 in column", {{"col", col_str}});
-                musica::SetProfileMidpointValues(profile_o3, o3_profile.data(), state->level_count(), &err);
-            }
+            update_density_profile(profile_air, air_profile);
+            update_density_profile(profile_o2, o2_profile);
+            update_density_profile(profile_o3, o3_profile);
             if (profile_temp) {
                 if (dbg_column)
                     Logger::debug(*state, "SetProfileMidpointValues for temperature in column", {{"col", col_str}});
