@@ -1,0 +1,23 @@
+# The species of chapman.yml, in the same order, but named differently from
+# the MICM chapman mechanism (which uses O2, O, O1D, O3): two names are in
+# mixed case, and atomic oxygen is reachable only through an alias. The
+# gaschem process must resolve all four through the mechanism definition and
+# give the same results as with chapman.yml.
+- name: O2
+  __description: Molecular oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.03200
+- name: o3p
+  aliases: [O]
+  __description: Atomic oxygen, listed under a host name with the mechanism name as an alias
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: O1d
+  __description: Excited atomic oxygen
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.01600
+- name: o3
+  __description: Ozone
+  __is_gas: true
+  roles: [photolysis.ozone]
+  molecular weight [kg mol-1]: 0.04800
