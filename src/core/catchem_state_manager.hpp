@@ -215,7 +215,7 @@ namespace catchem {
         static std::string units_for(const std::string& name) {
             const auto key = canonical_field_name(name);
             // Temperature
-            if (key == "T" || key == "TS" || key == "T2M" || key == "SOILT")
+            if (key == "T" || key == "TEDGE" || key == "TS" || key == "T2M" || key == "SOILT")
                 return "K";
             // Water vapor
             if (key == "QV" || key == "QV2M")

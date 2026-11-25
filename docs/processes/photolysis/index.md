@@ -68,6 +68,14 @@ background mixing ratios of 20.95% and 0.3 ppmv, respectively.
 TUV-x reaction names are separate from profile names. For MICM to consume a
 photolysis rate, its `PHOTO.<label>` must match the TUV-x reaction label.
 
+Temperature-dependent quantum yields use temperatures at layer interfaces. A
+host can supply `TEDGE` in kelvin through the axis-aware meteorology binding
+with the interface axis and one more value per column than `T`. When `TEDGE`
+is absent from the current input, CATChem linearly interpolates `T` in height
+at interior interfaces and uses the nearest layer-center temperature at the
+bottom and top. A fixed temperature profile from the TUV-x configuration
+keeps its configured values.
+
 ---
 
 ## Integration and Verification

@@ -28,6 +28,7 @@ namespace catchem {
                          host_field_2d("LON", "degrees", FieldRequirement::Required, AccessIntent::Read,
                                        PersistencePolicy::Persistent),
                          host_field_3d("T", "K"), host_field_3d("PMID", "Pa", FieldRequirement::Optional),
+                         host_field_interface("TEDGE", "K", FieldRequirement::Optional),
                          host_field_interface("PEDGE", "Pa", FieldRequirement::Optional),
                          host_field_3d("BXHEIGHT", "m"), host_field_3d("AIRDEN", "kg/m3", FieldRequirement::Optional),
                          host_field_3d("AIRDEN_DRY", "kg/m3", FieldRequirement::Optional), host_concentration()});
@@ -296,6 +297,7 @@ namespace catchem {
         std::vector<double> o3_profile(state->level_count(), 0.0);
         std::vector<double> species_density(state->level_count());
         std::vector<double> temp_profile(state->level_count(), 0.0);
+        std::vector<double> temp_edges(state->level_count() + 1);
         std::vector<double> layer_density(state->level_count());
 
         const auto update_density_profile = [&](musica::Profile* profile, std::vector<double>& midpoint_density) {
@@ -342,6 +344,16 @@ namespace catchem {
                                   : nullptr);
         require_field_pointer("Photolysis", "CHEM_CONC",
                               state->chemistry().conc ? state->chemistry().conc->host_write() : nullptr);
+
+        const auto host_temp_edges = state->meteorology().get_3d({"TEDGE"});
+        const bool use_host_temp_edges =
+            profile_temp && host_temp_edges && host_temp_edges->is_current(import_generation);
+        if (use_host_temp_edges) {
+            if (host_temp_edges->extent(1) != temp_edges.size() ||
+                host_temp_edges->contract.axes[1] != SemanticAxis::Interface)
+                throw std::invalid_argument("Photolysis expects TEDGE on the vertical interface axis");
+            require_field_pointer("Photolysis", "TEDGE", host_temp_edges->host_read());
+        }
 
         // Column-level tracing is only useful when CATCHEM_LOG_LEVEL=DEBUG; the
         // flag is hoisted out of the loop so the per-column string build and the
@@ -397,8 +409,26 @@ namespace catchem {
             }
             if (profile_temp) {
                 if (dbg_column)
-                    Logger::debug(*state, "SetProfileMidpointValues for temperature in column", {{"col", col_str}});
+                    Logger::debug(*state, "Updating temperature profile in column", {{"col", col_str}});
+                if (use_host_temp_edges) {
+                    for (std::size_t edge = 0; edge < temp_edges.size(); ++edge)
+                        temp_edges[edge] = host_temp_edges->host_view(i_col, edge, 0);
+                } else {
+                    // Hold the nearest midpoint value at the boundaries. Interior
+                    // edges divide the midpoint interval in proportion to layer thickness.
+                    temp_edges.front() = temp_profile.front();
+                    temp_edges.back() = temp_profile.back();
+                    for (std::size_t edge = 1; edge < temp_profile.size(); ++edge) {
+                        const double lower_thickness = height_edges[edge] - height_edges[edge - 1];
+                        const double span = height_edges[edge + 1] - height_edges[edge - 1];
+                        temp_edges[edge] =
+                            std::lerp(temp_profile[edge - 1], temp_profile[edge], lower_thickness / span);
+                    }
+                }
+                if (std::ranges::any_of(temp_edges, [](double temp) { return !std::isfinite(temp) || temp <= 0.0; }))
+                    throw std::domain_error("Photolysis requires finite, positive interface temperatures in kelvin");
                 musica::SetProfileMidpointValues(profile_temp.get(), temp_profile.data(), state->level_count(), &err);
+                musica::SetProfileEdgeValues(profile_temp.get(), temp_edges.data(), temp_edges.size(), &err);
             }
 
             std::vector<double> edge_photolysis_rates((state->level_count() + 1) * num_reactions, 0.0);
