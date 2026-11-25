@@ -36,7 +36,7 @@ namespace catchem {
         if (cloud_feedback_) {
             contract.fields.push_back(host_field_3d("CLDF", "1"));
             contract.fields.push_back(host_field_3d("CLDLIQ", "kg/kg"));
-            contract.fields.push_back(host_field_3d("DELP", "Pa"));
+            contract.fields.push_back(host_field_3d("DELP", "Pa", FieldRequirement::Optional));
         }
         return contract;
     }
@@ -342,6 +342,8 @@ namespace catchem {
         }
 
         const auto import_generation = state->current_import_generation();
+        if (cloud_feedback_ && state->meteorology().PEDGE)
+            state->derive_delp();
         std::unique_ptr<musica::RadiatorMap> cloud_map;
         std::unique_ptr<musica::Radiator> cloud_radiator;
         std::shared_ptr<InteropField<double, 3>> cloud_fraction, cloud_liquid, pressure_thickness;

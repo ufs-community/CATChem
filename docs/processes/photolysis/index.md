@@ -80,7 +80,8 @@ host-updatable profile.
 Set `processes.photolysis.cloud_feedback: true` to enable the CAM-SIMA
 approximation. Supply current layer fields `CLDF` (cloud fraction, 0–1),
 `CLDLIQ` (liquid water mixing ratio, kg/kg), and `DELP` (pressure thickness,
-Pa), each shaped `(columns, levels, 1)`. CATChem computes
+Pa), each shaped `(columns, levels, 1)`. When `DELP` is absent, CATChem
+derives it from current `PEDGE` pressure interfaces. CATChem computes
 `155 * CLDLIQ * DELP / g * sqrt(CLDF)` for each layer and applies that optical
 depth at every TUV-x wavelength. The radiator's single-scattering albedo and
 asymmetry remain zero, matching the current CAM-SIMA implementation. Fields
@@ -89,8 +90,10 @@ existing TUV-x configuration is used.
 
 The current CCPP interface binds cloud liquid water and pressure thickness but
 only has a column cloud fraction. It must be extended to provide layer `CLDF`
-before enabling this option through that interface. NUOPC hosts must also
-provide all three layer fields. Aerosol feedback remains future work.
+before enabling this option through that interface. The NUOPC mapping imports
+`inst_cloud_frac_levels` as `CLDF` and `inst_pres_interface` as `PEDGE`,
+which can provide `DELP`. It still needs a current cloud liquid-water mixing
+ratio as `CLDLIQ`. Aerosol feedback remains future work.
 
 ## Read rates and verify coupling
 

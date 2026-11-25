@@ -78,10 +78,8 @@ int main(int argc, char* argv[]) {
         state->bind_met_field_3d("BXHEIGHT", bxheight.data());
         std::vector<double> cloud_fraction(n_levels, 0.0);
         std::vector<double> cloud_liquid(n_levels, 1.0e-4);
-        std::vector<double> pressure_thickness(n_levels, 10000.0);
         state->bind_met_field_3d("CLDF", cloud_fraction.data());
         state->bind_met_field_3d("CLDLIQ", cloud_liquid.data());
-        state->bind_met_field_3d("DELP", pressure_thickness.data());
 
         // 3b. The photolysis process contract now requires the CONCENTRATION
         // field and a mechanism carrying the photolysis.ozone role, and run()
