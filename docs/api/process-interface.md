@@ -217,33 +217,28 @@ namespace catchem {
 ## Configuration & Diagnostics Integration
 
 ### YAML Configuration Loading
-Processes load configuration settings in their `init` method by querying the thread-safe `StateManager` and associated YAML files:
-
-```cpp
-void GasChemProcess::init(std::shared_ptr<StateManager> state) {
-    // Obtain configuration path
-    std::string config_dir = state->config_dir;
-
-    // Parse using yaml-cpp
-    YAML::Node config = YAML::LoadFile(config_dir + "/micm_config.yaml");
-    double absolute_tolerance = config["absolute_tolerance"].as<double>(1e-12);
-}
-```
+Processes read settings during `init()`. GasChem parses its settings under
+`processes.gaschem` through its registered settings validator. Photolysis
+reads `processes/photolysis/config_file` from the state's
+`ConfigManager`, with a fallback to the legacy `process/photolysis/config_file`
+key. See the [configuration reference](../user-guide/configuration.md).
 
 ### Diagnostics Binding
-Processes write diagnostics directly into pre-allocated memory buffers in the `DiagnosticManager`:
+
+Use `StateManager::diagnostic_manager()` inside a process. For a registered
+two-dimensional diagnostic, request a host write pointer and index the
+buffer by column and level.
 
 ```cpp
-void PhotolysisProcess::run(std::shared_ptr<StateManager> state) {
-    auto diag_mgr = state->get_diagnostic_manager();
-
-    // Retrieve direct pointer address of registered diagnostic field
-    double* jrate_ptr = diag_mgr->get_field_pointer("photolysis_rate_jfoo");
-
-    // Write directly into diagnostic buffer
-    jrate_ptr[cell_idx] = calculated_jrate;
+auto diag_mgr = state->diagnostic_manager();
+if (diag_mgr && diag_mgr->has_field("photolysis_rate_jfoo")) {
+    auto* rates = static_cast<double*>(diag_mgr->get_host_write_pointer("photolysis_rate_jfoo"));
+    rates[level * state->column_count() + column] = calculated_jrate;
 }
 ```
+
+Call `get_host_read_pointer()` to consume the diagnostic without acquiring
+write access.
 
 ---
 

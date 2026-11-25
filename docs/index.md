@@ -39,12 +39,12 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
 
     ```bash
     # Clone the repository
-    git clone https://github.com/UFS-Community/CATChem.git
+    git clone --recurse-submodules https://github.com/UFS-Community/CATChem.git
     cd CATChem
 
     # Build with CMake (supports -DCATCHEM_ENABLE_KOKKOS=ON for GPU acceleration)
     mkdir build && cd build
-    cmake -DCATCHEM_ENABLE_KOKKOS=ON ..
+    cmake -DCATCHEM_ENABLE_KOKKOS=ON -DCATCHEM_BUILD_MUSICA=ON ..
     make -j$(nproc)
     ```
 
@@ -53,7 +53,7 @@ CATChem (Configurable ATmospheric Chemistry) is a library and modeling component
     ```bash
     # Run a test case
     cd build
-    ctest -R test_catchem_gaschem
+    ctest --test-dir tests -R '^test_catchem_(photolysis|gaschem)$' --output-on-failure
 
     ```
 

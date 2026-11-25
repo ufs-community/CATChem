@@ -5,14 +5,22 @@
 #include <musica/tuvx/tuvx.hpp>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 namespace catchem {
 
     class PhotolysisProcess : public ProcessInterface {
     private:
         std::string config_path_;
+        bool cloud_feedback_ = false;
         musica::TUVX* tuvx_instance_ = nullptr;
         musica::Mappings photo_mappings_;
+        struct SpeciesProfile {
+            std::string role;
+            std::string name;
+            bool legacy_ozone;
+        };
+        std::vector<SpeciesProfile> species_profiles_;
 
         // Keep raw map pointers alive
         musica::GridMap* grids_ = nullptr;

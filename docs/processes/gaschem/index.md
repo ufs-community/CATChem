@@ -44,16 +44,15 @@ During a chemistry simulation timestep, `GasChemProcess::run` executes a highly-
 
 ---
 
-## Automatic Zero-Overhead Photolysis Coupling
+## Photolysis coupling
 
-A standout feature of the C++ core is the dynamic, zero-hardcoded coupling channel with the C++ Photolysis process:
-
-1.  **Pre-Scan Rate Parameters in `init()`**: During initialization, `GasChemProcess::init` iterates through the solver's rate parameter map once.
-2.  **Prefix Extraction**: If a rate parameter matches the pattern `"PHOTO.<label>"` (e.g., `"PHOTO.jfoo"`):
-    *   It strips the prefix to extract the raw photolysis reaction identifier: `jfoo`.
-    *   It caches the diagnostic search key: `"photolysis_rate_jfoo"` alongside its MICM parameter index.
-3.  **Per-Timestep Pointer Binding**: At the start of `GasChemProcess::run` (outside the batch and cell loops), it queries `DiagnosticManager` once per photolysis parameter to resolve raw host pointers, then copies the calculated photolysis J-rates directly into MICM's rate parameter array inside the batch loop.
-4.  **Loss Coefficient Defaults**: Any mechanism loss coefficients matching `"LOSS.<label>"` are initialized to `1.0` to preserve the chemistry mechanism's built-in scaling factors.
+Schedule [photolysis](../photolysis/index.md) before `gaschem` in `run_phases`.
+For each MICM parameter named `PHOTO.<label>`, GasChem looks up the
+`photolysis_rate_<label>` diagnostic once per timestep and copies the
+layer-center rates in `s-1` into MICM's batched state. Matching is
+case-sensitive. A missing diagnostic supplies zero for the corresponding
+photolysis parameter. Parameters named `LOSS.<label>` receive `1.0` so the
+mechanism's loss scaling applies.
 
 ---
 
@@ -99,10 +98,10 @@ processes:
     # config_dir: "src/external/musica/configs/v0/chapman/"
 ```
 
-> **Note:** when migrating a v0 mechanism to v1, the photolysis reaction names must
-> match the TUV-x radiator labels: `gaschem` binds each `"PHOTO.<label>"` rate
-> parameter to the `photolysis_rate_<label>` diagnostic produced by the photolysis
-> process (e.g. v0 `jO3->O1D` vs v1 `jo3_b` are *different* labels).
+When changing or migrating mechanisms, check the TUV-x reaction labels. For
+example, the Chapman v0 label `jO3->O1D` and the v1 label `jo3_b` require
+different diagnostic names. The `photolysis.<profile>` roles in the CATChem
+species file control absorber inputs to TUV-x.
 
 ### Species coverage
 
@@ -190,11 +189,12 @@ Verifies mathematical conversion reversibility and clamping safety across a wide
 *   Checks a standalone arithmetic guard that replaces a negative number with `1.0e-20`. This is a property of the test's own expression, not of the process: the process rejects a negative concentration by default and floors it to zero under `clamp`.
 
 ### 2. End-to-End Simulation Tests (`test_catchem_gaschem`)
-Runs a coupled multi-level atmospheric column simulation containing both the C++ `photolysis` and `gaschem` processes:
-1.  Registers both processes dynamically inside a C++ `Core` instance.
-2.  Synthesizes physical conditions modeling a noon summer atmospheric column.
-3.  Executes `core->run_timestep(3600.0)`.
-4.  Asserts that photolysis rate diagnostics are successfully populated and mapped to MICM, and that solver concentrations successfully converge with stable mass balance.
+The coupled test loads both processes from a CATChem YAML configuration that
+schedules photolysis before gas chemistry for Chapman v0 and v1 mechanisms.
+It checks positive daylight rates, zero nighttime rates,
+attenuation when the tagged absorber concentration increases, and a resulting
+change in MICM's ozone output. The fixture exercises both the legacy ozone
+role and a generic role that supplies molecular oxygen.
 
 The same target runs a six-column case across `columns_per_batch` values of 1, 2, 4,
 and 6 and requires every batch size to match the single-column result within ten times

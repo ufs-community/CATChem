@@ -10,7 +10,9 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 extern "C" {
 void catchem_register_photolysis_cpp();
@@ -58,11 +60,11 @@ int main(int argc, char* argv[]) {
         std::vector<double> pedge(n_cols * (n_levels + 1), 101300.0);
         std::vector<double> bxheight(n_cols * n_levels, 100.0);
 
-        // Populate pedagogical profiles
+        // Nonuniform layers keep the interface interpolation distinct from averaging.
+        temperature = {240.0, 280.0, 300.0};
+        bxheight = {1000.0, 3000.0, 2000.0};
         for (int i = 0; i < n_levels; ++i) {
-            temperature[i] = 280.0 - 0.5 * i;
             airden[i] = 1.2 * std::exp(-i / 10.0);
-            bxheight[i] = 1000.0; // 1km thick layers
             pedge[i] = 101300.0 * std::exp(-i / 10.0);
         }
         pedge[n_levels] = 101300.0 * std::exp(-n_levels / 10.0);
@@ -74,6 +76,10 @@ int main(int argc, char* argv[]) {
         state->bind_met_field_3d("AIRDEN", airden.data());
         state->bind_met_field_3d("PEDGE", pedge.data());
         state->bind_met_field_3d("BXHEIGHT", bxheight.data());
+        std::vector<double> cloud_fraction(n_levels, 0.0);
+        std::vector<double> cloud_liquid(n_levels, 1.0e-4);
+        state->bind_met_field_3d("CLDF", cloud_fraction.data());
+        state->bind_met_field_3d("CLDLIQ", cloud_liquid.data());
 
         // 3b. The photolysis process contract now requires the CONCENTRATION
         // field and a mechanism carrying the photolysis.ozone role, and run()
@@ -93,6 +99,15 @@ int main(int argc, char* argv[]) {
         std::cout << "DEBUG: Using TUV-x config path: " << config_path << std::endl;
         assert(file_exists(config_path) &&
                "Error: TUV-x configuration file could not be located relative to test runner!");
+        auto tuvx_config = YAML::LoadFile(config_path);
+        auto reactions = tuvx_config["photolysis"]["reactions"];
+        auto temperature_dependent = YAML::Clone(reactions[0]);
+        temperature_dependent["name"] = "j_temperature";
+        temperature_dependent["quantum yield"]["type"] = "NO3-_(aq)+hv->NO2(aq)+O-";
+        temperature_dependent.remove("heating");
+        reactions.push_back(temperature_dependent);
+        const auto temperature_config = std::filesystem::absolute("test_temperature_from_host.yml");
+        std::ofstream(temperature_config) << tuvx_config;
 
         // Write a temp main config for propagation test
         std::string temp_main_config = "test_main_config.yml";
@@ -100,7 +115,8 @@ int main(int argc, char* argv[]) {
         main_conf_writer << "process:\n";
         main_conf_writer << "  photolysis:\n";
         main_conf_writer << "    active: true\n";
-        main_conf_writer << "    config_file: \"" << config_path << "\"\n";
+        main_conf_writer << "    cloud_feedback: true\n";
+        main_conf_writer << "    config_file: " << temperature_config << "\n";
         main_conf_writer.close();
 
         // Propagate config file path
@@ -137,10 +153,58 @@ int main(int argc, char* argv[]) {
         }
 
         assert(total_rate > 0.0 && "Photolysis rates should be non-zero for positive solar zenith angles!");
+        const double clear_rate = jfoo_rates[1];
+        std::fill(cloud_fraction.begin(), cloud_fraction.end(), 1.0);
+        core->run_timestep(3600.0);
+        jfoo_rates = static_cast<double*>(diag_mgr->get_host_pointer("photolysis_rate_jfoo"));
+        if (!(jfoo_rates[1] < clear_rate))
+            throw std::runtime_error("Cloud liquid water must reduce the photolysis rate");
+        std::fill(cloud_fraction.begin(), cloud_fraction.end(), 0.0);
+        core->run_timestep(3600.0);
+        jfoo_rates = static_cast<double*>(diag_mgr->get_host_pointer("photolysis_rate_jfoo"));
+        if (std::abs(jfoo_rates[1] - clear_rate) > clear_rate * 1.0e-10)
+            throw std::runtime_error("Clearing clouds must restore the photolysis rate");
         std::cout << "SUCCESS: Calculated non-zero finite J-rates for all levels." << std::endl;
+
+        const auto rate_ratios = [&] {
+            const auto* dependent_rates =
+                static_cast<const double*>(diag_mgr->get_host_read_pointer("photolysis_rate_j_temperature"));
+            const auto* reference_rates =
+                static_cast<const double*>(diag_mgr->get_host_read_pointer("photolysis_rate_jfoo"));
+            std::vector<double> ratios(n_levels);
+            for (int level = 0; level < n_levels; ++level) {
+                ratios[level] = dependent_rates[level] / reference_rates[level];
+                if (!std::isfinite(ratios[level]) || ratios[level] <= 0.0)
+                    throw std::runtime_error("Temperature-dependent quantum yield must be finite and positive");
+            }
+            return ratios;
+        };
+        const auto interpolated_ratios = rate_ratios();
+        std::vector<double> interface_temperature = {240.0, 250.0, 292.0, 300.0};
+        const auto run_with_edges = [&] {
+            state->bind_met_field_3d_contract("TEDGE", interface_temperature.data(), n_levels + 1,
+                                              catchem::SemanticAxis::Interface);
+            core->run_timestep(3600.0);
+            return rate_ratios();
+        };
+        const auto supplied_ratios = run_with_edges();
+        for (int level = 0; level < n_levels; ++level) {
+            if (std::abs(supplied_ratios[level] - interpolated_ratios[level]) > 1.0e-12)
+                throw std::runtime_error("Interpolated temperatures must match the expected nonuniform interfaces");
+        }
+
+        interface_temperature.assign(n_levels + 1, 265.0);
+        // The NO3 aqueous parameterization has yield exp(-2400/T + 3.6).
+        // Divide by the reference yield of 0.5 for the same cross section.
+        const double expected_ratio = 2.0 * std::exp(-2400.0 / 265.0 + 3.6);
+        for (double ratio : run_with_edges()) {
+            if (std::abs(ratio - expected_ratio) > 1.0e-12)
+                throw std::runtime_error("Supplied interface temperatures must control the quantum yield");
+        }
 
         // Clean up temp file
         std::remove(temp_main_config.c_str());
+        std::filesystem::remove(temperature_config);
 
         std::cout << "\n==========================================" << std::endl;
         std::cout << "TEST PASSED SUCCESSFULLY!" << std::endl;

@@ -98,6 +98,22 @@ temp_ptr(i, j, k) = 298.15
 
 ---
 
+## Optional photolysis interface temperatures
+
+Bind `TEDGE` in kelvin with the interface axis for each current import. The
+C++ binding expects a column-fast buffer of shape `(columns, levels + 1, 1)`.
+
+```cpp
+state->bind_met_field_3d_contract("TEDGE", interface_temperature,
+                                  state->level_count() + 1, catchem::SemanticAxis::Interface);
+```
+
+Fortran hosts can call `model%bind_met_3d_axis("TEDGE", tedge, 1, rc)`, where
+`tedge` has shape `(nx, ny, nz + 1)` and axis value `1` selects interfaces.
+Keep the bound storage valid while CATChem uses it. If a host omits `TEDGE`,
+the [photolysis process](../processes/photolysis/index.md#supply-temperatures)
+interpolates from `T`.
+
 ## Dual-Space Synchronization
 
 To prevent race conditions across heterogeneous systems (CPU host and GPU devices), developers must explicitly schedule memory synchronizations at computational boundaries:

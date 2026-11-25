@@ -16,97 +16,26 @@ CATChem input files can be organized into several categories:
 
 ### Main Configuration File
 
-The main configuration file (typically `catchem_config.yml`) controls all aspects of the model run:
+The main CATChem YAML file defines the simulation inputs, process settings,
+and execution order. Put paths to the species and emission mapping files under
+`simulation`. List scheduled process names under `run_phases` and activate
+each one under its key in the `processes` map.
 
-```yaml
-# CATChem Configuration File
-model:
-  name: "My CATChem Run"
-  version: "2.1.0"
-  simulation_start: "2024-01-01T00:00:00"
-  simulation_end: "2024-01-02T00:00:00"
-  timestep: 300  # seconds
-
-domain:
-  grid_type: "latlon"
-  nx: 100
-  ny: 80
-  nz: 50
-  dx: 0.25  # degrees
-  dy: 0.25  # degrees
-
-processes:
-  - name: chemistry
-    enabled: true
-    scheme: cb6_full
-    timestep_factor: 1
-
-  - name: emissions
-    enabled: true
-    scheme: edgar_v6
-    timestep_factor: 1
-
-  - name: dry_deposition
-    enabled: true
-    scheme: wesely1989
-    timestep_factor: 2
-
-input:
-  meteorology:
-    file_template: "met_data_%Y%m%d_%H.nc"
-    directory: "/data/meteorology/"
-
-  emissions:
-    anthropogenic:
-      file_template: "emis_anthro_%Y%m.nc"
-      directory: "/data/emissions/"
-    biogenic:
-      file_template: "emis_bio_%Y%m%d.nc"
-      directory: "/data/emissions/"
-
-output:
-  directory: "/output/catchem_run/"
-  file_template: "catchem_output_%Y%m%d_%H.nc"
-  frequency: 3600  # seconds
-  variables:
-    - "O3"
-    - "NO2"
-    - "PM25"
-    - "SO2"
-```
+See the [configuration reference](configuration.md) for the full layout and
+the [coupled TUV-x and MICM example](../processes/photolysis/index.md#configure-photolysis-and-gas-phase-chemistry)
+for a chemistry schedule.
 
 ### Process-Specific Configuration
 
 Each process can have detailed configuration in separate files:
 
-**Chemistry Configuration (`chemistry_config.yml`):**
-```yaml
-chemistry:
-  mechanism: cb6_full
-  solver: rosenbrock
-  solver_options:
-    relative_tolerance: 1.0e-3
-    absolute_tolerance: 1.0e-12
-    max_iterations: 1000
+**Chemistry configuration**
 
-  species:
-    - name: O3
-      initial_concentration: 50.0e-9  # ppbv
-      units: "mol/mol"
-
-    - name: NO2
-      initial_concentration: 10.0e-9
-      units: "mol/mol"
-
-  reactions:
-    photolysis:
-      lookup_table: "photolysis_rates.nc"
-      update_frequency: 3600
-
-    thermal:
-      temperature_dependence: arrhenius
-      pressure_dependence: troe
-```
+CATChem reads species properties from `simulation.species_filename`. Set
+`processes.gaschem.config_file` for a MUSICA v1 mechanism or
+`processes.gaschem.config_dir` for a v0 CAMP mechanism. TUV-x reads its own
+file under `processes.photolysis.config_file` and calculates photolysis rates
+during the timestep. See the [coupled configuration example](../processes/photolysis/index.md#configure-photolysis-and-gas-phase-chemistry).
 
 **Emissions Configuration (`emissions_config.yml`):**
 ```yaml
@@ -347,27 +276,13 @@ species:
 
 ### Chemical Mechanisms
 
-**Mechanism Definition:**
-```yaml
-mechanism:
-  name: CB6_full
-  description: "Carbon Bond 6 full mechanism"
-
-  species:
-    gas_phase: [O3, NO, NO2, CO, SO2, NH3, ...]
-    aerosol_phase: [SO4, NO3, NH4, BC, OC, ...]
-
-  reactions:
-    - equation: "NO2 + hv -> NO + O"
-      rate_constant: "photolysis"
-      products: [NO, O]
-
-    - equation: "NO + O3 -> NO2 + O2"
-      rate_constant:
-        A: 1.8e-14
-        Ea: -1370.0
-        units: "cm3/molec/s"
-```
+The CATChem species file describes host species and their process roles. The
+MICM mechanism defines the gas-phase reactions. To supply a gas concentration
+to TUV-x, give its CATChem species entry a `photolysis.<profile>` role that
+matches a TUV-x profile name. The TUV-x file defines radiators, cross sections,
+quantum yields, and reaction labels. See
+[photolysis species bindings](../processes/photolysis/index.md#feed-gas-species-into-tuv-x)
+and the [MICM mechanism settings](../processes/gaschem/index.md#configuration).
 
 ## Geographic Data
 
@@ -596,8 +511,10 @@ def validate_emission_data(filename):
 │   └── roughness.nc
 └── chemistry/
     ├── species.yml
-    ├── mechanism.yml
-    └── photolysis_rates.nc
+    ├── micm/
+    │   └── config.yaml
+    └── tuvx/
+        └── config.yml
 ```
 
 ### File Naming Conventions
