@@ -1,83 +1,102 @@
-# Modernized C++ Photolysis Process Documentation
+# Photolysis (TUV-x)
 
-## Overview
+CATChem's `PhotolysisProcess` uses NCAR's TUV-x solver from MUSICA to calculate
+photolysis rates in `s-1`. The process runs on the CPU, one atmospheric column
+at a time. Build CATChem with `CATCHEM_BUILD_MUSICA=ON` and
+`CATCHEM_ENABLE_KOKKOS=ON` to enable it.
 
-The modernized `PhotolysisProcess` is a native C++ physics process that implements radiative transfer calculations to determine atmospheric photolysis rates ($J$-values). It encapsulates NCAR's **TUV-x** (Tropospheric Ultraviolet and Visible) engine, which is part of NCAR's **musica** library submodule, completely replacing legacy Fortran proxy layers.
+## Configure photolysis and gas-phase chemistry
 
-*   **Namespace / Class**: `catchem::PhotolysisProcess : public catchem::ProcessInterface`
-*   **Header Location**: `src/process/photolysis/catchem_process_photolysis.hpp`
-*   **Source Location**: `src/process/photolysis/catchem_process_photolysis.cpp`
-
----
-
-## Architecture & How It Works
-
-During a simulation timestep, `PhotolysisProcess::run` executes a column-wise photolysis calculation pipeline on the CPU host:
-
-1.  **Device-to-Host Synchronization**: Pulls physical and meteorological variables from Kokkos GPU memory space back to CPU buffers:
-    ```cpp
-    state->sync_to_host();
-    ```
-2.  **Column-Wise Input Extraction**: Loops over 1D columns, extracting key meteorological fields for every vertical level:
-    *   Midpoint Altitudes and Grid-cell Thicknesses
-    *   Air Density (`AIRDEN_DRY`)
-    *   Solar Zenith Angle (SZA)
-    *   Number and layer column densities for tagged gas species
-3.  **Solver Execution**: Delegates the 1D columns to the scientific TUV-x engine:
-    ```cpp
-    tuvx_instance->Calculate(photo_mappings, columns);
-    ```
-4.  **Edge-to-Midpoint Interpolation**: The scientific TUV-x engine calculates photolysis rates at grid-cell edges. `PhotolysisProcess` performs linear/exponential interpolation to map these edge rates to grid-cell midpoints (layer centers) to match CATChem's chemistry layout.
-5.  **Diagnostic Publishing**: Midpoint photolysis rates are registered dynamically and written into the global `DiagnosticManager` under the naming convention:
-    $$\text{diagnostic\_name} = \text{"photolysis\_rate\_"} + \text{rx\_name}$$
-    (e.g., `"photolysis_rate_jfoo"` for reaction `jfoo`).
-6.  **Coupling Hand-Off**: These diagnosed photolysis rates are then automatically consumed by downstream chemistry processes (like `GasChemProcess`), requiring zero copies or hardcoding.
-
----
-
-## Configuration
-
-The process is configured through CATChem's YAML system:
+Schedule photolysis before gas chemistry so MICM reads the rates from the
+current timestep. This example shows the schedule and file settings for a
+coupled run. Replace both paths with your matching TUV-x and MICM configuration
+files, and set `simulation.species_filename` to the CATChem species file.
 
 ```yaml
+run_phases:
+  chemistry:
+    processes: [photolysis, gaschem]
+
 processes:
-  - name: "photolysis"
-    enabled: true
-    parameters:
-      config_file: "src/external/musica/configs/tuvx/tuv_5_4.yml"
-    diagnostics:
-      - "photolysis_rate_jfoo"
+  photolysis:
+    activate: true
+    config_file: "/path/to/tuvx/config.yml"
+  gaschem:
+    activate: true
+    config_file: "/path/to/micm/config.yaml"
 ```
 
-In the CATChem species file, give each gas species supplied by the host a
-`photolysis.<profile>` role. The suffix must match the TUV-x profile name,
-including case. For example, use `roles: [photolysis.NO2]` to feed the host
-nitrogen dioxide mixing ratio into the TUV-x profile named `NO2`. CATChem
-creates the profile if it is absent from the TUV-x configuration. An explicitly
-configured profile for that role must be host-updatable and use
-`molecule cm-3`.
+If you omit the photolysis `config_file`, CATChem looks for
+`src/external/musica/configs/tuvx/tuv_5_4.yml` relative to the working directory.
+Make the data files referenced by your TUV-x configuration available at their
+configured paths. The shipped TUV 5.4 and Chapman files use different reaction
+labels and require label alignment before they can exchange those rates.
 
-CATChem converts dry-air ppmv to molecules per cubic centimeter using local dry-air
-density and supplies molecules per square centimeter for each layer using its
-thickness. Negative mixing ratios contribute zero absorption, and the original
-concentration remains available to gas chemistry. The legacy `photolysis.ozone`
-role maps to `O3` and preserves any fixed ozone profile in an existing TUV-x
-configuration. For untagged `O2` and `O3`, CATChem uses configured profiles or
-background mixing ratios of 20.95% and 0.3 ppmv, respectively.
+## Feed gas species into TUV-x
 
-TUV-x reaction names are separate from profile names. For MICM to consume a
-photolysis rate, its `PHOTO.<label>` must match the TUV-x reaction label.
+In the CATChem species file, tag any gas species whose concentration should feed a
+TUV-x profile. For example, this entry supplies nitrogen dioxide to a TUV-x
+radiator that references the profile `NO2`.
 
-Temperature-dependent quantum yields use temperatures at layer interfaces. A
-host can supply `TEDGE` in kelvin through the axis-aware meteorology binding
-with the interface axis and one more value per column than `T`. When `TEDGE`
-is absent from the current input, CATChem linearly interpolates `T` in height
-at interior interfaces and uses the nearest layer-center temperature at the
-bottom and top. A fixed temperature profile from the TUV-x configuration
-keeps its configured values.
+```yaml
+- name: no2
+  __is_gas: true
+  molecular weight [kg mol-1]: 0.046
+  roles: [photolysis.NO2]
+```
 
----
+The suffix in `photolysis.<profile>` must match the TUV-x profile name, including
+case. CATChem creates the profile if the TUV-x file omits it. For an explicit
+species binding, any profile already defined under that name must be
+host-updatable and use `molecule cm-3`. The TUV-x configuration still defines
+how the profile is used, including its radiator and cross section where
+applicable.
 
-## Integration and Verification
+CATChem converts each tagged species from dry-air ppmv to molecules per cubic
+centimeter using the local dry-air density. It multiplies that value by layer
+thickness in centimeters to supply the layer column density in molecules per
+square centimeter. Negative mixing ratios contribute zero absorption without
+changing the host concentrations. A nonfinite tagged mixing ratio raises an error.
 
-Like all modernized processes under the C++ core, the photolysis process is tested and verified under the standard CTest suite. Its dynamic coupling to chemistry is end-to-end verified by `test_catchem_gaschem` to ensure that midpoint-interpolated $J$-values are stable, non-negative, and properly scaled.
+The legacy `photolysis.ozone` role maps to `O3` and preserves any fixed ozone
+profile in an existing configuration. For untagged `O2` and `O3`, CATChem uses
+configured profiles or background mixing ratios of 20.95% and 0.3 ppmv,
+respectively.
+
+## Supply temperatures
+
+CATChem uses layer-center `T` in kelvin and layer thickness `BXHEIGHT` in meters.
+Temperature-dependent quantum yields also use interface temperatures. A host
+can supply `TEDGE` in kelvin using the axis-aware meteorology binding with the
+interface axis and shape `(columns, levels + 1, 1)`. When `TEDGE` is absent or
+stale, CATChem linearly interpolates `T` in height at interior interfaces and
+uses the nearest layer-center temperature at the bottom and top. A fixed
+temperature profile defined in the TUV-x configuration retains its values.
+CATChem rejects nonfinite or nonpositive interface temperatures supplied to a
+host-updatable profile.
+
+## Read rates and verify coupling
+
+CATChem computes the solar zenith angle from the column latitude, longitude,
+and midpoint time. It calls `musica::RunTuvx` and averages the two interface
+rates that bound each layer. It publishes the layer-center rates as
+`photolysis_rate_<label>` diagnostics in `s-1`, with shape `(columns, levels)`.
+If the solver reports an error for a column, CATChem logs it and clears that
+column's rates.
+
+MICM parameters named `PHOTO.<label>` read the diagnostic with the same
+case-sensitive reaction label. A missing diagnostic gives a zero rate. Profile
+names and reaction labels are independent. See the
+[gas-phase chemistry guide](../gaschem/index.md) for mechanism settings.
+
+In a build with MUSICA enabled, run both integration tests.
+
+```bash
+ctest --test-dir build/tests -R '^test_catchem_(photolysis|gaschem)$' --output-on-failure
+```
+
+`test_catchem_photolysis` compares a temperature-dependent nitrate quantum yield
+with a constant-yield reference. It checks both interpolated and supplied
+interface temperatures. `test_catchem_gaschem` checks daylight and nighttime
+rates, attenuation by tagged absorbers, and the resulting change in MICM
+concentrations for Chapman v0 and v1 mechanisms.

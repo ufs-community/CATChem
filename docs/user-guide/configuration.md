@@ -286,6 +286,15 @@ processes:
 scheme requires `PRECCON` and `PRECOSC` precipitation fields and errors naming
 the field if either is unbound.
 
+### Photolysis (`photolysis`)
+
+With MUSICA enabled, activate `photolysis` and list it before `gaschem` in
+`run_phases` for a coupled run. Set `processes.photolysis.config_file` to the
+TUV-x configuration. The CATChem species file can bind host concentrations to
+named TUV-x profiles through `photolysis.<profile>` roles. See the
+[photolysis guide](../processes/photolysis/index.md) for a coupled schedule,
+temperature inputs, and the reaction-label matching rule.
+
 ### Gas-phase chemistry (`gaschem`)
 
 `gaschem` runs a MUSICA/MICM mechanism and has no `scheme:` selector. Its options

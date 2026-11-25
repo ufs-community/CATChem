@@ -79,10 +79,14 @@ The complete API documentation includes:
     ```cpp
     #include <catchem_diagnostic_manager.hpp>
 
-    // Query and write diagnostic midpoint photolysis rate
-    auto diag_mgr = core->get_diagnostic_manager();
-    double* jrate_ptr = diag_mgr->get_field_pointer("photolysis_rate_jfoo");
-    jrate_ptr[cell_idx] = calculated_jrate;
+    // Read a registered layer-center rate in s^-1.
+    auto diag_mgr = core.get_diagnostic_manager();
+    const auto column_count = core.get_state_manager()->column_count();
+    if (diag_mgr->has_field("photolysis_rate_jfoo")) {
+        const auto* rates =
+            static_cast<const double*>(diag_mgr->get_host_read_pointer("photolysis_rate_jfoo"));
+        const double jrate = rates[level * column_count + column];
+    }
     ```
 
 === "Diagnostic Access (Fortran)"

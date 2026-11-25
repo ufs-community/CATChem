@@ -62,19 +62,11 @@ Removal processes that remove species from the atmosphere:
 
 ### Configuration
 
-All processes are configured through CATChem's YAML configuration files:
-
-```yaml
-processes:
-  - name: "photolysis"
-    enabled: true
-    parameters:
-      config_file: "src/external/musica/configs/tuvx/tuv_5_4.yml"
-  - name: "gaschem"
-    enabled: true
-    parameters:
-      config_dir: "src/external/musica/configs/tuvx/from_host/"
-```
+Set `activate: true` under the process name in `processes` and list the process
+in `run_phases` where it should execute. See the
+[configuration reference](../user-guide/configuration.md) for the YAML layout and
+the [photolysis guide](photolysis/index.md#configure-photolysis-and-gas-phase-chemistry)
+for a coupled TUV-x and MICM schedule.
 
 ### Process Interface (C++)
 

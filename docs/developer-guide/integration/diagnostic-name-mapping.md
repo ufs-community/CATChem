@@ -148,10 +148,15 @@ The current photolysis process dynamically registers:
 photolysis_rate_<reaction>
 ```
 
-with units `s-1`, where `<reaction>` comes from the TUV-x photolysis-rate
-ordering. Gas chemistry does not register an output diagnostic; it reads
-`photolysis_rate_<reaction>` fields when a mechanism rate parameter has the
-`PHOTO.<reaction>` form.
+with units `s-1` and shape `(columns, levels)`. The suffix is the exact
+TUV-x reaction label, and values are averages of the adjacent interface
+rates. CATChem registers these fields as persistent and overwrites them each
+timestep. A reported TUV-x solver error clears the affected column.
+
+GasChem reads these diagnostics for its `PHOTO.<reaction>` parameters and
+uses zero when the diagnostic is absent. Schedule photolysis before gas
+chemistry to make the current timestep's rates available. See the
+[photolysis guide](../../processes/photolysis/index.md) for configuration details.
 
 ## Diagnostic-selection differences
 
