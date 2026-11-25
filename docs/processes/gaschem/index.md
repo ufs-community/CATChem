@@ -189,8 +189,9 @@ Verifies mathematical conversion reversibility and clamping safety across a wide
 *   Checks a standalone arithmetic guard that replaces a negative number with `1.0e-20`. This is a property of the test's own expression, not of the process: the process rejects a negative concentration by default and floors it to zero under `clamp`.
 
 ### 2. End-to-End Simulation Tests (`test_catchem_gaschem`)
-The coupled test runs photolysis followed by gas chemistry for Chapman v0 and
-v1 configurations. It checks positive daylight rates, zero nighttime rates,
+The coupled test loads both processes from a CATChem YAML configuration that
+schedules photolysis before gas chemistry for Chapman v0 and v1 mechanisms.
+It checks positive daylight rates, zero nighttime rates,
 attenuation when the tagged absorber concentration increases, and a resulting
 change in MICM's ozone output. The fixture exercises both the legacy ozone
 role and a generic role that supplies molecular oxygen.
