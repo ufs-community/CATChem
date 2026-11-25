@@ -22,7 +22,7 @@ During a simulation timestep, `PhotolysisProcess::run` executes a column-wise ph
     *   Midpoint Altitudes and Grid-cell Thicknesses
     *   Air Density (`AIRDEN_DRY`)
     *   Solar Zenith Angle (SZA)
-    *   Ozone ($O_3$) profile density
+    *   Number and layer column densities for tagged gas species
 3.  **Solver Execution**: Delegates the 1D columns to the scientific TUV-x engine:
     ```cpp
     tuvx_instance->Calculate(photo_mappings, columns);
@@ -48,6 +48,25 @@ processes:
     diagnostics:
       - "photolysis_rate_jfoo"
 ```
+
+In the CATChem species file, give each gas species supplied by the host a
+`photolysis.<profile>` role. The suffix must match the TUV-x profile name,
+including case. For example, use `roles: [photolysis.NO2]` to feed the host
+nitrogen dioxide mixing ratio into the TUV-x profile named `NO2`. CATChem
+creates the profile if it is absent from the TUV-x configuration. An explicitly
+configured profile for that role must be host-updatable and use
+`molecule cm-3`.
+
+CATChem converts dry-air ppmv to molecules per cubic centimeter using local dry-air
+density and supplies molecules per square centimeter for each layer using its
+thickness. Negative mixing ratios contribute zero absorption, and the original
+concentration remains available to gas chemistry. The legacy `photolysis.ozone`
+role maps to `O3` and preserves any fixed ozone profile in an existing TUV-x
+configuration. For untagged `O2` and `O3`, CATChem uses configured profiles or
+background mixing ratios of 20.95% and 0.3 ppmv, respectively.
+
+TUV-x reaction names are separate from profile names. For MICM to consume a
+photolysis rate, its `PHOTO.<label>` must match the TUV-x reaction label.
 
 ---
 

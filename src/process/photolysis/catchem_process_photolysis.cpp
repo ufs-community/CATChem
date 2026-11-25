@@ -15,23 +15,22 @@
 #include <musica/tuvx/radiator_map.hpp>
 #include <musica/tuvx/tuvx_c_interface.hpp>
 #include <sstream>
+#include <string_view>
 #include <unordered_set>
 #include <yaml-cpp/yaml.h>
 
 namespace catchem {
 
     ProcessContract PhotolysisProcess::get_contract() const {
-        return make_contract(get_name(),
-                             {host_field_2d("LAT", "degrees", FieldRequirement::Required, AccessIntent::Read,
-                                            PersistencePolicy::Persistent),
-                              host_field_2d("LON", "degrees", FieldRequirement::Required, AccessIntent::Read,
-                                            PersistencePolicy::Persistent),
-                              host_field_3d("T", "K"), host_field_3d("PMID", "Pa", FieldRequirement::Optional),
-                              host_field_interface("PEDGE", "Pa", FieldRequirement::Optional),
-                              host_field_3d("BXHEIGHT", "m"),
-                              host_field_3d("AIRDEN", "kg/m3", FieldRequirement::Optional),
-                              host_field_3d("AIRDEN_DRY", "kg/m3", FieldRequirement::Optional), host_concentration()},
-                             {{"photolysis.ozone", "", true}});
+        return make_contract(
+            get_name(), {host_field_2d("LAT", "degrees", FieldRequirement::Required, AccessIntent::Read,
+                                       PersistencePolicy::Persistent),
+                         host_field_2d("LON", "degrees", FieldRequirement::Required, AccessIntent::Read,
+                                       PersistencePolicy::Persistent),
+                         host_field_3d("T", "K"), host_field_3d("PMID", "Pa", FieldRequirement::Optional),
+                         host_field_interface("PEDGE", "Pa", FieldRequirement::Optional),
+                         host_field_3d("BXHEIGHT", "m"), host_field_3d("AIRDEN", "kg/m3", FieldRequirement::Optional),
+                         host_field_3d("AIRDEN_DRY", "kg/m3", FieldRequirement::Optional), host_concentration()});
     }
 
     PhotolysisProcess::PhotolysisProcess() : config_path_("") {}
@@ -51,6 +50,28 @@ namespace catchem {
 
         if (this->config_path_.empty()) {
             this->config_path_ = "src/external/musica/configs/tuvx/tuv_5_4.yml";
+        }
+
+        const auto& mechanism = state->chemistry().mechanism;
+        if (!mechanism)
+            throw std::runtime_error("Photolysis requires an active chemical mechanism");
+        species_profiles_.clear();
+        std::unordered_set<std::string> mapped_profiles;
+        constexpr std::string_view role_prefix = "PHOTOLYSIS.";
+        for (const auto& species : mechanism->species) {
+            for (const auto& role : species.roles) {
+                const auto canonical_role = canonical_species_name(role);
+                if (!canonical_role.starts_with(role_prefix))
+                    continue;
+                const bool legacy_ozone = canonical_role == "PHOTOLYSIS.OZONE";
+                std::string name = legacy_ozone ? "O3" : role.substr(role_prefix.size());
+                const auto canonical_name = canonical_species_name(name);
+                if (!species.is_gas || name.empty() || canonical_name == "AIR" || canonical_name == "TEMPERATURE" ||
+                    canonical_name == "SURFACE ALBEDO" || canonical_name == "EXTRATERRESTRIAL FLUX" ||
+                    !mapped_profiles.insert(name).second)
+                    throw std::invalid_argument("Invalid or duplicate photolysis species profile for role: " + role);
+                species_profiles_.push_back({role, std::move(name), legacy_ozone});
+            }
         }
 
         Logger::debug(*state, "Parsing TUV-x config file to check profiles", {{"config", config_path_}});
@@ -142,10 +163,15 @@ namespace catchem {
                                     state->level_count(), &err);
         register_profile_if_missing(*state, config_defined_profiles, "air", "molecule cm-3", height_grid, 1e12,
                                     state->level_count(), &err);
-        register_profile_if_missing(*state, config_defined_profiles, "O2", "molecule cm-3", height_grid, 1e12,
-                                    state->level_count(), &err);
-        register_profile_if_missing(*state, config_defined_profiles, "O3", "molecule cm-3", height_grid, 1e12,
-                                    state->level_count(), &err);
+        for (const auto& binding : species_profiles_) {
+            register_profile_if_missing(*state, config_defined_profiles, binding.name.c_str(), "molecule cm-3",
+                                        height_grid, 1e12, state->level_count(), &err);
+        }
+        for (const auto* background : {"O2", "O3"}) {
+            if (!mapped_profiles.contains(background))
+                register_profile_if_missing(*state, config_defined_profiles, background, "molecule cm-3", height_grid,
+                                            1e12, state->level_count(), &err);
+        }
         register_profile_if_missing(*state, config_defined_profiles, "surface albedo", "none", wl_grid, 0.1,
                                     wl_sections, &err);
         register_profile_if_missing(*state, config_defined_profiles, "extraterrestrial flux", "photon cm-2 s-1",
@@ -206,18 +232,12 @@ namespace catchem {
 
         Logger::debug(*state, "Syncing state to host");
 
-        Logger::debug(*state, "Resolving configured ozone role");
-        if (!state->chemistry().mechanism || !state->chemistry().mechanism->has_role("photolysis.ozone"))
-            throw std::runtime_error("Photolysis requires mechanism role photolysis.ozone");
-        const int i_o3 = static_cast<int>(state->chemistry().mechanism->index_for_role("photolysis.ozone"));
-        Logger::debug(*state, "Ozone index resolved", {{"index", std::to_string(i_o3)}});
-
         musica::Error err;
         int num_reactions = photo_mappings_.size_;
         Logger::debug(*state, "Number of photolysis reactions mapped", {{"reactions", std::to_string(num_reactions)}});
 
         Logger::debug(*state, "Fetching ProfileMap from TUVX instance");
-        musica::ProfileMap* loaded_profiles = musica::GetProfileMap(tuvx_instance_, &err);
+        const std::unique_ptr<musica::ProfileMap> loaded_profiles(musica::GetProfileMap(tuvx_instance_, &err));
         if (err.code_ != 0) {
             Logger::error(*state, "PhotolysisProcess: error getting ProfileMap",
                           {{"error", err.message_.value_ ? err.message_.value_ : "Unknown Error"}});
@@ -225,13 +245,34 @@ namespace catchem {
         }
 
         Logger::debug(*state, "Retrieving individual Profile pointers");
-        musica::Profile* profile_air = musica::GetProfile(loaded_profiles, "air", "molecule cm-3", &err);
-        musica::Profile* profile_o2 = musica::GetProfile(loaded_profiles, "O2", "molecule cm-3", &err);
-        musica::Profile* profile_o3 = musica::GetProfile(loaded_profiles, "O3", "molecule cm-3", &err);
-        musica::Profile* profile_temp = musica::GetProfile(loaded_profiles, "temperature", "K", &err);
+        const auto density_profile = [&](const char* name) {
+            return std::unique_ptr<musica::Profile>(
+                musica::GetProfile(loaded_profiles.get(), name, "molecule cm-3", &err));
+        };
+        const auto is_mapped = [&](std::string_view name) {
+            return std::ranges::any_of(species_profiles_, [&](const auto& binding) { return binding.name == name; });
+        };
+        const auto profile_air = density_profile("air");
+        const auto profile_o2 = is_mapped("O2") ? nullptr : density_profile("O2");
+        const auto profile_o3 = is_mapped("O3") ? nullptr : density_profile("O3");
+        const std::unique_ptr<musica::Profile> profile_temp(
+            musica::GetProfile(loaded_profiles.get(), "temperature", "K", &err));
+
+        std::vector<std::pair<std::size_t, std::unique_ptr<musica::Profile>>> host_species;
+        for (const auto& binding : species_profiles_) {
+            auto profile = density_profile(binding.name.c_str());
+            if (!profile && !binding.legacy_ozone)
+                throw std::invalid_argument("Photolysis role " + binding.role +
+                                            " requires a host-updatable TUV-x profile in molecule cm-3");
+            if (profile) {
+                const auto index = state->chemistry().mechanism->index_for_role(binding.role);
+                host_species.emplace_back(index, std::move(profile));
+            }
+        }
 
         std::ostringstream ptr_ss;
-        ptr_ss << "air=" << profile_air << ", o2=" << profile_o2 << ", o3=" << profile_o3 << ", temp=" << profile_temp;
+        ptr_ss << "air=" << profile_air.get() << ", o2=" << profile_o2.get() << ", o3=" << profile_o3.get()
+               << ", temp=" << profile_temp.get();
         Logger::debug(*state, "Profile pointers retrieved", {{"profiles", ptr_ss.str()}});
 
         if (profile_air) {
@@ -253,6 +294,7 @@ namespace catchem {
         std::vector<double> air_profile(state->level_count(), 0.0);
         std::vector<double> o2_profile(state->level_count(), 0.0);
         std::vector<double> o3_profile(state->level_count(), 0.0);
+        std::vector<double> species_density(state->level_count());
         std::vector<double> temp_profile(state->level_count(), 0.0);
         std::vector<double> layer_density(state->level_count());
 
@@ -334,24 +376,29 @@ namespace catchem {
                 o2_profile[i_lvl] = air_profile[i_lvl] * 0.2095;
                 temp_profile[i_lvl] = state->meteorology().T->host_view(i_col, i_lvl, 0);
 
-                if (i_o3 >= 0 && state->chemistry().conc) {
-                    // CATChem stores dry-air mixing ratios in ppmv.
-                    const double ozone_ppmv = state->chemistry().conc->host_view(i_col, i_lvl, i_o3);
-                    o3_profile[i_lvl] = ozone_ppmv * 1.0e-6 * air_profile[i_lvl];
-                } else {
-                    o3_profile[i_lvl] = air_profile[i_lvl] * 3e-7;
-                }
+                o3_profile[i_lvl] = air_profile[i_lvl] * 3e-7;
             }
 
             if (dbg_column)
                 Logger::debug(*state, "Updating profiles in TUVX for column", {{"col", col_str}});
-            update_density_profile(profile_air, air_profile);
-            update_density_profile(profile_o2, o2_profile);
-            update_density_profile(profile_o3, o3_profile);
+            update_density_profile(profile_air.get(), air_profile);
+            update_density_profile(profile_o2.get(), o2_profile);
+            update_density_profile(profile_o3.get(), o3_profile);
+            for (const auto& [index, profile] : host_species) {
+                for (int level = 0; level < state->level_count(); ++level) {
+                    // A negative mixing ratio cannot contribute negative optical depth.
+                    const double ppmv = state->chemistry().conc->host_view(i_col, level, index);
+                    if (!std::isfinite(ppmv))
+                        throw std::domain_error("Photolysis received a non-finite mixing ratio for species " +
+                                                state->chemistry().mechanism->species[index].short_name);
+                    species_density[level] = std::max(ppmv, 0.0) * 1.0e-6 * air_profile[level];
+                }
+                update_density_profile(profile.get(), species_density);
+            }
             if (profile_temp) {
                 if (dbg_column)
                     Logger::debug(*state, "SetProfileMidpointValues for temperature in column", {{"col", col_str}});
-                musica::SetProfileMidpointValues(profile_temp, temp_profile.data(), state->level_count(), &err);
+                musica::SetProfileMidpointValues(profile_temp.get(), temp_profile.data(), state->level_count(), &err);
             }
 
             std::vector<double> edge_photolysis_rates((state->level_count() + 1) * num_reactions, 0.0);

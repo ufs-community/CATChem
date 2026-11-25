@@ -41,7 +41,7 @@ bool file_exists(const std::string& name) {
 // list every MICM variable of that mechanism.
 static void run_coupled_case(const std::string& label, const std::string& config_key, const std::string& config_value,
                              const std::string& ozone_rate_label, const std::string& species_fixture = "chapman.yml",
-                             int n_species = 4) {
+                             int n_species = 4, bool use_generic_absorber = false) {
     std::cout << "\n------------------------------------------" << std::endl;
     std::cout << "CASE: gaschem mechanism via " << config_key << " (" << label << ")" << std::endl;
     std::cout << "------------------------------------------\n" << std::endl;
@@ -49,7 +49,7 @@ static void run_coupled_case(const std::string& label, const std::string& config
     // 2. Set up core and states
     constexpr int daylight = 0;
     constexpr int darkness = 1;
-    constexpr int high_ozone = 2;
+    constexpr int high_absorber = 2;
     constexpr int n_cols = 3;
     constexpr int n_levels = 3;
 
@@ -93,12 +93,26 @@ static void run_coupled_case(const std::string& label, const std::string& config
     state->bind_met_field_3d("PMID", pmid.data());
     state->bind_met_field_3d("BXHEIGHT", bxheight.data());
 
-    // Load a species list that covers the mechanism under test and carries the
-    // photolysis.ozone role the photolysis contract requires.
+    // Load a species list that covers the mechanism under test.
     std::string species_config = std::string(catchem::test::TEST_DIR) + "/fixtures/mechanisms/" + species_fixture;
     assert(file_exists(species_config) && "ERROR: Could not find the chapman mechanism fixture!");
+    const std::string absorber_profile = use_generic_absorber ? "molecular_oxygen" : "O3";
+    const std::string generic_species_config = "test_generic_photolysis_species.yml";
+    if (use_generic_absorber) {
+        auto species = YAML::LoadFile(species_config);
+        for (auto entry : species) {
+            const auto name = entry["name"].as<std::string>();
+            if (name == "o3")
+                entry.remove("roles");
+            if (name == "o2")
+                entry["roles"].push_back("photolysis." + absorber_profile);
+        }
+        std::ofstream(generic_species_config) << species;
+        species_config = generic_species_config;
+    }
     state->load_species_config(species_config);
-    const auto ozone_index = state->chemistry().mechanism->index_for_role("photolysis.ozone");
+    const auto ozone_index = state->chemistry().mechanism->index_of("O3");
+    const auto absorber_index = state->chemistry().mechanism->index_of(use_generic_absorber ? "O2" : "O3");
     std::vector<double> conc_data(n_cols * n_levels * n_species, 1.0); // 1.0 ppmv initially
     // Start without atomic oxygen so thermal reactions do not exhaust ozone
     // before the effect of the photolysis channel can be measured.
@@ -107,7 +121,7 @@ static void run_coupled_case(const std::string& label, const std::string& config
         std::fill_n(conc_data.begin() + species_indices.at(name) * n_cols * n_levels, n_cols * n_levels, 0.0);
     }
     for (int level = 0; level < n_levels; ++level) {
-        conc_data[(ozone_index * n_levels + level) * n_cols + high_ozone] = 100.0;
+        conc_data[(absorber_index * n_levels + level) * n_cols + high_absorber] = 100.0;
     }
     // Molecular nitrogen, where the mechanism solves for it, starts at its
     // atmospheric mixing ratio rather than 1 ppmv.
@@ -122,21 +136,21 @@ static void run_coupled_case(const std::string& label, const std::string& config
         std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/tuvx/from_host/config.json";
     assert(file_exists(photolysis_config) && "ERROR: Could not find photolysis config explicitly!");
     // Couple the synthetic TUV-x reaction to the mechanism's ozone channel and
-    // reuse its cross section as an absorber to exercise the host ozone profile.
+    // reuse its cross section as an absorber to exercise the tagged host profile.
     auto tuvx_config = YAML::LoadFile(photolysis_config);
     auto reaction = tuvx_config["photolysis"]["reactions"][0];
     assert(reaction["name"].as<std::string>() == "jfoo");
     reaction["name"] = ozone_rate_label;
     auto absorber = YAML::Clone(reaction["cross section"]);
-    absorber["name"] = "O3";
+    absorber["name"] = absorber_profile;
     tuvx_config["radiative transfer"]["cross sections"].push_back(absorber);
     auto radiators = tuvx_config["radiative transfer"]["radiators"];
-    auto ozone_radiator = YAML::Clone(radiators[1]);
-    ozone_radiator["name"] = "O3";
-    ozone_radiator["cross section"] = "O3";
-    ozone_radiator["vertical profile"] = "O3";
-    // Replace the fixture's synthetic O2 absorber so it cannot mask the ozone signal.
-    radiators[1] = ozone_radiator;
+    auto absorber_radiator = YAML::Clone(radiators[1]);
+    absorber_radiator["name"] = absorber_profile;
+    absorber_radiator["cross section"] = absorber_profile;
+    absorber_radiator["vertical profile"] = absorber_profile;
+    // Replace the fixture's synthetic O2 absorber so it cannot mask the host profile signal.
+    radiators[1] = absorber_radiator;
     const auto coupled_tuvx_config = std::filesystem::absolute("test_coupled_from_host.yml");
     std::ofstream(coupled_tuvx_config) << tuvx_config;
 
@@ -174,20 +188,24 @@ static void run_coupled_case(const std::string& label, const std::string& config
     // 6. Verify photolysis rate diagnostics calculation
     auto diag_mgr = core->get_diagnostic_manager();
     const auto diagnostic = "photolysis_rate_" + ozone_rate_label;
-    assert(diag_mgr->has_field(diagnostic));
+    if (!diag_mgr->has_field(diagnostic))
+        throw std::runtime_error("Missing TUV-x diagnostic " + diagnostic);
     const auto* rates = static_cast<const double*>(diag_mgr->get_host_pointer(diagnostic));
-    assert(rates != nullptr);
-    assert(rates[daylight] > 0.0 && rates[darkness] == 0.0);
-    assert(rates[high_ozone] < 0.99 * rates[daylight] && "Higher ozone must attenuate surface photolysis");
+    if (!rates || !(rates[daylight] > 0.0 && rates[darkness] == 0.0))
+        throw std::runtime_error("Expected nonzero TUV-x photolysis in daylight and zero in darkness");
+    if (!(rates[high_absorber] < 0.99 * rates[daylight]))
+        throw std::runtime_error("Higher absorber concentration must attenuate surface photolysis");
     state->sync_to_host();
     const auto concentrations = state->chemistry().conc->host_view;
-    assert(std::abs(concentrations(daylight, 0, ozone_index) - concentrations(darkness, 0, ozone_index)) > 1.0e-6 &&
-           "MICM must respond to the TUV-x rate when the mechanism requests its label");
+    if (!(std::abs(concentrations(daylight, 0, ozone_index) - concentrations(darkness, 0, ozone_index)) > 1.0e-6))
+        throw std::runtime_error("MICM must respond to the TUV-x rate when the mechanism requests its label");
 
     std::cout << "SUCCESS: Dynamic J-rates calculated and coupled successfully!" << std::endl;
 
     std::remove(temp_main_coupled_config.c_str());
     std::filesystem::remove(coupled_tuvx_config);
+    if (use_generic_absorber)
+        std::filesystem::remove(generic_species_config);
     std::cout << "CASE PASSED: " << label << std::endl;
 }
 
@@ -1115,7 +1133,7 @@ int main(int argc, char* argv[]) {
         std::string v1_file =
             std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/config.yaml";
         assert(file_exists(v1_file) && "ERROR: Could not find gaschem v1 config file explicitly!");
-        run_coupled_case("v1 single file (config_file)", "config_file", v1_file, "jo3_a", "chapman_v1.yml", 5);
+        run_coupled_case("v1 single file (config_file)", "config_file", v1_file, "jo3_a", "chapman_v1.yml", 5, true);
 
         // Case C: v1 mechanism directory exercising config.yaml auto-detection.
         std::string v1_dir = std::string(catchem::test::SOURCE_DIR) + "/src/external/musica/configs/v1/chapman/";
