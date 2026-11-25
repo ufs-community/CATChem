@@ -12,6 +12,7 @@ namespace catchem {
     class PhotolysisProcess : public ProcessInterface {
     private:
         std::string config_path_;
+        bool cloud_feedback_ = false;
         musica::TUVX* tuvx_instance_ = nullptr;
         musica::Mappings photo_mappings_;
         struct SpeciesProfile {

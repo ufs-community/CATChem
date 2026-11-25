@@ -75,6 +75,23 @@ temperature profile defined in the TUV-x configuration retains its values.
 CATChem rejects nonfinite or nonpositive interface temperatures supplied to a
 host-updatable profile.
 
+## Cloud feedback
+
+Set `processes.photolysis.cloud_feedback: true` to enable the CAM-SIMA
+approximation. Supply current layer fields `CLDF` (cloud fraction, 0–1),
+`CLDLIQ` (liquid water mixing ratio, kg/kg), and `DELP` (pressure thickness,
+Pa), each shaped `(columns, levels, 1)`. CATChem computes
+`155 * CLDLIQ * DELP / g * sqrt(CLDF)` for each layer and applies that optical
+depth at every TUV-x wavelength. The radiator's single-scattering albedo and
+asymmetry remain zero, matching the current CAM-SIMA implementation. Fields
+must be current, finite and physically valid. With feedback disabled, the
+existing TUV-x configuration is used.
+
+The current CCPP interface binds cloud liquid water and pressure thickness but
+only has a column cloud fraction. It must be extended to provide layer `CLDF`
+before enabling this option through that interface. NUOPC hosts must also
+provide all three layer fields. Aerosol feedback remains future work.
+
 ## Read rates and verify coupling
 
 CATChem computes the solar zenith angle from the column latitude, longitude,

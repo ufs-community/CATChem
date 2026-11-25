@@ -76,6 +76,12 @@ int main(int argc, char* argv[]) {
         state->bind_met_field_3d("AIRDEN", airden.data());
         state->bind_met_field_3d("PEDGE", pedge.data());
         state->bind_met_field_3d("BXHEIGHT", bxheight.data());
+        std::vector<double> cloud_fraction(n_levels, 0.0);
+        std::vector<double> cloud_liquid(n_levels, 1.0e-4);
+        std::vector<double> pressure_thickness(n_levels, 10000.0);
+        state->bind_met_field_3d("CLDF", cloud_fraction.data());
+        state->bind_met_field_3d("CLDLIQ", cloud_liquid.data());
+        state->bind_met_field_3d("DELP", pressure_thickness.data());
 
         // 3b. The photolysis process contract now requires the CONCENTRATION
         // field and a mechanism carrying the photolysis.ozone role, and run()
@@ -111,6 +117,7 @@ int main(int argc, char* argv[]) {
         main_conf_writer << "process:\n";
         main_conf_writer << "  photolysis:\n";
         main_conf_writer << "    active: true\n";
+        main_conf_writer << "    cloud_feedback: true\n";
         main_conf_writer << "    config_file: " << temperature_config << "\n";
         main_conf_writer.close();
 
@@ -148,6 +155,17 @@ int main(int argc, char* argv[]) {
         }
 
         assert(total_rate > 0.0 && "Photolysis rates should be non-zero for positive solar zenith angles!");
+        const double clear_rate = jfoo_rates[1];
+        std::fill(cloud_fraction.begin(), cloud_fraction.end(), 1.0);
+        core->run_timestep(3600.0);
+        jfoo_rates = static_cast<double*>(diag_mgr->get_host_pointer("photolysis_rate_jfoo"));
+        if (!(jfoo_rates[1] < clear_rate))
+            throw std::runtime_error("Cloud liquid water must reduce the photolysis rate");
+        std::fill(cloud_fraction.begin(), cloud_fraction.end(), 0.0);
+        core->run_timestep(3600.0);
+        jfoo_rates = static_cast<double*>(diag_mgr->get_host_pointer("photolysis_rate_jfoo"));
+        if (std::abs(jfoo_rates[1] - clear_rate) > clear_rate * 1.0e-10)
+            throw std::runtime_error("Clearing clouds must restore the photolysis rate");
         std::cout << "SUCCESS: Calculated non-zero finite J-rates for all levels." << std::endl;
 
         const auto rate_ratios = [&] {

@@ -618,6 +618,7 @@ contains
      if (status == CC_SUCCESS) status = catchem_state_bind_met_3d_checked(state_mgr, "AIRDEN_DRY"//c_null_char, c_loc(airden(1,1)), im, kte, 1)
      if (status == CC_SUCCESS) status = catchem_state_bind_met_3d_checked(state_mgr, "PFILSAN"//c_null_char, c_loc(pfl_isan(1,1)), im, kte, 1)
      if (status == CC_SUCCESS) status = catchem_state_bind_met_3d_checked(state_mgr, "PFLLSAN"//c_null_char, c_loc(pfl_lsan(1,1)), im, kte, 1)
+     if (status == CC_SUCCESS) status = catchem_state_bind_met_3d_checked(state_mgr, "CLDLIQ"//c_null_char, c_loc(pfl_lsan(1,1)), im, kte, 1)
      if (status == CC_SUCCESS) status = catchem_state_bind_met_3d_axis_checked(state_mgr, "soil_moisture"//c_null_char, c_loc(soilmoist(1,1)), im, nsoil, 1, 2)
      if (status /= CC_SUCCESS) then
         errmsg = 'CATChem Run: checked 3D meteorology import failed.'

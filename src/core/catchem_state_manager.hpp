@@ -221,6 +221,8 @@ namespace catchem {
             if (key == "QV" || key == "QV2M")
                 return "kg/kg";
             // Unitless variables
+            if (key == "CLDLIQ")
+                return "kg/kg";
             if (key == "RH" || key == "CLDFRC" || key == "SUNCOSMID")
                 return "1";
             // Pressure related fields

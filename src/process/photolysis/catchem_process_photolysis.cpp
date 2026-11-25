@@ -12,6 +12,7 @@
 #include <musica/tuvx/grid_map.hpp>
 #include <musica/tuvx/profile.hpp>
 #include <musica/tuvx/profile_map.hpp>
+#include <musica/tuvx/radiator.hpp>
 #include <musica/tuvx/radiator_map.hpp>
 #include <musica/tuvx/tuvx_c_interface.hpp>
 #include <sstream>
@@ -22,7 +23,7 @@
 namespace catchem {
 
     ProcessContract PhotolysisProcess::get_contract() const {
-        return make_contract(
+        auto contract = make_contract(
             get_name(), {host_field_2d("LAT", "degrees", FieldRequirement::Required, AccessIntent::Read,
                                        PersistencePolicy::Persistent),
                          host_field_2d("LON", "degrees", FieldRequirement::Required, AccessIntent::Read,
@@ -32,6 +33,12 @@ namespace catchem {
                          host_field_interface("PEDGE", "Pa", FieldRequirement::Optional),
                          host_field_3d("BXHEIGHT", "m"), host_field_3d("AIRDEN", "kg/m3", FieldRequirement::Optional),
                          host_field_3d("AIRDEN_DRY", "kg/m3", FieldRequirement::Optional), host_concentration()});
+        if (cloud_feedback_) {
+            contract.fields.push_back(host_field_3d("CLDF", "1"));
+            contract.fields.push_back(host_field_3d("CLDLIQ", "kg/kg"));
+            contract.fields.push_back(host_field_3d("DELP", "Pa"));
+        }
+        return contract;
     }
 
     PhotolysisProcess::PhotolysisProcess() : config_path_("") {}
@@ -40,6 +47,9 @@ namespace catchem {
     void PhotolysisProcess::init(std::shared_ptr<StateManager> state) {
         Logger::debug(*state, "PhotolysisProcess::init started");
         if (state->config_manager()) {
+            cloud_feedback_ = state->config_manager()->get_bool(
+                "processes/photolysis/cloud_feedback",
+                state->config_manager()->get_bool("process/photolysis/cloud_feedback", false));
             std::string cfg = state->config_manager()->get_string("processes/photolysis/config_file", "");
             if (cfg.empty()) {
                 cfg = state->config_manager()->get_string("process/photolysis/config_file", "");
@@ -177,6 +187,15 @@ namespace catchem {
                                     wl_sections, &err);
         register_profile_if_missing(*state, config_defined_profiles, "extraterrestrial flux", "photon cm-2 s-1",
                                     wl_grid, 1.5e14, wl_sections, &err);
+
+        if (cloud_feedback_) {
+            std::unique_ptr<musica::Radiator> cloud(musica::CreateRadiator("clouds", height_grid, wl_grid, &err));
+            if (err.code_ != 0 || !cloud)
+                throw std::runtime_error("Photolysis failed to create cloud radiator");
+            musica::AddRadiator(radiators_, cloud.get(), &err);
+            if (err.code_ != 0)
+                throw std::runtime_error("Photolysis failed to register cloud radiator");
+        }
 
         // 4. Safely delete local grids as they are cloned/owned inside the GridMap
         Logger::debug(*state, "Deleting local height and wavelength grid pointers");
@@ -323,6 +342,25 @@ namespace catchem {
         }
 
         const auto import_generation = state->current_import_generation();
+        std::unique_ptr<musica::RadiatorMap> cloud_map;
+        std::unique_ptr<musica::Radiator> cloud_radiator;
+        std::shared_ptr<InteropField<double, 3>> cloud_fraction, cloud_liquid, pressure_thickness;
+        if (cloud_feedback_) {
+            cloud_fraction = state->meteorology().get_3d({"CLDF"});
+            cloud_liquid = state->meteorology().get_3d({"CLDLIQ"});
+            pressure_thickness = state->meteorology().get_3d({"DELP"});
+            for (const auto& field : {cloud_fraction, cloud_liquid, pressure_thickness}) {
+                if (!field || !field->is_current(import_generation))
+                    throw std::runtime_error("Cloud feedback requires current layer fields CLDF, CLDLIQ and DELP");
+                field->sync_to_host();
+            }
+            cloud_map.reset(musica::GetRadiatorMap(tuvx_instance_, &err));
+            if (err.code_ != 0 || !cloud_map)
+                throw std::runtime_error("Photolysis failed to get cloud radiator map");
+            cloud_radiator.reset(musica::GetRadiator(cloud_map.get(), "clouds", &err));
+            if (err.code_ != 0 || !cloud_radiator)
+                throw std::runtime_error("Photolysis failed to get cloud radiator");
+        }
 
         require_field_pointer("Photolysis", "LAT",
                               state->meteorology().LAT ? state->meteorology().LAT->host_write() : nullptr);
@@ -378,6 +416,27 @@ namespace catchem {
             }
             if (height_grid) {
                 musica::SetGridEdges(height_grid, height_edges.data(), height_edges.size(), &err);
+            }
+
+            if (cloud_feedback_) {
+                const int wavelength_count = tuvx_instance_->GetNumberOfWavelengthMidpoints();
+                std::vector<double> optical_depth(state->level_count() * wavelength_count);
+                for (int level = 0; level < state->level_count(); ++level) {
+                    const double fraction = cloud_fraction->host_view(i_col, level, 0);
+                    const double liquid = cloud_liquid->host_view(i_col, level, 0);
+                    const double pressure = pressure_thickness->host_view(i_col, level, 0);
+                    if (!std::isfinite(fraction) || fraction < 0.0 || fraction > 1.0 || !std::isfinite(liquid) ||
+                        liquid < 0.0 || !std::isfinite(pressure) || pressure <= 0.0)
+                        throw std::domain_error(
+                            "Photolysis received invalid cloud fraction, liquid water or pressure thickness");
+                    const double tau = 155.0 * liquid * pressure / constants::G0 * std::sqrt(fraction);
+                    for (int wavelength = 0; wavelength < wavelength_count; ++wavelength)
+                        optical_depth[wavelength * state->level_count() + level] = tau;
+                }
+                musica::SetRadiatorOpticalDepths(cloud_radiator.get(), optical_depth.data(), state->level_count(),
+                                                 wavelength_count, &err);
+                if (err.code_ != 0)
+                    throw std::runtime_error("Photolysis failed to update cloud optical depth");
             }
 
             if (dbg_column)
